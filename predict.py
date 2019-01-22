@@ -50,10 +50,10 @@ class predict(baseclass.baseClass):
 
   def _readClasses(self):
     self.classes=pd.read_csv(self.classListPath, encoding=self.classListPathEncoding)
-    
+
     
   def _resolveClassId(self,id):
-    return self.classes.loc[self.classes['id'] == id].label
+    return self.classes.loc[self.classes['id'] == id].label.item()
 
 
   def doPredictions(self):
@@ -62,7 +62,7 @@ class predict(baseclass.baseClass):
     for item in self.testImages:
       testImage = os.path.join(self.testImageRootFolder,item)
       if os.path.isfile(testImage):
-        self.logger.info("test image {}".format(testImage))
+        self.logger.debug("loaded test image {}".format(testImage))
         self._predict(testImage)
       else:
         self.logger.error("test image {} doesn't exist".format(testImage))
@@ -73,8 +73,10 @@ class predict(baseclass.baseClass):
       from keras.applications.inception_v3 import preprocess_input
     elif self.modelArchitecture=="Xception":
       from keras.applications.xception import preprocess_input
+    elif self.modelArchitecture=="VGG16":
+      from keras.applications.vgg16 import preprocess_input
     else:
-      raise ValueError("didn't load preprocess_input for architecture {}".format(self.modelArchitecture))
+      raise ValueError("unknown architecture {}".format(self.modelArchitecture))
     
     # https://stackoverflow.com/questions/47555829/preprocess-input-method-in-keras
     img = image.load_img(testImage, target_size=self.modelTargetSize)
@@ -82,16 +84,14 @@ class predict(baseclass.baseClass):
     x = np.expand_dims(x, axis=0)
     x = preprocess_input(x)
  
-    
-    preds = self.model.predict(x,verbose=1)
-
+    preds = self.model.predict(x,verbose=0)
     index = np.argmax(preds[0])
-    bla = np.max(preds[0])
-#    print(index)
-    print(testImage)
-    print(bla)
-    print(self._resolveClassId(index))
-    print("")
+    certainty = np.max(preds[0])
+    this_class = self._resolveClassId(index)
+
+    print("{}: {} ({})".format(testImage.replace(self.testImageRootFolder,""), 
+          this_class, 
+          certainty))
 
 
 
@@ -102,10 +102,10 @@ if __name__ == "__main__":
   logger = helpers.logger.logger('./log/','predict',logging.INFO)
 
   predict = predict(settings, logger)
-  predict.setModelName("alien_predator_1")
+  predict.setModelName("alien_predator_VGG16")
   predict.loadModel()
   
-  predict.setModelArchitecture("Inception") # Inception, Xception
+  predict.setModelArchitecture("VGG16") # Inception, Xception, VGG16
   predict.setModelTargetSize((299, 299)) # must match model's
   
   test_image_folder = "/storage/data/alien-predator/test/"
@@ -118,3 +118,7 @@ if __name__ == "__main__":
 
   predict.doPredictions()
 
+
+# confusion matrix
+# list of all test images + their predictions
+# image of intermediate activations

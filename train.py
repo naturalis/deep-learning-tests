@@ -14,7 +14,7 @@ from keras import models
 from keras import layers
 from keras import optimizers
 import pandas as pd
-from keras.applications import InceptionV3, Xception
+#from keras.applications import InceptionV3, Xception, VGG16
 from keras.callbacks import EarlyStopping, ModelCheckpoint, ReduceLROnPlateau
 import helpers.logger
 import helpers.settings_reader
@@ -140,7 +140,7 @@ class modelTrainer:
       checkpoint = ModelCheckpoint(filepath=self.modelSavePath, 
                                    verbose=1, 
                                    save_best_only=True, 
-                                   monitor=self.trainingSettings["save"]["monitor"], 
+                                   monitor=self.trainingSettings["save"]["after_every_epoch_monitor"], 
                                    mode='auto')
       self.callbacks.append(checkpoint)
       self.logger.info("enabled saving after every epoch")
@@ -176,15 +176,22 @@ class modelTrainer:
     
     else:
       if self.trainingSettings["model_architecture"] == 'Inception':
+        from keras.applications import InceptionV3
         conv_base = InceptionV3(weights='imagenet',
                           include_top=False,
                           input_shape=self.trainingSettings["input_size"])
       elif self.trainingSettings["model_architecture"] == 'Xception':
+        from keras.applications import Xception
         conv_base = Xception(weights='imagenet',
                           include_top=False,
                           input_shape=self.trainingSettings["input_size"])
+      elif self.trainingSettings["model_architecture"] == 'VGG16':
+        from keras.applications import VGG16
+        conv_base = VGG16(weights='imagenet',
+                          include_top=False,
+                          input_shape=self.trainingSettings["input_size"])
       else:
-        raise ValueError('missing model architecture')
+        raise ValueError('unknown model architecture {}'.format(self.trainingSettings["model_architecture"]))
       conv_base.trainable = False
   
       self.model.add(conv_base)
@@ -314,8 +321,8 @@ if __name__ == "__main__":
   logger = helpers.logger.logger('./log/','training',logging.DEBUG)
   train = modelTrainer(settings, logger)
   train.setTrainingsettings(
-        model_name="alien_predator_1",
-        model_architecture="Inception", # Inception, Xception
+        model_name="alien_predator_VGG16",
+        model_architecture="VGG16", # Inception, Xception, VGG16
         batch_size=64,
         epochs=100,
         initial_lr=1e-5,
@@ -331,7 +338,7 @@ if __name__ == "__main__":
         input_size=(299, 299, 3),
         validation_split=0.1,
         save={"after_every_epoch": True,
-              "monitor": "val_loss",
+              "after_every_epoch_monitor": "val_loss",
               "when_configured": True}
       )
   train.trainModel()
@@ -342,6 +349,3 @@ if __name__ == "__main__":
 # switchable hyperparameters
 # save w/ hyperparmeters and ... (dataset)
 
-# outputs:
-#  confusion matrix
-#  list of all test images + their predictions
