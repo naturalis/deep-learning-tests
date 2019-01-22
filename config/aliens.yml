@@ -1,0 +1,37 @@
+project_root: /storage/data/alien-predator/
+
+# all other paths should be relative to project_root
+
+dwca_infile:
+  name: dwca/Occurrence.csv
+  encoding: utf-8-sig
+
+dwca_headers:
+  id: catalogNumber
+  name: scientificName
+  images: associatedMedia
+
+# reg exp for parsing actual filename from URL
+image_url_path_parse:
+  reg_exp: ^(/file/id/)(.*)(/format/)(.*)$
+  name_index: 1
+
+output_lists:
+  image_list:
+    file: data/imagelist.csv
+    encoding: utf-8-sig
+    col_class: label
+    col_image: image
+  downloaded_list: data/files.csv
+  class_list: data/classes.csv
+
+image_download:
+  folder: images/
+  default_extension: jpg
+  # if downloaded images don't have one of these extensions, they automatically get 'default_extension'
+  expected_extensions:
+    - jpg
+    - jpeg
+
+models:
+  folder: models/
