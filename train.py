@@ -84,6 +84,9 @@ class modelTrainer:
     if 'model' in kwargs:
       self.trainingSettings["model"]=kwargs['model']
 
+    if 'train_conv_base' in kwargs:
+      self.trainingSettings["train_conv_base"]=kwargs['train_conv_base']
+
     self.logger.debug("training settings: {}".format(self.trainingSettings))
 
 
@@ -192,8 +195,12 @@ class modelTrainer:
                           input_shape=self.trainingSettings["input_size"])
       else:
         raise ValueError('unknown model architecture {}'.format(self.trainingSettings["model_architecture"]))
-      conv_base.trainable = False
-  
+        
+      if "train_conv_base" in self.trainingSettings and self.trainingSettings["train_conv_base"]==True:
+        conv_base.trainable = True
+      else:
+        conv_base.trainable = False
+
       self.model.add(conv_base)
       self.model.add(layers.Flatten())
       self.model.add(layers.Dense(256, activation='relu'))
@@ -315,14 +322,21 @@ class modelTrainer:
 
 
 if __name__ == "__main__":
-#  settings_file = "./config/martin-collectie.yml"
+  #  settings_file = "./config/martin-collectie.yml"
   settings_file = "./config/aliens.yml"
   settings = helpers.settings_reader.settingsReader(settings_file).getSettings()
   logger = helpers.logger.logger('./log/','training',logging.DEBUG)
+
+#  import helpers.custom_models
+#  custom = helpers.custom_models.customModels()
+#  custom_model = custom.smallSequentialModel(input_shape=(299, 299, 3))
+
   train = modelTrainer(settings, logger)
   train.setTrainingsettings(
-        model_name="alien_predator_VGG16",
-        model_architecture="VGG16", # Inception, Xception, VGG16
+        model_name="alien_predator_VGG_full",
+        model_architecture="VGG16", # Inception, Xception, VGG16, custom
+#        model=custom_model,
+        train_conv_base=True,
         batch_size=64,
         epochs=100,
         initial_lr=1e-5,
@@ -344,8 +358,11 @@ if __name__ == "__main__":
   train.trainModel()
 
 
-
 # make threeway split
 # switchable hyperparameters
 # save w/ hyperparmeters and ... (dataset)
+
+
+
+
 
