@@ -6,11 +6,9 @@ Created on Tue Jan 15 11:36:18 2019
 @author: maarten
 """
 import os
-from keras.models import load_model
 from keras.preprocessing import image
 import logging
 import numpy as np
-import pandas as pd
 import helpers.logger
 import helpers.settings_reader
 import baseclass
@@ -28,16 +26,6 @@ class predict(baseclass.baseClass):
     self.setProjectRoot(settings)
     self.setModelRepoFolder(settings)
     self.setClassListPath(settings)
-  
-
-  def loadModel(self,showSummary=True):
-    if self.modelFilePath=="" or not os.path.isfile(self.modelFilePath):
-      raise ValueError("no model or model file doesn't exist ({})".format(self.modelFilePath))
-    else:
-      self.model = load_model(self.modelFilePath)
-
-    if showSummary:
-      self.model.summary()    
 
 
   def setTestImageRootFolder(self,path):
@@ -47,17 +35,9 @@ class predict(baseclass.baseClass):
   def setTestImage(self,file):
     self.testImages.append(file)
 
-
-  def _readClasses(self):
-    self.classes=pd.read_csv(self.classListPath, encoding=self.classListPathEncoding)
-
     
-  def _resolveClassId(self,id):
-    return self.classes.loc[self.classes['id'] == id].label.item()
-
-
   def doPredictions(self):
-    self._readClasses()
+    self.readClasses()
     
     for item in self.testImages:
       testImage = os.path.join(self.testImageRootFolder,item)
@@ -69,12 +49,17 @@ class predict(baseclass.baseClass):
 
  
   def _predict(self,testImage):
-    if self.modelArchitecture=="Inception":
-      from keras.applications.inception_v3 import preprocess_input
+    
+#    preprocess_input(img, model = c("Xception", "VGG16", "VGG19", "ResNet50","InceptionV3"))
+    
+    
+    
+    if self.modelArchitecture=="InceptionV3":
+      from keras.applications.inception_v3 import preprocess_input, decode_predictions
     elif self.modelArchitecture=="Xception":
-      from keras.applications.xception import preprocess_input
+      from keras.applications.xception import preprocess_input, decode_predictions
     elif self.modelArchitecture=="VGG16":
-      from keras.applications.vgg16 import preprocess_input
+      from keras.applications.vgg16 import preprocess_input, decode_predictions
     else:
       raise ValueError("unknown architecture {}".format(self.modelArchitecture))
     
@@ -84,28 +69,27 @@ class predict(baseclass.baseClass):
     x = np.expand_dims(x, axis=0)
     x = preprocess_input(x)
  
-    preds = self.model.predict(x,verbose=0)
+    preds = self.model.predict(x)
     index = np.argmax(preds[0])
     certainty = np.max(preds[0])
-    this_class = self._resolveClassId(index)
+    this_class = self.resolveClassId(index)
 
     print("{}: {} ({})".format(testImage.replace(self.testImageRootFolder,""), 
           this_class, 
           certainty))
 
 
-
 if __name__ == "__main__":
 #  settings_file = "./config/martin-collectie.yml"
   settings_file = "./config/aliens.yml"
   settings = helpers.settings_reader.settingsReader(settings_file).getSettings()
-  logger = helpers.logger.logger('./log/','predict',logging.INFO)
+  logger = helpers.logger.logger('./log/','predict',logging.DEBUG,False)
 
   predict = predict(settings, logger)
-  predict.setModelName("alien_predator_VGG16")
+  predict.setModelName("alien_predator_inception_plus")
   predict.loadModel()
-  
-  predict.setModelArchitecture("VGG16") # Inception, Xception, VGG16
+
+  predict.setModelArchitecture("InceptionV3") # Inception, Xception, VGG16
   predict.setModelTargetSize((299, 299)) # must match model's
   
   test_image_folder = "/storage/data/alien-predator/test/"
@@ -117,6 +101,7 @@ if __name__ == "__main__":
       predict.setTestImage(filename) # may be full path, will be joined with testImageRootFolder
 
   predict.doPredictions()
+  predict.printClasses()
 
 
 # confusion matrix

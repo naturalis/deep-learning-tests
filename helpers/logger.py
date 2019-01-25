@@ -10,8 +10,9 @@ import logging, os
 class logger:
   
   log_dir = "./"
+  log_to_stdout=True
 
-  def __init__(self, logdir, application_name, loglevel=logging.INFO):
+  def __init__(self, logdir, application_name, loglevel=logging.INFO, log_to_stdout=True):
     if logdir is not None:
       self.log_dir = logdir
 
@@ -26,17 +27,21 @@ class logger:
     self.fh.setLevel(loglevel)
     self.fh.setFormatter(formatter)
     self.logging.addHandler(self.fh)
-
-    self.ch = logging.StreamHandler()
-    self.ch.setLevel(loglevel)
-    self.ch.setFormatter(formatter)
-    self.logging.addHandler(self.ch)
+    
+    if log_to_stdout:
+      self.ch = logging.StreamHandler()
+      self.ch.setLevel(loglevel)
+      self.ch.setFormatter(formatter)
+      self.logging.addHandler(self.ch)
+    else:
+      self.log_to_stdout=False
     
   def __del__(self):
     self.fh.close()
     self.logging.removeHandler(self.fh)
-    self.ch.close()
-    self.logging.removeHandler(self.ch)
+    if self.log_to_stdout:
+      self.ch.close()
+      self.logging.removeHandler(self.ch)
 
   def debug(self,msg):
     self.logging.debug(msg)
