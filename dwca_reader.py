@@ -227,7 +227,7 @@ class dwcaReader:
 if __name__ == "__main__":
   settings_file = "./config/martin-collectie.yml"
   settings = helpers.settings_reader.settingsReader(settings_file).getSettings()
-  logger = helpers.logger.logger(os.path.join(settings['project_root'],'log/'),'dwca_reader',logging.INFO)
+  logger = helpers.logger.logger(os.path.join(settings['project_root'],'log/'),settings["project_name"] + '/dwca_reader',logging.INFO)
   reader = dwcaReader(settings,logger)
   reader.extractImageList()
   reader.writeImageList()

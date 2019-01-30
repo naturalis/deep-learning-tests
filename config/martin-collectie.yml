@@ -1,3 +1,4 @@
+project_name: martin-collectie
 project_root: /storage/data/martin-collectie/
 
 # all other paths should be relative to project_root
@@ -15,6 +16,8 @@ dwca_headers:
 image_url_path_parse:
   reg_exp: ^(/file/id/)(.*)(/format/)(.*)$
   name_index: 1
+  
+use_subdirs_as_classes: False
 
 output_lists:
   image_list:
@@ -34,4 +37,8 @@ image_download:
     - jpeg
 
 models:
+  basename: martin_{model_architecture}
   folder: models/
+
+test_image_folder: test/
+log_folder: log/

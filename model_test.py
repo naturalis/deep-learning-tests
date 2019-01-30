@@ -176,11 +176,16 @@ class modelTest(baseclass.baseClass):
 
 
 
+
+
+
+
+
 if __name__ == "__main__":
   #  settings_file = "./config/martin-collectie.yml"
   settings_file = "./config/aliens.yml"
-  settings = helpers.settings_reader.settingsReader(settings_file).getSettings()
-  logger = helpers.logger.logger('./log/','metrics',logging.DEBUG)
+  settings=helpers.settings_reader.settingsReader(settings_file).getSettings()
+  logger=helpers.logger.logger(join(settings["project_root"] + settings["log_folder"]),settings["project_name"] + '/model_test',logging.DEBUG)
 
   test = modelTest(settings, logger)
   test.setModelName("alien_predator_inception_2")

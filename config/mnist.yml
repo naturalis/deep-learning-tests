@@ -1,5 +1,5 @@
-project_name: alien-predator
-project_root: /storage/data/alien-predator/
+project_name: mnist
+project_root: /storage/data/mnist/
 
 # all other paths should be relative to project_root
 
@@ -17,19 +17,22 @@ image_url_path_parse:
   reg_exp: ^(/file/id/)(.*)(/format/)(.*)$
   name_index: 1
 
-use_subdirs_as_classes: False
+use_subdirs_as_classes: True
 
 output_lists:
+  # also required when you're not downloading, as the headers are also used for the 'downloaded_list'
   image_list:
     file: data/imagelist.csv
     encoding: utf-8-sig
     col_class: label
     col_image: image
-  downloaded_list: data/files.csv
+  # only used when flowing_from_dataframes; when flowing from directories, classes are inferred from the subdirs
+  downloaded_list: data/index.txt
   class_list: data/classes.csv
+  corrupt_image_list: data/corrupt_images.csv
 
 image_download:
-  folder: images/
+  folder: trainingSet/
   default_extension: jpg
   # if downloaded images don't have one of these extensions, they automatically get 'default_extension'
   expected_extensions:
@@ -37,7 +40,7 @@ image_download:
     - jpeg
 
 models:
-  basename: alien_{model_architecture}
+  basename: mnist_{model_architecture}
   folder: models/
 
 test_image_folder: test/

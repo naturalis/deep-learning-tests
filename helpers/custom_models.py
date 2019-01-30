@@ -23,3 +23,8 @@ class customModels:
     model.add(layers.Dropout(0.5))
     model.add(layers.Dense(512, activation='relu'))
     return model
+
+
+#  import helpers.custom_models
+#  custom = helpers.custom_models.customModels()
+#  custom_model = custom.smallSequentialModel(input_shape=(299, 299, 3))

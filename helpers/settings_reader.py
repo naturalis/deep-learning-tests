@@ -19,7 +19,7 @@ class settingsReader:
       self.settingsFile = settingsFile
 
     if not os.path.isfile(self.settingsFile):
-      self.logger.error("settings file doesn't exist: {}".format(self.settingsFile))
+      raise FileNotFoundError("settings file doesn't exist: {}".format(self.settingsFile))
       exit(1)
       
     self._readSettings()

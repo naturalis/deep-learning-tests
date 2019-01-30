@@ -48,13 +48,8 @@ class baseClass:
     self.modelArchitecture = arch
 
 
-  def setModelInputSize(self,input_size):
-    self.modelInputSize=input_size
-    self._setModelTargetSize()
-    
-
-  def _setModelTargetSize(self):
-    self.modelTargetSize = self.modelInputSize[0:2]
+  def setModelTargetSize(self,model_target_size):
+    self.modelTargetSize = model_target_size
 
 
   def setClassListPath(self,settings):
