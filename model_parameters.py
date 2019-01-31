@@ -8,6 +8,7 @@ Created on Thu Jan 24 14:56:30 2019
 
 class modelParameters():
 
+  # defaults
   parameters = {
     "early_stopping" : { "use": True, "monitor": "val_acc", "patience": 3, "verbose": 0, "restore_best_weights": True },
     "save" : { "after_every_epoch": True, "after_every_epoch_monitor": "val_acc", "when_configured": True },
@@ -58,7 +59,7 @@ class modelParameters():
           "loss_function": "categorical_crossentropy",
           "initial_lr": 1e-4,
           "reduce_lr": { "use": True, "monitor": "val_acc", "factor": 0.1, "patience": 2, "min_lr": 1e-8 },
-          "epochs": 200, # 4
+          "epochs": 4,
           "use": True
         },
         {
@@ -68,6 +69,6 @@ class modelParameters():
           "initial_lr": 1e-4,
           "reduce_lr": { "use": True, "monitor": "val_acc", "factor": 0.1, "patience": 2, "min_lr": 1e-8 },
           "epochs": 200,
-          "use": False
+          "use": True
         }
       ]

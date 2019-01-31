@@ -55,7 +55,6 @@ class modelTrain(baseclass.baseClass):
     self._applyImageMinimum()
     self._doTestSplit()
     self._createGenerators()
-    self._setNumberOfClasses()
     self._saveClassList(self.train_generator.class_indices)
     self._initModel()
     self._setStaticModelCallbacks()
@@ -178,12 +177,6 @@ class modelTrain(baseclass.baseClass):
     else:
       self.useTestSplit=False
 
-
-  def _setNumberOfClasses(self):
-    self.numberOfClasses = len(np.unique(self.train_generator.classes))
-    self.logger.info("got {} classes".format(self.numberOfClasses))
-
-
   def _saveClassList(self,class_dict):
     with open(self.classListPath, 'w+') as file:
       c = csv.writer(file)
@@ -191,7 +184,7 @@ class modelTrain(baseclass.baseClass):
       for name, id in class_dict.items():
         c.writerow([id,name])
 
-    self.logger.info("wrote classes {} to {}".format(len(class_dict),self.classListPath))
+    self.logger.info("wrote {} classes to {}".format(len(class_dict),self.classListPath))
 
 
   def _saveModel(self):
@@ -248,14 +241,26 @@ class modelTrain(baseclass.baseClass):
   def _createGenerators(self):
     a = self.trainingSettings["image_data_generator"]
 
+    # featurewise_center=False, 
+    # samplewise_center=False, 
+    # featurewise_std_normalization=False, 
+    # samplewise_std_normalization=False, 
+    # zca_whitening=False, 
+    # zca_epsilon=1e-06, 
+    # brightness_range=None, 
+    # channel_shift_range=0.0, 
+    # fill_mode='nearest', 
+    # cval=0.0, 
+    # data_format=None
+        
     datagen=ImageDataGenerator(
-        rotation_range=a["rotation_range"] if "rotation_range" in a else None,
-        shear_range=a["shear_range"] if "shear_range" in a else None,
-        zoom_range=a["zoom_range"] if "zoom_range" in a else None,
-        width_shift_range=a["width_shift_range"] if "width_shift_range" in a else None,
-        height_shift_range=a["height_shift_range"] if "height_shift_range" in a else None,
-        horizontal_flip=a["horizontal_flip"] if "horizontal_flip" in a else None,
-        vertical_flip=a["vertical_flip"] if "vertical_flip" in a else None,
+        rotation_range=a["rotation_range"] if "rotation_range" in a else 0,
+        shear_range=a["shear_range"] if "shear_range" in a else 0.0,
+        zoom_range=a["zoom_range"] if "zoom_range" in a else 0.0,
+        width_shift_range=a["width_shift_range"] if "width_shift_range" in a else 0.0,
+        height_shift_range=a["height_shift_range"] if "height_shift_range" in a else 0.0,
+        horizontal_flip=a["horizontal_flip"] if "horizontal_flip" in a else False,
+        vertical_flip=a["vertical_flip"] if "vertical_flip" in a else False,
         preprocessing_function=self.preProcess,
         validation_split=self.trainingSettings["split"]["validation"])
 
@@ -325,6 +330,8 @@ class modelTrain(baseclass.baseClass):
           self.train_generator.n,
           self.validation_generator.n))
 
+    self.logger.info("got {} classes".format(self.train_generator.num_classes))
+
 
   def evaluateAndPredict(self):
     if self.useTestSplit==True:
@@ -374,10 +381,9 @@ class modelTrain(baseclass.baseClass):
 
     # let's add a fully-connected layer
     x = layers.Dense(1024, activation='relu')(x)
-#    x=layers.Flatten()(x)
 
     # and a logistic layer
-    predictions = layers.Dense(self.numberOfClasses, activation='softmax')(x)
+    predictions = layers.Dense(self.train_generator.num_classes, activation='softmax')(x)
 
     # this is the model we will train
     self.model=models.Model(inputs=self.conv_base.input, outputs=predictions)
@@ -391,7 +397,7 @@ class modelTrain(baseclass.baseClass):
           
     for idx, phase in enumerate(self.trainingPhases):
       if phase["use"]==False:
-        self.logger.info("skipping phase {}".format(idx))
+        self.logger.info("skipping phase {}".format(idx+1))
         continue
 
       try: 
@@ -407,12 +413,17 @@ class modelTrain(baseclass.baseClass):
            layer.trainable = True
 
       except ValueError:
-        # first: train only the top layers (which were randomly initialized)
-        # i.e. freeze all convolutional InceptionV3 layers
-        for layer in self.conv_base.layers:
-            layer.trainable = False if phase["frozen_layers"]=="base_model" else True
+        if phase["frozen_layers"]=="base_model":
+          # first: train only the top layers (which were randomly initialized)
+          # i.e. freeze all convolutional InceptionV3 layers
+          for layer in self.conv_base.layers:
+            layer.trainable = False
+        elif phase["frozen_layers"]=="none":
+          # finally train them all
+          for layer in self.model.layers:
+            layer.trainable = True
 
-      if idx==0:
+      if idx==0 and self.logger.log_level==logging.DEBUG:
         self.model.summary()
 
       # compile the model (should be done *after* setting layers to non-trainable)
@@ -463,17 +474,90 @@ class modelTrain(baseclass.baseClass):
     self._saveModel()
 
 
+  def cholletCode(self):
+    from keras.applications.inception_v3 import InceptionV3
+#    from keras.preprocessing import image
+    from keras.models import Model
+    from keras.layers import Dense, GlobalAveragePooling2D
+#    from keras import backend as K
+    
+    # create the base pre-trained model
+    base_model = InceptionV3(weights='imagenet', include_top=False)
+    
+    # add a global spatial average pooling layer
+    x = base_model.output
+    x = GlobalAveragePooling2D()(x)
+    # let's add a fully-connected layer
+    x = Dense(1024, activation='relu')(x)
+    # and a logistic layer -- let's say we have 200 classes
+    predictions = Dense(self.train_generator.num_classes, activation='softmax')(x)
+    
+    # this is the model we will train
+    model = Model(inputs=base_model.input, outputs=predictions)
+    
+    # first: train only the top layers (which were randomly initialized)
+    # i.e. freeze all convolutional InceptionV3 layers
+    for layer in base_model.layers:
+        layer.trainable = False
+    
+    # compile the model (should be done *after* setting layers to non-trainable)
+    model.compile(optimizer='rmsprop', loss='categorical_crossentropy',
+          metrics=["acc"])
+
+    step_size_train=self.train_generator.n//self.train_generator.batch_size
+    step_size_validate=self.validation_generator.n//self.validation_generator.batch_size
+    
+    # train the model on the new data for a few epochs
+    model.fit_generator(
+        self.train_generator,
+        steps_per_epoch=step_size_train,
+        epochs=4,
+        validation_data=self.validation_generator,
+        validation_steps=step_size_validate)
+    
+    # at this point, the top layers are well trained and we can start fine-tuning
+    # convolutional layers from inception V3. We will freeze the bottom N layers
+    # and train the remaining top layers.
+    
+    # let's visualize layer names and layer indices to see how many layers
+    # we should freeze:
+    for i, layer in enumerate(base_model.layers):
+       print(i, layer.name)
+    
+    # we chose to train the top 2 inception blocks, i.e. we will freeze
+    # the first 249 layers and unfreeze the rest:
+    for layer in model.layers[:249]:
+       layer.trainable = False
+    for layer in model.layers[249:]:
+       layer.trainable = True
+    
+    # we need to recompile the model for these modifications to take effect
+    # we use SGD with a low learning rate
+    from keras.optimizers import SGD
+    model.compile(optimizer=SGD(lr=0.0001, momentum=0.9), loss='categorical_crossentropy',
+          metrics=["acc"])
+    
+    # we train our model again (this time fine-tuning the top 2 inception blocks
+    # alongside the top Dense layers
+    model.fit_generator(
+        self.train_generator,
+        steps_per_epoch=step_size_train,
+        epochs=400,
+        validation_data=self.validation_generator,
+        validation_steps=step_size_validate)
+
+    self._saveModel()
+
 
 if __name__ == "__main__":
-
   start = time.time()
 
-#  settings_file="./config/martin-collectie.yml"
-  settings_file="./config/aliens.yml"
-  settings_file="./config/mnist.yml"
+  settings_file="./config/martin-collectie.yml"
+#  settings_file="./config/aliens.yml"
+#  settings_file="./config/mnist.yml"
 
   settings=helpers.settings_reader.settingsReader(settings_file).getSettings()
-  logger=helpers.logger.logger(os.path.join(settings["project_root"] + settings["log_folder"]),settings["project_name"] + '/training',logging.DEBUG)
+  logger=helpers.logger.logger(os.path.join(settings["project_root"] + settings["log_folder"]),'training',logging.DEBUG)
   params=model_parameters.modelParameters()
 
   params.setModelParameters(
@@ -486,10 +570,11 @@ if __name__ == "__main__":
   train=modelTrain(settings, logger)
   train.setModelParameters(params.getModelParameters())
   train.initializeTraining()
-  train.trainModel()
+#  train.trainModel()
+  train.cholletCode()
 
   end=time.time()
-  logger.info("took {}s".format(str(datetime.timedelta(seconds=end-start))))
+  logger.info("{} took {}s".format(settings["project_name"],str(datetime.timedelta(seconds=end-start))))
   
-  train.evaluateAndPredict()
+#  train.evaluateAndPredict()
 

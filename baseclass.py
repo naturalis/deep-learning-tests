@@ -70,7 +70,6 @@ class baseClass:
       return { "project_root": self.projectRoot,
                "model_name": self.modelName,
                "model_architecture": self.modelArchitecture,
-               "input_size": self.modelInputSize,
                "target_size": self.modelTargetSize }
 
 
