@@ -36,6 +36,10 @@ class baseClass:
       raise ValueError("missing setting".format(setting))
 
 
+  def getDownloadedListFile(self):
+    return os.path.join(self.projectRoot, self.getSetting('output_lists')['downloaded_list'])
+
+
   def _setProjectName(self):
     self.projectName = self.getSetting('project_name')
 

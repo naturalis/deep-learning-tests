@@ -27,6 +27,7 @@ class dwcaReader(baseclass.baseClass):
   
   headerCols = []
   imageDownloadList = []
+  downloadedListFile = []
 
   def __init__(self,project_settings,logger=None):
     if logger is not None:
@@ -67,10 +68,11 @@ class dwcaReader(baseclass.baseClass):
     if 'expected_extensions' in self.getSetting('image_download'):
       self.imgExpectedExtensions = self.getSetting('image_download')['expected_extensions']
     
+    self.downloadedListFile = self.getDownloadedListFile()
+
     self._readImageListFile()
     self._downloadImages(skip_downloading)
-  
-  
+
 
   def _getColumnIndices(self):
     for k,v in self.getSetting('dwca_headers').items():
@@ -219,7 +221,12 @@ class dwcaReader(baseclass.baseClass):
       if ((len(downloaded_list) + failed) % 100 == 0) and not skip_downloading:
           self.logger.info("downloaded: {}, failed: {}".format(len(downloaded_list),failed))
 
-    self.logger.info("finished downloading: downloaded: {}, failed: {}".format(len(downloaded_list),failed))
+    if not skip_downloading:
+      self.logger.info("finished downloading, downloaded: {}, failed: {}".format(len(downloaded_list),failed))
+    else:
+      self.logger.info("skipped downloading, have: {}".format(len(downloaded_list)))
+        
+    
 
     with open(self.downloadedListFile, 'w+') as file:
       c = csv.writer(file)

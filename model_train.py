@@ -43,7 +43,9 @@ class modelTrain(baseclass.baseClass):
   def __init__(self,project_settings,logger=None):
     if logger is not None:
       self.logger = logger
-    self.settings = project_settings
+    self.setSettings(project_settings)
+    self.logger.info("project: {}; program: {}".format(self.projectName,self.__class__.__name__))
+DIE!
     self.setProjectRoot(project_settings)
     self.setModelRepoFolder(project_settings)
     self.setClassListPath(project_settings)
@@ -624,8 +626,8 @@ if __name__ == "__main__":
   train.setModelParameters(params.getModelParameters())
 #  train.setImageSetFraction(0.2) # for faster debugging
   train.initializeTraining()
-#  train.trainModel()
-  train.cholletCode()
+  train.trainModel()
+#  train.cholletCode()
 
   end=time.time()
   logger.info("{} took {}s".format(settings["project_name"],str(datetime.timedelta(seconds=end-start))))
