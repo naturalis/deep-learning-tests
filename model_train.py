@@ -30,20 +30,23 @@ class modelTrain(baseclass.baseClass):
 
   imageFolder = ""
   imageListFile = ""
+  groupedClassList = None
   imageList = []
   imageListClassCol = "label"
   imageListImageCol = "image"
   staticCallbacks = []
+  callbacks = []
   trainingSettings = {}
   useTestSplit = False
+  imageSetFraction = None
 
-  def __init__(self,settings,logger=None):
+  def __init__(self,project_settings,logger=None):
     if logger is not None:
       self.logger = logger
-    self.settings = settings
-    self.setProjectRoot(settings)
-    self.setModelRepoFolder(settings)
-    self.setClassListPath(settings)
+    self.settings = project_settings
+    self.setProjectRoot(project_settings)
+    self.setModelRepoFolder(project_settings)
+    self.setClassListPath(project_settings)
     self._setImageDataGeneratorSource()
     self._setOutputFilesAndFolders()
 
@@ -52,6 +55,7 @@ class modelTrain(baseclass.baseClass):
     self._createModelFolder()
     self._readImageListFile()
     self._checkForDuplicateImages()
+    self._reduceImageSet()
     self._applyImageMinimum()
     self._doTestSplit()
     self._createGenerators()
@@ -79,10 +83,10 @@ class modelTrain(baseclass.baseClass):
     if 'minimum_images_per_class' in kwargs:
       self.trainingSettings["minimum_images_per_class"]=kwargs['minimum_images_per_class']
     else:
-      self.trainingSettings["minimum_images_per_class"]=2
+      self.trainingSettings["minimum_images_per_class"]=50
 
-    self.logger.debug("base settings: {}".format(self.getBaseSettings()))
-    self.logger.debug("training settings: {}".format(self.trainingSettings))
+    self.logger.info("base settings: {}".format(self.getBaseSettings()))
+    self.logger.info("training settings: {}".format(self.trainingSettings))
     
     self._giveWarnings()
 
@@ -97,8 +101,13 @@ class modelTrain(baseclass.baseClass):
         split = parameters["split"],
         training_stages = parameters["training_stages"],
         model_target_size = parameters["model_target_size"],
-        image_data_generator = parameters["image_data_generator"]
+        image_data_generator = parameters["image_data_generator"],
+        minimum_images_per_class = parameters["minimum_images_per_class"],
     )
+    
+  
+  def setImageSetFraction(self,fraction):
+    self.imageSetFraction=fraction
 
 
   def _giveWarnings(self):
@@ -124,6 +133,8 @@ class modelTrain(baseclass.baseClass):
       self.imageListFileEncoding = self.settings['output_lists']['image_list']['encoding']
       self.imageListClassCol = self.settings['output_lists']['image_list']['col_class']
       self.imageListImageCol = self.settings['output_lists']['image_list']['col_image']
+      if 'grouped_class_list' in self.settings['output_lists']:
+        self.groupedClassList = os.path.join(self.projectRoot,self.settings['output_lists']['grouped_class_list'])
 
 
   def _createModelFolder(self):
@@ -134,7 +145,7 @@ class modelTrain(baseclass.baseClass):
 
   def _readImageListFile(self):
     if not self.imageDataGeneratorSource=="directories":
-      self.traindf=pd.read_csv(self.imageListFile,encoding=self.imageListFileEncoding)
+      self.traindf=pd.read_csv(self.imageListFile,encoding=self.imageListFileEncoding,sep='\t')
       self.logger.info("read infile {}; got {} records".format(self.imageListFile,len(self.traindf)))
     
     
@@ -143,6 +154,12 @@ class modelTrain(baseclass.baseClass):
       if len(self.traindf.drop_duplicates(keep=False)) != len(self.traindf):
         raise ValueError("found duplicate images ({} unique out of {} total)"
                          .format(len(self.traindf.drop_duplicates(keep=False)),len(self.traindf)))
+
+
+  def _reduceImageSet(self):
+    if not self.imageDataGeneratorSource=="directories":
+      if not self.imageSetFraction == None:
+        self.traindf=self.traindf.sample(frac=self.imageSetFraction).reset_index(drop=True)
 
 
   def _applyImageMinimum(self):
@@ -177,6 +194,7 @@ class modelTrain(baseclass.baseClass):
     else:
       self.useTestSplit=False
 
+
   def _saveClassList(self,class_dict):
     with open(self.classListPath, 'w+') as file:
       c = csv.writer(file)
@@ -185,6 +203,16 @@ class modelTrain(baseclass.baseClass):
         c.writerow([id,name])
 
     self.logger.info("wrote {} classes to {}".format(len(class_dict),self.classListPath))
+
+    if not self.imageDataGeneratorSource=="directories" and not self.groupedClassList == None:
+      grouped_df=self.traindf.groupby(by=['label'])
+
+      with open(self.groupedClassList, 'w+') as file:
+        c = csv.writer(file)
+        for key, item in grouped_df:
+           c.writerow([key,len(grouped_df.get_group(key))])
+#           print(grouped_df.get_group(key), "\n\n")
+      self.logger.info("wrote class count list to {}".format(self.groupedClassList))
 
 
   def _saveModel(self):
@@ -243,7 +271,7 @@ class modelTrain(baseclass.baseClass):
 
     # featurewise_center=False, 
     # samplewise_center=False, 
-    # featurewise_std_normalization=False, 
+    # featurewise_std_normalization=Fals  e, 
     # samplewise_std_normalization=False, 
     # zca_whitening=False, 
     # zca_epsilon=1e-06, 
@@ -273,7 +301,7 @@ class modelTrain(baseclass.baseClass):
           interpolation="nearest",
           subset="training")
 
-      self.validation_generator=datagen.flow_from_directory(
+      self.validation_generator=datagen.  flow_from_directory(
           directory=self.imageFolder,
           class_mode="categorical", 
           target_size=self.modelTargetSize,
@@ -333,6 +361,14 @@ class modelTrain(baseclass.baseClass):
     self.logger.info("got {} classes".format(self.train_generator.num_classes))
 
 
+  def logHistory(self):
+    self.logger.info("val_loss: {}; acc: {}; loss: {}; val_acc: {}".format(
+        self.history.history['val_loss'][0],
+        self.history.history['acc'][0],
+        self.history.history['loss'][0],
+        self.history.history['val_acc'][0]))
+
+
   def evaluateAndPredict(self):
     if self.useTestSplit==True:
       eval_gen = self.test_generator
@@ -340,12 +376,9 @@ class modelTrain(baseclass.baseClass):
       eval_gen = self.validation_generator
 
     #  should be done on test, or on validation if no test exists
-    score = self.model.evaluate_generator(
-        eval_gen,
-        eval_gen.n/eval_gen.batch_size,
-        verbose=1)
+    score = self.model.evaluate_generator(eval_gen,eval_gen.n/eval_gen.batch_size,verbose=1)
 
-    self.logger.info("score: {}".format(set(zip(self.model.metrics_names,score))))
+    self.logger.info("evaluation score: {}".format(set(zip(self.model.metrics_names,score))))
 
 #    predictions = self.model.predict_generator(
 #        self.validation_generator,
@@ -461,7 +494,7 @@ class modelTrain(baseclass.baseClass):
     
       self._setDynamicModelCallbacks(phase)    
 
-      history = self.model.fit_generator(
+      self.history = self.model.fit_generator(
           self.train_generator,
           steps_per_epoch=step_size_train,
           epochs=phase["epochs"],
@@ -469,12 +502,18 @@ class modelTrain(baseclass.baseClass):
           validation_steps=step_size_validate,
           callbacks=self.callbacks)
 
-      # print(history) save somehow
-  
+      self.logHistory()
+
     self._saveModel()
 
 
+
+
   def cholletCode(self):
+    self._setStaticModelCallbacks()
+    self.logger.info("running chollet code")
+
+    # https://github.com/keras-team/keras/blob/master/docs/templates/applications.md#fine-tune-inceptionv3-on-a-new-set-of-classes
     from keras.applications.inception_v3 import InceptionV3
 #    from keras.preprocessing import image
     from keras.models import Model
@@ -491,9 +530,9 @@ class modelTrain(baseclass.baseClass):
     x = Dense(1024, activation='relu')(x)
     # and a logistic layer -- let's say we have 200 classes
     predictions = Dense(self.train_generator.num_classes, activation='softmax')(x)
-    
+
     # this is the model we will train
-    model = Model(inputs=base_model.input, outputs=predictions)
+    self.model = Model(inputs=base_model.input, outputs=predictions)
     
     # first: train only the top layers (which were randomly initialized)
     # i.e. freeze all convolutional InceptionV3 layers
@@ -501,52 +540,64 @@ class modelTrain(baseclass.baseClass):
         layer.trainable = False
     
     # compile the model (should be done *after* setting layers to non-trainable)
-    model.compile(optimizer='rmsprop', loss='categorical_crossentropy',
+    from keras.optimizers import RMSprop
+    # optimizer=RMSprop(lr=0.0001, rho=0.9, epsilon=1e-08, decay=0.0),
+    self.model.compile(optimizer=RMSprop(lr=0.0001), loss='categorical_crossentropy',
           metrics=["acc"])
 
     step_size_train=self.train_generator.n//self.train_generator.batch_size
     step_size_validate=self.validation_generator.n//self.validation_generator.batch_size
     
     # train the model on the new data for a few epochs
-    model.fit_generator(
+    self.history = self.model.fit_generator(
         self.train_generator,
         steps_per_epoch=step_size_train,
         epochs=4,
         validation_data=self.validation_generator,
-        validation_steps=step_size_validate)
-    
+        validation_steps=step_size_validate,
+        callbacks=self.callbacks)
+   
+    self.logHistory()
+    self.evaluateAndPredict()
+   
     # at this point, the top layers are well trained and we can start fine-tuning
     # convolutional layers from inception V3. We will freeze the bottom N layers
     # and train the remaining top layers.
     
     # let's visualize layer names and layer indices to see how many layers
     # we should freeze:
-    for i, layer in enumerate(base_model.layers):
-       print(i, layer.name)
+    #let's not
+    #for i, layer in enumerate(base_model.layers):
+    #   print(i, layer.name)
     
     # we chose to train the top 2 inception blocks, i.e. we will freeze
     # the first 249 layers and unfreeze the rest:
-    for layer in model.layers[:249]:
+    for layer in self.model.layers[:249]:
        layer.trainable = False
-    for layer in model.layers[249:]:
+    for layer in self.model.layers[249:]:
        layer.trainable = True
     
-    # we need to recompile the model for these modifications to take effect
+    # we need to recompile the model for thepandasse modifications to take effect
     # we use SGD with a low learning rate
     from keras.optimizers import SGD
-    model.compile(optimizer=SGD(lr=0.0001, momentum=0.9), loss='categorical_crossentropy',
+    self.model.compile(optimizer=SGD(lr=0.0001, momentum=0.9), loss="categorical_crossentropy",
           metrics=["acc"])
     
     # we train our model again (this time fine-tuning the top 2 inception blocks
     # alongside the top Dense layers
-    model.fit_generator(
+    self.history = self.model.fit_generator(
         self.train_generator,
         steps_per_epoch=step_size_train,
-        epochs=400,
+        epochs=200,
         validation_data=self.validation_generator,
-        validation_steps=step_size_validate)
+        validation_steps=step_size_validate,
+        callbacks=self.callbacks)
 
+    self.logHistory()
+    self.evaluateAndPredict()
     self._saveModel()
+
+
 
 
 if __name__ == "__main__":
@@ -554,21 +605,24 @@ if __name__ == "__main__":
 
   settings_file="./config/martin-collectie.yml"
 #  settings_file="./config/aliens.yml"
-#  settings_file="./config/mnist.yml"
+  settings_file="./config/mnist.yml"
 
   settings=helpers.settings_reader.settingsReader(settings_file).getSettings()
-  logger=helpers.logger.logger(os.path.join(settings["project_root"] + settings["log_folder"]),'training',logging.DEBUG)
+  logger=helpers.logger.logger(os.path.join(settings["project_root"] + settings["log_folder"]),'training',logging.INFO)
   params=model_parameters.modelParameters()
 
   params.setModelParameters(
       model_name=settings["models"]["basename"],
-      minimum_images_per_class=10,
-      # early_stopping={ "use": True, "monitor": "val_acc", "patience": 3, "verbose": 0, "restore_best_weights": True},
-      # save={ "after_every_epoch": True, "after_every_epoch_monitor": "val_acc", "when_configured": True },
+      minimum_images_per_class=5,
+      batch_size=8,
+      split = { "validation": 0.3 }, # test not implemented
+      early_stopping={ "use": True, "monitor": "val_acc", "patience": 2, "verbose": 0, "restore_best_weights": True},
+      save={ "after_every_epoch": True, "after_every_epoch_monitor": "val_acc", "when_configured": True },
   )
 
-  train=modelTrain(settings, logger)
+  train=modelTrain(project_settings=settings, logger=logger)
   train.setModelParameters(params.getModelParameters())
+#  train.setImageSetFraction(0.2) # for faster debugging
   train.initializeTraining()
 #  train.trainModel()
   train.cholletCode()
@@ -576,5 +630,5 @@ if __name__ == "__main__":
   end=time.time()
   logger.info("{} took {}s".format(settings["project_name"],str(datetime.timedelta(seconds=end-start))))
   
-#  train.evaluateAndPredict()
+  train.evaluateAndPredict()
 

@@ -10,7 +10,7 @@ class modelParameters():
 
   # defaults
   parameters = {
-    "early_stopping" : { "use": True, "monitor": "val_acc", "patience": 3, "verbose": 0, "restore_best_weights": True },
+    "early_stopping" : { "use": True, "monitor": "val_acc", "patience": 5, "verbose": 0, "restore_best_weights": True },
     "save" : { "after_every_epoch": True, "after_every_epoch_monitor": "val_acc", "when_configured": True },
     "model_architecture" : "InceptionV3",
     "model_target_size" : (299,299),
@@ -38,7 +38,8 @@ class modelParameters():
 
 
   def _setModelName(self):
-    self.parameters["model_name"]=self.parameters["model_name"].format(model_architecture=self.parameters["model_architecture"])
+    if not self.parameters["model_name"]==None:
+      self.parameters["model_name"]=self.parameters["model_name"].format(model_architecture=self.parameters["model_architecture"])
 
 
   def _setTrainingStagesDefault(self):
@@ -49,7 +50,7 @@ class modelParameters():
           "frozen_layers": "base_model",
           "loss_function": "categorical_crossentropy",
           "initial_lr": 1e-4,
-          "reduce_lr": { "use": True, "monitor": "val_acc", "factor": 0.2, "patience": 2, "min_lr": 1e-8 },
+          "reduce_lr": { "use": True, "monitor": "val_acc", "factor": 0.2, "patience": 2, "min_lr": 1e-7},
           "epochs": 4,
           "use": True
         },
@@ -58,7 +59,7 @@ class modelParameters():
           "frozen_layers": 249,
           "loss_function": "categorical_crossentropy",
           "initial_lr": 1e-4,
-          "reduce_lr": { "use": True, "monitor": "val_acc", "factor": 0.1, "patience": 2, "min_lr": 1e-8 },
+          "reduce_lr": { "use": True, "monitor": "val_acc", "factor": 0.1, "patience": 2, "min_lr": 1e-7 },
           "epochs": 4,
           "use": True
         },

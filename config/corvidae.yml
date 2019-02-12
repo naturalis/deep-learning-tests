@@ -1,10 +1,10 @@
-project_name: martin-collectie
-project_root: /storage/data/martin-collectie/
+project_name: corvidae
+project_root: /storage/data/corvidae/
 
 # all other paths should be relative to project_root
 
 dwca_infile:
-  name: dwca/Occurrence.csv
+  name: data/Occurrence.txt
   encoding: utf-8-sig
 
 dwca_headers:
@@ -25,13 +25,12 @@ output_lists:
     encoding: utf-8-sig
     col_class: label
     col_image: image
-  #downloaded_list: data/downloaded.csv
-  downloaded_list: data/three_species.csv
+  downloaded_list: data/downloaded.csv
   class_list: data/classes.csv
   grouped_class_list: data/grouped_classes.csv
 
 image_download:
-  folder: downloads/
+  folder: images/
   default_extension: jpg
   # if downloaded images don't have one of these extensions, they automatically get 'default_extension'
   expected_extensions:
@@ -39,7 +38,7 @@ image_download:
     - jpeg
 
 models:
-  basename: martin_{model_architecture}
+  basename: corvidae_{model_architecture}
   folder: models/
 
 test_image_folder: tests/

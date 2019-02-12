@@ -6,6 +6,7 @@ from urllib.parse import urlparse
 import logging
 import helpers.logger
 import helpers.settings_reader
+import pandas as pd
 
 class header:
   name = ""
@@ -23,9 +24,9 @@ class header:
 class dwcaReader:
   
   """
-  DwCA reader does the following:
-  - extract an imagelist from the occurence file from a DwCA archive
-  - download the images from that list
+  DwCA reader:
+  - extracts an imagelist from the occurence file from a DwCA archive
+  - downloads the images from that list
   
   settings are read from a yaml file
   
@@ -56,6 +57,8 @@ class dwcaReader:
   imgUrlDefaultExtension = ""
   imgExpectedExtensions = []
   imgDownloadFolder = ""
+  classImageMinimum = 0
+
 
   def __init__(self,settings,logger=None):
     self.settings = settings
@@ -64,6 +67,61 @@ class dwcaReader:
     self._readSettings()
     self._getColumnIndices()
     self._createDownloadFolder()
+
+
+  def _readSettings(self):
+    # print(self.settings)/storage/data/martin-collectie/tests/
+    self.project_root = self.settings['project_root']
+
+    # dwca_infile
+    self.infile = os.path.join(self.project_root ,self.settings['dwca_infile']['name'])
+    if 'encoding' in self.settings['dwca_infile']:
+      self.infileEncoding = self.settings['dwca_infile']['encoding']
+    
+    # dwca_headers
+    for k,v in self.settings['dwca_headers'].items():
+      self.headerCols.append(header(k,v))
+
+    # image_url_path_parse
+    if 'reg_exp' in self.settings['image_url_path_parse']:
+      self.imgUrlPathParseRegExp = self.settings['image_url_path_parse']['reg_exp']
+    if 'name_index' in self.settings['image_url_path_parse']:
+      self.imgUrlPathParseNameIdx = self.settings['image_url_path_parse']['name_index']
+
+    # image_download
+    if 'folder' in self.settings['image_download']:
+      self.imgDownloadFolder = os.path.join(self.project_root, self.settings['image_download']['folder'])
+    if 'default_extension' in self.settings['image_download']:
+      self.imgUrlDefaultExtension = self.settings['image_download']['default_extension']
+    if 'expected_extensions' in self.settings['image_download']:
+      self.imgExpectedExtensions = self.settings['image_download']['expected_extensions']
+
+    # output_lists
+    if 'image_list' in self.settings['output_lists']:
+      self.imageListFile = os.path.join(self.project_root, self.settings['output_lists']['image_list']['file'])
+      self.imageListFileEncoding = self.settings['output_lists']['image_list']['encoding']
+
+    if 'downloaded_list' in self.settings['output_lists']:
+      self.downloadedListFile = os.path.join(self.project_root, self.settings['output_lists']['downloaded_list'])
+
+
+  def _getColumnIndices(self):
+    with open(self.infile,'r',encoding=self.infileEncoding) as file:
+      c = csv.reader(file)
+      row1 = next(c)
+    idx=0;
+    for header in row1:
+      for item in self.headerCols:
+        if header==item.columnLabel:
+          item.setIndex(idx)
+      idx += 1
+
+
+  def _createDownloadFolder(self):
+    if not os.path.exists(self.imgDownloadFolder):
+      os.makedirs(self.imgDownloadFolder)
+      self.logger.debug("created download folder: {}".format(self.imgDownloadFolder))
+
 
   def extractImageList(self):
     for item in self.headerCols:
@@ -74,6 +132,8 @@ class dwcaReader:
       if item.name=='name':
         idx_name = item.index
 
+    self.imageDict={}
+
     with open(self.infile,'r',encoding=self.infileEncoding) as file:
         c = csv.reader(file)
         idx=0
@@ -82,22 +142,55 @@ class dwcaReader:
             idx += 1
             continue
           
-          self.imageList.append([row[idx_id],row[idx_name],row[idx_image].split("|")])
+          if row[idx_name] in self.imageDict:
+            self.imageDict[row[idx_name]]["images"] += row[idx_image].split("|")
+          else:
+            self.imageDict[row[idx_name]]={
+                "label" : row[idx_name],
+                "id" : row[idx_id],
+                "images": row[idx_image].split("|")
+            }
+
           idx += 1
 
-    self.logger.info("extracted image list ({})".format(len(self.imageList)))
+#    print(self.imageDict)
+    self.logger.info("extracted image list ({})".format(idx-1))
+
+
+  def setClassImageMinimum(self,image_minimum):
+    self.classImageMinimum=image_minimum
+    self.logger.info("class image minimum set to {}".format(self.classImageMinimum))
 
 
   def writeImageList(self):
+    skipped = 0
+    written = 0
+    classes = 0
     with open(self.imageListFile, 'w+',encoding=self.imageListFileEncoding) as file:
       c = csv.writer(file)
 #      c.writerow(["id","label","image"])
-      for item in self.imageList:
-        for image in item[2]:
+      for x in self.imageDict.items():
+        if self.classImageMinimum > 0 and len(x[1]["images"]) < self.classImageMinimum:
+          skipped += 1
+          continue
+#        print(x[0],x[1]["id"],len(x[1]["images"]))
+        classes += 1
+        for image in x[1]["images"]:
           # id, label, image
-          c.writerow([item[0],item[1],image])
+          c.writerow([x[1]["id"],x[1]["label"],image])
+          written += 1
 
+    self.logger.info("got {} images for {} classes; skipped {} due to image minimum {}".format(written,classes,skipped,self.classImageMinimum))
     self.logger.info("wrote image list: {}".format(self.imageListFile))
+
+
+  def _readImageListFile(self):
+    with open(self.imageListFile,'r', encoding=self.infileEncoding) as file:
+        c = csv.reader(file)
+        for row in c:
+          self.imageDownloadList.append(row)
+
+    self.logger.info("read image list: {} ({})".format(self.imageListFile,len(self.imageDownloadList)))
 
 
   def downloadImages(self,skip_actual_downloading=False):    
@@ -162,74 +255,21 @@ class dwcaReader:
     self.logger.info("wrote {} ({})".format(self.downloadedListFile, len(downloaded_list)))
 
 
-  def _readSettings(self):
-    # print(self.settings)/storage/data/martin-collectie/tests/
-    self.project_root = self.settings['project_root']
-
-    # dwca_infile
-    self.infile = os.path.join(self.project_root ,self.settings['dwca_infile']['name'])
-    if 'encoding' in self.settings['dwca_infile']:
-      self.infileEncoding = self.settings['dwca_infile']['encoding']
     
-    # dwca_headers
-    for k,v in self.settings['dwca_headers'].items():
-      self.headerCols.append(header(k,v))
-
-    # image_url_path_parse
-    if 'reg_exp' in self.settings['image_url_path_parse']:
-      self.imgUrlPathParseRegExp = self.settings['image_url_path_parse']['reg_exp']
-    if 'name_index' in self.settings['image_url_path_parse']:
-      self.imgUrlPathParseNameIdx = self.settings['image_url_path_parse']['name_index']
-
-    # image_download
-    if 'folder' in self.settings['image_download']:
-      self.imgDownloadFolder = os.path.join(self.project_root, self.settings['image_download']['folder'])
-    if 'default_extension' in self.settings['image_download']:
-      self.imgUrlDefaultExtension = self.settings['image_download']['default_extension']
-    if 'expected_extensions' in self.settings['image_download']:
-      self.imgExpectedExtensions = self.settings['image_download']['expected_extensions']
-
-    # output_lists
-    if 'image_list' in self.settings['output_lists']:
-      self.imageListFile = os.path.join(self.project_root, self.settings['output_lists']['image_list']['file'])
-      self.imageListFileEncoding = self.settings['output_lists']['image_list']['encoding']
-
-    if 'downloaded_list' in self.settings['output_lists']:
-      self.downloadedListFile = os.path.join(self.project_root, self.settings['output_lists']['downloaded_list'])
-
-  def _createDownloadFolder(self):
-    if not os.path.exists(self.imgDownloadFolder):
-      os.makedirs(self.imgDownloadFolder)
-      self.logger.debug("created download folder: {}".format(self.imgDownloadFolder))
-
-
-  def _getColumnIndices(self):
-    with open(self.infile,'r',encoding=self.infileEncoding) as file:
-      c = csv.reader(file)
-      row1 = next(c)
-    idx=0;
-    for header in row1:
-      for item in self.headerCols:
-        if header==item.columnLabel:
-          item.setIndex(idx)
-      idx += 1
-
-  def _readImageListFile(self):
-    with open(self.imageListFile,'r', encoding=self.infileEncoding) as file:
-        c = csv.reader(file)
-        for row in c:
-          self.imageDownloadList.append(row)
-
-    self.logger.info("read image list: {} ({})".format(self.imageListFile,len(self.imageDownloadList)))
-
-
-
+    
+    
 if __name__ == "__main__":
-  settings_file = "./config/martin-collectie.yml"
-  settings = helpers.settings_reader.settingsReader(settings_file).getSettings()
-  logger = helpers.logger.logger(os.path.join(settings['project_root'],'log/'),settings["project_name"] + '/dwca_reader',logging.INFO)
+#  settings_file = "./config/martin-collectie.yml"
+  settings_file = "./config/corvidae.yml"
+
+  settings=helpers.settings_reader.settingsReader(settings_file).getSettings()
+  logger=helpers.logger.logger(os.path.join(settings["project_root"] + settings["log_folder"]),'training',logging.INFO)
+
   reader = dwcaReader(settings,logger)
   reader.extractImageList()
+  reader.setClassImageMinimum(100)
   reader.writeImageList()
-  reader.downloadImages(False)
+  reader.downloadImages()
+
+
 

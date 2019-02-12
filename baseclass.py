@@ -10,7 +10,8 @@ import pandas as pd
 from keras.models import load_model
 
 class baseClass:
-
+  
+  project_settings = {}
   projectRoot = ""
   modelRepoFolder = ""
   modelName = ""
@@ -20,12 +21,31 @@ class baseClass:
   classListPath = ""
   classListPathEncoding = "utf-8-sig"
   testImageFolder = ""
+  
+  def setSettings(self,project_settings):
+    self.project_settings = project_settings
+    self._setProjectName()
+    self._setProjectRoot()
+    self._setImageFolder()
 
-  def setProjectRoot(self,settings):
-    if 'project_root' in settings:
-      self.projectRoot = settings['project_root']
+
+  def getSetting(self,setting):
+    if setting in self.project_settings:
+      return self.project_settings[setting]
     else:
-      raise ValueError("project_root missing from settings")
+      raise ValueError("missing setting".format(setting))
+
+
+  def _setProjectName(self):
+    self.projectName = self.getSetting('project_name')
+
+
+  def _setProjectRoot(self):
+    self.projectRoot = self.getSetting('project_root')
+
+
+  def _setImageFolder(self):
+    self.imageFolder = os.path.join(self.projectRoot, self.getSetting('image_download')['folder'])
 
 
   def setModelRepoFolder(self,settings):
@@ -42,6 +62,18 @@ class baseClass:
   
   def _makeModelFilePath(self):
     self.modelFilePath = os.path.join(self.modelRepoFolder,self.modelName + '.hd5')
+
+
+#    # dwca_infile
+#    self.infile = os.path.join(self.project_root ,self.settings['dwca_infile']['name'])
+#    if 'encoding' in self.settings['dwca_infile']:
+#      self.infileEncoding = self.settings['dwca_infile']['encoding']
+#    
+
+
+  def setImageDownloadFolder(self,settings):
+    if 'image_download' in settings and 'folder' in settings['image_download']:
+      self.imgDownloadFolder = os.path.join(self.projectRoot, self.settings['image_download']['folder'])
 
   
   def setModelArchitecture(self,arch):
