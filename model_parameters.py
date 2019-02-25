@@ -14,7 +14,7 @@ class modelParameters():
     "save" : { "after_every_epoch": True, "after_every_epoch_monitor": "val_acc", "when_configured": True },
     "model_architecture" : "InceptionV3",
     "model_target_size" : (299,299),
-    "minimum_images_per_class" : 50,
+    "minimum_images_per_class" : 0, # ignore
     "batch_size" : 32,
     "split" : { "validation": 0.2, "test" : 0.1 }, # test not implemented
     "image_data_generator" : {
@@ -51,7 +51,7 @@ class modelParameters():
           "loss_function": "categorical_crossentropy",
           "initial_lr": 1e-4,
           "reduce_lr": { "use": True, "monitor": "val_acc", "factor": 0.2, "patience": 2, "min_lr": 1e-7},
-          "epochs": 4,
+          "epochs": 4, #4,
           "use": True
         },
         {
@@ -60,7 +60,7 @@ class modelParameters():
           "loss_function": "categorical_crossentropy",
           "initial_lr": 1e-4,
           "reduce_lr": { "use": True, "monitor": "val_acc", "factor": 0.1, "patience": 2, "min_lr": 1e-7 },
-          "epochs": 4,
+          "epochs": 4, #4,
           "use": True
         },
         {
@@ -69,7 +69,7 @@ class modelParameters():
           "loss_function": "categorical_crossentropy",
           "initial_lr": 1e-4,
           "reduce_lr": { "use": True, "monitor": "val_acc", "factor": 0.1, "patience": 2, "min_lr": 1e-8 },
-          "epochs": 200,
+          "epochs": 200, # 200,
           "use": True
         }
       ]

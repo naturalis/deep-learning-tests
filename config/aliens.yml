@@ -6,11 +6,10 @@ project_root: /storage/data/alien-predator/
 dwca_infile:
   name: dwca/Occurrence.csv
   encoding: utf-8-sig
-
-dwca_headers:
-  id: catalogNumber
-  name: scientificName
-  images: associatedMedia
+  headers:
+    id: catalogNumber
+    name: scientificName
+    images: associatedMedia
 
 # reg exp for parsing actual filename from URL
 image_url_path_parse:

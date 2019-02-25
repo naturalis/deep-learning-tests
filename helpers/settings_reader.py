@@ -27,6 +27,10 @@ class settingsReader:
   def getSettings(self):
     return self.settings    
 
+  def getSetting(self,setting):
+    if setting in self.settings:
+      return self.settings[setting]
+
   def _readSettings(self):
     stream = open(self.settingsFile, "r")
     docs = yaml.load_all(stream)

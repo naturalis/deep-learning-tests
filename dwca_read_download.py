@@ -29,9 +29,8 @@ class dwcaReader(baseclass.baseClass):
   imageDownloadList = []
   downloadedListFile = []
 
-  def __init__(self,project_settings,logger=None):
-    if logger is not None:
-      self.logger = logger
+  def __init__(self,project_settings,logger):
+    self.logger = logger
     self.setSettings(project_settings)
     self.logger.info("project: {}; program: {}".format(self.projectName,self.__class__.__name__))
 
@@ -54,7 +53,7 @@ class dwcaReader(baseclass.baseClass):
     self._writeImageList()
   
 
-  def downloadImages(self,skip_downloading=False):    
+  def downloadImages(self,skip_download_if_exists=False):    
     # image_url_path_parse
     if 'reg_exp' in self.getSetting('image_url_path_parse'):
       self.imgUrlPathParseRegExp = self.getSetting('image_url_path_parse')['reg_exp']
@@ -71,11 +70,11 @@ class dwcaReader(baseclass.baseClass):
     self.downloadedListFile = self.getDownloadedListFile()
 
     self._readImageListFile()
-    self._downloadImages(skip_downloading)
+    self._downloadImages(skip_download_if_exists)
 
 
   def _getColumnIndices(self):
-    for k,v in self.getSetting('dwca_headers').items():
+    for k,v in self.getSetting('dwca_infile')['headers'].items():
       self.headerCols.append({"name": k,  "columnLabel": v, "index" : -1})
 
     with open(self.dwcaInfile['path'],'r',encoding=self.dwcaInfile['encoding']) as file:
@@ -172,11 +171,9 @@ class dwcaReader(baseclass.baseClass):
 
 
 
-  def _downloadImages(self,skip_downloading=False):    
-    if skip_downloading:
-      self.logger.warning("BE AWARE! actual downloading is being skipped")
-
+  def _downloadImages(self,skip_download_if_exists=True):
     failed = 0
+    downloaded = 0
     downloaded_list = []
 
     for row in self.imageDownloadList:
@@ -191,7 +188,7 @@ class dwcaReader(baseclass.baseClass):
       else:
         filename = os.path.basename(p.path)
 
-      print(filename)
+#      print(filename)
 
       ext = list(reversed(os.path.splitext(filename)))[0].replace(".","").lower()
       has_extension = ext in self.imgExpectedExtensions
@@ -207,9 +204,10 @@ class dwcaReader(baseclass.baseClass):
       savefile = os.path.join(self.imageFolder,filename)
 
       try:
-        if not skip_downloading:
+        if not os.path.exists(savefile) or skip_download_if_exists==False:
           urllib.request.urlretrieve(url, savefile)
           self.logger.debug("downloaded {} to {}".format(url,savefile))
+          downloaded += 1
         else:
           self.logger.debug("skipped download {} to {}".format(url,savefile))
         row.append(filename)
@@ -218,14 +216,10 @@ class dwcaReader(baseclass.baseClass):
         self.logger.warning("download failed: {} ({})".format(url,sys.exc_info()[1]))
         failed += 1
 
-      if ((len(downloaded_list) + failed) % 100 == 0) and not skip_downloading:
-          self.logger.info("downloaded: {}, failed: {}".format(len(downloaded_list),failed))
+      if ((downloaded + failed)!= 0 and (downloaded + failed) % 100 == 0):
+          self.logger.info("downloaded: {}, failed: {}".format(downloaded,failed))
 
-    if not skip_downloading:
-      self.logger.info("finished downloading, downloaded: {}, failed: {}".format(len(downloaded_list),failed))
-    else:
-      self.logger.info("skipped downloading, have: {}".format(len(downloaded_list)))
-        
+    self.logger.info("skipped downloading, have: {}".format(len(downloaded_list)))
     
 
     with open(self.downloadedListFile, 'w+') as file:
@@ -248,6 +242,6 @@ if __name__ == "__main__":
 
   reader = dwcaReader(settings,logger)
   reader.readDwca()
-  reader.setClassImageMinimum(100)
+  reader.setClassImageMinimum(150)
   reader.writeImageList()
-  reader.downloadImages()
+  reader.downloadImages(skip_download_if_exists=True)

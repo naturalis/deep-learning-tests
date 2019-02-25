@@ -25,6 +25,7 @@ class projectSetup(baseclass.baseClass):
     self._createProjectFolder()
     self._createImageFolder()
     self._createDataFolder()
+    self._createModelRepoFolder()
 
 
   def _createProjectFolder(self):
@@ -37,6 +38,10 @@ class projectSetup(baseclass.baseClass):
 
   def _createDataFolder(self):
     self._createFolder(os.path.join(self.projectRoot,"data/"),"data")
+
+
+  def _createModelRepoFolder(self):
+    self._createFolder(self.modelRepoFolder,"models")
 
 
   def _createFolder(self,path,label):
