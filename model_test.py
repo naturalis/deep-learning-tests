@@ -28,7 +28,7 @@ class modelTest(baseclass.baseClass):
   def __init__(self, project_settings, logger):
     self.logger = logger
     self.setSettings(project_settings)
-    self.logger.info("project: {}; program: {}".format(self.projectName,self.__class__.__name__))
+#    self.logger.info("project: {}; program: {}".format(self.projectName,self.__class__.__name__))
     self.readImageListFile()
     self.readClasses()
 
@@ -92,8 +92,8 @@ class modelTest(baseclass.baseClass):
         self.validation_generator.n/self.validation_generator.batch_size,
         verbose=1)
     
-    print(self.model.metrics_names[0], score2s[0],self.model.metrics_names[1], scores[1])
-    self.logger.info("evaluation score: {}".format(set(zip(self.model.metrics_names,scores))))    
+    print(self.model.metrics_names[0], scores[0],self.model.metrics_names[1], scores[1])
+#    self.logger.info("evaluation score: {}".format(set(zip(self.model.metrics_names,scores))))    
 
 
   def confusionMatrix(self):
@@ -113,7 +113,7 @@ class modelTest(baseclass.baseClass):
 
   def setBatchPredictTrainingSetSample(self,fraction=0.002):
     self.testdf = self.traindf.sample(frac=fraction).reset_index()
-    self.setCurrentTestPath(self.testImageFolder)
+    self.setBatchPredictTestPath(self.testImageFolder)
    
 
   def setBatchPredictTestImage(self,path,label=""):
@@ -139,7 +139,7 @@ class modelTest(baseclass.baseClass):
 
       this_class = self.resolveClassId(index)
 
-      print("{}: {} ({}) / label: {}".format(y["image"], this_class, certainty, y.label))
+      print("{} {}: {} ({}) / label: {}".format("1" if this_class==y.label else "0", y["image"], this_class, certainty, y.label))
   
 
   def batchPredict2(self):
@@ -179,14 +179,21 @@ if __name__ == "__main__":
   settings_file="./config/corvidae.yml"
 
   settings=helpers.settings_reader.settingsReader(settings_file).getSettings()
-  logger=helpers.logger.logger(os.path.join(settings["project_root"] + settings["log_folder"]),'training',logging.INFO)
+  logger=helpers.logger.logger(os.path.join(settings["project_root"] + settings["log_folder"]),'testing',logging.INFO)
   params=model_parameters.modelParameters()
 
+  params.setModelParameters(
+      minimum_images_per_class=150,
+      batch_size=16
+  )
+  
   tester = modelTest(project_settings=settings,logger=logger)
   tester.setModelParameters(params.getModelParameters())
   tester.listProjectModels()
 
-  tester.setModelName('corvidae_InceptionV3')
+  tester.setModelName('corvidae_InceptionV3_150min')
+  tester.setModelVersionNumber('0e59ced80cad5f17f7806e4e410bc350')
+  tester.setModelArchitecture("InceptionV3")
   tester.loadModel()
   tester.initiateGenerators()
 
@@ -196,7 +203,7 @@ if __name__ == "__main__":
 
   
   # batch predict
-  if False:
+  if True:
     tester.setBatchPredictTrainingSetSample(0.01)
   else:
     tester.setBatchPredictTestPath("/storage/data/corvidae/images/")

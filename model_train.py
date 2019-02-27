@@ -471,25 +471,26 @@ class modelTrain(baseclass.baseClass):
 
       self.logHistory()
 
-      # in case of fit_generator, the evaluation is part of the fitting itself
-      scores = self.model.evaluate_generator(
-          self.test_generator,
-          self.test_generator.n/self.test_generator.batch_size,
-          verbose=1)
+    # in case of fit_generator, the evaluation is part of the fitting itself
+    scores = self.model.evaluate_generator(
+        self.validation_generator,
+        self.validation_generator.n/self.validation_generator.batch_size,
+        verbose=1)
+    
+    #      print(scores)
+    print("validation_generator")
+    print(self.model.metrics_names[0], scores[0],self.model.metrics_names[1], scores[1])
+
+    # in case of fit_generator, the evaluation is part of the fitting itself
+    scores = self.model.evaluate_generator(
+        self.test_generator,
+        self.test_generator.n/self.test_generator.batch_size,
+        verbose=1)
+
+    # print(scores)
+    print("test_generator")
+    print(self.model.metrics_names[0], scores[0],self.model.metrics_names[1], scores[1])
   
-     #      print(scores)
-      print("test_generator")
-      print(self.model.metrics_names[0], scores[0],self.model.metrics_names[1], scores[1])
-  
-      # in case of fit_generator, the evaluation is part of the fitting itself
-      scores = self.model.evaluate_generator(
-          self.validation_generator,
-          self.validation_generator.n/self.validation_generator.batch_size,
-          verbose=1)
-      
-      #      print(scores)
-      print("validation_generator")
-      print(self.model.metrics_names[0], scores[0],self.model.metrics_names[1], scores[1])
 
 
     from sklearn.metrics import classification_report, confusion_matrix
@@ -519,7 +520,7 @@ if __name__ == "__main__":
   settings=helpers.settings_reader.settingsReader(settings_file).getSettings()
   logger=helpers.logger.logger(os.path.join(settings["project_root"] + settings["log_folder"]),'training',logging.INFO)
   params=model_parameters.modelParameters()
-  store=model_store.modelStore()
+  store =model_store.modelStore()
 
   params.setModelParameters(
       model_name=settings["models"]["basename"]+"_150min",
@@ -528,7 +529,7 @@ if __name__ == "__main__":
       split = { "validation": 0.2, "test" : 0.1  },
 #      split = { "validation": 0.3 },
 #      image_data_generator = {},
-      early_stopping={ "use": True, "monitor": "val_acc", "patience": 3, "verbose": 0, "restore_best_weights": True},
+      early_stopping={ "use": False, "monitor": "val_acc", "patience": 3, "verbose": 0, "restore_best_weights": True},
       save={ "after_every_epoch": True, "after_every_epoch_monitor": "val_acc", "when_configured": True },
   )
 
@@ -537,7 +538,7 @@ if __name__ == "__main__":
   train.setModelParameters(params.getModelParameters())
   train.initializeTraining()
   train.trainModel()
+#  train.cholletCode()
 
   end=time.time()
   logger.info("{} took {}s".format(settings["project_name"],str(datetime.timedelta(seconds=end-start))))
-

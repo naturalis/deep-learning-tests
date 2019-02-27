@@ -238,7 +238,7 @@ if __name__ == "__main__":
   settings_file = "./config/corvidae.yml"
 
   settings=helpers.settings_reader.settingsReader(settings_file).getSettings()
-  logger=helpers.logger.logger(os.path.join(settings["project_root"] + settings["log_folder"]),'training',logging.INFO)
+  logger=helpers.logger.logger(os.path.join(settings["project_root"] + settings["log_folder"]),'dwca_reader',logging.INFO)
 
   reader = dwcaReader(settings,logger)
   reader.readDwca()
