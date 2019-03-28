@@ -3,11 +3,11 @@
 """
 Created on Mon Dec 10 09:32:19 2018
 
-@author: maarten
+@author: maarten.schermer@naturalis.nl
 """
 import baseclass
 import model_parameters, model_store
-import os, csv, copy
+import os, copy
 import logging
 from keras_preprocessing.image import ImageDataGenerator
 from keras import models
@@ -16,46 +16,38 @@ from keras import optimizers
 from keras import applications
 from keras import backend as K
 from keras.callbacks import EarlyStopping, ModelCheckpoint, ReduceLROnPlateau
-import pandas as pd
 import numpy as np
 import helpers.logger
 import helpers.settings_reader
 import time,datetime
-from sklearn.model_selection import StratifiedShuffleSplit
+
 
 # https://datascience.stackexchange.com/questions/32814/error-while-using-flow-from-generator
 from PIL import ImageFile
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 
+
 class modelTrain(baseclass.baseClass):
 
   imageFolder = ""
   imageListFile = ""
-  groupedClassList = None
   imageList = []
   staticCallbacks = []
   callbacks = []
-  trainingSettings = {}
   useTestSplit = False
   imageSetFraction = None
-  testdf = None
+
 
   def __init__(self,project_settings,logger):
     self.logger = logger
     self.setSettings(project_settings)
     self.logger.info("project: {}; program: {}".format(self.projectName,self.__class__.__name__))
-
-    self._setImageDataGeneratorSource()
-    self._setOutputFilesAndFolders()
+    self.readClasses()
 
 
   def initializeTraining(self):
-    self._readImageListFile()
-    self._checkForDuplicateImages()
-    self._applyImageMinimum()
-    self._doTestSplit()
+    self.readTrainAndTestImageLists()
     self._createGenerators()
-    self._saveClassList(self.train_generator.class_indices)
     self._initModel()
     self._setStaticModelCallbacks()
 
@@ -103,113 +95,39 @@ class modelTrain(baseclass.baseClass):
     
   
   def _giveWarnings(self):
+#    print(self.classes)
+#    print(self.classList)
+    
     if (self.trainingSettings["early_stopping"]==False or self.trainingSettings["early_stopping"]["use"]==False) and \
       self.trainingSettings["save"]["after_every_epoch"]==False:
       self.logger.warning("configured no early stopping or saving after every epoch, model won't be saved until all epochs are complete")
         
     if self.trainingSettings["save"]["after_every_epoch"]==False and self.trainingSettings["save"]["when_configured"]==False:
       self.logger.warning("configured no saving after every epoch and no saving when configured, model won't be saved!")
-    
-
-  def _setImageDataGeneratorSource(self):
-    if self.getSetting('use_subdirs_as_classes')==True:
-      self.imageDataGeneratorSource="directories"
-    else:
-      self.imageDataGeneratorSource="dataframes"
-    self.logger.info("image generatior source: {}".format(self.imageDataGeneratorSource))
 
 
-  def _setOutputFilesAndFolders(self):
-    if self.imageDataGeneratorSource=="dataframes":
-      if 'grouped_class_list' in self.getSetting('output_lists'):
-        self.groupedClassList = os.path.join(self.projectRoot,self.getSetting('output_lists')['grouped_class_list'])
-
-
-  def _readImageListFile(self):
-    if not self.imageDataGeneratorSource=="directories":
-      self.readImageListFile()
-      self.logger.info("read infile {}; got {} records".format(self.imageListFile,len(self.traindf)))
-    
-    
-  def _checkForDuplicateImages(self):
-    if not self.imageDataGeneratorSource=="directories":
-      if len(self.traindf.drop_duplicates(keep=False)) != len(self.traindf):
-        raise ValueError("found duplicate images ({} unique out of {} total)"
-                         .format(len(self.traindf.drop_duplicates(keep=False)),len(self.traindf)))
-
-
-  def _applyImageMinimum(self):
-    if self.trainingSettings["minimum_images_per_class"]==0:
-      self.logger.info("no image minimum set")
-      return
-
-    if not self.imageDataGeneratorSource=="directories":
-      grouped_df=self.traindf.groupby(by=['label'])
-  
-      labels_to_keep = []
-      for key, item in grouped_df:
-        # print(key,len(grouped_df.get_group(key)), "\n\n")
-        # print(grouped_df.get_group(key), "\n\n")
-        if len(grouped_df.get_group(key)) >= self.trainingSettings["minimum_images_per_class"]:
-          labels_to_keep.append(key)
-        
-      self.logger.info("{} of {} classes do not make the {} image minimum".format(
-          len(grouped_df)-len(labels_to_keep),
-          len(grouped_df),
-          self.trainingSettings["minimum_images_per_class"]))
-      
-      self.traindf=self.traindf[self.traindf['label'].isin(labels_to_keep)]
-    else:
-      self.logger.warning("function _applyImageMinimum() not implemented for flow_from_directory")
-
-
-  def _doTestSplit(self):
-    if "test" in self.trainingSettings["split"]:
-      self.useTestSplit=True
-      sss = StratifiedShuffleSplit(n_splits=1, test_size=self.trainingSettings["split"]["test"], random_state=0)
-  
-      train_ids= []
-      test_ids = []
-
-      for train_index, test_index in sss.split(self.traindf["image"], self.traindf["label"]):
-        train_ids.extend(train_index)
-        test_ids.extend(test_index)
-      
-      self.testdf = self.traindf.ix[test_ids].reset_index()
-      self.traindf = self.traindf.ix[train_ids].reset_index()
-      self.logger.info("did {} test split: {} train, {} test".format(self.trainingSettings["split"]["test"],len(train_ids),len(test_ids)))
-   
-    else:
-      self.useTestSplit=False
-      self.logger.info("no test split")
-
-
-  def _saveClassList(self,class_dict):
-    with open(self.classListPath, 'w+') as file:
-      c = csv.writer(file)
-      c.writerow(["id","label"])
-      for name, id in class_dict.items():
-        c.writerow([id,name])
-
-    self.logger.info("wrote {} classes to {}".format(len(class_dict),self.classListPath))
-
-    if not self.imageDataGeneratorSource=="directories" and not self.groupedClassList == None:
-      grouped_df=self.traindf.groupby(by=['label'])
-
-      with open(self.groupedClassList, 'w+') as file:
-        c = csv.writer(file)
-        for key, item in grouped_df:
-           c.writerow([key,len(grouped_df.get_group(key))])
-#           print(grouped_df.get_group(key), "\n\n")
-      self.logger.info("wrote class count list to {}".format(self.groupedClassList))
+  def _logHistory(self):
+    self.logger.info("val_loss: {}; acc: {}; loss: {}; val_acc: {}".format(
+        self.history.history['val_loss'][0],
+        self.history.history['acc'][0],
+        self.history.history['loss'][0],
+        self.history.history['val_acc'][0]))
 
 
   def _saveModel(self):
     if self.trainingSettings["save"]["when_configured"]==True:
       self.model.save(self.modelFilePath)
       self.logger.info("saved model {}".format(self.modelFilePath))
+      self._saveModelJson()
     else:
       self.logger.info("skipped saving model")
+
+
+  def _saveModelJson(self):
+    f = open(self.modelJsonFilePath, "w")
+    f.write(self.model.to_json())
+    f.close()
+    self.logger.info("saved model json {}".format(self.modelJsonFilePath))
 
 
   def _setStaticModelCallbacks(self):
@@ -218,7 +136,8 @@ class modelTrain(baseclass.baseClass):
           monitor=self.trainingSettings["early_stopping"]["monitor"],
           patience=self.trainingSettings["early_stopping"]["patience"],
           verbose=self.trainingSettings["early_stopping"]["verbose"],
-          restore_best_weights=self.trainingSettings["early_stopping"]["restore_best_weights"])
+          restore_best_weights=self.trainingSettings["early_stopping"]["restore_best_weights"]
+          )
       self.staticCallbacks.append(early_stopping)
       self.logger.info("enabled early stopping ({})".format(self.trainingSettings["early_stopping"]["monitor"]))
     else:
@@ -269,7 +188,7 @@ class modelTrain(baseclass.baseClass):
     # fill_mode='nearest', 
     # cval=0.0, 
     # data_format=None
-        
+
     datagen=ImageDataGenerator(
         rotation_range=a["rotation_range"] if "rotation_range" in a else 0,
         shear_range=a["shear_range"] if "shear_range" in a else 0.0,
@@ -281,51 +200,36 @@ class modelTrain(baseclass.baseClass):
         preprocessing_function=self.preProcess,
         validation_split=self.trainingSettings["split"]["validation"])
 
-    if self.imageDataGeneratorSource=="directories":
-      self.train_generator=datagen.flow_from_directory(
-          directory=self.imageFolder,
-          class_mode="categorical", 
-          target_size=self.modelTargetSize,
-          batch_size=self.trainingSettings["batch_size"],
-          interpolation="nearest",
-          subset="training")
-
-      self.validation_generator=datagen.flow_from_directory(
-          directory=self.imageFolder,
-          class_mode="categorical", 
-          target_size=self.modelTargetSize,
-          batch_size=self.trainingSettings["batch_size"],
-          interpolation="nearest",
-          subset="validation")
-      
-    else:
-      # https://medium.com/@vijayabhaskar96/tutorial-on-keras-flow-from-dataframe-1fd4493d237c
-      self.train_generator=datagen.flow_from_dataframe(
-          dataframe=self.traindf, 
-          directory=self.imageFolder,
-          x_col=self.imageListImageCol, 
-          y_col=self.imageListClassCol, 
-          class_mode="categorical", 
-          target_size=self.modelTargetSize,
-          batch_size=self.trainingSettings["batch_size"],
-          interpolation="nearest",
-          subset="training")
-      
-      self.validation_generator=datagen.flow_from_dataframe(
-          dataframe=self.traindf, 
-          directory=self.imageFolder,
-          x_col=self.imageListImageCol, 
-          y_col=self.imageListClassCol,
-          class_mode="categorical", 
-          target_size=self.modelTargetSize,
-          batch_size=self.trainingSettings["batch_size"],
-          interpolation="nearest",
-          subset="validation")
+    # https://medium.com/@vijayabhaskar96/tutorial-on-keras-flow-from-dataframe-1fd4493d237c
+    self.train_generator=datagen.flow_from_dataframe(
+        classes=self.classList,
+        dataframe=self.traindf, 
+        directory=self.imageFolder,
+        x_col=self.imageListImageCol, 
+        y_col=self.imageListClassCol, 
+        class_mode="categorical", 
+        target_size=self.modelTargetSize,
+        batch_size=self.trainingSettings["batch_size"],
+        interpolation="nearest",
+        subset="training")
+    
+    self.validation_generator=datagen.flow_from_dataframe(
+        classes=self.classList,
+        dataframe=self.traindf, 
+        directory=self.imageFolder,
+        x_col=self.imageListImageCol, 
+        y_col=self.imageListClassCol,
+        class_mode="categorical", 
+        target_size=self.modelTargetSize,
+        batch_size=self.trainingSettings["batch_size"],
+        interpolation="nearest",
+        subset="validation")
 
     if self.useTestSplit==True:
       test_datagen=ImageDataGenerator(rescale=1./255.)
       
       self.test_generator=test_datagen.flow_from_dataframe(
+          classes=self.classList,
           dataframe=self.testdf,
           directory=self.imageFolder,
           x_col=self.imageListImageCol, 
@@ -334,7 +238,6 @@ class modelTrain(baseclass.baseClass):
 #          class_mode=None,
           class_mode="categorical", 
           target_size=self.modelTargetSize)
-
 
       self.logger.info("split: {} train, {} validation, {} test".format(
           self.train_generator.n,
@@ -346,15 +249,9 @@ class modelTrain(baseclass.baseClass):
           self.train_generator.n,
           self.validation_generator.n))
 
-    self.logger.info("got {} classes".format(self.train_generator.num_classes))
+    self.logger.info("got {} classes".format(len(self.classList)))
+    
 
-
-  def logHistory(self):
-    self.logger.info("val_loss: {}; acc: {}; loss: {}; val_acc: {}".format(
-        self.history.history['val_loss'][0],
-        self.history.history['acc'][0],
-        self.history.history['loss'][0],
-        self.history.history['val_acc'][0]))
 
 
   def _initModel(self):
@@ -378,7 +275,7 @@ class modelTrain(baseclass.baseClass):
     x = layers.Dense(1024, activation='relu')(x)
 
     # and a logistic layer
-    predictions = layers.Dense(self.train_generator.num_classes, activation='softmax')(x)
+    predictions = layers.Dense(len(self.classList), activation='softmax')(x)
 
     # this is the model we will train
     self.model=models.Model(inputs=self.conv_base.input, outputs=predictions)
@@ -387,7 +284,7 @@ class modelTrain(baseclass.baseClass):
     self.logger.debug("number of layers: {}".format(len(self.model.layers)))
 
 
-  def trainModel(self):    
+  def trainModel(self):
     self.logger.info("training model {}".format(self.modelName))
           
     for idx, phase in enumerate(self.trainingPhases):
@@ -469,41 +366,30 @@ class modelTrain(baseclass.baseClass):
           validation_steps=step_size_validate,
           callbacks=self.callbacks)
 
-      self.logHistory()
+      self._logHistory()
 
+    self._saveModel()
+
+
+
+  def evaluateModel(self):
     # in case of fit_generator, the evaluation is part of the fitting itself
+    print("evaluate: validation_generator")
     scores = self.model.evaluate_generator(
         self.validation_generator,
         self.validation_generator.n/self.validation_generator.batch_size,
         verbose=1)
     
-    #      print(scores)
-    print("validation_generator")
     print(self.model.metrics_names[0], scores[0],self.model.metrics_names[1], scores[1])
 
-    # in case of fit_generator, the evaluation is part of the fitting itself
+
+    print("evaluate: test_generator")
     scores = self.model.evaluate_generator(
         self.test_generator,
         self.test_generator.n/self.test_generator.batch_size,
         verbose=1)
 
-    # print(scores)
-    print("test_generator")
     print(self.model.metrics_names[0], scores[0],self.model.metrics_names[1], scores[1])
-  
-
-
-    from sklearn.metrics import classification_report, confusion_matrix
-    #Confution Matrix and Classification Report
-    Y_pred = self.model.predict_generator(self.validation_generator, self.validation_generator.n // self.validation_generator.batch_size+1)
-    y_pred = np.argmax(Y_pred, axis=1)
-    print('Confusion Matrix')
-    print(confusion_matrix(self.validation_generator.classes, y_pred))
-    print('Classification Report')
-    print(classification_report(self.validation_generator.classes, y_pred))
-
-    self._saveModel()
-
 
 
 
@@ -512,33 +398,35 @@ class modelTrain(baseclass.baseClass):
 if __name__ == "__main__":
   start = time.time()
 
-#  settings_file="./config/martin-collectie.yml"
-#  settings_file="./config/aliens.yml"
-#  settings_file="./config/mnist.yml"
-  settings_file="./config/corvidae.yml"
+#  settings_file="./config/corvidae.yml"
+  settings_file="./config/mnist.yml"
 
-  settings=helpers.settings_reader.settingsReader(settings_file).getSettings()
-  logger=helpers.logger.logger(os.path.join(settings["project_root"] + settings["log_folder"]),'training',logging.INFO)
-  params=model_parameters.modelParameters()
-  store =model_store.modelStore()
+  settings = helpers.settings_reader.settingsReader(settings_file).getSettings()
+  logger = helpers.logger.logger(os.path.join(settings["project_root"] + settings["log_folder"]),'training',logging.INFO)
+  params = model_parameters.modelParameters()
+  store = model_store.modelStore()
 
   params.setModelParameters(
-      model_name=settings["models"]["basename"]+"_150min",
-      minimum_images_per_class=150,
+      model_name=settings["models"]["basename"]+"_testsplit",
+      minimum_images_per_class=10,
       batch_size=32,
-      split = { "validation": 0.2, "test" : 0.1  },
-#      split = { "validation": 0.3 },
-#      image_data_generator = {},
-      early_stopping={ "use": False, "monitor": "val_acc", "patience": 3, "verbose": 0, "restore_best_weights": True},
+      split = { "validation": 0.2, "test" : 0.1 },
+      early_stopping={ "use": True, "monitor": "val_acc", "patience": 5, "verbose": 0, "restore_best_weights": True },
       save={ "after_every_epoch": True, "after_every_epoch_monitor": "val_acc", "when_configured": True },
   )
+  
+#  params.setTrainingStagesCustomValue([
+#      {"stage" : 1,"param": "epochs", "value" : 200 },
+#      {"stage" : 1,"param": "reduce_lr", "value" : { "use": True, "monitor": "val_acc", "factor": 0.1, "patience": 2, "min_lr": 1e-8 } },
+#      {"stage" : 2,"param": "use", "value" : False }
+#  ])
 
   train=modelTrain(project_settings=settings, logger=logger)
   train.setModelVersionNumber(store.getVersionNumber())
   train.setModelParameters(params.getModelParameters())
   train.initializeTraining()
   train.trainModel()
-#  train.cholletCode()
+  train.evaluateModel()
 
   end=time.time()
   logger.info("{} took {}s".format(settings["project_name"],str(datetime.timedelta(seconds=end-start))))

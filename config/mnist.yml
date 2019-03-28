@@ -3,35 +3,32 @@ project_root: /storage/data/mnist/
 
 # all other paths should be relative to project_root
 
-dwca_infile:
-  name: dwca/Occurrence.csv
-  encoding: utf-8-sig
-  headers:
-    id: catalogNumber
-    name: scientificName
-    images: associatedMedia
+#test_image_folder: tests/
+test_image_folder: images/
+log_folder: log/
 
-# reg exp for parsing actual filename from URL
-image_url_path_parse:
-  reg_exp: ^(/file/id/)(.*)(/format/)(.*)$
-  name_index: 1
+images_per_class_minimum: 10
 
-use_subdirs_as_classes: True
-
-output_lists:
-  # also required when you're not downloading, as the headers are also used for the 'downloaded_list'
-  image_list:
+image_lists:
+  all:
     file: data/imagelist.csv
     encoding: utf-8-sig
     col_class: label
     col_image: image
-  # only used when flowing_from_dataframes; when flowing from directories, classes are inferred from the subdirs
-  downloaded_list: data/index.txt
-  class_list: data/classes.csv
-  corrupt_image_list: data/corrupt_images.csv
+  downloaded:
+    file: data/list.csv
+  corrupt:
+    file: data/corrupt_images.csv
+  classes:
+    file: data/classes.csv
+  train:
+    file: data/images_train.csv
+  test:
+    file: data/images_test.csv
+
 
 image_download:
-  folder: trainingSet/
+  folder: images/
   default_extension: jpg
   # if downloaded images don't have one of these extensions, they automatically get 'default_extension'
   expected_extensions:
@@ -42,5 +39,6 @@ models:
   basename: mnist_{model_architecture}
   folder: models/
 
-test_image_folder: test/
-log_folder: log/
+
+
+

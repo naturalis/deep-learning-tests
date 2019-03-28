@@ -21,19 +21,22 @@ class imageCheck(baseclass.baseClass):
   readRecursively = False
   extensions = ( ".jpg" )
 
-  def __init__(self,settings,logger=None):
-    if logger is not None:
-      self.logger = logger
-    self.settings = settings
-    self.setProjectRoot(settings)
-    if "corrupt_image_list" in self.settings["output_lists"]:
-      self.corruptImagesFile = os.path.join(self.projectRoot,self.settings['output_lists']['corrupt_image_list'])
-    else:
+  def __init__(self,project_settings,logger):
+    self.logger = logger
+    self.setSettings(project_settings)
+    self.logger.info("project: {}; program: {}".format(self.projectName,self.__class__.__name__))
+    self.addFolder(self.imageFolder)
+    
+    try:
+      list_file = self.getImageList("corrupt")
+      self.corruptImagesFile = list_file["path"]
+    except:
       self.corruptImagesFile = os.path.join(self.projectRoot,"corrupt_images.csv")
 
 
   def addFolder(self,folder):
     self.folders.append(folder)
+    self.logger.info("added folder {}".format(folder))
 
 
   def setExtensions(self,extensions):
@@ -84,12 +87,14 @@ class imageCheck(baseclass.baseClass):
 
 
 if __name__ == "__main__":
-  settings_file="./config/mnist.yml"
+  settings_file = "./config/corvidae.yml"
+
   settings=helpers.settings_reader.settingsReader(settings_file).getSettings()
-  logger=helpers.logger.logger(os.path.join(settings["project_root"] + settings["log_folder"]),settings["project_name"] + '/image_check',logging.DEBUG)
+  logger=helpers.logger.logger(os.path.join(settings["project_root"] + settings["log_folder"]),'dwca_reader',logging.INFO)
+
   d = imageCheck(settings, logger)
   d.setExtensions((".jpg",".png"))
-  d.addFolder("/storage/data/mnist/trainingSet/")
+  # d.addFolder("/path/to/extra/folder/")
   d.setReadFoldersRecursive(True)
   d.checkFiles()
   d.writeCorruptFiles()

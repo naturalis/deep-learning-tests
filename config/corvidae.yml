@@ -3,28 +3,33 @@ project_root: /storage/data/corvidae/
 
 # all other paths should be relative to project_root
 
+
+
 dwca_infile:
-  name: data/Occurrence.txt
+  file: data/Occurrence.txt
   encoding: utf-8-sig
   headers:
     id: catalogNumber
     name: scientificName
     images: associatedMedia
 
+
+
+
+#test_image_folder: tests/
+test_image_folder: images/
+log_folder: log/
+
+models:
+  basename: corvidae_{model_architecture}
+  folder: models/
+
+images_per_class_minimum: 150
+
 # reg exp for parsing actual filename from URL
 image_url_path_parse:
   reg_exp: ^(/file/id/)(.*)(/format/)(.*)$
   name_index: 1
-
-output_lists:
-  image_list:
-    file: data/imagelist.csv
-    encoding: utf-8-sig
-    col_class: label
-    col_image: image
-  downloaded_list: data/downloaded.csv
-  class_list: data/classes.csv
-  grouped_class_list: data/grouped_classes.csv
 
 image_download:
   folder: images/
@@ -34,13 +39,19 @@ image_download:
     - jpg
     - jpeg
 
-use_subdirs_as_classes: False
-
-models:
-  basename: corvidae_{model_architecture}
-  folder: models/
-
-#test_image_folder: tests/
-test_image_folder: images/
-
-log_folder: log/
+image_lists:
+  all:
+    file: data/imagelist.csv
+    encoding: utf-8-sig
+    col_class: label
+    col_image: image
+  downloaded:
+    file: data/images_downloaded.csv
+  corrupt:
+    file: data/corrupt_images.csv
+  classes:
+    file: data/classes.csv
+  train:
+    file: data/images_train.csv
+  test:
+    file: data/images_test.csv

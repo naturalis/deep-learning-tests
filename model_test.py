@@ -3,7 +3,7 @@
 """
 Created on Mon Dec 10 09:32:19 2018
 
-@author: maarten
+@author: maarten.schermer@naturalis.nl
 """
 import baseclass
 import model_parameters
@@ -24,22 +24,26 @@ ImageFile.LOAD_TRUNCATED_IMAGES = True
 class modelTest(baseclass.baseClass):
   
   testdf = None
+  ran_predictions = False
   
   def __init__(self, project_settings, logger):
     self.logger = logger
     self.setSettings(project_settings)
-#    self.logger.info("project: {}; program: {}".format(self.projectName,self.__class__.__name__))
-    self.readImageListFile()
-    self.readClasses()
 
+
+  def initTesting(self):
+    self.readTrainAndTestImageLists()
+    self.readClasses()
+    self.printClasses()
+    
 
   def setModelParameters(self,parameters):
     self.trainingSettings = parameters
-    
+
 
   def initiateGenerators(self):
     a=self.trainingSettings["image_data_generator"]
-    
+   
     datagen=ImageDataGenerator(
         rotation_range=a["rotation_range"] if "rotation_range" in a else 0,
         shear_range=a["shear_range"] if "shear_range" in a else 0.0,
@@ -49,62 +53,139 @@ class modelTest(baseclass.baseClass):
         horizontal_flip=a["horizontal_flip"] if "horizontal_flip" in a else False,
         vertical_flip=a["vertical_flip"] if "vertical_flip" in a else False,
         preprocessing_function=self.preProcess,
-        validation_split=self.trainingSettings["split"]["validation"])
+        validation_split=self.trainingSettings["split"]["validation"]
+    )
     
     self.validation_generator=datagen.flow_from_dataframe(
+        classes=self.classList,
         dataframe=self.traindf, 
         directory=self.imageFolder,
         x_col=self.imageListImageCol, 
         y_col=self.imageListClassCol,
         class_mode="categorical",
         target_size=self.trainingSettings["model_target_size"],
+        shuffle=False,
         batch_size=self.trainingSettings["batch_size"],
         interpolation="nearest",
-        subset="validation")
+        subset="validation"
+    )
 
-#    test_datagen = ImageDataGenerator(rescale=1./255)
-#
-#    self.test_generator=test_datagen.flow_from_dataframe(
-#        dataframe=self.testdf,
-#        directory=self.imageFolder,
-#        x_col=self.imageListImageCol, 
-#        y_col=None,
-#        batch_size=1,
-#        class_mode=None,
-#        shuffle = False,
-#        target_size=self.modelTargetSize
-#        )
+    test_datagen=ImageDataGenerator(
+        rescale=1./255.
+    )
 
+    self.test_generator=test_datagen.flow_from_dataframe(
+        classes=self.classList,
+        dataframe=self.testdf, 
+        directory=self.imageFolder,
+        x_col=self.imageListImageCol, 
+        y_col=self.imageListClassCol,
+        class_mode="categorical",
+        target_size=self.trainingSettings["model_target_size"],
+#        shuffle=False,
+        batch_size=self.trainingSettings["batch_size"],
+#        interpolation="nearest"
+    )
 
   def evaluateModel(self):
-#    # in case of fit_generator, the evaluation is part of the fitting itself
-#    scores = self.model.evaluate_generator(
-#        self.test_generator,
-#        self.test_generator.n/self.test_generator.batch_size,
-#        verbose=1)
-#
-#    print("test_generator")
-#    print(self.model.metrics_names[0], scores[0],self.model.metrics_names[1], scores[1])
+    print("evaluation (test_generator)")
+    self.test_generator.reset()
+    scores = self.model.evaluate_generator(
+        self.test_generator,
+        self.test_generator.n // self.test_generator.batch_size+1,
+        verbose=1)
+        
+    print(self.model.metrics_names[0], scores[0],self.model.metrics_names[1], scores[1])
+    self.logger.info("evaluation score (test): {}".format(set(zip(self.model.metrics_names,scores))))    
+
 
     print("evaluation (validation_generator)")
+    self.validation_generator.reset()
     scores = self.model.evaluate_generator(
         self.validation_generator,
-        self.validation_generator.n/self.validation_generator.batch_size,
+        self.validation_generator.n // self.validation_generator.batch_size+1,
         verbose=1)
-    
+        
     print(self.model.metrics_names[0], scores[0],self.model.metrics_names[1], scores[1])
-#    self.logger.info("evaluation score: {}".format(set(zip(self.model.metrics_names,scores))))    
+    self.logger.info("evaluation score (validation): {}".format(set(zip(self.model.metrics_names,scores))))    
+    
 
 
-  def confusionMatrix(self):
-    Y_pred = self.model.predict_generator(self.validation_generator, self.validation_generator.n // self.validation_generator.batch_size+1)
+
+
+    
+
+  def confusionMatrix(self,save=False):
+    if not self.ran_predictions:
+      self._runPredictions()
+      
+    print('confusion matrix')
+    print(confusion_matrix(self.labels_ground_truths, self.labels_predictions))
+   
+
+  def classificationReport(self,save=False):
+    if not self.ran_predictions:
+      self._runPredictions()
+    
+    print('classification report')
+    print(classification_report(self.labels_ground_truths, self.labels_predictions))
+
+
+
+  def _runPredictions(self):
+    print('running predictions')
+    self.validation_generator.reset()
+      
+    self.labels_ground_truths=[]
+    # a = iter(self.validation_generator.filenames)
+#    for c in self.validation_generator.classes:
+#      for label, index in self.validation_generator.class_indices.items():
+#          if index==c:
+#              # class_index, class, filename
+#              # print(c, label, next(a)) 
+#              # print(c, label)
+#              self.labels_ground_truths.append(label)
+
+
+    # predictions
+    # y_pred = class index for all n predictions
+    Y_pred = self.model.predict_generator(
+        self.validation_generator,
+        self.validation_generator.n // self.validation_generator.batch_size+1,
+        verbose=1)
+
+    Y_pred = Y_pred[:self.validation_generator.n]
     y_pred = np.argmax(Y_pred, axis=1)
 
-    print('confusion matrix')
-    print(confusion_matrix(self.validation_generator.classes, y_pred))
+#    self.labels_predictions=[]
+#    for index in y_pred:
+#      self.labels_predictions.append(self.resolveClassId(index))
 
-    print('classification report')
-    print(classification_report(self.validation_generator.classes, y_pred))
+    self.ran_predictions = True
+
+    self.labels_ground_truths = self.validation_generator.classes
+    self.labels_predictions = y_pred
+
+
+
+  def whatever(self):
+    datagen=ImageDataGenerator(preprocessing_function=self.preProcess)
+    
+    self.validation_generator3=datagen.flow_from_dataframe(
+        classes=self.classList,
+        dataframe=self.traindf, 
+        directory=self.imageFolder,
+        x_col=self.imageListImageCol,
+        class_mode=None,
+        target_size=self.trainingSettings["model_target_size"],
+        shuffle=False,
+        batch_size=self.trainingSettings["batch_size"],
+        interpolation="nearest"
+        )
+
+    print("evaluation (predict_generator)")
+    probabilities = self.model.predict_generator(self.validation_generator3, 100)
+    print(probabilities)
 
 
   def setBatchPredictTestPath(self,path):    
@@ -120,7 +201,7 @@ class modelTest(baseclass.baseClass):
     if self.testdf is None or len(self.testdf.index)==0:
       self.testdf = pd.DataFrame([[path,label.encode('utf-8')]],columns=["image","label"])
     else:
-      self.testdf = self.testdf.append({"image": path, "label": label.encode('utf-8') }, ignore_index=True)
+      self.testdf = self.testdf.append({"image": path, "label":  label.encode('utf-8') }, ignore_index=True)
 
 
   def batchPredict(self):
@@ -139,7 +220,7 @@ class modelTest(baseclass.baseClass):
 
       this_class = self.resolveClassId(index)
 
-      print("{} {}: {} ({}) / label: {}".format("1" if this_class==y.label else "0", y["image"], this_class, certainty, y.label))
+      print("{} {}: {} / label: {} ({})".format("1" if this_class==y.label else "0", y["image"], this_class, y.label, certainty))
   
 
   def batchPredict2(self):
@@ -165,6 +246,7 @@ class modelTest(baseclass.baseClass):
 #        print(idx, filenames[idx], val, predictions[val])
         print(idx, filenames[idx], val, predictions[idx][val], self.classes.loc[self.classes["id"]==val]["label"])
 
+
     p = self.model.predict()
     print(p)
 
@@ -183,43 +265,47 @@ if __name__ == "__main__":
   params=model_parameters.modelParameters()
 
   params.setModelParameters(
+      model_name=settings["models"]["basename"]+"_150min",
       minimum_images_per_class=150,
-      batch_size=16
+      batch_size=32,
+      split =  { "validation": 0.2, "test" : 0.1 },
+      early_stopping={ "use": False, "monitor": "val_acc", "patience": 3, "verbose": 0, "restore_best_weights": True},
+      save={ "after_every_epoch": True, "after_every_epoch_monitor": "val_acc", "when_configured": True },
   )
   
   tester = modelTest(project_settings=settings,logger=logger)
   tester.setModelParameters(params.getModelParameters())
+
+  tester.initTesting()
   tester.listProjectModels()
 
-  tester.setModelName('corvidae_InceptionV3_150min')
-  tester.setModelVersionNumber('0e59ced80cad5f17f7806e4e410bc350')
+  tester.setModelName('corvidae_InceptionV3_testsplit')
+  tester.setModelVersionNumber('cbe29ab716ec42dfc01ef17b28d5cee8')
+
   tester.setModelArchitecture("InceptionV3")
   tester.loadModel()
   tester.initiateGenerators()
 
-  # confusion matrix & classification report, evaluations
-  tester.confusionMatrix()
   tester.evaluateModel()
+  tester.classificationReport()
+  tester.confusionMatrix()
+##  tester.whatever()
+  
 
   
-  # batch predict
-  if True:
-    tester.setBatchPredictTrainingSetSample(0.01)
-  else:
-    tester.setBatchPredictTestPath("/storage/data/corvidae/images/")
-    tester.setBatchPredictTestImage(label="Pica pica pica (Linnaeus, 1758)",path="RMNH.AVES.56402_1.jpg")
-    tester.setBatchPredictTestImage(label="Garrulus glandarius glandarius (Linnaeus, 1758)",path="RMNH.AVES.140137_2.jpg")
-    tester.setBatchPredictTestImage(label="Corvus frugilegus frugilegus Linnaeus, 1758",path="RMNH.AVES.67832_1.jpg")
+
+
+#  # batch predict
+#  if True:
+#    tester.setBatchPredictTrainingSetSample(0.015)
+#  else:
+#    tester.setBatchPredictTestPath("/storage/data/corvidae/images/")
+#    tester.setBatchPredictTestImage(label="Pica pica pica (Linnaeus, 1758)",path="RMNH.AVES.56402_1.jpg")
+#    tester.setBatchPredictTestImage(label="Garrulus glandarius glandarius (Linnaeus, 1758)",path="RMNH.AVES.140137_2.jpg")
+#    tester.setBatchPredictTestImage(label="Corvus frugilegus frugilegus Linnaeus, 1758",path="RMNH.AVES.67832_1.jpg")
+#  
+#  tester.batchPredict()
   
-  tester.batchPredict()
-
-
-
-  
-#  tester.generalModelStats()
-#  tester.performancePerClass()
-#   precision
-#   recall
 
 #  tester.setImage()
 #  tester.lastStepHeatmap()

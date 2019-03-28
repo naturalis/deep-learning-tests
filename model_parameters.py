@@ -3,7 +3,7 @@
 """
 Created on Thu Jan 24 14:56:30 2019
 
-@author: maarten
+@author: maarten.schermer@naturalis.nl
 """
 
 class modelParameters():
@@ -24,6 +24,8 @@ class modelParameters():
     "model_name" : None,
     "training_stages" : None
   }
+    
+  trainingStagesCustomValues=[];
 
   def setModelParameters(self,**kwargs):
     for key, value in kwargs.items():
@@ -31,10 +33,21 @@ class modelParameters():
         self.parameters[key] = value 
     
 
+  def setTrainingStagesCustomValue(self,items):
+    for item in items:
+      self.trainingStagesCustomValues.append({"stage":item["stage"],"param":item["param"],"value":item["value"]})
+
+
   def getModelParameters(self):
-    self._setTrainingStagesDefault()
     self._setModelName()
+    self._setTrainingStagesDefault()
+    self._setTrainingStagesCustomValues()
     return self.parameters
+
+
+  def _setTrainingStagesCustomValues(self):
+    for item in self.trainingStagesCustomValues:
+      self.parameters["training_stages"][item["stage"]][item["param"]]=item["value"]
 
 
   def _setModelName(self):
@@ -51,7 +64,7 @@ class modelParameters():
           "loss_function": "categorical_crossentropy",
           "initial_lr": 1e-4,
           "reduce_lr": { "use": True, "monitor": "val_acc", "factor": 0.2, "patience": 2, "min_lr": 1e-7},
-          "epochs": 4, #4,
+          "epochs": 4,
           "use": True
         },
         {
@@ -60,7 +73,7 @@ class modelParameters():
           "loss_function": "categorical_crossentropy",
           "initial_lr": 1e-4,
           "reduce_lr": { "use": True, "monitor": "val_acc", "factor": 0.1, "patience": 2, "min_lr": 1e-7 },
-          "epochs": 4, #4,
+          "epochs": 4,
           "use": True
         },
         {
@@ -69,7 +82,7 @@ class modelParameters():
           "loss_function": "categorical_crossentropy",
           "initial_lr": 1e-4,
           "reduce_lr": { "use": True, "monitor": "val_acc", "factor": 0.1, "patience": 2, "min_lr": 1e-8 },
-          "epochs": 200, # 200,
+          "epochs": 200,
           "use": True
         }
       ]

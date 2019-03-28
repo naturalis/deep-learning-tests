@@ -1,0 +1,73 @@
+have config.yml
+have DwCA
+- project_setup.py
+- dwca_reader.py (if DwCA fed)
+- image_download.py
+- image_check.py (optional, checks for each image if it loads correctly)
+- save_classlist.py (optional, if you're not using image_download.py)
+- test_split.py (optional)
+- model_train.py
+- model_test.py
+
+
+
+
+
+
+DwCA:Occurences.txt -> dwca_reader.py    -> imagelist.csv
+
+imagelist.csv       -> image_download.py -> downloaded.csv
+                                            classes.csv
+                                            <images>
+
+downloaded.csv      -> save_classlist.py -> classes.csv
+
+downloaded.csv      -> test_split.py     -> images_train.csv
+                                            images_test.csv
+
+images_train.csv    -> model_train.py    -> model.h5
+images_test.csv                             model.json
+classes.csv
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+CAVEATS
+min images in including test split, if any
+
+
+
+TODO
+* if test split in config, check in train that the test-outfile actually exists
+* make a config.yml template
+* project_setup.py is not up to date
+* use_subdirs_as_classes: not sure of it really works
+* maybe randomize the sss-split for repeated cycles (since we should use the test-set only once, strictly speaking)
+* check for duplicate images at some preliminary point?
+
+INSTRUCTIONS
+* how to get a DwCA (and what to if yoy don't want to)
+  describe 'imagelist.csv' format
+  
+
+[ model_train.py ]
+/usr/local/lib/python3.5/dist-packages/keras_preprocessing/image.py:2059: SettingWithCopyWarning:
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: http://pandas.pydata.org/pandas-docs/stable/indexing.html#indexing-view-versus-copy
+  self.df[x_col] = self.df[x_col].astype(str)

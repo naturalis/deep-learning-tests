@@ -5,7 +5,7 @@ Created on Thu Jan 17 10:12:29 2019
 
 @author: maarten
 """
-import os
+import glob, os
 import pandas as pd
 from keras.models import load_model
 import datetime
@@ -18,6 +18,7 @@ class baseClass:
   modelName = ""
   model = ""
   modelFilePath = ""
+  modelJsonFilePath = ""
   modelArchitecture = ""
   modelTargetSize = ()
   classListPath = ""
@@ -27,31 +28,88 @@ class baseClass:
   imageListFileEncoding = ""
   imageListClassCol = "label"
   imageListImageCol = "image"
-  traindf = {}
+  traindf = None
+  testdf = None
   modelVersionNumber = "1"
+  classList = []
+  availableModels = []
+  trainingSettings = {}
 
-
-  
   def setSettings(self,project_settings):
     self.project_settings = project_settings
     self._setProjectName()
     self._setProjectRoot()
     self._setImageFolder()
     self._setModelRepoFolder()
-    self._setClassListPath()
-    self._setImageList()
     self._setTestImageFolder()
+    self._setClassListPath()
 
 
   def getSetting(self,setting):
     if setting in self.project_settings:
       return self.project_settings[setting]
     else:
-      raise ValueError("missing setting".format(setting))
+      pass
+#      raise ValueError("missing setting".format(setting))
 
 
-  def getDownloadedListFile(self):
-    return os.path.join(self.projectRoot, self.getSetting('output_lists')['downloaded_list'])
+  def getImageList(self,list_type):
+    if not list_type in self.getSetting('image_lists'):
+      raise ValueError("unknown list type: {}".format(list_type))
+    a = self.getSetting('image_lists')[list_type]
+    a['path'] = os.path.join(self.projectRoot,a['file'])
+    return a
+
+
+  def getProjectModels(self):
+    if not self.modelRepoFolder == "":
+      os.chdir(self.modelRepoFolder)
+      for file in glob.glob("*.hd5"):
+        self.availableModels.append(file)
+
+
+  def listProjectModels(self):
+    self.getProjectModels()
+    print("models in {}:".format(self.modelRepoFolder))
+    for model in self.availableModels:
+      mod_timestamp = datetime.datetime.fromtimestamp(os.path.getmtime(os.path.join(self.modelRepoFolder,model)))
+      statinfo = os.stat(os.path.join(self.modelRepoFolder,model))
+      print("- {} ({}; {}mb)".format(model,mod_timestamp,round(statinfo.st_size/1e6)))
+
+
+  def setModelVersionNumber(self,number):
+    self.modelVersionNumber = number
+    self._setModelFilePath()
+
+
+  def setModelName(self,modelName):
+    self.modelName = modelName 
+    self.modelName.replace(".hd5","")
+    self._setModelFilePath()
+
+
+  def readTrainAndTestImageLists(self):
+    try:
+      test_split = self.trainingSettings["split"]["test"]
+    except:
+      test_split = -1
+
+    if test_split > 0:
+      self.traindf = self.readImageListFile(self.getImageList("train")["path"])
+      self.testdf = self.readImageListFile(self.getImageList("test")["path"])
+      self.logger.info("read {}; got {} training images".format(self.getImageList("train")["path"],len(self.traindf)))
+      self.logger.info("read {}; got {} test images".format(self.getImageList("test")["path"],len(self.testdf)))
+      self.useTestSplit = True
+    else:
+      self.readDownloadedImagesFile()
+      self.testdf = None
+      self.logger.info("read infile {}; got {} training images".format(self.imageListFile,len(self.traindf)))
+      self.logger.info("no test images")
+      self.useTestSplit = False
+     
+#    print(self.testdf.head())
+#    print(self.traindf.head())
+     
 
 
   def _setProjectName(self):
@@ -69,50 +127,23 @@ class baseClass:
   def _setModelRepoFolder(self):
     self.modelRepoFolder = os.path.join(self.projectRoot, self.getSetting('models')['folder'])
  
-  
+
   def _setClassListPath(self):
-    self.classListPath = os.path.join(self.projectRoot, self.getSetting('output_lists')['class_list'])
+    self.classListPath = self.getImageList("classes")["path"]
 
-
-  def _setImageList(self):
-    self.imageListFile = os.path.join(self.projectRoot,self.getSetting('output_lists')['downloaded_list'])
-    self.imageListFileEncoding = self.getSetting('output_lists')['image_list']['encoding']
-    self.imageListClassCol = self.getSetting('output_lists')['image_list']['col_class']
-    self.imageListImageCol = self.getSetting('output_lists')['image_list']['col_image']
-
-
-
-  def getProjectModels(self):
-    if not self.modelRepoFolder == "":
-      self.availableModels = [f for f in os.listdir(self.modelRepoFolder) if os.path.isfile(os.path.join(self.modelRepoFolder, f))]      
-
-
-  def listProjectModels(self):
-    self.getProjectModels()
-    print("models in {}:".format(self.modelRepoFolder))
-    for model in self.availableModels:
-      mod_timestamp = datetime.datetime.fromtimestamp(os.path.getmtime(os.path.join(self.modelRepoFolder,model)))
-      statinfo = os.stat(os.path.join(self.modelRepoFolder,model))
-      print("- {} ({}; {}mb)".format(model,mod_timestamp,round(statinfo.st_size/1e6)))
-      
-
-  def setModelVersionNumber(self,number):
-    self.modelVersionNumber = number
-    self._setModelFilePath()
-
-
-  def setModelName(self,modelName):
-    self.modelName = modelName 
-    self.modelName.replace(".hd5","")
-    self._setModelFilePath()
 
   
   def _setModelFilePath(self):
     self.setModelFilePath(os.path.join(self.modelRepoFolder,"{}_{}.{}".format(self.modelName,self.modelVersionNumber,'hd5')))
+    self.setModelJsonFilePath(os.path.join(self.modelRepoFolder,"{}_{}.{}".format(self.modelName,self.modelVersionNumber,'json')))
 
 
   def setModelFilePath(self,path):
     self.modelFilePath = path
+
+
+  def setModelJsonFilePath(self,path):
+    self.modelJsonFilePath = path
 
 
   def setImageDownloadFolder(self,settings):
@@ -148,7 +179,8 @@ class baseClass:
 
 
   def readClasses(self):
-    self.classes=pd.read_csv(self.classListPath, encoding=self.classListPathEncoding)
+    self.classes = pd.read_csv(self.classListPath, encoding=self.classListPathEncoding)
+    self.classList = list(self.classes["label"])
 
 
   def resolveClassId(self,id):
@@ -184,21 +216,31 @@ class baseClass:
       else:
         raise ValueError("unknown model architecture {}".format(self.modelArchitecture))
         
-
-  def readImageListFile(self):
-    sep=','
-    f = open(self.imageListFile, "r")
+  
+  def readImageListFile(self,file_path,encoding="utf-8-sig"):
+    f = open(file_path, "r", encoding=encoding)
     line = f.readline()
+    sep=','
     if line.count('\t')>0:
       sep='\t'
-    self.traindf=pd.read_csv(self.imageListFile,encoding=self.imageListFileEncoding,sep=sep)
-   
-#    grouped_df=self.traindf.groupby(by=['label'])
-#    print(grouped_df)
-#    print(len(grouped_df))
-#    for key, item in grouped_df:
-#      print([key,len(grouped_df.get_group(key))])
-##      print(grouped_df.get_group(key), "\n\n")
+    return pd.read_csv(file_path, encoding=encoding, sep=sep, dtype="str")
 
 
-    
+  def readDownloadedImagesFile(self):
+    list_file = self.getImageList("downloaded")
+    self.traindf = self.readImageListFile(list_file["path"])
+
+
+  def saveClassList(self,dataFrame):
+    classes = []
+    a = dataFrame.groupby(by="label")
+    for key, item in a:
+       classes.append(([key.encode("utf-8"), len(a.get_group(key))]))
+       
+    a = pd.DataFrame(classes, columns = ["label", "image_count"])
+    a = a.sort_values(by=["label"]).reset_index(drop=True)
+
+    list_file = self.getImageList("classes")
+    a.to_csv(list_file["path"], index=False)
+
+    self.logger.info("wrote {} classes to {}".format(len(a),list_file["path"]))
