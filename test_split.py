@@ -6,6 +6,7 @@ Created on Mon Dec 10 09:32:19 2018
 @author: maarten.schermer@naturalis.nl
 """
 import baseclass
+import utilities
 import model_parameters
 import os, csv
 import logging
@@ -48,26 +49,16 @@ class testSplit(baseclass.baseClass):
       c = csv.writer(file)
       c.writerow(["label","image"])
       for key, item in grouped_traindf:
-        try:
-          data = key.decode()
-        except AttributeError:
-          data = key
-        
         for item in grouped_traindf.get_group(key)["image"].iteritems():
-          c.writerow([data.encode("utf-8"),item[1]])
+          c.writerow([key,item[1]])
 
     list_file_test = self.getImageList("test")
     with open(list_file_test["path"], 'w') as file:
       c = csv.writer(file)
       c.writerow(["label","image"])
       for key, item in grouped_testdf:
-        try:
-          data = key.decode()
-        except AttributeError:
-          data = key
-
         for item in grouped_testdf.get_group(key)["image"].iteritems():
-          c.writerow([data.encode("utf-8"),item[1]])
+          c.writerow([key,item[1]])
 
     self.logger.info("did {} test split: {} train, {} test".format(self.trainingSettings["split"]["test"],len(train_ids),len(test_ids)))
     self.logger.info("training images: {}".format(list_file_train["path"]))
@@ -76,8 +67,7 @@ class testSplit(baseclass.baseClass):
 
 
 if __name__ == "__main__":
-  settings_file="./config/corvidae.yml"
-#  settings_file="./config/mnist.yml"
+  settings_file=utilities.utilities.getSettingsFilePath()
 
   settings = helpers.settings_reader.settingsReader(settings_file).getSettings()
   logger = helpers.logger.logger(os.path.join(settings["project_root"] + settings["log_folder"]),'training',logging.INFO)

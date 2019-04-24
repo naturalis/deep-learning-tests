@@ -3,8 +3,6 @@ project_root: /storage/data/corvidae/
 
 # all other paths should be relative to project_root
 
-
-
 dwca_infile:
   file: data/Occurrence.txt
   encoding: utf-8-sig
@@ -12,9 +10,6 @@ dwca_infile:
     id: catalogNumber
     name: scientificName
     images: associatedMedia
-
-
-
 
 #test_image_folder: tests/
 test_image_folder: images/
@@ -42,7 +37,6 @@ image_download:
 image_lists:
   all:
     file: data/imagelist.csv
-    encoding: utf-8-sig
     col_class: label
     col_image: image
   downloaded:

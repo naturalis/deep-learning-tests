@@ -1,0 +1,6 @@
+{
+    "early_stopping" : { "use": True, "monitor": "val_acc", "patience": 5, "verbose": 0, "restore_best_weights": True },
+    "save" : { "after_every_epoch": True, "after_every_epoch_monitor": "val_acc", "when_configured": True },
+    "minimum_images_per_class" : 150,
+    "batch_size" : 64
+}

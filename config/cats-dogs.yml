@@ -1,0 +1,38 @@
+project_name: cats-dogs
+project_root: /storage/data/cats-dogs/
+
+# all other paths should be relative to project_root
+
+test_image_folder: images/
+log_folder: log/
+
+image_lists:
+  all:
+    file: data/labels.csv
+    encoding: utf-8-sig
+    col_class: label
+    col_image: image
+  downloaded:
+    file: data/labels.csv
+  corrupt:
+    file: data/corrupt_images.csv
+  classes:
+    file: data/classes.csv
+  train:
+    file: data/images_train.csv
+  test:
+    file: data/images_test.csv
+
+
+image_download:
+  folder: train/
+  default_extension: jpg
+  # if downloaded images don't have one of these extensions, they automatically get 'default_extension'
+  expected_extensions:
+    - jpg
+    - jpeg
+
+models:
+  basename: meow_{model_architecture}
+  folder: models/
+

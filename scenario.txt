@@ -4,15 +4,16 @@ have DwCA
 - dwca_reader.py (if DwCA fed)
 - image_download.py
 - image_check.py (optional, checks for each image if it loads correctly)
-- save_classlist.py (optional, if you're not using image_download.py)
+- save_classlist.py (optional, if you haven't run image_download.py)
 - test_split.py (optional)
 - model_train.py
 - model_test.py
 
 
 
+ENV: export project=<project name>
 
-
+                       project_setup.py  -> <file & folder structure>
 
 DwCA:Occurences.txt -> dwca_reader.py    -> imagelist.csv
 
@@ -29,6 +30,12 @@ images_train.csv    -> model_train.py    -> model.h5
 images_test.csv                             model.json
 classes.csv
 
+
+<repo>              -> model_repo.py     -> <list of models (name, date, size, version)>
+
+<model>             -> model_test.py     -> <results>
+(<model_name>)
+(<model_version>)
 
 
 
@@ -47,7 +54,7 @@ classes.csv
 
 
 CAVEATS
-min images in including test split, if any
+min images is including test split, if any
 
 
 
@@ -58,9 +65,11 @@ TODO
 * use_subdirs_as_classes: not sure of it really works
 * maybe randomize the sss-split for repeated cycles (since we should use the test-set only once, strictly speaking)
 * check for duplicate images at some preliminary point?
+* be able to alter image minimum post facto in save_classlist.py (now only in dwca_reader)
+* yes/no headers in imagelists is bit of a mess
 
 INSTRUCTIONS
-* how to get a DwCA (and what to if yoy don't want to)
+* how to get a DwCA (and what to if you don't want to)
   describe 'imagelist.csv' format
   
 

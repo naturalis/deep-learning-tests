@@ -5,13 +5,14 @@ Created on Thu Jan 17 10:12:29 2019
 
 @author: maarten
 """
-import glob, os
+import os
 import pandas as pd
 from keras.models import load_model
-import datetime
+
 
 class baseClass:
   
+  projectName = None
   project_settings = {}
   projectRoot = ""
   modelRepoFolder = ""
@@ -34,6 +35,7 @@ class baseClass:
   classList = []
   availableModels = []
   trainingSettings = {}
+    
 
   def setSettings(self,project_settings):
     self.project_settings = project_settings
@@ -59,22 +61,6 @@ class baseClass:
     a = self.getSetting('image_lists')[list_type]
     a['path'] = os.path.join(self.projectRoot,a['file'])
     return a
-
-
-  def getProjectModels(self):
-    if not self.modelRepoFolder == "":
-      os.chdir(self.modelRepoFolder)
-      for file in glob.glob("*.hd5"):
-        self.availableModels.append(file)
-
-
-  def listProjectModels(self):
-    self.getProjectModels()
-    print("models in {}:".format(self.modelRepoFolder))
-    for model in self.availableModels:
-      mod_timestamp = datetime.datetime.fromtimestamp(os.path.getmtime(os.path.join(self.modelRepoFolder,model)))
-      statinfo = os.stat(os.path.join(self.modelRepoFolder,model))
-      print("- {} ({}; {}mb)".format(model,mod_timestamp,round(statinfo.st_size/1e6)))
 
 
   def setModelVersionNumber(self,number):
@@ -233,9 +219,14 @@ class baseClass:
 
   def saveClassList(self,dataFrame):
     classes = []
-    a = dataFrame.groupby(by="label")
-    for key, item in a:
-       classes.append(([key.encode("utf-8"), len(a.get_group(key))]))
+
+    try:
+      a = dataFrame.groupby(by=1)
+    except KeyError:
+      a = dataFrame.groupby(by="label")
+
+    for key, item in a:      
+      classes.append(([key, len(a.get_group(key))]))
        
     a = pd.DataFrame(classes, columns = ["label", "image_count"])
     a = a.sort_values(by=["label"]).reset_index(drop=True)

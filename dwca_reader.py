@@ -1,11 +1,10 @@
 import baseclass
+import utilities
 import csv
 import os.path
 import logging
 import helpers.logger
 import helpers.settings_reader
-import numpy as np
-import pandas as pd
 
 class dwcaReader(baseclass.baseClass):
   
@@ -20,6 +19,7 @@ class dwcaReader(baseclass.baseClass):
   classImageMinimum = 2
 
   def __init__(self,project_settings,logger):
+    baseclass.baseClass.__init__(self)
     self.logger = logger
     self.setSettings(project_settings)
     self._setClassImageMinimum()
@@ -58,16 +58,15 @@ class dwcaReader(baseclass.baseClass):
 
 
   def saveImageList(self):
-
     skipped = 0
     written = 0
     classes = 0
     
     list_file = self.getImageList("all")
       
-    with open(list_file["path"], 'w+',encoding=list_file["encoding"]) as file:
+    with open(list_file["path"], 'w+') as file:
       c = csv.writer(file)
-      # c.writerow(["id","label","image"])
+#      c.writerow(["id","label","image"])
       for x in self.imageDict.items():
         if self.classImageMinimum > 0 and len(x[1]["images"]) < self.classImageMinimum:
           skipped += 1
@@ -76,7 +75,7 @@ class dwcaReader(baseclass.baseClass):
         classes += 1
         for image in x[1]["images"]:
           # id, label, image
-          c.writerow([x[1]["id"],x[1]["label"],image])
+          c.writerow([x[1]["id"],x[1]["label"].encode('utf-8'),image])
           written += 1
 
     self.logger.info("got {} images for {} classes; skipped {} due to image minimum of {}".format(written,classes,skipped,self.classImageMinimum))
@@ -132,8 +131,7 @@ class dwcaReader(baseclass.baseClass):
 
 
 if __name__ == "__main__":
-  settings_file = "./config/corvidae.yml"
-
+  settings_file=utilities.utilities.getSettingsFilePath()
   settings=helpers.settings_reader.settingsReader(settings_file).getSettings()
   logger=helpers.logger.logger(os.path.join(settings["project_root"] + settings["log_folder"]),'dwca_reader',logging.INFO)
 

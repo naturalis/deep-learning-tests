@@ -6,6 +6,7 @@ Created on Mon Dec 10 09:32:19 2018
 @author: maarten.schermer@naturalis.nl
 """
 import baseclass
+import utilities
 import model_parameters, model_store
 import os, copy
 import logging
@@ -118,7 +119,6 @@ class modelTrain(baseclass.baseClass):
     if self.trainingSettings["save"]["when_configured"]==True:
       self.model.save(self.modelFilePath)
       self.logger.info("saved model {}".format(self.modelFilePath))
-      self._saveModelJson()
     else:
       self.logger.info("skipped saving model")
 
@@ -127,7 +127,7 @@ class modelTrain(baseclass.baseClass):
     f = open(self.modelJsonFilePath, "w")
     f.write(self.model.to_json())
     f.close()
-    self.logger.info("saved model json {}".format(self.modelJsonFilePath))
+    self.logger.info("saved model architecture to {}".format(self.modelJsonFilePath))
 
 
   def _setStaticModelCallbacks(self):
@@ -269,7 +269,6 @@ class modelTrain(baseclass.baseClass):
     # add a global spatial average pooling layer
     x = self.conv_base.output
     x = layers.GlobalAveragePooling2D()(x)
-    # x = layers.Dropout(0.2)(x) # not in chollet, but added in some inception schematics
 
     # let's add a fully-connected layer
     x = layers.Dense(1024, activation='relu')(x)
@@ -279,8 +278,11 @@ class modelTrain(baseclass.baseClass):
 
     # this is the model we will train
     self.model=models.Model(inputs=self.conv_base.input, outputs=predictions)
+    
+    # saving the architecture
+    self._saveModelJson()
    
-    self.logger.info("model architecture: {}".format(self.modelArchitecture))     
+    self.logger.info("model architecture: {}".format(self.modelArchitecture))
     self.logger.debug("number of layers: {}".format(len(self.model.layers)))
 
 
@@ -398,29 +400,17 @@ class modelTrain(baseclass.baseClass):
 if __name__ == "__main__":
   start = time.time()
 
-#  settings_file="./config/corvidae.yml"
-  settings_file="./config/mnist.yml"
+  settings_file=utilities.utilities.getSettingsFilePath()
+  custom_params_file=utilities.utilities.getCustomParametersFilePath()
 
   settings = helpers.settings_reader.settingsReader(settings_file).getSettings()
   logger = helpers.logger.logger(os.path.join(settings["project_root"] + settings["log_folder"]),'training',logging.INFO)
-  params = model_parameters.modelParameters()
-  store = model_store.modelStore()
+  store = model_store.modelStore(project_settings=settings, logger=logger)
+  params = model_parameters.modelParameters(logger=logger)
 
-  params.setModelParameters(
-      model_name=settings["models"]["basename"]+"_testsplit",
-      minimum_images_per_class=10,
-      batch_size=32,
-      split = { "validation": 0.2, "test" : 0.1 },
-      early_stopping={ "use": True, "monitor": "val_acc", "patience": 5, "verbose": 0, "restore_best_weights": True },
-      save={ "after_every_epoch": True, "after_every_epoch_monitor": "val_acc", "when_configured": True },
-  )
-  
-#  params.setTrainingStagesCustomValue([
-#      {"stage" : 1,"param": "epochs", "value" : 200 },
-#      {"stage" : 1,"param": "reduce_lr", "value" : { "use": True, "monitor": "val_acc", "factor": 0.1, "patience": 2, "min_lr": 1e-8 } },
-#      {"stage" : 2,"param": "use", "value" : False }
-#  ])
-
+  params.readCustomSettingsFile(custom_params_file)
+  params.setModelParameters(model_name=settings["models"]["basename"])
+ 
   train=modelTrain(project_settings=settings, logger=logger)
   train.setModelVersionNumber(store.getVersionNumber())
   train.setModelParameters(params.getModelParameters())

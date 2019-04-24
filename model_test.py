@@ -6,8 +6,9 @@ Created on Mon Dec 10 09:32:19 2018
 @author: maarten.schermer@naturalis.nl
 """
 import baseclass
+import utilities
 import model_parameters
-import logging, os
+import logging, os, sys
 import numpy as np
 import pandas as pd
 import helpers.logger
@@ -18,7 +19,7 @@ from keras.applications.inception_v3 import decode_predictions, preprocess_input
 from sklearn.metrics import classification_report, confusion_matrix
 
 # https://datascience.stackexchange.com/questions/32814/error-while-using-flow-from-generator
-from PIL import ImageFile, Image
+from PIL import ImageFile
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 
 class modelTest(baseclass.baseClass):
@@ -64,7 +65,7 @@ class modelTest(baseclass.baseClass):
         y_col=self.imageListClassCol,
         class_mode="categorical",
         target_size=self.trainingSettings["model_target_size"],
-        shuffle=False,
+        shuffle=True,
         batch_size=self.trainingSettings["batch_size"],
         interpolation="nearest",
         subset="validation"
@@ -80,6 +81,7 @@ class modelTest(baseclass.baseClass):
         directory=self.imageFolder,
         x_col=self.imageListImageCol, 
         y_col=self.imageListClassCol,
+        shuffle=False,
         class_mode="categorical",
         target_size=self.trainingSettings["model_target_size"],
 #        shuffle=False,
@@ -119,6 +121,11 @@ class modelTest(baseclass.baseClass):
     if not self.ran_predictions:
       self._runPredictions()
       
+    print(self.labels_ground_truths)
+    print(self.labels_predictions)
+    print(len(self.labels_ground_truths))
+    print(len(self.labels_predictions))
+   
     print('confusion matrix')
     print(confusion_matrix(self.labels_ground_truths, self.labels_predictions))
    
@@ -132,11 +139,15 @@ class modelTest(baseclass.baseClass):
 
 
 
+
+
   def _runPredictions(self):
     print('running predictions')
-    self.validation_generator.reset()
+
+
+#    self.validation_generator.reset()
       
-    self.labels_ground_truths=[]
+#    self.labels_ground_truths=[]
     # a = iter(self.validation_generator.filenames)
 #    for c in self.validation_generator.classes:
 #      for label, index in self.validation_generator.class_indices.items():
@@ -149,12 +160,21 @@ class modelTest(baseclass.baseClass):
 
     # predictions
     # y_pred = class index for all n predictions
+#    Y_pred = self.model.predict_generator(
+#        self.validation_generator,
+#        self.validation_generator.n // self.validation_generator.batch_size+1,
+#        verbose=1)
+
+
+    self.validation_generator.reset()
     Y_pred = self.model.predict_generator(
-        self.validation_generator,
-        self.validation_generator.n // self.validation_generator.batch_size+1,
+        self.test_generator,
+        self.test_generator.n // self.test_generator.batch_size+1,
         verbose=1)
 
-    Y_pred = Y_pred[:self.validation_generator.n]
+
+
+    Y_pred = Y_pred[:self.test_generator.n]
     y_pred = np.argmax(Y_pred, axis=1)
 
 #    self.labels_predictions=[]
@@ -163,8 +183,12 @@ class modelTest(baseclass.baseClass):
 
     self.ran_predictions = True
 
-    self.labels_ground_truths = self.validation_generator.classes
+    self.labels_ground_truths = self.test_generator.classes
     self.labels_predictions = y_pred
+
+
+
+
 
 
 
@@ -255,12 +279,19 @@ class modelTest(baseclass.baseClass):
 
 
 if __name__ == "__main__":
-#  settings_file="./config/martin-collectie.yml"
-#  settings_file="./config/aliens.yml"
-#  settings_file="./config/mnist.yml"
-  settings_file="./config/corvidae.yml"
-
+  
+  settings_file=utilities.utilities.getSettingsFilePath()
   settings=helpers.settings_reader.settingsReader(settings_file).getSettings()
+
+  try:
+    model_name = sys.argv[1]
+    model_version = sys.argv[2]
+  except IndexError:
+    print("need a model name and version as parameters")
+    print("run 'python model_repo.py' for available models in project {}".format(settings["project_name"]))
+    exit(0)
+
+  
   logger=helpers.logger.logger(os.path.join(settings["project_root"] + settings["log_folder"]),'testing',logging.INFO)
   params=model_parameters.modelParameters()
 
@@ -272,15 +303,14 @@ if __name__ == "__main__":
       early_stopping={ "use": False, "monitor": "val_acc", "patience": 3, "verbose": 0, "restore_best_weights": True},
       save={ "after_every_epoch": True, "after_every_epoch_monitor": "val_acc", "when_configured": True },
   )
-  
+
   tester = modelTest(project_settings=settings,logger=logger)
   tester.setModelParameters(params.getModelParameters())
 
   tester.initTesting()
-  tester.listProjectModels()
 
-  tester.setModelName('corvidae_InceptionV3_testsplit')
-  tester.setModelVersionNumber('cbe29ab716ec42dfc01ef17b28d5cee8')
+  tester.setModelName(model_name)
+  tester.setModelVersionNumber(model_version)
 
   tester.setModelArchitecture("InceptionV3")
   tester.loadModel()

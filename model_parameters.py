@@ -6,6 +6,8 @@ Created on Thu Jan 24 14:56:30 2019
 @author: maarten.schermer@naturalis.nl
 """
 
+import json, os
+
 class modelParameters():
 
   # defaults
@@ -14,9 +16,9 @@ class modelParameters():
     "save" : { "after_every_epoch": True, "after_every_epoch_monitor": "val_acc", "when_configured": True },
     "model_architecture" : "InceptionV3",
     "model_target_size" : (299,299),
-    "minimum_images_per_class" : 0, # ignore
+    "minimum_images_per_class" : 10,
     "batch_size" : 32,
-    "split" : { "validation": 0.2, "test" : 0.1 }, # test not implemented
+    "split" : { "validation": 0.2, "test" : 0.1 },
     "image_data_generator" : {
       "rotation_range": 90, "shear_range": 0.2, "zoom_range": 0.2,"horizontal_flip": True
       # "width_shift_range": 0.2, "height_shift_range": 0.2, "vertical_flip": True,
@@ -26,6 +28,25 @@ class modelParameters():
   }
     
   trainingStagesCustomValues=[];
+  
+  def __init__(self,logger):
+    self.logger = logger
+
+  def readCustomSettingsFile(self,filename):
+    if not os.path.isfile(filename):
+      self.logger.info("no or non-existing custom settings file")
+      return
+    else:
+      self.logger.info("reading custom settings file {}".format(filename))
+
+    with open(filename, 'r') as myfile:
+      data=myfile.read()
+
+    obj = json.loads(data)
+    for key, value in obj.items():
+      if key in self.parameters:
+        self.parameters[key] = value 
+    
 
   def setModelParameters(self,**kwargs):
     for key, value in kwargs.items():
@@ -63,7 +84,7 @@ class modelParameters():
           "frozen_layers": "base_model",
           "loss_function": "categorical_crossentropy",
           "initial_lr": 1e-4,
-          "reduce_lr": { "use": True, "monitor": "val_acc", "factor": 0.2, "patience": 2, "min_lr": 1e-7},
+          "reduce_lr": { "use": True, "monitor": "val_loss", "factor": 0.2, "patience": 2, "min_lr": 1e-7 },
           "epochs": 4,
           "use": True
         },
@@ -72,8 +93,8 @@ class modelParameters():
           "frozen_layers": 249,
           "loss_function": "categorical_crossentropy",
           "initial_lr": 1e-4,
-          "reduce_lr": { "use": True, "monitor": "val_acc", "factor": 0.1, "patience": 2, "min_lr": 1e-7 },
-          "epochs": 4,
+          "reduce_lr": { "use": True, "monitor": "val_loss", "factor": 0.1, "patience": 2, "min_lr": 1e-7 },
+          "epochs": 8,
           "use": True
         },
         {
@@ -81,8 +102,9 @@ class modelParameters():
           "frozen_layers": "none",
           "loss_function": "categorical_crossentropy",
           "initial_lr": 1e-4,
-          "reduce_lr": { "use": True, "monitor": "val_acc", "factor": 0.1, "patience": 2, "min_lr": 1e-8 },
+          "reduce_lr": { "use": True, "monitor": "val_loss", "factor": 0.1, "patience": 4, "min_lr": 1e-8 },
           "epochs": 200,
           "use": True
         }
       ]
+

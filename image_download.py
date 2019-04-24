@@ -7,6 +7,7 @@ Created on Wed Mar 13 09:54:07 2019
 """
 
 import baseclass
+import utilities
 import csv
 import os.path
 import sys, re
@@ -47,7 +48,7 @@ class imageDownloader(baseclass.baseClass):
 
     list_file = self.getImageList("all")
     
-    with open(list_file["path"],'r', encoding=list_file["encoding"]) as file:
+    with open(list_file["path"],'r') as file:
         c = csv.reader(file)
         for row in c:
           self.imageDownloadList.append(row)
@@ -111,7 +112,7 @@ class imageDownloader(baseclass.baseClass):
       c = csv.writer(file)
       c.writerow(["label","image"])
       for item in self.downloaded_list:
-        c.writerow([item[1].encode('utf-8'),item[3]])
+        c.writerow([item[1],item[3]])
     
     self.logger.info("wrote {} ({})".format(list_file["path"], len(self.downloaded_list)))
 
@@ -124,12 +125,10 @@ class imageDownloader(baseclass.baseClass):
 
 
 if __name__ == "__main__":
-#  settings_file = "./config/corvidae.yml"
-  settings_file = "./config/mnist.yml"
-
+  settings_file=utilities.utilities.getSettingsFilePath()
   settings=helpers.settings_reader.settingsReader(settings_file).getSettings()
   logger=helpers.logger.logger(os.path.join(settings["project_root"] + settings["log_folder"]),'dwca_reader',logging.INFO)
 
-  reader = imageDownloader(settings,logger)
-  reader.downloadImages(skip_download_if_exists=True)
-  reader.doSaveClassList()
+  imagedownloader = imageDownloader(settings,logger)
+  imagedownloader.downloadImages(skip_download_if_exists=True)
+  imagedownloader.doSaveClassList()

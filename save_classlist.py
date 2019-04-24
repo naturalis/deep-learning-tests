@@ -14,11 +14,10 @@ import utilities
 
 
 if __name__ == "__main__":
-#  settings_file = "./config/corvidae.yml"
-  settings_file = "./config/mnist.yml"
+  settings_file=utilities.utilities.getSettingsFilePath()
 
   settings=helpers.settings_reader.settingsReader(settings_file).getSettings()
   logger = helpers.logger.logger(os.path.join(settings["project_root"] + settings["log_folder"]),'training',logging.INFO)
 
-  reader = utilities.utilities(settings,logger)
-  reader.doSaveClassList()
+  utils = utilities.utilities(settings,logger)
+  utils.doSaveClassList()

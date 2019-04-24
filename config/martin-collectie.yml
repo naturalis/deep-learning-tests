@@ -43,3 +43,4 @@ models:
 
 test_image_folder: tests/
 log_folder: log/
+
