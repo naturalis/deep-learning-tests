@@ -72,8 +72,9 @@ class modelParameters():
 
 
   def _setModelName(self):
-    if not self.parameters["model_name"]==None:
-      self.parameters["model_name"]=self.parameters["model_name"].format(model_architecture=self.parameters["model_architecture"])
+    pass
+#    if not self.parameters["model_name"]==None:
+#      self.parameters["model_name"]=self.parameters["model_name"].format(model_architecture=self.parameters["model_architecture"])
 
 
   def _setTrainingStagesDefault(self):

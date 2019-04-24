@@ -95,7 +95,6 @@ class baseClass:
      
 #    print(self.testdf.head())
 #    print(self.traindf.head())
-     
 
 
   def _setProjectName(self):
@@ -116,7 +115,6 @@ class baseClass:
 
   def _setClassListPath(self):
     self.classListPath = self.getImageList("classes")["path"]
-
 
   
   def _setModelFilePath(self):
@@ -190,17 +188,17 @@ class baseClass:
 
 
   def preProcess(self,x):
-      if self.modelArchitecture == "InceptionV3":
-        import keras.applications.inception_v3
-        return keras.applications.inception_v3.preprocess_input(x)
-      elif self.modelArchitecture == "Xception":
-        import keras.applications.xception
-        return keras.applications.xception.preprocess_input(x)
-      elif self.modelArchitecture == "VGG16":
-        import keras.applications.vgg16
-        return keras.applications.vgg16.preprocess_input(x)
-      else:
-        raise ValueError("unknown model architecture {}".format(self.modelArchitecture))
+    if self.modelArchitecture == "InceptionV3":
+      import keras.applications.inception_v3
+      return keras.applications.inception_v3.preprocess_input(x)
+    elif self.modelArchitecture == "Xception":
+      import keras.applications.xception
+      return keras.applications.xception.preprocess_input(x)
+    elif self.modelArchitecture == "VGG16":
+      import keras.applications.vgg16
+      return keras.applications.vgg16.preprocess_input(x)
+    else:
+      raise ValueError("unknown model architecture {}".format(self.modelArchitecture))
         
   
   def readImageListFile(self,file_path,encoding="utf-8-sig"):
