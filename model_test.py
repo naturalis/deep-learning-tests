@@ -293,7 +293,7 @@ if __name__ == "__main__":
 
   
   logger=helpers.logger.logger(os.path.join(settings["project_root"] + settings["log_folder"]),'testing',logging.INFO)
-  params=model_parameters.modelParameters()
+  params=model_parameters.modelParameters(logger=logger)
 
   params.setModelParameters(
       model_name=settings["models"]["basename"]+"_150min",

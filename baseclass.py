@@ -74,6 +74,33 @@ class baseClass:
     self._setModelFilePath()
 
 
+  def setTrainingsettings(self, model_name, batch_size, model_architecture, model_target_size,
+                          split, early_stopping, save, training_stages, image_data_generator, **kwargs):
+    self.setModelName(model_name)
+    self.setModelArchitecture(model_architecture)
+    self.setModelTargetSize(model_target_size)
+    self.trainingSettings["batch_size"]=batch_size
+    self.trainingSettings["split"]=split
+    self.trainingSettings["save"]=save
+    self.trainingSettings["image_data_generator"]=image_data_generator
+    self.trainingPhases=training_stages
+
+    if not early_stopping==False and not early_stopping["use"]==False:
+        self.trainingSettings["early_stopping"]=early_stopping
+    else:
+        self.trainingSettings["early_stopping"]=False
+    
+    if 'minimum_images_per_class' in kwargs:
+      self.trainingSettings["minimum_images_per_class"]=kwargs['minimum_images_per_class']
+    else:
+      self.trainingSettings["minimum_images_per_class"]=50
+
+    self.logger.info("base settings: {}".format(self.getBaseSettings()))
+    self.logger.info("training settings: {}".format(self.trainingSettings))
+    
+    self._giveWarnings()
+
+
   def readTrainAndTestImageLists(self):
     try:
       test_split = self.trainingSettings["split"]["test"]
@@ -89,7 +116,7 @@ class baseClass:
     else:
       self.readDownloadedImagesFile()
       self.testdf = None
-      self.logger.info("read infile {}; got {} training images".format(self.imageListFile,len(self.traindf)))
+      self.logger.info("read infile {}; got {} training images".format(self.getImageList("downloaded")["path"],len(self.traindf)))
       self.logger.info("no test images")
       self.useTestSplit = False
      
@@ -119,7 +146,7 @@ class baseClass:
   
   def _setModelFilePath(self):
     self.setModelFilePath(os.path.join(self.modelRepoFolder,"{}_{}.{}".format(self.modelName,self.modelVersionNumber,'hd5')))
-    self.setModelJsonFilePath(os.path.join(self.modelRepoFolder,"{}_{}.{}".format(self.modelName,self.modelVersionNumber,'json')))
+    self.setModelJsonFilePath(os.path.join(self.modelRepoFolder,"{}_{}_architecture.{}".format(self.modelName,self.modelVersionNumber,'json')))
 
 
   def setModelFilePath(self,path):

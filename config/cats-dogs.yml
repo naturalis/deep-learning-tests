@@ -33,6 +33,6 @@ image_download:
     - jpeg
 
 models:
-  basename: meow_
+  basename: meow
   folder: models/
 

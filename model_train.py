@@ -53,33 +53,6 @@ class modelTrain(baseclass.baseClass):
     self._setStaticModelCallbacks()
 
 
-  def setTrainingsettings(self, model_name, batch_size, model_architecture, model_target_size,
-                          split, early_stopping, save, training_stages, image_data_generator, **kwargs):
-    self.setModelName(model_name)
-    self.setModelArchitecture(model_architecture)
-    self.setModelTargetSize(model_target_size)
-    self.trainingSettings["batch_size"]=batch_size
-    self.trainingSettings["split"]=split
-    self.trainingSettings["save"]=save
-    self.trainingSettings["image_data_generator"]=image_data_generator
-    self.trainingPhases=training_stages
-
-    if not early_stopping==False and not early_stopping["use"]==False:
-        self.trainingSettings["early_stopping"]=early_stopping
-    else:
-        self.trainingSettings["early_stopping"]=False
-    
-    if 'minimum_images_per_class' in kwargs:
-      self.trainingSettings["minimum_images_per_class"]=kwargs['minimum_images_per_class']
-    else:
-      self.trainingSettings["minimum_images_per_class"]=50
-
-    self.logger.info("base settings: {}".format(self.getBaseSettings()))
-    self.logger.info("training settings: {}".format(self.trainingSettings))
-    
-    self._giveWarnings()
-    
-
   def setModelParameters(self,parameters):    
     self.setTrainingsettings(
         model_name = parameters["model_name"],
@@ -287,7 +260,7 @@ class modelTrain(baseclass.baseClass):
 
 
   def trainModel(self):
-    self.logger.info("training model {}".format(self.modelName))
+    self.logger.info("training model {}".format(self.modelName)) # no version?
           
     for idx, phase in enumerate(self.trainingPhases):
       if phase["use"]==False:
@@ -412,7 +385,7 @@ if __name__ == "__main__":
   params.setModelParameters(model_name=settings["models"]["basename"])
  
   train=modelTrain(project_settings=settings, logger=logger)
-  train.setModelVersionNumber(store.getVersionNumber())
+  train.setModelVersionNumber(store.generateVersionNumber())
   train.setModelParameters(params.getModelParameters())
   train.initializeTraining()
   train.trainModel()

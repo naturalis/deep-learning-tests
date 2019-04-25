@@ -29,6 +29,7 @@ downloaded.csv      -> test_split.py     -> images_train.csv
 images_train.csv    -> model_train.py    -> model.h5
 images_test.csv                             model.json
 classes.csv
+training_params.json (optional)
 
 
 <repo>              -> model_repo.py     -> <list of models (name, date, size, version)>
