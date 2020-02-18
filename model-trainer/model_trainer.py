@@ -106,7 +106,7 @@ class ModelTrainer():
         for setting in self.model_settings:
             self.logger.info("setting - {}: {}".format(setting,str(self.model_settings[setting])))
 
-    def create_model(self):
+    def configure_model(self):
         if "conv_base" in self.model_settings:
             conv_base = self.model_settings["conv_base"]
         else:
@@ -129,7 +129,7 @@ class ModelTrainer():
         #
         # self.logger.info("trainable {}; non trainable: {}".format(trainable_count,non_trainable_count))
 
-    def create_generators(self):
+    def configure_generators(self):
         datagen = tf.keras.preprocessing.image.ImageDataGenerator(
             validation_split=self.model_settings["validation_split"])
         # rotation_range=a["rotation_range"] if "rotation_range" in a else 0,
@@ -195,6 +195,6 @@ if __name__ == "__main__":
         "optimizer": tf.keras.optimizers.Adadelta(lr=1e-4)
     })
 
-    trainer.create_model()
-    trainer.create_generators()
+    trainer.configure_model()
+    trainer.configure_generators()
     trainer.train_model()
