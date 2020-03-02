@@ -9,6 +9,7 @@ x-logging:
 
 services:
   python:
+    image: naturalisai/test-inference:0.1
     runtime: nvidia
     mem_limit: 12g
     environment:
