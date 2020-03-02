@@ -9,6 +9,10 @@ x-logging:
 
 services:
   python:
+    runtime: nvidia
+    mem_limit: 12g
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
     image: maarten-python:latest
     env_file:
       - .env
