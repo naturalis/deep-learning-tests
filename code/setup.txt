@@ -116,3 +116,7 @@ https://ruder.io/optimizing-gradient-descent/
 
 
 
+
+
+source venv/bin/activate
+nvidia-smi
