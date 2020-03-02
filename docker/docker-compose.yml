@@ -15,9 +15,9 @@ services:
     logging: *default-logging
     volumes:
       - /data/maarten.schermer/data:/data
-      - /data/maarten.schermer/code:/code
+      - /data/maarten.schermer/deep-learning-tests/code:/code
       # - /home/maarten/Documents/ai/phase02:/code
 
-# networks:
-#   web:
-#     external: true
+networks:
+  web:
+    external: true
