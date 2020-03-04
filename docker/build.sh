@@ -1,3 +1,3 @@
 #!/bin/sh
 
-sudo docker build -t maarten-python:latest -f Dockerfile .
+sudo docker build -t mds-tensorflow:latest -f Dockerfile .
