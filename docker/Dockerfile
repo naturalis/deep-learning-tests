@@ -8,6 +8,10 @@ MAINTAINER maarten.schermer@naturalis.nl
 COPY . /app
 WORKDIR /app
 
+RUN apt-get update && \
+    apt-get upgrade && \
+    apt-get install python3-pandas
+
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 
