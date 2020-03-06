@@ -10,7 +10,7 @@ WORKDIR /app
 
 RUN apt-get update && \
     apt-get upgrade && \
-    apt-get install python3-pandas -y
+    apt-get -y install python3-pandas
 
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
