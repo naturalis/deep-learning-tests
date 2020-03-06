@@ -1,14 +1,15 @@
 import os, logging
 
-class LogClass():
 
-    def __init__(self,name):
+class LogClass:
+
+    def __init__(self, name):
         self.logger = logging.getLogger(name)
         self.logger.setLevel(logging.INFO)
 
         fh = logging.FileHandler(os.path.join(os.environ['PROJECT_ROOT'], 'log', 'general.log'))
 
-        if 'DEBUGGING' in os.environ and os.environ['DEBUGGING']=="1":
+        if 'DEBUGGING' in os.environ and os.environ['DEBUGGING'] == "1":
             fh.setLevel(logging.DEBUG)
         else:
             fh.setLevel(logging.INFO)
@@ -26,42 +27,14 @@ class LogClass():
     def __del__(self):
         pass
 
-    def info(self,message):
+    def info(self, message):
         self.logger.info(message)
 
-    def debug(self,message):
+    def debug(self, message):
         self.logger.debug(message)
 
-    def warning(self,message):
+    def warning(self, message):
         self.logger.warning(message)
 
-    def error(self,message):
+    def error(self, message):
         self.logger.error(message)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -3,6 +3,7 @@ import json
 import os
 from lib import logclass
 
+
 class ClassificationClass:
     name = None
     images = []
@@ -132,7 +133,9 @@ class DwcaReader():
         with open(self.class_list_file_json, 'w') as outfile:
             json.dump(tmp, outfile)
 
-        self.logger.info("wrote {} classes with min {} images to {}".format(len(self.get_class_list()),self.class_image_minimum,self.class_list_file_json))
+        self.logger.info(
+            "wrote {} classes with min {} images to {}".format(len(self.get_class_list()), self.class_image_minimum,
+                                                               self.class_list_file_json))
 
     def _save_image_list(self):
         with open(self.image_list_file_csv, 'w') as csvfile:
@@ -142,7 +145,7 @@ class DwcaReader():
                 for image in item.get_images():
                     c.writerow([item.get_name(), image])
 
-        self.logger.info("wrote {} images to {}".format(self.total_images,self.image_list_file_csv))
+        self.logger.info("wrote {} images to {}".format(self.total_images, self.image_list_file_csv))
 
     def get_settings(self):
         return {

@@ -6,6 +6,9 @@ import pandas as pd
 import numpy as np
 from lib import logclass
 
+# TODO: "WARNING:tensorflow:sample_weight modes were coerced from .. "
+# https://stackoverflow.com/questions/59317919/warningtensorflowsample-weight-modes-were-coerced-from-to
+
 
 def _csv_to_dataframe(filepath, usecols, encoding="utf-8-sig"):
     f = open(filepath, "r", encoding=encoding)
@@ -14,7 +17,7 @@ def _csv_to_dataframe(filepath, usecols, encoding="utf-8-sig"):
         sep = '\t'
     else:
         sep = ','
-    return pd.read_csv(filepath,encoding=encoding,sep=sep,dtype="str",usecols=usecols,header=None)
+    return pd.read_csv(filepath, encoding=encoding, sep=sep, dtype="str", usecols=usecols, header=None)
 
 
 class ModelTrainer():
@@ -30,8 +33,8 @@ class ModelTrainer():
     model_settings = None
     predictions = None
 
-    COL_CLASS="class"
-    COL_IMAGE="image"
+    COL_CLASS = "class"
+    COL_IMAGE = "image"
 
     model = None
     train_generator = None
@@ -84,7 +87,8 @@ class ModelTrainer():
 
     # TODO: implement Test split
     def read_image_list_file(self):
-        df = _csv_to_dataframe(filepath=self.downloaded_images_list_file, usecols=[self.image_list_class_col, self.image_list_image_col])
+        df = _csv_to_dataframe(filepath=self.downloaded_images_list_file,
+                               usecols=[self.image_list_class_col, self.image_list_image_col])
         # if Test split
         #   df = df.sample(frac=1)
         #   msk = np.random.rand(len(df)) < 0.8
@@ -92,7 +96,7 @@ class ModelTrainer():
         #   self.testdf = df[~msk]
         # # print(len(df), len(self.traindf), len(self.testdf))
         df[2] = self.image_root.rstrip("/") + "/" + df[2].astype(str)
-        df.columns = [ self.COL_CLASS, self.COL_IMAGE ]
+        df.columns = [self.COL_CLASS, self.COL_IMAGE]
         self.traindf = df
 
     def read_class_list(self):
@@ -104,7 +108,7 @@ class ModelTrainer():
     def set_model_settings(self, model_settings):
         self.model_settings = model_settings
         for setting in self.model_settings:
-            self.logger.info("setting - {}: {}".format(setting,str(self.model_settings[setting])))
+            self.logger.info("setting - {}: {}".format(setting, str(self.model_settings[setting])))
 
     def configure_model(self):
         if "conv_base" in self.model_settings:
@@ -165,13 +169,15 @@ class ModelTrainer():
         step_size_train = self.train_generator.n // self.train_generator.batch_size
         step_size_validate = self.validation_generator.n // self.validation_generator.batch_size
 
-        history = self.model.fit_generator(
-            self.train_generator,
+        history = self.model.fit(
+            x=self.train_generator,
             steps_per_epoch=step_size_train,
             epochs=self.model_settings["epochs"],
             validation_data=self.validation_generator,
             validation_steps=step_size_validate
         )
+        # If x is a dataset, generator, or keras.utils.Sequence instance, y should not be specified (since targets
+        # will be obtained from x)
 
 
 if __name__ == "__main__":

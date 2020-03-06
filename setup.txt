@@ -7,9 +7,12 @@ source ./venv/bin/activate
 export PROJECT_ROOT=/data/ai/phase02/corvidae
 export PROJECT_ROOT=/home/maarten.schermer/data/corivdae
 
+
 [OPTIONAL]
 export DWCA_FILE_PATH=/path/to/occurrences.txt (defaults to "dwca/Occurrence.txt")
 export CLASS_IMAGE_MINIMUM=<n>  (defaults to 2)
+export IMAGE_URL_TO_NAME="{\"expression\": \"/file/id/|/format/[a-z]*\", \"replace\": \"\", \"postfix\": \".jpg\"}"
+
 
 [other defaults]
 DwCA-file must be utf-8-sig

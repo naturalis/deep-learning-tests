@@ -3,11 +3,20 @@
   <component name="ChangeListManager">
     <list default="true" id="5cc7df0a-0ddd-42fb-b420-7c7aa1712972" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/code/dwca-reader/dwca_reader.py" beforeDir="false" afterPath="$PROJECT_DIR$/code/dwca-reader/dwca_reader.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/code/lib/logclass.py" beforeDir="false" afterPath="$PROJECT_DIR$/code/lib/logclass.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -22,16 +31,64 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/.env" />
+    <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="Python" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/code/lib" />
     <property name="settings.editor.selected.configurable" value="Errors" />
   </component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/code/lib" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/lib" />
       <recent name="$PROJECT_DIR$/shared" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.model_trainer">
+  <component name="RunManager" selected="Python.dwca_reader (2)">
+    <configuration name="dwca_reader (1)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="phase02" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/code/dwca-reader" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/code/dwca-reader/dwca_reader.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="dwca_reader (2)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="phase02" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/code" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/code/dwca_reader.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="dwca_reader" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="phase02" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -132,12 +189,16 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Python.dwca_reader" />
       <item itemvalue="Python.image_downloader" />
+      <item itemvalue="Python.dwca_reader" />
       <item itemvalue="Python.model_trainer" />
+      <item itemvalue="Python.dwca_reader (1)" />
+      <item itemvalue="Python.dwca_reader (2)" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.dwca_reader (2)" />
+        <item itemvalue="Python.dwca_reader (1)" />
         <item itemvalue="Python.model_trainer" />
         <item itemvalue="Python.dwca_reader" />
       </list>
@@ -159,6 +220,7 @@
       <workItem from="1581935131320" duration="9988000" />
       <workItem from="1582014421916" duration="13795000" />
       <workItem from="1582532934408" duration="4000" />
+      <workItem from="1583485153441" duration="2177000" />
     </task>
     <servers />
   </component>
@@ -178,34 +240,34 @@
       <screen x="67" y="27" width="2493" height="1413" />
     </state>
     <state x="925" y="690" width="515" height="542" key="EnvironmentVariablesDialog/67.27.2493.1413@67.27.2493.1413" timestamp="1581592824046" />
-    <state x="963" y="690" width="424" height="484" key="FileChooserDialogImpl" timestamp="1581956376584">
+    <state x="963" y="690" width="424" height="484" key="FileChooserDialogImpl" timestamp="1583487317699">
       <screen x="67" y="27" width="2493" height="1413" />
     </state>
-    <state x="963" y="690" width="424" height="484" key="FileChooserDialogImpl/67.27.2493.1413@67.27.2493.1413" timestamp="1581956376584" />
-    <state width="2183" height="264" key="GridCell.Tab.0.bottom" timestamp="1582042254159">
+    <state x="963" y="690" width="424" height="484" key="FileChooserDialogImpl/67.27.2493.1413@67.27.2493.1413" timestamp="1583487317699" />
+    <state width="2183" height="264" key="GridCell.Tab.0.bottom" timestamp="1583487333415">
       <screen x="67" y="27" width="2493" height="1413" />
     </state>
     <state width="1807" height="520" key="GridCell.Tab.0.bottom/0.27.3840.1053@0.27.3840.1053" timestamp="1582018910220" />
     <state width="1807" height="348" key="GridCell.Tab.0.bottom/67.27.1853.1053@67.27.1853.1053" timestamp="1582024091441" />
-    <state width="2183" height="264" key="GridCell.Tab.0.bottom/67.27.2493.1413@67.27.2493.1413" timestamp="1582042254159" />
-    <state width="2183" height="264" key="GridCell.Tab.0.center" timestamp="1582042254159">
+    <state width="2183" height="264" key="GridCell.Tab.0.bottom/67.27.2493.1413@67.27.2493.1413" timestamp="1583487333415" />
+    <state width="2183" height="264" key="GridCell.Tab.0.center" timestamp="1583487333413">
       <screen x="67" y="27" width="2493" height="1413" />
     </state>
     <state width="1807" height="520" key="GridCell.Tab.0.center/0.27.3840.1053@0.27.3840.1053" timestamp="1582018910219" />
     <state width="1807" height="348" key="GridCell.Tab.0.center/67.27.1853.1053@67.27.1853.1053" timestamp="1582024091440" />
-    <state width="2183" height="264" key="GridCell.Tab.0.center/67.27.2493.1413@67.27.2493.1413" timestamp="1582042254159" />
-    <state width="2183" height="264" key="GridCell.Tab.0.left" timestamp="1582042254158">
+    <state width="2183" height="264" key="GridCell.Tab.0.center/67.27.2493.1413@67.27.2493.1413" timestamp="1583487333413" />
+    <state width="2183" height="264" key="GridCell.Tab.0.left" timestamp="1583487333412">
       <screen x="67" y="27" width="2493" height="1413" />
     </state>
     <state width="1807" height="520" key="GridCell.Tab.0.left/0.27.3840.1053@0.27.3840.1053" timestamp="1582018910219" />
     <state width="1807" height="348" key="GridCell.Tab.0.left/67.27.1853.1053@67.27.1853.1053" timestamp="1582024091439" />
-    <state width="2183" height="264" key="GridCell.Tab.0.left/67.27.2493.1413@67.27.2493.1413" timestamp="1582042254158" />
-    <state width="2183" height="264" key="GridCell.Tab.0.right" timestamp="1582042254159">
+    <state width="2183" height="264" key="GridCell.Tab.0.left/67.27.2493.1413@67.27.2493.1413" timestamp="1583487333412" />
+    <state width="2183" height="264" key="GridCell.Tab.0.right" timestamp="1583487333414">
       <screen x="67" y="27" width="2493" height="1413" />
     </state>
     <state width="1807" height="520" key="GridCell.Tab.0.right/0.27.3840.1053@0.27.3840.1053" timestamp="1582018910220" />
     <state width="1807" height="348" key="GridCell.Tab.0.right/67.27.1853.1053@67.27.1853.1053" timestamp="1582024091440" />
-    <state width="2183" height="264" key="GridCell.Tab.0.right/67.27.2493.1413@67.27.2493.1413" timestamp="1582042254159" />
+    <state width="2183" height="264" key="GridCell.Tab.0.right/67.27.2493.1413@67.27.2493.1413" timestamp="1583487333414" />
     <state width="1830" height="474" key="GridCell.Tab.1.bottom" timestamp="1581956565531">
       <screen x="67" y="27" width="2493" height="1413" />
     </state>
@@ -226,23 +288,25 @@
       <screen x="67" y="27" width="2493" height="1413" />
     </state>
     <state x="748" y="476" key="SettingsEditor/67.27.2493.1413@67.27.2493.1413" timestamp="1582016300129" />
-    <state x="920" y="563" key="com.intellij.ide.util.TipDialog" timestamp="1582532935168">
+    <state x="920" y="563" key="com.intellij.ide.util.TipDialog" timestamp="1583485158650">
       <screen x="67" y="27" width="2493" height="1413" />
     </state>
-    <state x="920" y="563" key="com.intellij.ide.util.TipDialog/67.27.2493.1413@67.27.2493.1413" timestamp="1582532935168" />
+    <state x="920" y="563" key="com.intellij.ide.util.TipDialog/67.27.2493.1413@67.27.2493.1413" timestamp="1583485158650" />
     <state x="1189" y="379" width="501" height="713" key="refactoring.ChangeSignatureDialog" timestamp="1582015057693">
       <screen x="67" y="27" width="2493" height="1413" />
     </state>
     <state x="1189" y="379" width="501" height="713" key="refactoring.ChangeSignatureDialog/67.27.2493.1413@67.27.2493.1413" timestamp="1582015057693" />
-    <state x="874" y="431" width="672" height="678" key="search.everywhere.popup" timestamp="1581947017476">
+    <state x="874" y="431" width="672" height="678" key="search.everywhere.popup" timestamp="1583486548663">
       <screen x="67" y="27" width="2493" height="1413" />
     </state>
-    <state x="874" y="431" width="672" height="678" key="search.everywhere.popup/67.27.2493.1413@67.27.2493.1413" timestamp="1581947017476" />
+    <state x="874" y="431" width="672" height="678" key="search.everywhere.popup/67.27.2493.1413@67.27.2493.1413" timestamp="1583486548663" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/phase02$dwca_reader.coverage" NAME="dwca_reader Coverage Results" MODIFIED="1582035661103" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/dwca-reader" />
     <SUITE FILE_PATH="coverage/phase02$default_python.coverage" NAME="default python Coverage Results" MODIFIED="1581592780092" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/phase02$dwca_reader__1_.coverage" NAME="dwca_reader (1) Coverage Results" MODIFIED="1583486597737" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/code/dwca-reader" />
     <SUITE FILE_PATH="coverage/phase02$model_trainer.coverage" NAME="model_trainer Coverage Results" MODIFIED="1582037985171" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/model-trainer" />
     <SUITE FILE_PATH="coverage/phase02$image_downloader.coverage" NAME="image_downloader Coverage Results" MODIFIED="1582037203600" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/phase02$dwca_reader__2_.coverage" NAME="dwca_reader (2) Coverage Results" MODIFIED="1583487258637" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/code" />
   </component>
 </project>
