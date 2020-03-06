@@ -8,6 +8,8 @@ MAINTAINER maarten.schermer@naturalis.nl
 COPY . /app
 WORKDIR /app
 
+ARG DEBIAN_FRONTEND=noninteractive
+
 RUN apt-get update && \
     apt-get -y upgrade && \
     apt-get -y install python3-pandas
