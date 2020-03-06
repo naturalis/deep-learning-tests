@@ -2,9 +2,8 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 import os
 import tensorflow as tf
-# import pandas as pd
+import pandas as pd
 import numpy as np
-import csv
 from lib import logclass
 
 # TODO: "WARNING:tensorflow:sample_weight modes were coerced from .. "
@@ -12,23 +11,13 @@ from lib import logclass
 
 
 def _csv_to_dataframe(filepath, usecols, encoding="utf-8-sig"):
-    with open(filepath, "r") as f:
-        reader = csv.reader(f)
-        # headers = reader.next()
-        column = {h:[] for h in headers}
-        for row in reader:
-            for h, v in zip(headers, row):
-                column[h].append(v)
-
-    return column
-
-    # f = open(filepath, "r", encoding=encoding)
-    # line = f.readline()
-    # if line.count('\t') > 0:
-    #     sep = '\t'
-    # else:
-    #     sep = ','
-    # return pd.read_csv(filepath, encoding=encoding, sep=sep, dtype="str", usecols=usecols, header=None)
+    f = open(filepath, "r", encoding=encoding)
+    line = f.readline()
+    if line.count('\t') > 0:
+        sep = '\t'
+    else:
+        sep = ','
+    return pd.read_csv(filepath, encoding=encoding, sep=sep, dtype="str", usecols=usecols, header=None)
 
 
 class ModelTrainer():
