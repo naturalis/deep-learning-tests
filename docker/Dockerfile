@@ -9,7 +9,7 @@ COPY . /app
 WORKDIR /app
 
 RUN apt-get update && \
-    apt-get upgrade && \
+    apt-get -y upgrade && \
     apt-get -y install python3-pandas
 
 RUN pip install --upgrade pip
