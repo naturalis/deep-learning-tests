@@ -50,7 +50,7 @@ PROJECT_ROOT/
 
 
 DwCA reader
-  python dwca_reader/dwca_reader.py 
+  python dwca_reader.py 
   in:
     PROJECT_ROOT *
     DWCA_FILE_PATH [$PROJECT_ROOT/dwca/Occurrence.txt]
@@ -62,7 +62,7 @@ DwCA reader
 
 
 Image Downloader
-  python image_downloader/image_downloader.py
+  python image_downloader.py
   in:
     PROJECT_ROOT *
     IMAGE_URL_TO_NAME [basename p.path]
@@ -76,6 +76,7 @@ Image Downloader
 
 
 ModelTrainer
+  python 
   TODO: implement Test split
 
 

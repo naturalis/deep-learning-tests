@@ -1,5 +1,0 @@
-https://www.tensorflow.org/install/pip
-
-tensorflow —Latest stable release for CPU-only
-tensorflow-gpu —Latest stable release with GPU support (Ubuntu and Windows)
-
