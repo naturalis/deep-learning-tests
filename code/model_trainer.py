@@ -43,7 +43,6 @@ class ModelTrainer():
     def __init__(self):
         self.logger = logclass.LogClass(self.__class__.__name__)
         self.logger.info("TensorFlow v{}".format(tf.__version__))
-        self.logger.info("started training {}".format(self.project_root))
         self.set_timestamp()
 
     def set_timestamp(self):
@@ -176,6 +175,8 @@ class ModelTrainer():
             subset="validation")
 
     def train_model(self):
+        self.logger.info("started model training {}".format(self.project_root))
+
         step_size_train = self.train_generator.n // self.train_generator.batch_size
         step_size_validate = self.validation_generator.n // self.validation_generator.batch_size
 
