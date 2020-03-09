@@ -236,6 +236,6 @@ if __name__ == "__main__":
         }
     })
 
-    # trainer.configure_model()
-    # trainer.configure_generators()
-    # trainer.train_model()
+    trainer.configure_model()
+    trainer.configure_generators()
+    trainer.train_model()
