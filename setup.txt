@@ -81,6 +81,16 @@ ModelTrainer
 
 
 
+next
+- settings file
+- beoordeel model
+  - alg
+  - per class
+- tensorboard?
+
+
+
+
 
 
 TODO

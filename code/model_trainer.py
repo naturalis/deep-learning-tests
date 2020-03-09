@@ -4,10 +4,8 @@ import os
 import tensorflow as tf
 import pandas as pd
 import numpy as np
+from datetime import datetime
 from lib import logclass
-
-# TODO: "WARNING:tensorflow:sample_weight modes were coerced from .. "
-# https://stackoverflow.com/questions/59317919/warningtensorflowsample-weight-modes-were-coerced-from-to
 
 
 def _csv_to_dataframe(filepath, usecols, encoding="utf-8-sig"):
@@ -44,6 +42,11 @@ class ModelTrainer():
     def __init__(self):
         self.logger = logclass.LogClass(self.__class__.__name__)
         self.logger.info("TensorFlow v{}".format(tf.__version__))
+        self.set_timestamp()
+
+    def set_time_stamp(self):
+        d = datetime.now()
+        self.timestamp = "{0}{1:02d}{2:02d}-{3:02d}{4:02d}{5:02d}".format(d.year,d.month,d.day,d.hour,d.minute,d.second)
 
     def set_project_root(self, project_root, image_root=None):
         self.project_root = project_root
@@ -100,7 +103,7 @@ class ModelTrainer():
         return self.class_list
 
     def get_model_save_path(self):
-        self.model_save_path = os.path.join(self.project_root, 'models')
+        self.model_save_path = os.path.join(self.project_root, "models", self.timestamp + ".hd5")
         return self.model_save_path
 
     def set_model_settings(self, model_settings):
@@ -197,10 +200,10 @@ if __name__ == "__main__":
         "loss": "categorical_crossentropy",
         "optimizer": tf.keras.optimizers.RMSprop(learning_rate=1e-4),
         "callbacks" : [ 
-            tf.keras.callbacks.EarlyStopping(monitor='val_acc', patience=5, mode='auto', restore_best_weights=True),
+            tf.keras.callbacks.EarlyStopping(monitor="val_acc", patience=5, mode="auto", restore_best_weights=True),
             # tf.keras.callbacks.TensorBoard(),
-            tf.keras.callbacks.ReduceLROnPlateau(monitor='val_loss'),
-            tf.keras.callbacks.ModelCheckpoint(trainer.get_model_save_path(), monitor='val_acc', save_best_only=True)
+            tf.keras.callbacks.ReduceLROnPlateau(monitor="val_loss", factor=0.1, patience=4, min_lr=1e-8 ),
+            tf.keras.callbacks.ModelCheckpoint(trainer.get_model_save_path(), monitor="val_acc", save_best_only=True)
         ],
         "image_augmentation" : {
             "rotation_range": 90,
