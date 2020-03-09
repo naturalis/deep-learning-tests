@@ -171,3 +171,4 @@ if __name__ == "__main__":
  mkdir  /data/maarten.schermer/data/corvidae/dwca
  mkdir  /data/maarten.schermer/data/corvidae/lists
  mkdir  /data/maarten.schermer/data/corvidae/images
+ mkdir  /data/maarten.schermer/data/corvidae/models

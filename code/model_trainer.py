@@ -28,6 +28,7 @@ class ModelTrainer():
     image_list_image_col = None
     class_list_file = None
     class_list_file_class_col = None
+    model_save_path = None
     traindf = None
     class_list = None
     model_settings = None
@@ -54,13 +55,6 @@ class ModelTrainer():
             self.image_root = image_root
         else:
             self.image_root = os.path.join(self.project_root, 'images')
-
-        # self.download_root_folder = 'images'
-        #
-        # if not os.path.isdir(os.path.join(self.project_root, self.download_root_folder)):
-        #     os.mkdir(os.path.join(self.project_root, self.download_root_folder))
-        #
-        # self.downloaded_images_file = os.path.join(self.project_root, self.downloaded_images_filename)
 
     def set_downloaded_images_list_file(self, downloaded_images_list_file=None, class_col=0, image_col=1):
         if downloaded_images_list_file is not None:
@@ -105,6 +99,10 @@ class ModelTrainer():
     def get_class_list(self):
         return self.class_list
 
+    def get_model_save_path(self):
+        self.model_save_path = os.path.join(self.project_root, 'models')
+        return self.model_save_path
+
     def set_model_settings(self, model_settings):
         self.model_settings = model_settings
         for setting in self.model_settings:
@@ -128,22 +126,20 @@ class ModelTrainer():
             metrics=["acc"]
         )
 
-        # trainable_count = int(np.sum([tf.keras.backend.count_params(p) for p in set(self.model.trainable_weights)]))
-        # non_trainable_count = int(np.sum([tf.keras.backend.count_params(p) for p in set(self.model.non_trainable_weights)]))
-        #
-        # self.logger.info("trainable {}; non trainable: {}".format(trainable_count,non_trainable_count))
-
     def configure_generators(self):
+        a = self.model_settings["image_augmentation"] if "image_augmentation" in self.model_settings else []
+
         datagen = tf.keras.preprocessing.image.ImageDataGenerator(
-            validation_split=self.model_settings["validation_split"])
-        # rotation_range=a["rotation_range"] if "rotation_range" in a else 0,
-        # shear_range=a["shear_range"] if "shear_range" in a else 0.0,
-        # zoom_range=a["zoom_range"] if "zoom_range" in a else 0.0,
-        # width_shift_range=a["width_shift_range"] if "width_shift_range" in a else 0.0,
-        # height_shift_range=a["height_shift_range"] if "height_shift_range" in a else 0.0,
-        # horizontal_flip=a["horizontal_flip"] if "horizontal_flip" in a else False,
-        # vertical_flip=a["vertical_flip"] if "vertical_flip" in a else False,
-        # preprocessing_function=self.preProcess,
+            validation_split=self.model_settings["validation_split"],
+            rotation_range=a["rotation_range"] if "rotation_range" in a else 0,
+            shear_range=a["shear_range"] if "shear_range" in a else 0.0,
+            zoom_range=a["zoom_range"] if "zoom_range" in a else 0.0,
+            width_shift_range=a["width_shift_range"] if "width_shift_range" in a else 0.0,
+            height_shift_range=a["height_shift_range"] if "height_shift_range" in a else 0.0,
+            horizontal_flip=a["horizontal_flip"] if "horizontal_flip" in a else False,
+            vertical_flip=a["vertical_flip"] if "vertical_flip" in a else False
+        )
+            # preprocessing_function=self.preProcess,
 
         self.train_generator = datagen.flow_from_dataframe(
             dataframe=self.traindf,
@@ -174,13 +170,15 @@ class ModelTrainer():
             steps_per_epoch=step_size_train,
             epochs=self.model_settings["epochs"],
             validation_data=self.validation_generator,
-            validation_steps=step_size_validate
+            validation_steps=step_size_validate,
+            callbacks=self.model_settings["callbacks"],
         )
         # If x is a dataset, generator, or keras.utils.Sequence instance, y should not be specified (since targets
         # will be obtained from x)
 
 
 if __name__ == "__main__":
+
     trainer = ModelTrainer()
 
     trainer.set_project_root(os.environ['PROJECT_ROOT'])
@@ -195,10 +193,24 @@ if __name__ == "__main__":
         "validation_split": 0.2,
         "conv_base": tf.keras.applications.InceptionV3(weights="imagenet", include_top=False),
         "batch_size": 64,
-        "epochs": 1,
+        "epochs": 200,
         "loss": "categorical_crossentropy",
-        # "optimizer": tf.keras.optimizers.RMSprop(lr=1e-4)
-        "optimizer": tf.keras.optimizers.Adadelta(lr=1e-4)
+        "optimizer": tf.keras.optimizers.RMSprop(learning_rate=1e-4),
+        "callbacks" : [ 
+            tf.keras.callbacks.EarlyStopping(monitor='val_acc', patience=5, mode='auto', restore_best_weights=True),
+            # tf.keras.callbacks.TensorBoard(),
+            tf.keras.callbacks.ReduceLROnPlateau(monitor='val_loss'),
+            tf.keras.callbacks.ModelCheckpoint(trainer.get_model_save_path(), monitor='val_acc', save_best_only=True)
+        ],
+        "image_augmentation" : {
+            "rotation_range": 90,
+            "shear_range": 0.2,
+            "zoom_range": 0.2,
+            "horizontal_flip": True
+            "width_shift_range": 0.2,
+            "height_shift_range": 0.2, 
+            "vertical_flip": false
+        }
     })
 
     trainer.configure_model()
