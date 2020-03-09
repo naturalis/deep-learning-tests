@@ -82,7 +82,7 @@ ModelTrainer
 
 
 next
-- settings file
+- settings file (maybe)
 - beoordeel model
   - alg
   - per class

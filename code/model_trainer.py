@@ -43,6 +43,7 @@ class ModelTrainer():
     def __init__(self):
         self.logger = logclass.LogClass(self.__class__.__name__)
         self.logger.info("TensorFlow v{}".format(tf.__version__))
+        self.logger.info("started training {}".format(self.project_root))
         self.set_timestamp()
 
     def set_timestamp(self):
@@ -153,7 +154,6 @@ class ModelTrainer():
             horizontal_flip=a["horizontal_flip"] if "horizontal_flip" in a else False,
             vertical_flip=a["vertical_flip"] if "vertical_flip" in a else False
         )
-            # preprocessing_function=self.preProcess,
 
         self.train_generator = datagen.flow_from_dataframe(
             dataframe=self.traindf,
