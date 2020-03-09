@@ -27,6 +27,7 @@ class ModelTrainer():
     class_list_file = None
     class_list_file_class_col = None
     model_save_path = None
+    architecture_save_path = None
     traindf = None
     class_list = None
     model_settings = None
@@ -84,6 +85,8 @@ class ModelTrainer():
 
     # TODO: implement Test split
     def read_image_list_file(self):
+        self.logger.info("reading images from: {}".format(self.downloaded_images_list_file))
+
         df = _csv_to_dataframe(filepath=self.downloaded_images_list_file,
                                usecols=[self.image_list_class_col, self.image_list_image_col])
         # if Test split
@@ -96,6 +99,8 @@ class ModelTrainer():
         df.columns = [self.COL_CLASS, self.COL_IMAGE]
         self.traindf = df
 
+        self.logger.info("read {} images in {} classes".format(self.traindf[self.COL_IMAGE].nunique(),self.traindf[self.COL_CLASS].nunique()))
+
     def read_class_list(self):
         self.class_list = _csv_to_dataframe(self.class_list_file, [self.class_list_file_class_col])
 
@@ -103,8 +108,12 @@ class ModelTrainer():
         return self.class_list
 
     def get_model_save_path(self):
-        self.model_save_path = os.path.join(self.project_root, "models", self.timestamp + ".hd5")
+        self.model_save_path = os.path.join(self.project_root, "models", self.timestamp + ".hdf5")
         return self.model_save_path
+
+    def get_architecture_save_path(self):
+        self.architecture_save_path = os.path.join(self.project_root, "models", self.timestamp + ".json")
+        return self.architecture_save_path
 
     def set_model_settings(self, model_settings):
         self.model_settings = model_settings
@@ -128,6 +137,8 @@ class ModelTrainer():
             loss=self.model_settings["loss"],
             metrics=["acc"]
         )
+
+        self.model.summary()
 
     def configure_generators(self):
         a = self.model_settings["image_augmentation"] if "image_augmentation" in self.model_settings else []
@@ -179,6 +190,15 @@ class ModelTrainer():
         # If x is a dataset, generator, or keras.utils.Sequence instance, y should not be specified (since targets
         # will be obtained from x)
 
+        self.model.save(self.get_model_save_path())
+        self.logger.info("saved model to {}".format(self.get_model_save_path()))
+
+        f = open(self.get_architecture_save_path(), "w")
+        f.write(self.model.to_json())
+        f.close()
+        self.logger.info("saved model architecture to {}".format(self.get_architecture_save_path()))
+
+
 
 if __name__ == "__main__":
 
@@ -202,8 +222,8 @@ if __name__ == "__main__":
         "callbacks" : [ 
             tf.keras.callbacks.EarlyStopping(monitor="val_acc", patience=5, mode="auto", restore_best_weights=True),
             # tf.keras.callbacks.TensorBoard(),
-            tf.keras.callbacks.ReduceLROnPlateau(monitor="val_loss", factor=0.1, patience=4, min_lr=1e-8 ),
-            tf.keras.callbacks.ModelCheckpoint(trainer.get_model_save_path(), monitor="val_acc", save_best_only=True)
+            tf.keras.callbacks.ReduceLROnPlateau(monitor="val_loss", factor=0.1, patience=4, min_lr=1e-8),
+            tf.keras.callbacks.ModelCheckpoint(trainer.get_model_save_path(), monitor="val_acc", save_best_only=True, save_freq="epoch")
         ],
         "image_augmentation" : {
             "rotation_range": 90,
@@ -216,6 +236,6 @@ if __name__ == "__main__":
         }
     })
 
-    trainer.configure_model()
-    trainer.configure_generators()
-    trainer.train_model()
+    # trainer.configure_model()
+    # trainer.configure_generators()
+    # trainer.train_model()
