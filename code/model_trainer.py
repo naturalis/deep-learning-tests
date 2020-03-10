@@ -220,8 +220,7 @@ if __name__ == "__main__":
         "conv_base": tf.keras.applications.InceptionV3(weights="imagenet", include_top=False),
         "batch_size": 64,
         "epochs": 200,
-        # "loss": "categorical_crossentropy",
-        "loss": "sparse_categorical_crossentropy",
+        "loss": "categorical_crossentropy",
         "optimizer": tf.keras.optimizers.RMSprop(learning_rate=1e-4),
         "callbacks" : [ 
             tf.keras.callbacks.EarlyStopping(monitor="val_loss", patience=5, mode="auto", restore_best_weights=True),
