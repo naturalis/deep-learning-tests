@@ -115,6 +115,10 @@ class ModelTrainer():
         self.architecture_save_path = os.path.join(self.project_root, "models", self.timestamp + ".json")
         return self.architecture_save_path
 
+    def get_tensorboard_log_path(self):
+        self.tensorboard_log_path = os.path.join(self.project_root, "log", "logs_keras")
+        return self.tensorboard_log_path
+
     def set_model_settings(self, model_settings):
         self.model_settings = model_settings
         for setting in self.model_settings:
@@ -206,10 +210,8 @@ if __name__ == "__main__":
     trainer = ModelTrainer()
 
     trainer.set_project_root(os.environ['PROJECT_ROOT'])
-
     trainer.set_downloaded_images_list_file(image_col=2)
     trainer.set_class_list_file()
-
     trainer.read_image_list_file()
     trainer.read_class_list()
 
@@ -218,11 +220,12 @@ if __name__ == "__main__":
         "conv_base": tf.keras.applications.InceptionV3(weights="imagenet", include_top=False),
         "batch_size": 64,
         "epochs": 200,
-        "loss": "categorical_crossentropy",
+        # "loss": "categorical_crossentropy",
+        "loss": "sparse_categorical_crossentropy",
         "optimizer": tf.keras.optimizers.RMSprop(learning_rate=1e-4),
         "callbacks" : [ 
             tf.keras.callbacks.EarlyStopping(monitor="val_acc", patience=5, mode="auto", restore_best_weights=True),
-            # tf.keras.callbacks.TensorBoard(),
+            tf.keras.callbacks.TensorBoard(trainer.get_tensorboard_log_path()),
             tf.keras.callbacks.ReduceLROnPlateau(monitor="val_loss", factor=0.1, patience=4, min_lr=1e-8),
             tf.keras.callbacks.ModelCheckpoint(trainer.get_model_save_path(), monitor="val_acc", save_best_only=True, save_freq="epoch")
         ],
