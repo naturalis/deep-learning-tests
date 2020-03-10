@@ -1,8 +1,0 @@
-FROM alpine:3.9.5
-
-MAINTAINER maarten.schermer@naturalis.nl
-
-RUN apk add --update python3-pip
-RUN pip install tensorboard
-
-CMD ["bash"]
