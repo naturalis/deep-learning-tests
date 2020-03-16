@@ -142,32 +142,30 @@ class ModelTrainer():
             metrics=["acc"]
         )
 
+        complete = self.get_trainable_params()
+
+        if "first_trainable_layer" in self.model_settings:
+            for layer in self.model.layers[:self.model_settings["first_trainable_layer"]]:
+                layer.trainable = False
+
+            for layer in self.model.layers[self.model_settings["first_trainable_layer"]:]:
+                layer.trainable = True
+
+            self.model.compile(
+                optimizer=self.model_settings["optimizer"],
+                loss=self.model_settings["loss"],
+                metrics=["acc"]
+            )
+
+            frozen = self.get_trainable_params()
 
         self.model.summary()
 
-        for layer in self.model.layers[:249]:
-            layer.trainable = False
+        print("{:.}".format(complete.total))
+        print("{:.} / {:.}".format(complete.trainable,complete.non_trainable))
+        if frozen is not None:
+            print("{:.} / {:.}".format(frozen.trainable,frozen.non_trainable))
 
-        for layer in self.model.layers[249:]:
-            layer.trainable = True
-
-        self.model.compile(
-            optimizer=self.model_settings["optimizer"],
-            loss=self.model_settings["loss"],
-            metrics=["acc"]
-        )
-
-        self.model.summary()
-
-        # import tensorflow.keras.backend as K
-
-
-        trainable_count = np.sum([tf.keras.backend.count_params(w) for w in self.model.trainable_weights])
-        non_trainable_count = np.sum([tf.keras.backend.count_params(w) for w in self.model.non_trainable_weights])
-
-        print('Total params: {:,}'.format(trainable_count + non_trainable_count))
-        print('Trainable params: {:,}'.format(trainable_count))
-        print('Non-trainable params: {:,}'.format(non_trainable_count))
 
 
     def configure_generators(self):
@@ -204,6 +202,7 @@ class ModelTrainer():
             interpolation="nearest",
             subset="validation")
 
+
     def train_model(self):
         self.logger.info("started model training {}".format(self.project_root))
 
@@ -230,6 +229,18 @@ class ModelTrainer():
         self.logger.info("saved model architecture to {}".format(self.get_architecture_save_path()))
 
 
+    def get_trainable_params(self):
+        trainable_count = np.sum([tf.keras.backend.count_params(w) for w in self.model.trainable_weights])
+        non_trainable_count = np.sum([tf.keras.backend.count_params(w) for w in self.model.non_trainable_weights])
+
+        return {
+            "total" : trainable_count + non_trainable_count,
+            "trainable" : trainable_count,
+            "non_trainable" : non_trainable_count
+        }
+
+
+
 
 if __name__ == "__main__":
 
@@ -244,7 +255,8 @@ if __name__ == "__main__":
     trainer.set_model_settings({
         "validation_split": 0.2,
         "conv_base": tf.keras.applications.InceptionV3(weights="imagenet", include_top=False),  
-        # "conv_base": tf.keras.applications.ResNet50(weights="imagenet", include_top=False),  
+        # "conv_base": tf.keras.applications.ResNet50(weights="imagenet", include_top=False),
+        "first_trainable_layer": 249
         "batch_size": 64,
         "epochs": 200,
         "loss": "categorical_crossentropy",
