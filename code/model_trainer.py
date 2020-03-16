@@ -219,7 +219,7 @@ if __name__ == "__main__":
         "validation_split": 0.2,
         # "conv_base": tf.keras.applications.InceptionV3(weights="imagenet", include_top=False),  
         "conv_base": tf.keras.applications.ResNet50(weights="imagenet", include_top=False),  
-        "batch_size": 64,
+        "batch_size": 32,
         "epochs": 200,
         "loss": "categorical_crossentropy",
         "optimizer": tf.keras.optimizers.RMSprop(learning_rate=1e-4),
