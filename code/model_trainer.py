@@ -142,7 +142,19 @@ class ModelTrainer():
             metrics=["acc"]
         )
 
+
         self.model.summary()
+
+        for layer in self.model.layers:
+            layer.trainable = False # freezing the complete extractor
+
+        self.model.summary()
+
+        self.model.layers[:-2] = True
+
+        self.model.summary()
+
+
 
     def configure_generators(self):
         a = self.model_settings["image_augmentation"] if "image_augmentation" in self.model_settings else []
@@ -242,4 +254,4 @@ if __name__ == "__main__":
 
     trainer.configure_model()
     trainer.configure_generators()
-    trainer.train_model()
+    # trainer.train_model()
