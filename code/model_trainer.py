@@ -145,18 +145,11 @@ class ModelTrainer():
 
         self.model.summary()
 
-        for layer in self.model.layers:
-            layer.trainable = False # freezing the complete extractor
+        for layer in self.models.layers[:249]:
+            layer.trainable = False
 
-        self.model.compile(
-            optimizer=self.model_settings["optimizer"],
-            loss=self.model_settings["loss"],
-            metrics=["acc"]
-        )
-
-        self.model.summary()
-
-        self.model.layers[:-2] = True
+        for layer in self.model.layers[249:]:
+            layer.trainable = True
 
         self.model.compile(
             optimizer=self.model_settings["optimizer"],
