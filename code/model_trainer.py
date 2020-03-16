@@ -145,7 +145,7 @@ class ModelTrainer():
 
         self.model.summary()
 
-        for layer in self.models.layers[:249]:
+        for layer in self.model.layers[:249]:
             layer.trainable = False
 
         for layer in self.model.layers[249:]:
