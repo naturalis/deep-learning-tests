@@ -143,16 +143,32 @@ class ModelTrainer():
         )
 
 
-        self.model.summary()
+        # self.model.summary()
+
+
+        trainable_count = int(
+            np.sum([K.count_params(p) for p in set(self.model.trainable_weights)]))
+        non_trainable_count = int(
+            np.sum([K.count_params(p) for p in set(self.model.non_trainable_weights)]))
+
+        print('Total params: {:,}'.format(trainable_count + non_trainable_count))
+        print('Trainable params: {:,}'.format(trainable_count))
+        print('Non-trainable params: {:,}'.format(non_trainable_count))
 
         for layer in self.model.layers:
             layer.trainable = False # freezing the complete extractor
 
-        self.model.summary()
+        self.model.compile(
+            optimizer=self.model_settings["optimizer"],
+            loss=self.model_settings["loss"],
+            metrics=["acc"]
+        )
 
-        self.model.layers[:-2] = True
+        # self.model.summary()
 
-        self.model.summary()
+        # self.model.layers[:-2] = True
+
+        # self.model.summary()
 
 
 
