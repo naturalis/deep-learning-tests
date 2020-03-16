@@ -3,3 +3,4 @@ pandas==0.24.2
 Pillow==2.2.2
 scipy
 tensorboard
+tensorflow-addons
