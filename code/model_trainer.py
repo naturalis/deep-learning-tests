@@ -161,10 +161,10 @@ class ModelTrainer():
 
         self.model.summary()
 
-        print("{:,}".format(complete["total"]))
-        print("{:,} / {:,}".format(complete["trainable"],complete["non_trainable"]))
         if frozen is not None:
-            print("{:,} / {:,}".format(frozen["trainable"],frozen["non_trainable"]))
+            print("total parameters: {:,}".format(complete["total"]))
+            print("trainable / non-trainable w/o freezing: {:,} / {:,}".format(complete["trainable"],complete["non_trainable"]))
+            print("trainable / non-trainable after freezing: {:,} / {:,}".format(frozen["trainable"],frozen["non_trainable"]))
 
 
 
