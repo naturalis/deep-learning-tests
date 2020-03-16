@@ -19,6 +19,7 @@ def _csv_to_dataframe(filepath, usecols, encoding="utf-8-sig"):
 
 
 class ModelTrainer():
+    debug = False
     project_root = None
     image_root = None
     downloaded_images_list_file = None
@@ -48,6 +49,9 @@ class ModelTrainer():
     def set_timestamp(self):
         d = datetime.now()
         self.timestamp = "{0}{1:02d}{2:02d}-{3:02d}{4:02d}{5:02d}".format(d.year,d.month,d.day,d.hour,d.minute,d.second)
+
+    def set_debug(self,state):
+        self.debug = state
 
     def set_project_root(self, project_root, image_root=None):
         self.project_root = project_root
@@ -159,12 +163,16 @@ class ModelTrainer():
 
             frozen = self.get_trainable_params()
 
-        self.model.summary()
+        if self.debug:
+            self.model.summary()
+
+        print("total parameters: {:,}".format(complete["total"]))
 
         if frozen is not None:
-            print("total parameters: {:,}".format(complete["total"]))
             print("trainable / non-trainable w/o freezing: {:,} / {:,}".format(complete["trainable"],complete["non_trainable"]))
             print("trainable / non-trainable after freezing: {:,} / {:,}".format(frozen["trainable"],frozen["non_trainable"]))
+        else:
+            print("trainable / non-trainable: {:,} / {:,}".format(complete["trainable"],complete["non_trainable"]))
 
 
 
@@ -246,6 +254,7 @@ if __name__ == "__main__":
 
     trainer = ModelTrainer()
 
+    trainer.set_debug(os.environ["DEBUG"] if "DEBUG" in os.environ else False)
     trainer.set_project_root(os.environ['PROJECT_ROOT'])
     trainer.set_downloaded_images_list_file(image_col=2)
     trainer.set_class_list_file()
