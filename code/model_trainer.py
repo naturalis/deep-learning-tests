@@ -145,8 +145,6 @@ class ModelTrainer():
 
         self.model.summary()
 
-        a = np.sum([np.prod(v.get_shape().as_list()) for v in tf.compat.v1.trainable_variables()])
-
         for layer in self.model.layers[:249]:
             layer.trainable = False
 
@@ -161,9 +159,14 @@ class ModelTrainer():
 
         self.model.summary()
 
-        b = np.sum([np.prod(v.get_shape().as_list()) for v in tf.compat.v1.trainable_variables()])
+        import tensorflow.keras.backend as K
 
-        print("{} / {}".format(a,b))
+        trainable_count = np.sum([K.count_params(w) for w in self.model.trainable_weights])
+        non_trainable_count = np.sum([K.count_params(w) for w in self.model.non_trainable_weights])
+
+        print('Total params: {:,}'.format(trainable_count + non_trainable_count))
+        print('Trainable params: {:,}'.format(trainable_count))
+        print('Non-trainable params: {:,}'.format(non_trainable_count))
 
 
     def configure_generators(self):
