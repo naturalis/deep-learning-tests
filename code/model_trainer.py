@@ -214,13 +214,10 @@ if __name__ == "__main__":
     trainer.set_class_list_file()
     trainer.read_image_list_file()
     trainer.read_class_list()
-            conv_base = 
-
-
-        # "conv_base": tf.keras.applications.InceptionV3(weights="imagenet", include_top=False),  
 
     trainer.set_model_settings({
         "validation_split": 0.2,
+        # "conv_base": tf.keras.applications.InceptionV3(weights="imagenet", include_top=False),  
         "conv_base": tf.keras.applications.ResNet50(weights="imagenet", include_top=False),  
         "batch_size": 64,
         "epochs": 200,
