@@ -147,6 +147,7 @@ class ModelTrainer():
         )
 
         complete = self.get_trainable_params()
+        frozen = None
 
         if "first_trainable_layer" in self.model_settings:
             for layer in self.model.layers[:self.model_settings["first_trainable_layer"]]:
