@@ -167,13 +167,12 @@ class ModelTrainer():
             self.model.summary()
 
         print("Total parameters: {:,}".format(complete["total"]))
-        print("Trainable: {:,}".format(complete["trainable"]))
-        print("Non-trainable: {:,}".format(complete["trainable"]))
+        print("  Trainable: {:,}".format(complete["trainable"]))
+        print("  Non-trainable: {:,}".format(complete["non_trainable"]))
         if frozen is not None:
             print("After freezing up to layer {}:".format(self.model_settings["first_trainable_layer"]))
-            print("Trainable: {:,}".format(frozen["trainable"]))
-            print("Non-trainable: {:,}".format(frozen["trainable"]))
-
+            print("  Trainable: {:,}".format(frozen["trainable"]))
+            print("  Non-trainable: {:,}".format(frozen["non_trainable"]))
 
 
     def configure_generators(self):
@@ -289,4 +288,4 @@ if __name__ == "__main__":
 
     trainer.configure_model()
     trainer.configure_generators()
-    # trainer.train_model()
+    trainer.train_model()
