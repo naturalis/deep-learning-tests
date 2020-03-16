@@ -190,7 +190,7 @@ class ModelTrainer():
             epochs=self.model_settings["epochs"],
             validation_data=self.validation_generator,
             validation_steps=step_size_validate,
-            callbacks=self.model_settings["callbacks"],
+            callbacks=self.model_settings["callbacks"] if "callbacks" in self.model_settings else None
         )
         # If x is a dataset, generator, or keras.utils.Sequence instance, y should not be specified (since targets
         # will be obtained from x)
