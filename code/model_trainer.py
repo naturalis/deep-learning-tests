@@ -145,6 +145,8 @@ class ModelTrainer():
 
         self.model.summary()
 
+        a = np.sum([np.prod(v.get_shape().as_list()) for v in tf.compat.v1.trainable_variables()])
+
         for layer in self.model.layers[:249]:
             layer.trainable = False
 
@@ -159,6 +161,9 @@ class ModelTrainer():
 
         self.model.summary()
 
+        b = np.sum([np.prod(v.get_shape().as_list()) for v in tf.compat.v1.trainable_variables()])
+
+        print("{} / {}".format(a,b))
 
 
     def configure_generators(self):
