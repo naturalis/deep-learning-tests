@@ -256,7 +256,7 @@ if __name__ == "__main__":
         "validation_split": 0.2,
         "conv_base": tf.keras.applications.InceptionV3(weights="imagenet", include_top=False),  
         # "conv_base": tf.keras.applications.ResNet50(weights="imagenet", include_top=False),
-        "first_trainable_layer": 249
+        "first_trainable_layer": 249,
         "batch_size": 64,
         "epochs": 200,
         "loss": "categorical_crossentropy",
