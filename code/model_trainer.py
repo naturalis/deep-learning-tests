@@ -217,11 +217,11 @@ if __name__ == "__main__":
             conv_base = 
 
 
+        # "conv_base": tf.keras.applications.InceptionV3(weights="imagenet", include_top=False),  
 
     trainer.set_model_settings({
         "validation_split": 0.2,
-        # "conv_base": tf.keras.applications.InceptionV3(weights="imagenet", include_top=False),
-        "conv_base": tf.keras.applications.InceptionV3(weights="imagenet", include_top=False),
+        "conv_base": tf.keras.applications.ResNet50(weights="imagenet", include_top=False),  
         "batch_size": 64,
         "epochs": 200,
         "loss": "categorical_crossentropy",
