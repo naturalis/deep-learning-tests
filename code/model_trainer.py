@@ -166,13 +166,13 @@ class ModelTrainer():
         if self.debug:
             self.model.summary()
 
-        print("total parameters: {:,}".format(complete["total"]))
-
+        print("Total parameters: {:,}".format(complete["total"]))
+        print("Trainable: {:,}".format(complete["trainable"]))
+        print("Non-trainable: {:,}".format(complete["trainable"]))
         if frozen is not None:
-            print("trainable / non-trainable w/o freezing: {:,} / {:,}".format(complete["trainable"],complete["non_trainable"]))
-            print("trainable / non-trainable after freezing: {:,} / {:,}".format(frozen["trainable"],frozen["non_trainable"]))
-        else:
-            print("trainable / non-trainable: {:,} / {:,}".format(complete["trainable"],complete["non_trainable"]))
+            print("After freezing up to layer {}:".format(self.model_settings["first_trainable_layer"]))
+            print("Trainable: {:,}".format(frozen["trainable"]))
+            print("Non-trainable: {:,}".format(frozen["trainable"]))
 
 
 
