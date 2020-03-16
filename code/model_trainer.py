@@ -156,9 +156,15 @@ class ModelTrainer():
 
         self.model.summary()
 
-        # self.model.layers[:-2] = True
+        self.model.layers[:-2] = True
 
-        # self.model.summary()
+        self.model.compile(
+            optimizer=self.model_settings["optimizer"],
+            loss=self.model_settings["loss"],
+            metrics=["acc"]
+        )
+
+        self.model.summary()
 
 
 
