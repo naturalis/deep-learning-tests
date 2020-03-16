@@ -159,10 +159,11 @@ class ModelTrainer():
 
         self.model.summary()
 
-        import tensorflow.keras.backend as K
+        # import tensorflow.keras.backend as K
 
-        trainable_count = np.sum([K.count_params(w) for w in self.model.trainable_weights])
-        non_trainable_count = np.sum([K.count_params(w) for w in self.model.non_trainable_weights])
+
+        trainable_count = np.sum([tf.keras.backend.count_params(w) for w in self.model.trainable_weights])
+        non_trainable_count = np.sum([tf.keras.backend.count_params(w) for w in self.model.non_trainable_weights])
 
         print('Total params: {:,}'.format(trainable_count + non_trainable_count))
         print('Trainable params: {:,}'.format(trainable_count))
