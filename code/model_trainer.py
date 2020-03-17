@@ -198,7 +198,7 @@ class ModelTrainer():
     IMG_SIZE = 160 # All images will be resized to 160x160
     BATCH_SIZE = 32
     SHUFFLE_BUFFER_SIZE = 1000
-    IMG_SHAPE = (IMG_SIZE, IMG_SIZE, 3)
+    
 
     def format_example(self, image, label):
         image = tf.cast(image, tf.float32)
@@ -207,6 +207,8 @@ class ModelTrainer():
         return image, label
 
     def train_example(self):
+
+        IMG_SHAPE = (self.IMG_SIZE, self.IMG_SIZE, 3)
 
         import tensorflow_datasets as tfds
         tfds.disable_progress_bar()
