@@ -232,7 +232,8 @@ class ModelTrainer():
            pass
 
         # Create the base model from the pre-trained model MobileNet V2
-        base_model = tf.keras.applications.MobileNetV2(iinclude_top=False,
+        base_model = tf.keras.applications.MobileNetV2(input_shape=IMG_SHAPE,
+                                                       include_top=False,
                                                        weights='imagenet')
 
         feature_batch = base_model(image_batch)
@@ -310,8 +311,7 @@ class ModelTrainer():
     def train_example_2(self):
 
         # Create the base model from the pre-trained model MobileNet V2
-        self.base_model = tf.keras.applications.MobileNetV2(input_shape=IMG_SHAPE,
-                                                       include_top=False,
+        self.base_model = tf.keras.applications.MobileNetV2(include_top=False,
                                                        weights='imagenet')
 
         self.base_model.trainable = False
