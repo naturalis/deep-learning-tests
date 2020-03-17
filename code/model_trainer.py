@@ -177,7 +177,10 @@ class ModelTrainer():
             self.model.summary()
         else:
             print("Model has {} layers (base model: {})".format(len(self.model.layers), len(self.base_model.layers)))
-            print("Frozen layers: {}".format(if "freeze_layers" in self.model_settings self.model_settings["freeze_layers"] else "none"))
+            if "freeze_layers" in self.model_settings:
+                print("Frozen layers: {}".format(self.model_settings["freeze_layers"]))
+            else:
+                print("Frozen layers: {}".format("none"))
             print("Trainable variables: {}".format(len(self.model.trainable_variables)))
 
         print("Total parameters: {:,}".format(complete["total"]))
