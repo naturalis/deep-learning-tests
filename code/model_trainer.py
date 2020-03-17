@@ -269,7 +269,7 @@ if __name__ == "__main__":
         "validation_split": 0.2,
         "conv_base": tf.keras.applications.InceptionV3(weights="imagenet", include_top=False),  
         # "conv_base": tf.keras.applications.ResNet50(weights="imagenet", include_top=False),
-        "freeze_layers": 249, # "base_model", # 249,
+        "freeze_layers": 10, # "base_model", # 249,
         "batch_size": 64,
         "epochs": 200,
         "loss": "categorical_crossentropy",
