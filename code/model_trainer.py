@@ -44,12 +44,12 @@ class ModelTrainer():
     def __init__(self):
         self.logger = logclass.LogClass(self.__class__.__name__)
         self.logger.info("TensorFlow v{}".format(tf.__version__))
-        if self.debug:
-            tf.get_logger().setLevel("DEBUG")
-            tf.autograph.set_verbosity(10)
-        else:
-            tf.get_logger().setLevel("INFO")
-            tf.autograph.set_verbosity(1)
+        # if self.debug:
+        #     tf.get_logger().setLevel("DEBUG")
+        #     tf.autograph.set_verbosity(10)
+        # else:
+        #     tf.get_logger().setLevel("INFO")
+        #     tf.autograph.set_verbosity(1)
         self.set_timestamp()
 
     def set_timestamp(self):
@@ -283,7 +283,7 @@ if __name__ == "__main__":
         "base_model": tf.keras.applications.InceptionV3(weights="imagenet", include_top=False),  
         # "base_model": tf.keras.applications.ResNet50(weights="imagenet", include_top=False),
         "freeze_layers": "base_model", # 249,
-        "batch_size": 64,
+        "batch_size": 16, # 64,
         "epochs": 200,
         "loss": "categorical_crossentropy",
         "optimizer": tf.keras.optimizers.RMSprop(learning_rate=1e-4),
