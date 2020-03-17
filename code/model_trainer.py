@@ -275,6 +275,41 @@ class ModelTrainer():
                             epochs=initial_epochs,
                             validation_data=validation_batches)
 
+        base_model.trainable = True
+
+        # Let's take a look to see how many layers are in the base model
+        print("Number of layers in the base model: ", len(base_model.layers))
+
+        # Fine-tune from this layer onwards
+        fine_tune_at = 100
+
+        # Freeze all the layers before the `fine_tune_at` layer
+        for layer in base_model.layers[:fine_tune_at]:
+            layer.trainable =  False
+
+        model.compile(loss=tf.keras.losses.BinaryCrossentropy(from_logits=True),
+                      optimizer = tf.keras.optimizers.RMSprop(lr=base_learning_rate/10),
+                      metrics=['accuracy'])
+
+        model.summary()
+
+        fine_tune_epochs = 10
+        total_epochs =  initial_epochs + fine_tune_epochs
+
+        history_fine = model.fit(train_batches,
+                                 epochs=total_epochs,
+                                 initial_epoch =  history.epoch[-1],
+                                 validation_data=validation_batches)
+
+        acc += history_fine.history['accuracy']
+        val_acc += history_fine.history['val_accuracy']
+
+        loss += history_fine.history['loss']
+        val_loss += history_fine.history['val_loss']
+
+
+
+
 
 
     def configure_generators(self):
