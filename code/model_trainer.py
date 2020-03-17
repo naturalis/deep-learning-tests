@@ -203,7 +203,7 @@ class ModelTrainer():
     def format_example(self, image, label):
         image = tf.cast(image, tf.float32)
         image = (image/127.5) - 1
-        image = tf.image.resize(image, (IMG_SIZE, IMG_SIZE))
+        image = tf.image.resize(image, (self.IMG_SIZE, self.IMG_SIZE))
         return image, label
 
     def train_example(self):
@@ -222,9 +222,9 @@ class ModelTrainer():
         validation = raw_validation.map(self.format_example)
         test = raw_test.map(self.format_example)
 
-        train_batches = train.shuffle(SHUFFLE_BUFFER_SIZE).batch(BATCH_SIZE)
-        validation_batches = validation.batch(BATCH_SIZE)
-        test_batches = test.batch(BATCH_SIZE)
+        train_batches = train.shuffle(self.SHUFFLE_BUFFER_SIZE).batch(self.BATCH_SIZE)
+        validation_batches = validation.batch(self.BATCH_SIZE)
+        test_batches = test.batch(self.BATCH_SIZE)
 
         # Create the base model from the pre-trained model MobileNet V2
         base_model = tf.keras.applications.MobileNetV2(input_shape=IMG_SHAPE,
