@@ -308,6 +308,65 @@ class ModelTrainer():
         val_loss += history_fine.history['val_loss']
 
 
+    def train_example_2(self):
+
+        # Create the base model from the pre-trained model MobileNet V2
+        self.base_model = tf.keras.applications.MobileNetV2(input_shape=IMG_SHAPE,
+                                                       include_top=False,
+                                                       weights='imagenet')
+
+        self.base_model.trainable = False
+        self.base_model.summary()
+
+        global_average_layer = tf.keras.layers.GlobalAveragePooling2D()
+        # prediction_layer = tf.keras.layers.Dense(1)
+        prediction_layer = tf.keras.layers.Dense(len(self.class_list), activation='softmax')
+#         x = tf.keras.layers.Dense(1024, activation='relu')(x)
+
+        self.model = tf.keras.Sequential([
+          self.base_model,
+          global_average_layer,
+          prediction_layer
+        ])
+
+        # self.model = tf.keras.models.Model(inputs=self.base_model.input, outputs=self.predictions)
+
+
+        base_learning_rate = 0.0001
+        self.model.compile(optimizer=tf.keras.optimizers.RMSprop(lr=base_learning_rate),
+                      loss=tf.keras.losses.BinaryCrossentropy(from_logits=True),
+                      metrics=['accuracy'])
+
+        self.model.summary()
+
+        self.model_settings["epochs"] = 10
+
+        self.train_model()
+
+        self.base_model.trainable = True
+
+        # Let's take a look to see how many layers are in the base model
+        print("Number of layers in the base model: ", len(self.base_model.layers))
+
+        # Fine-tune from this layer onwards
+        fine_tune_at = 100
+
+        # Freeze all the layers before the `fine_tune_at` layer
+        for layer in self.base_model.layers[:fine_tune_at]:
+            layer.trainable =  False
+
+        self.model.compile(loss=tf.keras.losses.BinaryCrossentropy(from_logits=True),
+                      optimizer = tf.keras.optimizers.RMSprop(lr=base_learning_rate/10),
+                      metrics=['accuracy'])
+
+        self.model.summary()
+
+        self.model_settings["epochs"] = 10
+
+        self.train_model()
+
+
+
 
 
 
@@ -390,9 +449,9 @@ if __name__ == "__main__":
 
     trainer = ModelTrainer()
 
-    trainer.train_example()
+    # trainer.train_example()
 
-    if False:
+    if True:
 
         trainer.set_debug(os.environ["DEBUG"] if "DEBUG" in os.environ else False)
         trainer.set_project_root(os.environ['PROJECT_ROOT'])
@@ -428,6 +487,9 @@ if __name__ == "__main__":
         })
 
 
-        trainer.configure_model()
+        # trainer.configure_model()
         trainer.configure_generators()
+    
+        trainer.train_example_2()
+
         trainer.train_model()
