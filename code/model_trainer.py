@@ -170,8 +170,8 @@ class ModelTrainer():
         if self.debug:
             self.model.summary()
         else:
-            print("{} layers (base model: {})}", len(self.model.layers, self.base_model.layers))
-            print("Trainable variables: {}", len(self.model.trainable_variables))
+            print("{} layers (base model: {})}".format(len(self.model.layers, self.base_model.layers)))
+            print("Trainable variables: {}".format(len(self.model.trainable_variables)))
 
         print("Total parameters: {:,}".format(complete["total"]))
         print("  Trainable: {:,}".format(complete["trainable"]))
