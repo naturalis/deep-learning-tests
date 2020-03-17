@@ -153,7 +153,7 @@ class ModelTrainer():
             if self.model_settings["freeze_layers"]=="base_model":
                 for layer in self.conv_base.layers:
                     layer.trainable = False
-            elif is_integer(self.model_settings["freeze_layers"]):
+            elif self.model_settings["freeze_layers"].is_integer():
                 for layer in self.model.layers[:self.model_settings["freeze_layers"]]:
                     layer.trainable = False
 
