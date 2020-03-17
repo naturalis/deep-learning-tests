@@ -193,6 +193,82 @@ class ModelTrainer():
             print("  Non-trainable: {:,}".format(frozen["non_trainable"]))
 
 
+
+
+    IMG_SIZE = 160 # All images will be resized to 160x160
+    BATCH_SIZE = 32
+    SHUFFLE_BUFFER_SIZE = 1000
+    IMG_SHAPE = (IMG_SIZE, IMG_SIZE, 3)
+
+    def format_example(self, image, label):
+        image = tf.cast(image, tf.float32)
+        image = (image/127.5) - 1
+        image = tf.image.resize(image, (IMG_SIZE, IMG_SIZE))
+        return image, label
+
+    def train_example(self):
+
+        import tensorflow_datasets as tfds
+        tfds.disable_progress_bar()
+
+        (raw_train, raw_validation, raw_test), metadata = tfds.load(
+            'cats_vs_dogs',
+            split=['train[:80%]', 'train[80%:90%]', 'train[90%:]'],
+            with_info=True,
+            as_supervised=True,
+        )
+
+        train = raw_train.map(self.format_example)
+        validation = raw_validation.map(self.format_example)
+        test = raw_test.map(self.format_example)
+
+        train_batches = train.shuffle(SHUFFLE_BUFFER_SIZE).batch(BATCH_SIZE)
+        validation_batches = validation.batch(BATCH_SIZE)
+        test_batches = test.batch(BATCH_SIZE)
+
+        # Create the base model from the pre-trained model MobileNet V2
+        base_model = tf.keras.applications.MobileNetV2(input_shape=IMG_SHAPE,
+                                                       include_top=False,
+                                                       weights='imagenet')
+
+        base_model.trainable = False
+        base_model.summary()
+
+        global_average_layer = tf.keras.layers.GlobalAveragePooling2D()
+        feature_batch_average = global_average_layer(feature_batch)
+        print(feature_batch_average.shape)
+
+        prediction_layer = tf.keras.layers.Dense(1)
+        prediction_batch = prediction_layer(feature_batch_average)
+        print(prediction_batch.shape)
+
+        model = tf.keras.Sequential([
+          base_model,
+          global_average_layer,
+          prediction_layer
+        ])
+
+        base_learning_rate = 0.0001
+        model.compile(optimizer=tf.keras.optimizers.RMSprop(lr=base_learning_rate),
+                      loss=tf.keras.losses.BinaryCrossentropy(from_logits=True),
+                      metrics=['accuracy'])
+
+        model.summary()
+
+        initial_epochs = 10
+        validation_steps=20
+
+        loss0,accuracy0 = model.evaluate(validation_batches, steps = validation_steps)
+
+        print("initial loss: {:.2f}".format(loss0))
+        print("initial accuracy: {:.2f}".format(accuracy0))
+
+        history = model.fit(train_batches,
+                            epochs=initial_epochs,
+                            validation_data=validation_batches)
+
+
+
     def configure_generators(self):
         a = self.model_settings["image_augmentation"] if "image_augmentation" in self.model_settings else []
 
@@ -271,39 +347,44 @@ if __name__ == "__main__":
 
     trainer = ModelTrainer()
 
-    trainer.set_debug(os.environ["DEBUG"] if "DEBUG" in os.environ else False)
-    trainer.set_project_root(os.environ['PROJECT_ROOT'])
-    trainer.set_downloaded_images_list_file(image_col=2)
-    trainer.set_class_list_file()
-    trainer.read_image_list_file()
-    trainer.read_class_list()
+    trainer.train_example()
 
-    trainer.set_model_settings({
-        "validation_split": 0.2,
-        "base_model": tf.keras.applications.InceptionV3(weights="imagenet", include_top=False),  
-        # "base_model": tf.keras.applications.ResNet50(weights="imagenet", include_top=False),
-        "freeze_layers": "base_model", # 249,
-        "batch_size": 64,
-        "epochs": 200,
-        "loss": "categorical_crossentropy",
-        "optimizer": tf.keras.optimizers.RMSprop(learning_rate=1e-4),
-        "callbacks" : [ 
-            tf.keras.callbacks.EarlyStopping(monitor="val_loss", patience=5, mode="auto", restore_best_weights=True),
-            tf.keras.callbacks.TensorBoard(trainer.get_tensorboard_log_path()),
-            tf.keras.callbacks.ReduceLROnPlateau(monitor="val_loss", factor=0.1, patience=4, min_lr=1e-8),
-            tf.keras.callbacks.ModelCheckpoint(trainer.get_model_save_path(), monitor="val_acc", save_best_only=True, save_freq="epoch")
-        ],
-        "image_augmentation" : {
-            "rotation_range": 90,
-            "shear_range": 0.2,
-            "zoom_range": 0.2,
-            "horizontal_flip": True,
-            "width_shift_range": 0.2,
-            "height_shift_range": 0.2, 
-            "vertical_flip": False
-        }
-    })
+    if False:
 
-    trainer.configure_model()
-    trainer.configure_generators()
-    trainer.train_model()
+        trainer.set_debug(os.environ["DEBUG"] if "DEBUG" in os.environ else False)
+        trainer.set_project_root(os.environ['PROJECT_ROOT'])
+        trainer.set_downloaded_images_list_file(image_col=2)
+        trainer.set_class_list_file()
+        trainer.read_image_list_file()
+        trainer.read_class_list()
+
+        trainer.set_model_settings({
+            "validation_split": 0.2,
+            "base_model": tf.keras.applications.InceptionV3(weights="imagenet", include_top=False),  
+            # "base_model": tf.keras.applications.ResNet50(weights="imagenet", include_top=False),
+            "freeze_layers": "base_model", # 249,
+            "batch_size": 64,
+            "epochs": 200,
+            "loss": "categorical_crossentropy",
+            "optimizer": tf.keras.optimizers.RMSprop(learning_rate=1e-4),
+            "callbacks" : [ 
+                tf.keras.callbacks.EarlyStopping(monitor="val_loss", patience=5, mode="auto", restore_best_weights=True),
+                tf.keras.callbacks.TensorBoard(trainer.get_tensorboard_log_path()),
+                tf.keras.callbacks.ReduceLROnPlateau(monitor="val_loss", factor=0.1, patience=4, min_lr=1e-8),
+                tf.keras.callbacks.ModelCheckpoint(trainer.get_model_save_path(), monitor="val_acc", save_best_only=True, save_freq="epoch")
+            ],
+            "image_augmentation" : {
+                "rotation_range": 90,
+                "shear_range": 0.2,
+                "zoom_range": 0.2,
+                "horizontal_flip": True,
+                "width_shift_range": 0.2,
+                "height_shift_range": 0.2, 
+                "vertical_flip": False
+            }
+        })
+
+
+        trainer.configure_model()
+        trainer.configure_generators()
+        trainer.train_model()
