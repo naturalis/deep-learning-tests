@@ -228,10 +228,16 @@ class ModelTrainer():
         validation_batches = validation.batch(self.BATCH_SIZE)
         test_batches = test.batch(self.BATCH_SIZE)
 
+        for image_batch, label_batch in train_batches.take(1):
+           pass
+
         # Create the base model from the pre-trained model MobileNet V2
         base_model = tf.keras.applications.MobileNetV2(input_shape=IMG_SHAPE,
                                                        include_top=False,
                                                        weights='imagenet')
+
+        feature_batch = base_model(image_batch)
+        print(feature_batch.shape)
 
         base_model.trainable = False
         base_model.summary()
