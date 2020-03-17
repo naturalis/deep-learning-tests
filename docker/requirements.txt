@@ -4,3 +4,4 @@ Pillow==2.2.2
 scipy
 tensorboard
 tensorflow-addons
+tensorflow-datasets
