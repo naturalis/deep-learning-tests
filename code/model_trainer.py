@@ -129,17 +129,17 @@ class ModelTrainer():
             self.logger.info("setting - {}: {}".format(setting, str(self.model_settings[setting])))
 
     def configure_model(self):
-        if "conv_base" in self.model_settings:
-            self.conv_base = self.model_settings["conv_base"]
+        if "base_model" in self.model_settings:
+            self.base_model = self.model_settings["base_model"]
         else:
-            self.conv_base = tf.keras.applications.InceptionV3(weights="imagenet", include_top=False)
+            self.base_model = tf.keras.applications.InceptionV3(weights="imagenet", include_top=False)
 
-        x = self.conv_base.output
+        x = self.base_model.output
         x = tf.keras.layers.GlobalAveragePooling2D()(x)
         x = tf.keras.layers.Dense(1024, activation='relu')(x)
 
         self.predictions = tf.keras.layers.Dense(len(self.class_list), activation='softmax')(x)
-        self.model = tf.keras.models.Model(inputs=self.conv_base.input, outputs=self.predictions)
+        self.model = tf.keras.models.Model(inputs=self.base_model.input, outputs=self.predictions)
         self.model.compile(
             optimizer=self.model_settings["optimizer"],
             loss=self.model_settings["loss"],
@@ -151,14 +151,13 @@ class ModelTrainer():
 
         if "freeze_layers" in self.model_settings:
             if self.model_settings["freeze_layers"]=="base_model":
-                for layer in self.conv_base.layers:
-                    layer.trainable = False
+                self.base_model.trainable = False
             else:
                 for layer in self.model.layers[:self.model_settings["freeze_layers"]]:
-                    layer.trainable = True
+                    layer.trainable = False
 
                 for layer in self.model.layers[self.model_settings["freeze_layers"]:]:
-                    layer.trainable = False
+                    layer.trainable = True
 
             self.model.compile(
                 optimizer=self.model_settings["optimizer"],
@@ -267,9 +266,9 @@ if __name__ == "__main__":
 
     trainer.set_model_settings({
         "validation_split": 0.2,
-        "conv_base": tf.keras.applications.InceptionV3(weights="imagenet", include_top=False),  
-        # "conv_base": tf.keras.applications.ResNet50(weights="imagenet", include_top=False),
-        "freeze_layers": 10, # "base_model", # 249,
+        "base_model": tf.keras.applications.InceptionV3(weights="imagenet", include_top=False),  
+        # "base_model": tf.keras.applications.ResNet50(weights="imagenet", include_top=False),
+        "freeze_layers": "base_model", # 249,
         "batch_size": 64,
         "epochs": 200,
         "loss": "categorical_crossentropy",
