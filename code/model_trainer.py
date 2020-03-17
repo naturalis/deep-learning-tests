@@ -149,15 +149,18 @@ class ModelTrainer():
         complete = self.get_trainable_params()
         frozen = None
 
-        if "first_trainable_layer" in self.model_settings:
-            # for layer in self.model.layers[:self.model_settings["first_trainable_layer"]]:
-            #     layer.trainable = False
+        if "freeze_layers" in self.model_settings:
+            if self.model_settings["freeze_layers"]=="base_model":
+                for layer in self.conv_base.layers:
+                    layer.trainable = False
+            else if is_integer(self.model_settings["freeze_layers"]):
+                for layer in self.model.layers[:self.model_settings["freeze_layers"]]:
+                    layer.trainable = False
 
-            # for layer in self.model.layers[self.model_settings["first_trainable_layer"]:]:
-            #     layer.trainable = True
-
-            for layer in self.conv_base.layers:
-                layer.trainable = False
+                for layer in self.model.layers[self.model_settings["freeze_layers"]:]:
+                    layer.trainable = True
+            else:
+                raise ValueError("freeze_layers must be integer or 'base_model': {}".format(self.model_settings["freeze_layers"]))
 
             self.model.compile(
                 optimizer=self.model_settings["optimizer"],
@@ -174,7 +177,7 @@ class ModelTrainer():
         print("  Trainable: {:,}".format(complete["trainable"]))
         print("  Non-trainable: {:,}".format(complete["non_trainable"]))
         if frozen is not None:
-            print("After freezing up to layer {}:".format(self.model_settings["first_trainable_layer"]))
+            print("After freezing up to layer {}:".format(self.model_settings["freeze_layers"]))
             print("  Trainable: {:,}".format(frozen["trainable"]))
             print("  Non-trainable: {:,}".format(frozen["non_trainable"]))
 
@@ -268,7 +271,7 @@ if __name__ == "__main__":
         "validation_split": 0.2,
         "conv_base": tf.keras.applications.InceptionV3(weights="imagenet", include_top=False),  
         # "conv_base": tf.keras.applications.ResNet50(weights="imagenet", include_top=False),
-        # "first_trainable_layer": 249,
+        "freeze_layers": "base_model", # 249,
         "batch_size": 64,
         "epochs": 200,
         "loss": "categorical_crossentropy",
