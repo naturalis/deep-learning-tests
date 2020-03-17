@@ -142,7 +142,7 @@ class ModelTrainer():
 
         x = self.base_model.output
         x = tf.keras.layers.GlobalAveragePooling2D()(x)
-        x = tf.keras.layers.Dense(1024, activation='relu')(x)
+        # x = tf.keras.layers.Dense(1024, activation='relu')(x)
 
         self.predictions = tf.keras.layers.Dense(len(self.class_list), activation='softmax')(x)
         self.model = tf.keras.models.Model(inputs=self.base_model.input, outputs=self.predictions)
@@ -318,9 +318,9 @@ class ModelTrainer():
         self.base_model.summary()
 
         global_average_layer = tf.keras.layers.GlobalAveragePooling2D()
+        # x = tf.keras.layers.Dense(1024, activation='relu')(x)
         # prediction_layer = tf.keras.layers.Dense(1)
         prediction_layer = tf.keras.layers.Dense(len(self.class_list), activation='softmax')
-#         x = tf.keras.layers.Dense(1024, activation='relu')(x)
 
         self.model = tf.keras.Sequential([
           self.base_model,
@@ -334,7 +334,7 @@ class ModelTrainer():
         base_learning_rate = 0.0001
         self.model.compile(optimizer=tf.keras.optimizers.RMSprop(lr=base_learning_rate),
                       loss=tf.keras.losses.BinaryCrossentropy(from_logits=True),
-                      metrics=['accuracy'])
+                      metrics=['acc'])
 
         self.model.summary()
 
@@ -356,18 +356,13 @@ class ModelTrainer():
 
         self.model.compile(loss=tf.keras.losses.BinaryCrossentropy(from_logits=True),
                       optimizer = tf.keras.optimizers.RMSprop(lr=base_learning_rate/10),
-                      metrics=['accuracy'])
+                      metrics=['acc'])
 
         self.model.summary()
 
         self.model_settings["epochs"] = 10
 
         self.train_model()
-
-
-
-
-
 
 
     def configure_generators(self):
@@ -448,47 +443,49 @@ if __name__ == "__main__":
 
     trainer = ModelTrainer()
 
-    # trainer.train_example()
+    if False:
+        trainer.train_example()
+        exit(0)
 
-    if True:
+    trainer.set_debug(os.environ["DEBUG"] if "DEBUG" in os.environ else False)
+    trainer.set_project_root(os.environ['PROJECT_ROOT'])
+    trainer.set_downloaded_images_list_file(image_col=2)
+    trainer.set_class_list_file()
+    trainer.read_image_list_file()
+    trainer.read_class_list()
 
-        trainer.set_debug(os.environ["DEBUG"] if "DEBUG" in os.environ else False)
-        trainer.set_project_root(os.environ['PROJECT_ROOT'])
-        trainer.set_downloaded_images_list_file(image_col=2)
-        trainer.set_class_list_file()
-        trainer.read_image_list_file()
-        trainer.read_class_list()
+    trainer.set_model_settings({
+        "validation_split": 0.2,
+        "base_model": tf.keras.applications.InceptionV3(weights="imagenet", include_top=False),  
+        # "base_model": tf.keras.applications.ResNet50(weights="imagenet", include_top=False),
+        "freeze_layers": "base_model", # 249,
+        "batch_size": 64,
+        "epochs": 200,
+        "loss": "categorical_crossentropy",
+        "optimizer": tf.keras.optimizers.RMSprop(learning_rate=1e-4),
+        "callbacks" : [ 
+            tf.keras.callbacks.EarlyStopping(monitor="val_loss", patience=5, mode="auto", restore_best_weights=True),
+            tf.keras.callbacks.TensorBoard(trainer.get_tensorboard_log_path()),
+            tf.keras.callbacks.ReduceLROnPlateau(monitor="val_loss", factor=0.1, patience=4, min_lr=1e-8),
+            tf.keras.callbacks.ModelCheckpoint(trainer.get_model_save_path(), monitor="val_acc", save_best_only=True, save_freq="epoch")
+        ],
+        "image_augmentation" : {
+            "rotation_range": 90,
+            "shear_range": 0.2,
+            "zoom_range": 0.2,
+            "horizontal_flip": True,
+            "width_shift_range": 0.2,
+            "height_shift_range": 0.2, 
+            "vertical_flip": False
+        }
+    })
 
-        trainer.set_model_settings({
-            "validation_split": 0.2,
-            "base_model": tf.keras.applications.InceptionV3(weights="imagenet", include_top=False),  
-            # "base_model": tf.keras.applications.ResNet50(weights="imagenet", include_top=False),
-            "freeze_layers": "base_model", # 249,
-            "batch_size": 64,
-            "epochs": 200,
-            "loss": "categorical_crossentropy",
-            "optimizer": tf.keras.optimizers.RMSprop(learning_rate=1e-4),
-            "callbacks" : [ 
-                tf.keras.callbacks.EarlyStopping(monitor="val_loss", patience=5, mode="auto", restore_best_weights=True),
-                tf.keras.callbacks.TensorBoard(trainer.get_tensorboard_log_path()),
-                tf.keras.callbacks.ReduceLROnPlateau(monitor="val_loss", factor=0.1, patience=4, min_lr=1e-8),
-                tf.keras.callbacks.ModelCheckpoint(trainer.get_model_save_path(), monitor="val_acc", save_best_only=True, save_freq="epoch")
-            ],
-            "image_augmentation" : {
-                "rotation_range": 90,
-                "shear_range": 0.2,
-                "zoom_range": 0.2,
-                "horizontal_flip": True,
-                "width_shift_range": 0.2,
-                "height_shift_range": 0.2, 
-                "vertical_flip": False
-            }
-        })
+    original = True
 
-
-        # trainer.configure_model()
+    if original:
+        trainer.configure_model()
         trainer.configure_generators()
-    
-        trainer.train_example_2()
-
         trainer.train_model()
+    else:
+        trainer.configure_generators()
+        trainer.train_example_2()
