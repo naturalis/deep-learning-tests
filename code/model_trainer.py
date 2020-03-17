@@ -153,14 +153,12 @@ class ModelTrainer():
             if self.model_settings["freeze_layers"]=="base_model":
                 for layer in self.conv_base.layers:
                     layer.trainable = False
-            elif self.model_settings["freeze_layers"].is_integer():
+            else:
                 for layer in self.model.layers[:self.model_settings["freeze_layers"]]:
                     layer.trainable = False
 
                 for layer in self.model.layers[self.model_settings["freeze_layers"]:]:
                     layer.trainable = True
-            else:
-                raise ValueError("freeze_layers must be integer or 'base_model': {}".format(self.model_settings["freeze_layers"]))
 
             self.model.compile(
                 optimizer=self.model_settings["optimizer"],
