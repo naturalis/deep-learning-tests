@@ -155,10 +155,10 @@ class ModelTrainer():
                     layer.trainable = False
             else:
                 for layer in self.model.layers[:self.model_settings["freeze_layers"]]:
-                    layer.trainable = False
+                    layer.trainable = True
 
                 for layer in self.model.layers[self.model_settings["freeze_layers"]:]:
-                    layer.trainable = True
+                    layer.trainable = False
 
             self.model.compile(
                 optimizer=self.model_settings["optimizer"],
