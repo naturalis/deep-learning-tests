@@ -232,8 +232,7 @@ class ModelTrainer():
            pass
 
         # Create the base model from the pre-trained model MobileNet V2
-        base_model = tf.keras.applications.MobileNetV2(input_shape=IMG_SHAPE,
-                                                       include_top=False,
+        base_model = tf.keras.applications.MobileNetV2(iinclude_top=False,
                                                        weights='imagenet')
 
         feature_batch = base_model(image_batch)
