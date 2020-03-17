@@ -44,6 +44,12 @@ class ModelTrainer():
     def __init__(self):
         self.logger = logclass.LogClass(self.__class__.__name__)
         self.logger.info("TensorFlow v{}".format(tf.__version__))
+        if self.debug:
+            tf.get_logger().setLevel("DEBUG")
+            tf.autograph.set_verbosity(10)
+        else:
+            tf.get_logger().setLevel("INFO")
+            tf.autograph.set_verbosity(1)
         self.set_timestamp()
 
     def set_timestamp(self):
@@ -170,12 +176,14 @@ class ModelTrainer():
         if self.debug:
             self.model.summary()
         else:
-            print("{} layers (base model: {})".format(len(self.model.layers), len(self.base_model.layers)))
+            print("Model has {} layers (base model: {})".format(len(self.model.layers), len(self.base_model.layers)))
+            print("Frozen layers: {}".format(if "freeze_layers" in self.model_settings self.model_settings["freeze_layers"] else "none"))
             print("Trainable variables: {}".format(len(self.model.trainable_variables)))
 
         print("Total parameters: {:,}".format(complete["total"]))
         print("  Trainable: {:,}".format(complete["trainable"]))
         print("  Non-trainable: {:,}".format(complete["non_trainable"]))
+
         if frozen is not None:
             print("After freezing up to layer {}:".format(self.model_settings["freeze_layers"]))
             print("  Trainable: {:,}".format(frozen["trainable"]))
