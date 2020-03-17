@@ -153,11 +153,11 @@ class ModelTrainer():
             if self.model_settings["freeze_layers"]=="base_model":
                 self.base_model.trainable = False
             else:
-                for layer in self.model.layers[:self.model_settings["freeze_layers"]]:
+                self.base_model.trainable = True
+
+                for layer in self.base_model.layers[:self.model_settings["freeze_layers"]]:
                     layer.trainable = False
 
-                for layer in self.model.layers[self.model_settings["freeze_layers"]:]:
-                    layer.trainable = True
 
             self.model.compile(
                 optimizer=self.model_settings["optimizer"],
@@ -169,6 +169,9 @@ class ModelTrainer():
 
         if self.debug:
             self.model.summary()
+        else:
+            print("{} layers ({} in base model)}", len(self.model.layers, self.base_model.layers))
+
 
         print("Total parameters: {:,}".format(complete["total"]))
         print("  Trainable: {:,}".format(complete["trainable"]))
