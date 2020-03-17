@@ -130,16 +130,16 @@ class ModelTrainer():
 
     def configure_model(self):
         if "conv_base" in self.model_settings:
-            conv_base = self.model_settings["conv_base"]
+            self.conv_base = self.model_settings["conv_base"]
         else:
-            conv_base = tf.keras.applications.InceptionV3(weights="imagenet", include_top=False)
+            self.conv_base = tf.keras.applications.InceptionV3(weights="imagenet", include_top=False)
 
-        x = conv_base.output
+        x = self.conv_base.output
         x = tf.keras.layers.GlobalAveragePooling2D()(x)
         x = tf.keras.layers.Dense(1024, activation='relu')(x)
 
         self.predictions = tf.keras.layers.Dense(len(self.class_list), activation='softmax')(x)
-        self.model = tf.keras.models.Model(inputs=conv_base.input, outputs=self.predictions)
+        self.model = tf.keras.models.Model(inputs=self.conv_base.input, outputs=self.predictions)
         self.model.compile(
             optimizer=self.model_settings["optimizer"],
             loss=self.model_settings["loss"],
@@ -150,11 +150,14 @@ class ModelTrainer():
         frozen = None
 
         if "first_trainable_layer" in self.model_settings:
-            for layer in self.model.layers[:self.model_settings["first_trainable_layer"]]:
-                layer.trainable = False
+            # for layer in self.model.layers[:self.model_settings["first_trainable_layer"]]:
+            #     layer.trainable = False
 
-            for layer in self.model.layers[self.model_settings["first_trainable_layer"]:]:
-                layer.trainable = True
+            # for layer in self.model.layers[self.model_settings["first_trainable_layer"]:]:
+            #     layer.trainable = True
+
+            for layer in self.conv_base.layers:
+                layer.trainable = False
 
             self.model.compile(
                 optimizer=self.model_settings["optimizer"],
