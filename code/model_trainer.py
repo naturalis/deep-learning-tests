@@ -199,7 +199,7 @@ class ModelTrainer():
             print("  Non-trainable: {:,}".format(frozen["non_trainable"]))
 
 
-    def train_example_2(self):
+    def configure_model_2(self):
 
         # Create the base model from the pre-trained model --> MobileNetV2
         self.base_model = tf.keras.applications.InceptionV3(include_top=False,
@@ -229,7 +229,9 @@ class ModelTrainer():
 
         self.model.summary()
 
-        self.model_settings["epochs"] = 10
+        return
+
+        self.model_settings["epochs"] = 200
 
         self.train_model()
 
@@ -399,4 +401,5 @@ if __name__ == "__main__":
         trainer.train_model()
     else:
         trainer.configure_generators()
-        trainer.train_example_2()
+        trainer.configure_model_2()
+        trainer.configure_model()
