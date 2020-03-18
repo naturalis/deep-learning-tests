@@ -147,7 +147,8 @@ class ModelTrainer():
         else:
             self.base_model = tf.keras.applications.InceptionV3(weights="imagenet", include_top=False)
 
-        x = self.base_model.output
+        x = self.base_model
+        # x = self.base_model.output
         x = tf.keras.layers.GlobalAveragePooling2D()(x)
         # x = tf.keras.layers.Dense(1024, activation='relu')(x)
 
@@ -376,7 +377,7 @@ if __name__ == "__main__":
         # "base_model": tf.keras.applications.ResNet50(weights="imagenet", include_top=False),
         "freeze_layers": "base_model", # 249,
         "batch_size": 64,
-        "epochs": 5,
+        "epochs": 2,
         "loss": "categorical_crossentropy",
         "optimizer": tf.keras.optimizers.RMSprop(learning_rate=1e-4),
         "callbacks" : [ 
