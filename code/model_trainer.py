@@ -207,8 +207,8 @@ class ModelTrainer():
         self.base_model = tf.keras.applications.InceptionV3(include_top=False,
                                                        weights='imagenet')
 
-        # self.base_model.trainable = False
-        # self.base_model.summary()
+        self.base_model.trainable = False
+        self.base_model.summary()
 
         global_average_layer = tf.keras.layers.GlobalAveragePooling2D()
         # x = tf.keras.layers.Dense(1024, activation='relu')(x)
@@ -234,31 +234,34 @@ class ModelTrainer():
 
         self.model.summary()
 
-        # self.model_settings["epochs"] = 200
+        self.model_settings["epochs"] = 10
 
-        # self.train_model()
+        self.train_model()
 
-        # self.base_model.trainable = True
 
-        # # Let's take a look to see how many layers are in the base model
-        # print("Number of layers in the base model: ", len(self.base_model.layers))
 
-        # # Fine-tune from this layer onwards
-        # fine_tune_at = 100
 
-        # # Freeze all the layers before the `fine_tune_at` layer
-        # for layer in self.base_model.layers[:fine_tune_at]:
-        #     layer.trainable =  False
+        self.base_model.trainable = True
 
-        # self.model.compile(loss=tf.keras.losses.BinaryCrossentropy(from_logits=True),
-        #               optimizer = tf.keras.optimizers.RMSprop(lr=base_learning_rate/10),
-        #               metrics=['acc'])
+        # Let's take a look to see how many layers are in the base model
+        print("Number of layers in the base model: ", len(self.base_model.layers))
 
-        # self.model.summary()
+        # Fine-tune from this layer onwards
+        fine_tune_at = 249
 
-        # self.model_settings["epochs"] = 10
+        # Freeze all the layers before the `fine_tune_at` layer
+        for layer in self.base_model.layers[:fine_tune_at]:
+            layer.trainable =  False
 
-        # self.train_model()
+        self.model.compile(loss=tf.keras.losses.BinaryCrossentropy(from_logits=True),
+                      optimizer = tf.keras.optimizers.RMSprop(lr=base_learning_rate/10),
+                      metrics=['acc'])
+
+        self.model.summary()
+
+        self.model_settings["epochs"] = 100
+
+        self.train_model()
 
 
     def configure_generators(self):
@@ -404,7 +407,7 @@ if __name__ == "__main__":
         trainer.train_model()
     else:
         trainer.configure_generators()
-        trainer.configure_model()
-        trainer.train_model()
+        # trainer.configure_model()
+        # trainer.train_model()
         trainer.configure_model_2()
         trainer.train_model()
