@@ -60,6 +60,7 @@ class ModelTrainer():
 
     def set_debug(self,state):
         self.debug = state
+        print(self.debug)
 
     def set_project_root(self, project_root, image_root=None):
         self.project_root = project_root
@@ -179,6 +180,7 @@ class ModelTrainer():
 
             frozen = self.get_trainable_params()
 
+        print("====================== model 1 ===============================")
         if self.debug:
             self.model.summary()
         else:
@@ -226,6 +228,9 @@ class ModelTrainer():
         self.model.compile(optimizer=tf.keras.optimizers.RMSprop(lr=base_learning_rate),
                       loss=tf.keras.losses.BinaryCrossentropy(from_logits=True),
                       metrics=['acc'])
+
+
+        print("====================== model 2 ===============================")
 
         self.model.summary()
 
@@ -401,5 +406,5 @@ if __name__ == "__main__":
         trainer.train_model()
     else:
         trainer.configure_generators()
-        trainer.configure_model_2()
         trainer.configure_model()
+        trainer.configure_model_2()
