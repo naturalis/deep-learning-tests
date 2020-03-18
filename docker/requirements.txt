@@ -5,3 +5,4 @@ scipy
 tensorboard
 tensorflow-addons
 tensorflow-datasets
+matplotlib

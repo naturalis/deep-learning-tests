@@ -5,6 +5,7 @@ import tensorflow as tf
 import pandas as pd
 import numpy as np
 from datetime import datetime
+import matplotlib.pyplot as plt
 from lib import logclass
 
 
@@ -33,6 +34,7 @@ class ModelTrainer():
     class_list = None
     model_settings = None
     predictions = None
+    history = None
 
     COL_CLASS = "class"
     COL_IMAGE = "image"
@@ -125,6 +127,10 @@ class ModelTrainer():
         self.architecture_save_path = os.path.join(self.project_root, "models", self.timestamp + ".json")
         return self.architecture_save_path
 
+    def get_history_plot_save_path(self):
+        self.history_plot_save_path = os.path.join(self.project_root, "log", self.timestamp + ".png")
+        return self.history_plot_save_path
+
     def get_tensorboard_log_path(self):
         self.tensorboard_log_path = os.path.join(self.project_root, "log", "logs_keras")
         return self.tensorboard_log_path
@@ -193,125 +199,10 @@ class ModelTrainer():
             print("  Non-trainable: {:,}".format(frozen["non_trainable"]))
 
 
-
-
-    IMG_SIZE = 160 # All images will be resized to 160x160
-    BATCH_SIZE = 32
-    SHUFFLE_BUFFER_SIZE = 1000
-    
-
-    def format_example(self, image, label):
-        image = tf.cast(image, tf.float32)
-        image = (image/127.5) - 1
-        image = tf.image.resize(image, (self.IMG_SIZE, self.IMG_SIZE))
-        return image, label
-
-    def train_example(self):
-
-        IMG_SHAPE = (self.IMG_SIZE, self.IMG_SIZE, 3)
-
-        import tensorflow_datasets as tfds
-        tfds.disable_progress_bar()
-
-        (raw_train, raw_validation, raw_test), metadata = tfds.load(
-            'cats_vs_dogs',
-            split=['train[:80%]', 'train[80%:90%]', 'train[90%:]'],
-            with_info=True,
-            as_supervised=True,
-        )
-
-        train = raw_train.map(self.format_example)
-        validation = raw_validation.map(self.format_example)
-        test = raw_test.map(self.format_example)
-
-        train_batches = train.shuffle(self.SHUFFLE_BUFFER_SIZE).batch(self.BATCH_SIZE)
-        validation_batches = validation.batch(self.BATCH_SIZE)
-        test_batches = test.batch(self.BATCH_SIZE)
-
-        for image_batch, label_batch in train_batches.take(1):
-           pass
-
-        # Create the base model from the pre-trained model MobileNet V2
-        base_model = tf.keras.applications.MobileNetV2(input_shape=IMG_SHAPE,
-                                                       include_top=False,
-                                                       weights='imagenet')
-
-        feature_batch = base_model(image_batch)
-        print(feature_batch.shape)
-
-        base_model.trainable = False
-        base_model.summary()
-
-        global_average_layer = tf.keras.layers.GlobalAveragePooling2D()
-        feature_batch_average = global_average_layer(feature_batch)
-        print(feature_batch_average.shape)
-
-        prediction_layer = tf.keras.layers.Dense(1)
-        prediction_batch = prediction_layer(feature_batch_average)
-        print(prediction_batch.shape)
-
-        model = tf.keras.Sequential([
-          base_model,
-          global_average_layer,
-          prediction_layer
-        ])
-
-        base_learning_rate = 0.0001
-        model.compile(optimizer=tf.keras.optimizers.RMSprop(lr=base_learning_rate),
-                      loss=tf.keras.losses.BinaryCrossentropy(from_logits=True),
-                      metrics=['accuracy'])
-
-        model.summary()
-
-        initial_epochs = 10
-        validation_steps=20
-
-        loss0,accuracy0 = model.evaluate(validation_batches, steps = validation_steps)
-
-        print("initial loss: {:.2f}".format(loss0))
-        print("initial accuracy: {:.2f}".format(accuracy0))
-
-        history = model.fit(train_batches,
-                            epochs=initial_epochs,
-                            validation_data=validation_batches)
-
-        base_model.trainable = True
-
-        # Let's take a look to see how many layers are in the base model
-        print("Number of layers in the base model: ", len(base_model.layers))
-
-        # Fine-tune from this layer onwards
-        fine_tune_at = 100
-
-        # Freeze all the layers before the `fine_tune_at` layer
-        for layer in base_model.layers[:fine_tune_at]:
-            layer.trainable =  False
-
-        model.compile(loss=tf.keras.losses.BinaryCrossentropy(from_logits=True),
-                      optimizer = tf.keras.optimizers.RMSprop(lr=base_learning_rate/10),
-                      metrics=['accuracy'])
-
-        model.summary()
-
-        fine_tune_epochs = 10
-        total_epochs =  initial_epochs + fine_tune_epochs
-
-        history_fine = model.fit(train_batches,
-                                 epochs=total_epochs,
-                                 initial_epoch =  history.epoch[-1],
-                                 validation_data=validation_batches)
-
-        acc += history_fine.history['accuracy']
-        val_acc += history_fine.history['val_accuracy']
-
-        loss += history_fine.history['loss']
-        val_loss += history_fine.history['val_loss']
-
-
     def train_example_2(self):
 
-        # Create the base model from the pre-trained model MobileNet V2
-        self.base_model = tf.keras.applications.MobileNetV2(include_top=False,
+        # Create the base model from the pre-trained model --> MobileNetV2
+        self.base_model = tf.keras.applications.InceptionV3(include_top=False,
                                                        weights='imagenet')
 
         self.base_model.trainable = False
@@ -406,7 +297,7 @@ class ModelTrainer():
         step_size_train = self.train_generator.n // self.train_generator.batch_size
         step_size_validate = self.validation_generator.n // self.validation_generator.batch_size
 
-        history = self.model.fit(
+        self.history = self.model.fit(
             x=self.train_generator,
             steps_per_epoch=step_size_train,
             epochs=self.model_settings["epochs"],
@@ -437,15 +328,34 @@ class ModelTrainer():
         }
 
 
+    def evaluate(self):
+        acc = self.history.history['accuracy']
+        val_acc = self.history.history['val_accuracy']
+
+        loss = self.history.history['loss']
+        val_loss = self.history.history['val_loss']
+
+        epochs_range = range(self.model_settings["epochs"])
+
+        plt.figure(figsize=(8, 8))
+        plt.subplot(1, 2, 1)
+        plt.plot(epochs_range, acc, label='Training Accuracy')
+        plt.plot(epochs_range, val_acc, label='Validation Accuracy')
+        plt.legend(loc='lower right')
+        plt.title('Training and Validation Accuracy')
+
+        plt.subplot(1, 2, 2)
+        plt.plot(epochs_range, loss, label='Training Loss')
+        plt.plot(epochs_range, val_loss, label='Validation Loss')
+        plt.legend(loc='upper right')
+        plt.title('Training and Validation Loss')
+        # plt.show()
+        plt.savefig(self.get_history_plot_save_path())
 
 
 if __name__ == "__main__":
 
     trainer = ModelTrainer()
-
-    if False:
-        trainer.train_example()
-        exit(0)
 
     trainer.set_debug(os.environ["DEBUG"] if "DEBUG" in os.environ else False)
     trainer.set_project_root(os.environ['PROJECT_ROOT'])
@@ -481,7 +391,7 @@ if __name__ == "__main__":
         }
     })
 
-    original = True
+    original = False
 
     if original:
         trainer.configure_model()
