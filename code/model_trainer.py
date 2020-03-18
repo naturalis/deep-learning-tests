@@ -375,7 +375,7 @@ if __name__ == "__main__":
         # "base_model": tf.keras.applications.MobileNetV2(weights="imagenet", include_top=False),  
         "base_model": tf.keras.applications.InceptionV3(weights="imagenet", include_top=False),  
         # "base_model": tf.keras.applications.ResNet50(weights="imagenet", include_top=False),
-        # "freeze_layers": "base_model", # 249,
+        "freeze_layers": 249, # "base_model", # 249,
         "batch_size": 64,
         "epochs": 200,
         "loss": tf.keras.losses.CategoricalCrossentropy(),
