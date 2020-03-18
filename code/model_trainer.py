@@ -180,7 +180,7 @@ class ModelTrainer():
 
             frozen = self.get_trainable_params()
 
-        print("====================== model 1 ===============================")
+        print("\n\n====================== model 1 ===============================")
         if self.debug:
             self.model.summary()
         else:
@@ -230,37 +230,35 @@ class ModelTrainer():
                       metrics=['acc'])
 
 
-        print("====================== model 2 ===============================")
+        print("\n\n====================== model 2 ===============================")
 
         self.model.summary()
 
-        return
+        # self.model_settings["epochs"] = 200
 
-        self.model_settings["epochs"] = 200
+        # self.train_model()
 
-        self.train_model()
+        # self.base_model.trainable = True
 
-        self.base_model.trainable = True
+        # # Let's take a look to see how many layers are in the base model
+        # print("Number of layers in the base model: ", len(self.base_model.layers))
 
-        # Let's take a look to see how many layers are in the base model
-        print("Number of layers in the base model: ", len(self.base_model.layers))
+        # # Fine-tune from this layer onwards
+        # fine_tune_at = 100
 
-        # Fine-tune from this layer onwards
-        fine_tune_at = 100
+        # # Freeze all the layers before the `fine_tune_at` layer
+        # for layer in self.base_model.layers[:fine_tune_at]:
+        #     layer.trainable =  False
 
-        # Freeze all the layers before the `fine_tune_at` layer
-        for layer in self.base_model.layers[:fine_tune_at]:
-            layer.trainable =  False
+        # self.model.compile(loss=tf.keras.losses.BinaryCrossentropy(from_logits=True),
+        #               optimizer = tf.keras.optimizers.RMSprop(lr=base_learning_rate/10),
+        #               metrics=['acc'])
 
-        self.model.compile(loss=tf.keras.losses.BinaryCrossentropy(from_logits=True),
-                      optimizer = tf.keras.optimizers.RMSprop(lr=base_learning_rate/10),
-                      metrics=['acc'])
+        # self.model.summary()
 
-        self.model.summary()
+        # self.model_settings["epochs"] = 10
 
-        self.model_settings["epochs"] = 10
-
-        self.train_model()
+        # self.train_model()
 
 
     def configure_generators(self):
@@ -378,7 +376,7 @@ if __name__ == "__main__":
         # "base_model": tf.keras.applications.ResNet50(weights="imagenet", include_top=False),
         "freeze_layers": "base_model", # 249,
         "batch_size": 64,
-        "epochs": 200,
+        "epochs": 5,
         "loss": "categorical_crossentropy",
         "optimizer": tf.keras.optimizers.RMSprop(learning_rate=1e-4),
         "callbacks" : [ 
@@ -407,4 +405,6 @@ if __name__ == "__main__":
     else:
         trainer.configure_generators()
         trainer.configure_model()
+        trainer.train_model()
         trainer.configure_model_2()
+        trainer.train_model()
