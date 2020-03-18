@@ -208,7 +208,7 @@ class ModelTrainer():
                                                        weights='imagenet')
 
         self.base_model.trainable = False
-        self.base_model.summary()
+        # self.base_model.summary()
 
         global_average_layer = tf.keras.layers.GlobalAveragePooling2D()
         # x = tf.keras.layers.Dense(1024, activation='relu')(x)
