@@ -375,9 +375,9 @@ if __name__ == "__main__":
         # "base_model": tf.keras.applications.MobileNetV2(weights="imagenet", include_top=False),  
         "base_model": tf.keras.applications.InceptionV3(weights="imagenet", include_top=False),  
         # "base_model": tf.keras.applications.ResNet50(weights="imagenet", include_top=False),
-        # "freeze_layers": "base_model", # 249,
+        "freeze_layers": "base_model", # 249,
         "batch_size": 64,
-        "epochs": 5,
+        "epochs": 200,
         "loss": tf.keras.losses.CategoricalCrossentropy(),
         "optimizer": tf.keras.optimizers.RMSprop(learning_rate=1e-4),
         "callbacks" : [ 
@@ -397,7 +397,7 @@ if __name__ == "__main__":
         }
     })
 
-    original = False
+    original = True
 
     if original:
         trainer.configure_model()
