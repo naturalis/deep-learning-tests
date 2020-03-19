@@ -9,7 +9,7 @@ class ImageIdentify:
 
     def load_model(self,filepath):
         print("a")
-        self.model = tf.keras.models.load_model(filepath)
+        self.model = tf.keras.models.load_model(filepath,compile=False)
         print("b")
 
     def predict(self,image):
