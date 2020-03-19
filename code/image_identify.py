@@ -18,17 +18,13 @@ class ImageIdentify:
         x = tf.keras.preprocessing.image.img_to_array(x)
         x = np.expand_dims(x, axis=0)
         prediction = self.model.predict(x)
-        return json.dumps(prediction.to_list())
+        return json.dumps(prediction.tolist())
 
 if __name__ == '__main__':
 
     image = sys.argv[1]
 
-    print("1")
     predict = ImageIdentify()
-    print("2")
     predict.load_model("/data/corvidae/models/20200319-120518.hdf5")
-    print("3")
     x = predict.predict(image)
-    print("4")
     print(x)
