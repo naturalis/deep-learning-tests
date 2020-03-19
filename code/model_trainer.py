@@ -429,16 +429,13 @@ if __name__ == "__main__":
         }
     })
 
-    original = True
+    trainer.assemble_model()
+    # trainer.configure_generators()
+    # trainer.train_model()
+    # trainer.evaluate()
 
-    if original:
-        trainer.assemble_model()
-        trainer.configure_generators()
-        trainer.train_model()
-        trainer.evaluate()
-    else:
-        trainer.configure_generators()
-        trainer.assemble_model_2()
-        trainer.train_model()
-        trainer.assemble_model()
-        trainer.train_model()
+    # trainer.configure_generators()
+    # trainer.assemble_model_2()
+    # trainer.train_model()
+    # trainer.assemble_model()
+    # trainer.train_model()
