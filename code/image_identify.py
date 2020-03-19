@@ -31,7 +31,7 @@ class ImageIdentify:
 
         print(self.classes)
 
-        zipped = zip(self.classes.iteritems(), p_list)
+        zipped = zip(self.classes.items(), p_list)
 
         for (key, value), num_list_entry in zipped:
             print(key)
