@@ -2,6 +2,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 import os
 import tensorflow as tf
+from tf.keras.applications.InceptionV3 import preprocess_input
 import pandas as pd
 import numpy as np
 from datetime import datetime
@@ -264,8 +265,6 @@ class ModelTrainer():
 
     def configure_generators(self):
         a = self.model_settings["image_augmentation"] if "image_augmentation" in self.model_settings else []
-
-        from keras.applications.InceptionV3 import preprocess_input
 
         datagen = tf.keras.preprocessing.image.ImageDataGenerator(
             validation_split=self.model_settings["validation_split"],
