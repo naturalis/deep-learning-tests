@@ -1,6 +1,6 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-import os
+import os, json
 import tensorflow as tf
 import pandas as pd
 import numpy as np
@@ -183,9 +183,9 @@ class ModelTrainer():
             shuffle=True)
 
         f = open(self.get_classes_save_path(), "w")
-        f.write(self.train_generator.class_indices)
+        f.write(json.dumps(self.train_generator.class_indices))
         f.close()
-    
+
         self.logger.info("saved model classes to {}".format(self.get_classes_save_path()))
 
 
