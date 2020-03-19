@@ -5,7 +5,7 @@ import tensorflow as tf
 
 
 import tensorflow.keras.applications.InceptionV3
-from keras_applications.InceptionV3 import preprocess_input
+from keras_applications.inception_v3 import preprocess_input
 
 
 import pandas as pd
