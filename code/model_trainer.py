@@ -2,12 +2,6 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 import os
 import tensorflow as tf
-
-
-import tensorflow.keras.applications.inception_v3
-from keras_applications.inception_v3 import preprocess_input
-
-
 import pandas as pd
 import numpy as np
 from datetime import datetime
@@ -147,6 +141,43 @@ class ModelTrainer():
         for setting in self.model_settings:
             self.logger.info("setting - {}: {}".format(setting, str(self.model_settings[setting])))
 
+    def configure_generators(self):
+        a = self.model_settings["image_augmentation"] if "image_augmentation" in self.model_settings else []
+
+        datagen = tf.keras.preprocessing.image.ImageDataGenerator(
+            validation_split=self.model_settings["validation_split"],
+            rotation_range=a["rotation_range"] if "rotation_range" in a else 0,
+            shear_range=a["shear_range"] if "shear_range" in a else 0.0,
+            zoom_range=a["zoom_range"] if "zoom_range" in a else 0.0,
+            width_shift_range=a["width_shift_range"] if "width_shift_range" in a else 0.0,
+            height_shift_range=a["height_shift_range"] if "height_shift_range" in a else 0.0,
+            horizontal_flip=a["horizontal_flip"] if "horizontal_flip" in a else False,
+            vertical_flip=a["vertical_flip"] if "vertical_flip" in a else False
+        )
+
+        self.train_generator = datagen.flow_from_dataframe(
+            dataframe=self.traindf,
+            x_col=self.COL_IMAGE,
+            y_col=self.COL_CLASS,
+            class_mode="categorical",
+            target_size=(299, 299),
+            batch_size=self.model_settings["batch_size"],
+            interpolation="nearest",
+            subset="training",
+            shuffle=True)
+
+        self.validation_generator = datagen.flow_from_dataframe(
+            dataframe=self.traindf,
+            x_col=self.COL_IMAGE,
+            y_col=self.COL_CLASS,
+            class_mode="categorical",
+            target_size=(299, 299),
+            batch_size=self.model_settings["batch_size"],
+            interpolation="nearest",
+            subset="validation",
+            shuffle=True)
+
+
     def configure_model(self):
         if "base_model" in self.model_settings:
             self.base_model = self.model_settings["base_model"]
@@ -266,44 +297,6 @@ class ModelTrainer():
         # self.model_settings["epochs"] = 100
 
         # self.train_model()
-
-
-    def configure_generators(self):
-        a = self.model_settings["image_augmentation"] if "image_augmentation" in self.model_settings else []
-
-        datagen = tf.keras.preprocessing.image.ImageDataGenerator(
-            validation_split=self.model_settings["validation_split"],
-            rotation_range=a["rotation_range"] if "rotation_range" in a else 0,
-            shear_range=a["shear_range"] if "shear_range" in a else 0.0,
-            zoom_range=a["zoom_range"] if "zoom_range" in a else 0.0,
-            width_shift_range=a["width_shift_range"] if "width_shift_range" in a else 0.0,
-            height_shift_range=a["height_shift_range"] if "height_shift_range" in a else 0.0,
-            horizontal_flip=a["horizontal_flip"] if "horizontal_flip" in a else False,
-            vertical_flip=a["vertical_flip"] if "vertical_flip" in a else False,
-            preprocessing_function=preprocess_input
-        )
-
-        self.train_generator = datagen.flow_from_dataframe(
-            dataframe=self.traindf,
-            x_col=self.COL_IMAGE,
-            y_col=self.COL_CLASS,
-            class_mode="categorical",
-            target_size=(299, 299),
-            batch_size=self.model_settings["batch_size"],
-            interpolation="nearest",
-            subset="training",
-            shuffle=True)
-
-        self.validation_generator = datagen.flow_from_dataframe(
-            dataframe=self.traindf,
-            x_col=self.COL_IMAGE,
-            y_col=self.COL_CLASS,
-            class_mode="categorical",
-            target_size=(299, 299),
-            batch_size=self.model_settings["batch_size"],
-            interpolation="nearest",
-            subset="validation",
-            shuffle=True)
 
 
     def train_model(self):
