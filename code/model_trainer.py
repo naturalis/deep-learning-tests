@@ -198,14 +198,23 @@ class ModelTrainer():
 
     def set_frozen_layers(self):
         if not "freeze_layers" in self.model_settings:
-            self.current_freeze="none"
+            self.current_freeze="none specified"
             return
 
+        print(self.training_phase)
+
         if isinstance(self.model_settings["freeze_layers"], list):
+            print("a")
             if self.training_phase in self.model_settings["freeze_layers"]:
                 self.current_freeze = self.model_settings["freeze_layers"][self.training_phase]
+                print("b")
+
         else:
             self.current_freeze = self.model_settings["freeze_layers"]
+            print("c")
+
+
+        print(self.current_freeze)
 
         self.model.trainable = True
 
