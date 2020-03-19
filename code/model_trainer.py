@@ -193,12 +193,12 @@ class ModelTrainer():
         self.predictions = tf.keras.layers.Dense(len(self.class_list), activation='softmax')(x)
         self.model = tf.keras.models.Model(inputs=self.base_model.input, outputs=self.predictions)
 
-        self.logger.info("setting - {}: {}".format(setting, str(self.model_settings[setting])))
-                print("Model has {} layers (base model: {})".format(len(self.model.layers), len(self.base_model.layers)))
+        self.logger.info("model has {} layers (base model: {})".format(len(self.model.layers), len(self.base_model.layers)))
 
 
     def set_frozen_layers(self):
         if not "freeze_layers" in self.model_settings:
+            self.current_freeze="none"
             return
 
         if isinstance(self.model_settings["freeze_layers"], list):
@@ -221,13 +221,18 @@ class ModelTrainer():
 
     def train_model(self):
 
+        self.logger.info("start training {}".format(self.project_root))
+
+        self.training_phase = 0
+
         if isinstance(self.model_settings["epochs"], int):
             epochs = [self.model_settings["epochs"]]
         else:
             epochs = self.model_settings["epochs"]
 
-        for i in epochs: 
-            self.training_phase = i
+        for epoch in epochs: 
+
+            self.logger.info("=== training phase {} ({}/{}) ===".format(self.training_phase,(self.training_phase+1),len(epochs)))
 
             self.set_frozen_layers()
 
@@ -240,39 +245,31 @@ class ModelTrainer():
             if self.debug:
                 self.model.summary()
             else:
+                self.logger.info("frozen layers: {}".format(self.current_freeze))
+
                 params = self.get_trainable_params()
 
-                if "freeze_layers" in self.model_settings:
-                    print("Frozen layers: {}".format(self.model_settings["freeze_layers"]))
-                else:
-                    print("Frozen layers: {}".format("none"))
-                print("Trainable variables: {}".format(len(self.model.trainable_variables)))
+                self.logger.info("trainable variables: {:,}".format(len(self.model.trainable_variables)))
+                self.logger.info("total parameters: {:,}".format(params["total"]))
+                self.logger.info("trainable: {:,}".format(params["trainable"]))
+                self.logger.info("non-trainable: {:,}".format(params["non_trainable"]))
 
-            print("Total parameters: {:,}".format(complete["total"]))
-            print("  Trainable: {:,}".format(complete["trainable"]))
-            print("  Non-trainable: {:,}".format(complete["non_trainable"]))
+                step_size_train = self.train_generator.n // self.train_generator.batch_size
+                step_size_validate = self.validation_generator.n // self.validation_generator.batch_size
 
-            if frozen is not None:
-                print("After freezing up to layer {}:".format(self.model_settings["freeze_layers"]))
-                print("  Trainable: {:,}".format(frozen["trainable"]))
-                print("  Non-trainable: {:,}".format(frozen["non_trainable"]))
+                self.history = self.model.fit(
+                    x=self.train_generator,
+                    steps_per_epoch=step_size_train,
+                    epochs=epoch,
+                    validation_data=self.validation_generator,
+                    validation_steps=step_size_validate,
+                    callbacks=self.model_settings["callbacks"] if "callbacks" in self.model_settings else None
+                )
+                # If x is a dataset, generator, or keras.utils.Sequence instance, y should not be specified (since targets
+                # will be obtained from x)
 
+            self.training_phase += 1
 
-        self.logger.info("started model training {}".format(self.project_root))
-
-        step_size_train = self.train_generator.n // self.train_generator.batch_size
-        step_size_validate = self.validation_generator.n // self.validation_generator.batch_size
-
-        self.history = self.model.fit(
-            x=self.train_generator,
-            steps_per_epoch=step_size_train,
-            epochs=self.model_settings["epochs"],
-            validation_data=self.validation_generator,
-            validation_steps=step_size_validate,
-            callbacks=self.model_settings["callbacks"] if "callbacks" in self.model_settings else None
-        )
-        # If x is a dataset, generator, or keras.utils.Sequence instance, y should not be specified (since targets
-        # will be obtained from x)
 
         self.model.save(self.get_model_save_path())
         self.logger.info("saved model to {}".format(self.get_model_save_path()))
@@ -356,8 +353,6 @@ class ModelTrainer():
         # self.model_settings["epochs"] = 100
 
         # self.train_model()
-
-
 
 
     def evaluate(self):
