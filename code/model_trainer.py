@@ -209,9 +209,6 @@ class ModelTrainer():
         else:
             self.current_freeze = self.model_settings["freeze_layers"]
 
-
-        print(self.current_freeze)
-
         if self.current_freeze=="none":
             return
 
@@ -260,14 +257,15 @@ class ModelTrainer():
                 step_size_train = self.train_generator.n // self.train_generator.batch_size
                 step_size_validate = self.validation_generator.n // self.validation_generator.batch_size
 
-                # self.history = self.model.fit(
-                #     x=self.train_generator,
-                #     steps_per_epoch=step_size_train,
-                #     epochs=epoch,
-                #     validation_data=self.validation_generator,
-                #     validation_steps=step_size_validate,
-                #     callbacks=self.model_settings["callbacks"] if "callbacks" in self.model_settings else None
-                # )
+                self.history = self.model.fit(
+                    x=self.train_generator,
+                    steps_per_epoch=step_size_train,
+                    epochs=epoch,
+                    validation_data=self.validation_generator,
+                    validation_steps=step_size_validate,
+                    callbacks=self.model_settings["callbacks"] if "callbacks" in self.model_settings else None
+                )
+
                 # If x is a dataset, generator, or keras.utils.Sequence instance, y should not be specified (since targets
                 # will be obtained from x)
 
