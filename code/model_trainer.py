@@ -197,6 +197,8 @@ class ModelTrainer():
 
 
     def set_frozen_layers(self):
+        self.model.trainable = True
+
         if not "freeze_layers" in self.model_settings:
             self.current_freeze="none specified"
             return
@@ -215,8 +217,6 @@ class ModelTrainer():
 
 
         print(self.current_freeze)
-
-        self.model.trainable = True
 
         if self.current_freeze=="none":
             return
