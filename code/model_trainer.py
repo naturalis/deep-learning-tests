@@ -265,7 +265,7 @@ class ModelTrainer():
     def configure_generators(self):
         a = self.model_settings["image_augmentation"] if "image_augmentation" in self.model_settings else []
 
-        from tf.keras.applications.InceptionV3 import preprocess_input
+        from tensorflow.keras.applications.InceptionV3 import preprocess_input
 
         datagen = tf.keras.preprocessing.image.ImageDataGenerator(
             validation_split=self.model_settings["validation_split"],
