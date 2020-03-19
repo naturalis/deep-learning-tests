@@ -34,9 +34,9 @@ class ImageIdentify:
         zipped = zip(self.classes.iteritems(), p_list)
 
         for (key, value), num_list_entry in zipped:
-            print key
-            print value
-            print num_list_entry
+            print(key)
+            print(value)
+            print(num_list_entry)
 
         return p_list
 
