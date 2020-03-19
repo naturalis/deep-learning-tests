@@ -18,7 +18,7 @@ class ImageIdentify:
         x = tf.keras.preprocessing.image.img_to_array(x)
         x = np.expand_dims(x, axis=0)
         prediction = self.model.predict(x)
-        return json.dumps(prediction)
+        return json.dumps(prediction.to_list())
 
 if __name__ == '__main__':
 
