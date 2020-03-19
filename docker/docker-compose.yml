@@ -25,6 +25,11 @@ services:
 
   api:
     image: mds-api:latest
+    runtime: nvidia
+    mem_limit: 12g
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=3
+      # - KERAS_HOME=/keras
     env_file:
       - .env
     logging: *default-logging
