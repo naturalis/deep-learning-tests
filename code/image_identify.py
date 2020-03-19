@@ -46,3 +46,4 @@ if __name__ == '__main__':
     x = predict.predict(image)
     print(type(x))
     print(x)
+    print(x[0])
