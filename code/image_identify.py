@@ -30,6 +30,8 @@ class ImageIdentify:
 
         print(prediction)
         print(self.classes)
+        print(type(prediction))
+        print(dir(prediction))
 
         return json.dumps(prediction.tolist())
 
@@ -43,5 +45,3 @@ if __name__ == '__main__':
     predict.load_model()
     x = predict.predict(image)
     print(x)
-    print(type(x))
-    print(dir(x))
