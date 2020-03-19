@@ -27,11 +27,18 @@ class ImageIdentify:
         x = np.expand_dims(x, axis=0)
 
         predictions = self.model.predict(x)
+        p_list = predictions[0].tolist()
 
         print(self.classes)
-        print(type(self.classes))
 
-        return predictions[0].tolist()
+        zipped = zip(self.classes.iteritems(), p_list)
+
+        for (key, value), num_list_entry in zipped:
+            print key
+            print value
+            print num_list_entry
+
+        return p_list
 
 if __name__ == '__main__':
 
