@@ -8,7 +8,9 @@ class ImageIdentify:
     model = None
 
     def load_model(self,filepath):
+        print("a")
         self.model = tf.keras.models.load_model(filepath)
+        print("b")
 
     def predict(self,image):
         x = load_img(image, target_size=(299,299))        
