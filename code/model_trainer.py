@@ -273,7 +273,8 @@ class ModelTrainer():
             width_shift_range=a["width_shift_range"] if "width_shift_range" in a else 0.0,
             height_shift_range=a["height_shift_range"] if "height_shift_range" in a else 0.0,
             horizontal_flip=a["horizontal_flip"] if "horizontal_flip" in a else False,
-            vertical_flip=a["vertical_flip"] if "vertical_flip" in a else False
+            vertical_flip=a["vertical_flip"] if "vertical_flip" in a else False,
+            preprocessing_function=tf.keras.applications.InceptionV3.preprocess_input
         )
 
         self.train_generator = datagen.flow_from_dataframe(
@@ -284,7 +285,8 @@ class ModelTrainer():
             target_size=(299, 299),
             batch_size=self.model_settings["batch_size"],
             interpolation="nearest",
-            subset="training")
+            subset="training",
+            shuffle=True)
 
         self.validation_generator = datagen.flow_from_dataframe(
             dataframe=self.traindf,
@@ -294,7 +296,8 @@ class ModelTrainer():
             target_size=(299, 299),
             batch_size=self.model_settings["batch_size"],
             interpolation="nearest",
-            subset="validation")
+            subset="validation",
+            shuffle=True)
 
 
     def train_model(self):
@@ -335,8 +338,8 @@ class ModelTrainer():
 
 
     def evaluate(self):
-        acc = self.history.history['accuracy']
-        val_acc = self.history.history['val_accuracy']
+        acc = self.history.history['acc']
+        val_acc = self.history.history['val_acc']
 
         loss = self.history.history['loss']
         val_loss = self.history.history['val_loss']
@@ -381,7 +384,7 @@ if __name__ == "__main__":
         "loss": tf.keras.losses.CategoricalCrossentropy(),
         "optimizer": tf.keras.optimizers.RMSprop(learning_rate=1e-4),
         "callbacks" : [ 
-            tf.keras.callbacks.EarlyStopping(monitor="val_loss", patience=5, mode="auto", restore_best_weights=True),
+            tf.keras.callbacks.EarlyStopping(monitor="val_loss", patience=2, mode="auto", restore_best_weights=True),
             tf.keras.callbacks.TensorBoard(trainer.get_tensorboard_log_path()),
             tf.keras.callbacks.ReduceLROnPlateau(monitor="val_loss", factor=0.1, patience=4, min_lr=1e-8),
             tf.keras.callbacks.ModelCheckpoint(trainer.get_model_save_path(), monitor="val_acc", save_best_only=True, save_freq="epoch")
