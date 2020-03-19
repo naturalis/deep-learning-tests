@@ -2,6 +2,7 @@
 
 import sys
 import tensorflow as tf
+import numpy as np
 
 class ImageIdentify:
 
@@ -13,8 +14,8 @@ class ImageIdentify:
         print("b")
 
     def predict(self,image):
-        x = load_img(image, target_size=(299,299))        
-        x = img_to_array(x)
+        x = tf.keras.preprocessing.image.load_img(image, target_size=(299,299))        
+        x = tf.keras.preprocessing.image.img_to_array(x)
         x = np.expand_dims(x, axis=0)
         prediction = self.model.predict(x)
         return jsonify(prediction)
