@@ -35,6 +35,8 @@ class ModelTrainer():
     model_settings = None
     predictions = None
     history = None
+    training_phase = None
+    current_freeze = None
 
     COL_CLASS = "class"
     COL_IMAGE = "image"
@@ -178,7 +180,7 @@ class ModelTrainer():
             shuffle=True)
 
 
-    def configure_model(self):
+    def assemble_model(self):
         if "base_model" in self.model_settings:
             self.base_model = self.model_settings["base_model"]
         else:
@@ -190,52 +192,98 @@ class ModelTrainer():
 
         self.predictions = tf.keras.layers.Dense(len(self.class_list), activation='softmax')(x)
         self.model = tf.keras.models.Model(inputs=self.base_model.input, outputs=self.predictions)
-        self.model.compile(
-            optimizer=self.model_settings["optimizer"],
-            loss=self.model_settings["loss"],
-            metrics=["acc"]
-        )
 
-        complete = self.get_trainable_params()
-        frozen = None
+        self.logger.info("setting - {}: {}".format(setting, str(self.model_settings[setting])))
+                print("Model has {} layers (base model: {})".format(len(self.model.layers), len(self.base_model.layers)))
 
-        if "freeze_layers" in self.model_settings:
-            if self.model_settings["freeze_layers"]=="base_model":
-                self.base_model.trainable = False
-            else:
-                self.base_model.trainable = True
 
-                for layer in self.base_model.layers[:self.model_settings["freeze_layers"]]:
-                    layer.trainable = False
+    def set_frozen_layers(self):
+        if not "freeze_layers" in self.model_settings:
+            return
 
+        if isinstance(self.model_settings["freeze_layers"], list):
+            if self.training_phase in self.model_settings["freeze_layers"]:
+                self.current_freeze = self.model_settings["freeze_layers"][self.training_phase]
+        else:
+            self.current_freeze = self.model_settings["freeze_layers"]
+
+        self.model.trainable = True
+
+        if self.current_freeze=="none":
+            return
+
+        if self.current_freeze=="base_model":
+            self.base_model.trainable = False
+        else:
+            for layer in self.base_model.layers[:self.current_freeze]:
+                layer.trainable = False
+
+
+    def train_model(self):
+
+        if isinstance(self.model_settings["epochs"], int):
+            epochs = [self.model_settings["epochs"]]
+        else:
+            epochs = self.model_settings["epochs"]
+
+        for i in epochs: 
+            self.training_phase = i
+
+            self.set_frozen_layers()
 
             self.model.compile(
                 optimizer=self.model_settings["optimizer"],
                 loss=self.model_settings["loss"],
-                metrics=["acc"]
+                metrics=self.model_settings["metrics"] if "metrics" in self.model_settings else [ "acc" ]
             )
 
-            frozen = self.get_trainable_params()
-
-        print("\n\n====================== model 1 ===============================")
-        if self.debug:
-            self.model.summary()
-        else:
-            print("Model has {} layers (base model: {})".format(len(self.model.layers), len(self.base_model.layers)))
-            if "freeze_layers" in self.model_settings:
-                print("Frozen layers: {}".format(self.model_settings["freeze_layers"]))
+            if self.debug:
+                self.model.summary()
             else:
-                print("Frozen layers: {}".format("none"))
-            print("Trainable variables: {}".format(len(self.model.trainable_variables)))
+                params = self.get_trainable_params()
 
-        print("Total parameters: {:,}".format(complete["total"]))
-        print("  Trainable: {:,}".format(complete["trainable"]))
-        print("  Non-trainable: {:,}".format(complete["non_trainable"]))
+                if "freeze_layers" in self.model_settings:
+                    print("Frozen layers: {}".format(self.model_settings["freeze_layers"]))
+                else:
+                    print("Frozen layers: {}".format("none"))
+                print("Trainable variables: {}".format(len(self.model.trainable_variables)))
 
-        if frozen is not None:
-            print("After freezing up to layer {}:".format(self.model_settings["freeze_layers"]))
-            print("  Trainable: {:,}".format(frozen["trainable"]))
-            print("  Non-trainable: {:,}".format(frozen["non_trainable"]))
+            print("Total parameters: {:,}".format(complete["total"]))
+            print("  Trainable: {:,}".format(complete["trainable"]))
+            print("  Non-trainable: {:,}".format(complete["non_trainable"]))
+
+            if frozen is not None:
+                print("After freezing up to layer {}:".format(self.model_settings["freeze_layers"]))
+                print("  Trainable: {:,}".format(frozen["trainable"]))
+                print("  Non-trainable: {:,}".format(frozen["non_trainable"]))
+
+
+        self.logger.info("started model training {}".format(self.project_root))
+
+        step_size_train = self.train_generator.n // self.train_generator.batch_size
+        step_size_validate = self.validation_generator.n // self.validation_generator.batch_size
+
+        self.history = self.model.fit(
+            x=self.train_generator,
+            steps_per_epoch=step_size_train,
+            epochs=self.model_settings["epochs"],
+            validation_data=self.validation_generator,
+            validation_steps=step_size_validate,
+            callbacks=self.model_settings["callbacks"] if "callbacks" in self.model_settings else None
+        )
+        # If x is a dataset, generator, or keras.utils.Sequence instance, y should not be specified (since targets
+        # will be obtained from x)
+
+        self.model.save(self.get_model_save_path())
+        self.logger.info("saved model to {}".format(self.get_model_save_path()))
+
+        f = open(self.get_architecture_save_path(), "w")
+        f.write(self.model.to_json())
+        f.close()
+        self.logger.info("saved model architecture to {}".format(self.get_architecture_save_path()))
+
+
+
 
 
     def get_trainable_params(self):
@@ -249,7 +297,7 @@ class ModelTrainer():
         }
 
 
-    def configure_model_2(self):
+    def assemble_model_2(self):
 
         # Create the base model from the pre-trained model --> MobileNetV2
         self.base_model = tf.keras.applications.InceptionV3(include_top=False,
@@ -310,30 +358,6 @@ class ModelTrainer():
         # self.train_model()
 
 
-    def train_model(self):
-        self.logger.info("started model training {}".format(self.project_root))
-
-        step_size_train = self.train_generator.n // self.train_generator.batch_size
-        step_size_validate = self.validation_generator.n // self.validation_generator.batch_size
-
-        self.history = self.model.fit(
-            x=self.train_generator,
-            steps_per_epoch=step_size_train,
-            epochs=self.model_settings["epochs"],
-            validation_data=self.validation_generator,
-            validation_steps=step_size_validate,
-            callbacks=self.model_settings["callbacks"] if "callbacks" in self.model_settings else None
-        )
-        # If x is a dataset, generator, or keras.utils.Sequence instance, y should not be specified (since targets
-        # will be obtained from x)
-
-        self.model.save(self.get_model_save_path())
-        self.logger.info("saved model to {}".format(self.get_model_save_path()))
-
-        f = open(self.get_architecture_save_path(), "w")
-        f.write(self.model.to_json())
-        f.close()
-        self.logger.info("saved model architecture to {}".format(self.get_architecture_save_path()))
 
 
     def evaluate(self):
@@ -343,7 +367,6 @@ class ModelTrainer():
         loss = self.history.history['loss']
         val_loss = self.history.history['val_loss']
 
-        # epochs_range = range(self.model_settings["epochs"])
         epochs_range = range(len(self.history.history["loss"]))
 
         plt.figure(figsize=(8, 8))
@@ -373,22 +396,24 @@ if __name__ == "__main__":
     trainer.read_image_list_file()
     trainer.read_class_list()
 
+        # "base_model": tf.keras.applications.MobileNetV2(weights="imagenet", include_top=False),  
+        # "base_model": tf.keras.applications.ResNet50(weights="imagenet", include_top=False),
+
     trainer.set_model_settings({
         "validation_split": 0.2,
-        # "base_model": tf.keras.applications.MobileNetV2(weights="imagenet", include_top=False),  
         "base_model": tf.keras.applications.InceptionV3(weights="imagenet", include_top=False),  
-        # "base_model": tf.keras.applications.ResNet50(weights="imagenet", include_top=False),
-        # "freeze_layers": 249, # "base_model", # 249,
-        "batch_size": 64,
-        "epochs": 10,
         "loss": tf.keras.losses.CategoricalCrossentropy(),
         "optimizer": tf.keras.optimizers.RMSprop(learning_rate=1e-4),
+        "batch_size": 64,
+        "epochs": [ 10, 100 ], # epochs single value or list controls whether training is phased
+        "freeze_layers": [ "base_model", "none" ], # "base_model", # 249,
         "callbacks" : [ 
             tf.keras.callbacks.EarlyStopping(monitor="val_loss", patience=2, mode="auto", restore_best_weights=True),
             tf.keras.callbacks.TensorBoard(trainer.get_tensorboard_log_path()),
             tf.keras.callbacks.ReduceLROnPlateau(monitor="val_loss", factor=0.1, patience=4, min_lr=1e-8),
             tf.keras.callbacks.ModelCheckpoint(trainer.get_model_save_path(), monitor="val_acc", save_best_only=True, save_freq="epoch")
         ],
+        "metrics" : [ "acc" ],
         "image_augmentation" : {
             "rotation_range": 90,
             "shear_range": 0.2,
@@ -403,13 +428,13 @@ if __name__ == "__main__":
     original = True
 
     if original:
-        trainer.configure_model()
+        trainer.assemble_model()
         trainer.configure_generators()
         trainer.train_model()
         trainer.evaluate()
     else:
         trainer.configure_generators()
-        trainer.configure_model_2()
+        trainer.assemble_model_2()
         trainer.train_model()
-        trainer.configure_model()
+        trainer.assemble_model()
         trainer.train_model()
