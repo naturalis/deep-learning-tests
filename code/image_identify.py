@@ -27,7 +27,7 @@ class ImageIdentify:
         x = np.expand_dims(x, axis=0)
 
         predictions = self.model.predict(x)
-        return json.dumps(predictions[0].tolist())
+        return predictions[0].tolist()
 
 if __name__ == '__main__':
 
