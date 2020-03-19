@@ -179,6 +179,9 @@ class ModelTrainer():
             subset="validation",
             shuffle=True)
 
+        print(self.train_generator.class_indices)
+        print(self.validation_generator.class_indices)
+
 
     def assemble_model(self):
         if "base_model" in self.model_settings:
@@ -423,11 +426,6 @@ if __name__ == "__main__":
 
     trainer.assemble_model()
     trainer.configure_generators()
-    trainer.train_model()
-    trainer.evaluate()
+    # trainer.train_model()
+    # trainer.evaluate()
 
-    # trainer.configure_generators()
-    # trainer.assemble_model_2()
-    # trainer.train_model()
-    # trainer.assemble_model()
-    # trainer.train_model()
