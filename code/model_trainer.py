@@ -265,8 +265,6 @@ class ModelTrainer():
     def configure_generators(self):
         a = self.model_settings["image_augmentation"] if "image_augmentation" in self.model_settings else []
 
-        from tensorflow.keras.applications.InceptionV3 import preprocess_input
-
         datagen = tf.keras.preprocessing.image.ImageDataGenerator(
             validation_split=self.model_settings["validation_split"],
             rotation_range=a["rotation_range"] if "rotation_range" in a else 0,
@@ -276,7 +274,7 @@ class ModelTrainer():
             height_shift_range=a["height_shift_range"] if "height_shift_range" in a else 0.0,
             horizontal_flip=a["horizontal_flip"] if "horizontal_flip" in a else False,
             vertical_flip=a["vertical_flip"] if "vertical_flip" in a else False,
-            preprocessing_function=preprocess_input
+            preprocessing_function=tf.keras.applications.InceptionV3.preprocess_input
         )
 
         self.train_generator = datagen.flow_from_dataframe(
