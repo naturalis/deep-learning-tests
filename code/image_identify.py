@@ -26,19 +26,8 @@ class ImageIdentify:
         x = tf.keras.preprocessing.image.img_to_array(x)
         x = np.expand_dims(x, axis=0)
 
-        prediction = self.model.predict(x)
-
-        # print(prediction)
-        # print(self.classes)
-        # print(type(prediction))
-        # print(dir(prediction))
-
-        print(prediction)
-        print(prediction[0])
-        print(prediction[0].tolist())
-        print(type(prediction[0].tolist()))
-
-        return json.dumps(prediction.tolist())
+        predictions = self.model.predict(x)
+        return json.dumps(predictions[0].tolist())
 
 if __name__ == '__main__':
 
@@ -50,3 +39,4 @@ if __name__ == '__main__':
     predict.load_model()
     x = predict.predict(image)
     print(x)
+    print(type(x))
