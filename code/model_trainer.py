@@ -200,21 +200,15 @@ class ModelTrainer():
         self.model.trainable = True
 
         if not "freeze_layers" in self.model_settings:
-            self.current_freeze="none specified"
+            self.current_freeze="none"
             return
 
-        print(self.training_phase)
-
         if isinstance(self.model_settings["freeze_layers"], list):
-            print("a")
-            print(self.model_settings["freeze_layers"])
-            if self.training_phase in self.model_settings["freeze_layers"]:
-                self.current_freeze = self.model_settings["freeze_layers"][self.training_phase]
-                print("b")
-
+            self.current_freeze = self.model_settings["freeze_layers"][self.training_phase] 
+                if self.training_phase < len(self.model_settings["freeze_layers"]) 
+                else self.current_freeze                 
         else:
             self.current_freeze = self.model_settings["freeze_layers"]
-            print("c")
 
 
         print(self.current_freeze)
@@ -267,14 +261,14 @@ class ModelTrainer():
                 step_size_train = self.train_generator.n // self.train_generator.batch_size
                 step_size_validate = self.validation_generator.n // self.validation_generator.batch_size
 
-                self.history = self.model.fit(
-                    x=self.train_generator,
-                    steps_per_epoch=step_size_train,
-                    epochs=epoch,
-                    validation_data=self.validation_generator,
-                    validation_steps=step_size_validate,
-                    callbacks=self.model_settings["callbacks"] if "callbacks" in self.model_settings else None
-                )
+                # self.history = self.model.fit(
+                #     x=self.train_generator,
+                #     steps_per_epoch=step_size_train,
+                #     epochs=epoch,
+                #     validation_data=self.validation_generator,
+                #     validation_steps=step_size_validate,
+                #     callbacks=self.model_settings["callbacks"] if "callbacks" in self.model_settings else None
+                # )
                 # If x is a dataset, generator, or keras.utils.Sequence instance, y should not be specified (since targets
                 # will be obtained from x)
 
