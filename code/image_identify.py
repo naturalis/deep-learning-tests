@@ -9,15 +9,15 @@ class ImageIdentify:
     model = None
 
     def load_model(self,filepath):
-        print("a")
         self.model = tf.keras.models.load_model(filepath,compile=False)
-        print("b")
 
     def predict(self,image):
         x = tf.keras.preprocessing.image.load_img(image, target_size=(299,299))        
         x = tf.keras.preprocessing.image.img_to_array(x)
         x = np.expand_dims(x, axis=0)
         prediction = self.model.predict(x)
+        y_classes = prediction.argmax(axis=-1)
+        print(y_classes)
         return json.dumps(prediction.tolist())
 
 if __name__ == '__main__':
