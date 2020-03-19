@@ -23,8 +23,11 @@ if __name__ == '__main__':
 
     image = sys.argv[1]
 
+    print("1")
     predict = ImageIdentify()
-
+    print("2")
     predict.load_model("/data/corvidae/models/20200319-120518.hdf5")
+    print("3")
     x = predict.predict(image)
+    print("4")
     print(x)
