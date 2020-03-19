@@ -2,7 +2,12 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 import os
 import tensorflow as tf
-from tensorflow.keras.applications.InceptionV3 import preprocess_input
+
+
+import tensorflow.keras.applications.InceptionV3
+from keras_applications.InceptionV3 import preprocess_input
+
+
 import pandas as pd
 import numpy as np
 from datetime import datetime
