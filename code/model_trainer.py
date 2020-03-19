@@ -204,9 +204,8 @@ class ModelTrainer():
             return
 
         if isinstance(self.model_settings["freeze_layers"], list):
-            self.current_freeze = self.model_settings["freeze_layers"][self.training_phase] 
-                if self.training_phase < len(self.model_settings["freeze_layers"]) 
-                else self.current_freeze                 
+            if self.training_phase < len(self.model_settings["freeze_layers"]):
+                self.current_freeze = self.model_settings["freeze_layers"][self.training_phase]
         else:
             self.current_freeze = self.model_settings["freeze_layers"]
 
