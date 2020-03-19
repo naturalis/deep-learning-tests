@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import sys
+import sys, json
 import tensorflow as tf
 import numpy as np
 
@@ -18,7 +18,7 @@ class ImageIdentify:
         x = tf.keras.preprocessing.image.img_to_array(x)
         x = np.expand_dims(x, axis=0)
         prediction = self.model.predict(x)
-        return jsonify(prediction)
+        return json.dump(prediction)
 
 if __name__ == '__main__':
 
