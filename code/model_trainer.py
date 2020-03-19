@@ -4,7 +4,7 @@ import os
 import tensorflow as tf
 
 
-import tensorflow.keras.applications.InceptionV3
+import tensorflow.keras.applications.inception_v3
 from keras_applications.inception_v3 import preprocess_input
 
 
