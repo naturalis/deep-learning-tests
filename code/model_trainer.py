@@ -207,6 +207,7 @@ class ModelTrainer():
 
         if isinstance(self.model_settings["freeze_layers"], list):
             print("a")
+            print(self.model_settings["freeze_layers"])
             if self.training_phase in self.model_settings["freeze_layers"]:
                 self.current_freeze = self.model_settings["freeze_layers"][self.training_phase]
                 print("b")
@@ -430,9 +431,9 @@ if __name__ == "__main__":
     })
 
     trainer.assemble_model()
-    # trainer.configure_generators()
-    # trainer.train_model()
-    # trainer.evaluate()
+    trainer.configure_generators()
+    trainer.train_model()
+    trainer.evaluate()
 
     # trainer.configure_generators()
     # trainer.assemble_model_2()
