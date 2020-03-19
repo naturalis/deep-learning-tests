@@ -33,6 +33,11 @@ class ImageIdentify:
         # print(type(prediction))
         # print(dir(prediction))
 
+        print(prediction)
+        print(prediction[0])
+        print(prediction[0].tolist())
+        print(type(prediction[0].tolist()))
+
         return json.dumps(prediction.tolist())
 
 if __name__ == '__main__':
@@ -44,6 +49,4 @@ if __name__ == '__main__':
     predict.set_model_name("20200319-120518")
     predict.load_model()
     x = predict.predict(image)
-    print(type(x))
     print(x)
-    print(x[0])
