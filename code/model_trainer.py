@@ -238,6 +238,17 @@ class ModelTrainer():
             print("  Non-trainable: {:,}".format(frozen["non_trainable"]))
 
 
+    def get_trainable_params(self):
+        trainable_count = np.sum([tf.keras.backend.count_params(w) for w in self.model.trainable_weights])
+        non_trainable_count = np.sum([tf.keras.backend.count_params(w) for w in self.model.non_trainable_weights])
+
+        return {
+            "total" : trainable_count + non_trainable_count,
+            "trainable" : trainable_count,
+            "non_trainable" : non_trainable_count
+        }
+
+
     def configure_model_2(self):
 
         # Create the base model from the pre-trained model --> MobileNetV2
@@ -325,17 +336,6 @@ class ModelTrainer():
         self.logger.info("saved model architecture to {}".format(self.get_architecture_save_path()))
 
 
-    def get_trainable_params(self):
-        trainable_count = np.sum([tf.keras.backend.count_params(w) for w in self.model.trainable_weights])
-        non_trainable_count = np.sum([tf.keras.backend.count_params(w) for w in self.model.non_trainable_weights])
-
-        return {
-            "total" : trainable_count + non_trainable_count,
-            "trainable" : trainable_count,
-            "non_trainable" : non_trainable_count
-        }
-
-
     def evaluate(self):
         acc = self.history.history['acc']
         val_acc = self.history.history['val_acc']
@@ -343,7 +343,8 @@ class ModelTrainer():
         loss = self.history.history['loss']
         val_loss = self.history.history['val_loss']
 
-        epochs_range = range(self.model_settings["epochs"])
+        # epochs_range = range(self.model_settings["epochs"])
+        epochs_range = range(len(self.history.history["loss"]))
 
         plt.figure(figsize=(8, 8))
         plt.subplot(1, 2, 1)
