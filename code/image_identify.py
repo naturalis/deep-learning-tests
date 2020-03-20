@@ -31,6 +31,7 @@ class ImageIdentify:
         # sort classes
         classes = {k: v for k, v in sorted(self.classes.items(), key=lambda item: item[1])}
         predictions = dict(zip(classes.items(), predictions))
+        print(type(classes))
         print(predictions)
         return json.dumps(predictions)
 
