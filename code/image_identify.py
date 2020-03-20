@@ -29,8 +29,10 @@ class ImageIdentify:
         predictions = self.model.predict(x)
         p_list = predictions[0].tolist()
 
-        print(self.classes)
-        print(dir(self.classes))
+        # print(self.classes)
+
+        {k: v for k, v in sorted(self.classes.items(), key=lambda item: item[1])}
+        print(k)
 
         zipped = zip(self.classes.items(), p_list)
 
