@@ -243,6 +243,18 @@ class ModelTrainer():
                 layer.trainable = False
 
 
+    def set_callbacks(self):
+        if not "callbacks" in self.model_settings:
+            self.current_callbacks = None
+            return None
+
+        if isinstance(self.model_settings["callbacks"], list):
+            if self.training_phase < len(self.model_settings["callbacks"]):
+                self.current_callbacks = self.model_settings["callbacks"][self.training_phase]
+        else:
+            self.current_callbacks = self.model_settings["callbacks"]
+
+
     def train_model(self):
 
         self.logger.info("start training {}".format(self.project_root))
@@ -278,20 +290,22 @@ class ModelTrainer():
                 self.logger.info("trainable: {:,}".format(params["trainable"]))
                 self.logger.info("non-trainable: {:,}".format(params["non_trainable"]))
 
-                step_size_train = self.train_generator.n // self.train_generator.batch_size
-                step_size_validate = self.validation_generator.n // self.validation_generator.batch_size
+            step_size_train = self.train_generator.n // self.train_generator.batch_size
+            step_size_validate = self.validation_generator.n // self.validation_generator.batch_size
 
-                self.history = self.model.fit(
-                    x=self.train_generator,
-                    steps_per_epoch=step_size_train,
-                    epochs=epoch,
-                    validation_data=self.validation_generator,
-                    validation_steps=step_size_validate,
-                    callbacks=self.model_settings["callbacks"] if "callbacks" in self.model_settings else None
-                )
+            self.set_callbacks()
 
-                # If x is a dataset, generator, or keras.utils.Sequence instance, y should not be specified (since targets
-                # will be obtained from x)
+            self.history = self.model.fit(
+                x=self.train_generator,
+                steps_per_epoch=step_size_train,
+                epochs=epoch,
+                validation_data=self.validation_generator,
+                validation_steps=step_size_validate,
+                callbacks=self.current_callbacks
+            )
+
+            # If x is a dataset, generator, or keras.utils.Sequence instance, y should not be specified (since targets
+            # will be obtained from x)
 
             self.training_phase += 1
 
@@ -364,11 +378,18 @@ if __name__ == "__main__":
         "batch_size": 64,
         "epochs": [ 10, 100 ], # epochs single value or list controls whether training is phased
         "freeze_layers": [ "base_model", "none" ], # "base_model", # 249,
-        "callbacks" : [ 
-            tf.keras.callbacks.EarlyStopping(monitor="val_loss", patience=2, mode="auto", restore_best_weights=True),
-            tf.keras.callbacks.TensorBoard(trainer.get_tensorboard_log_path()),
-            tf.keras.callbacks.ReduceLROnPlateau(monitor="val_loss", factor=0.1, patience=4, min_lr=1e-8),
-            tf.keras.callbacks.ModelCheckpoint(trainer.get_model_save_path(), monitor="val_acc", save_best_only=True, save_freq="epoch")
+        "callbacks" : [
+            [ 
+                tf.keras.callbacks.TensorBoard(trainer.get_tensorboard_log_path()),
+                tf.keras.callbacks.ReduceLROnPlateau(monitor="val_loss", factor=0.2, patience=2, min_lr=1e-7),
+                tf.keras.callbacks.ModelCheckpoint(trainer.get_model_save_path(), monitor="val_acc", save_best_only=True, save_freq="epoch")
+            ],
+            [ 
+                tf.keras.callbacks.EarlyStopping(monitor="val_loss", patience=5, mode="auto", restore_best_weights=True),
+                tf.keras.callbacks.TensorBoard(trainer.get_tensorboard_log_path()),
+                tf.keras.callbacks.ReduceLROnPlateau(monitor="val_loss", factor=0.1, patience=4, min_lr=1e-8),
+                tf.keras.callbacks.ModelCheckpoint(trainer.get_model_save_path(), monitor="val_acc", save_best_only=True, save_freq="epoch")
+            ]
         ],
         "metrics" : [ "acc" ],
         "image_augmentation" : {
