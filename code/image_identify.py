@@ -28,10 +28,10 @@ class ImageIdentify:
 
         predictions = self.model.predict(x)
         predictions = predictions[0].tolist()
-        # sort classes
         classes = {k: v for k, v in sorted(self.classes.items(), key=lambda item: item[1])}
         predictions = dict(zip(classes.keys(), predictions))
-        print(type(predictions))
+        predictions = {k: v for k, v in sorted(self.classes.items(), key=lambda item: item[1])}
+
         return json.dumps(predictions)
 
 if __name__ == '__main__':
