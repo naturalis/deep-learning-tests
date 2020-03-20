@@ -69,7 +69,7 @@ class ModelTrainer():
     def set_debug(self,state):
         self.debug = state
 
-    def set_project_root(self, project_root, image_root=None):
+    def set_project_folders(self, project_root, image_root=None):
         self.project_root = project_root
 
         if not os.path.isdir(self.project_root):
@@ -79,6 +79,9 @@ class ModelTrainer():
             self.image_root = image_root
         else:
             self.image_root = os.path.join(self.project_root, 'images')
+
+        self.create_model_folder()
+
 
     def set_downloaded_images_list_file(self, downloaded_images_list_file=None, class_col=0, image_col=1):
         if downloaded_images_list_file is not None:
@@ -294,7 +297,6 @@ class ModelTrainer():
 
 
     def save_model(self):
-        self.create_model_folder()
         self.model.save(self.get_model_save_path())
         self.logger.info("saved model to {}".format(self.get_model_save_path()))
 
@@ -345,7 +347,7 @@ if __name__ == "__main__":
     trainer = ModelTrainer()
 
     trainer.set_debug(os.environ["DEBUG"]=="1" if "DEBUG" in os.environ else False)
-    trainer.set_project_root(os.environ['PROJECT_ROOT'])
+    trainer.set_project_folders(project_root=os.environ['PROJECT_ROOT'])
     trainer.set_downloaded_images_list_file(image_col=2)
     trainer.set_class_list_file()
     trainer.read_image_list_file()
