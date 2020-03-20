@@ -36,13 +36,21 @@ class ImageIdentify:
 
 if __name__ == '__main__':
 
+    project_root = os.environ['PROJECT_ROOT']
     image = sys.argv[1]
 
+    if 2 in sys.argv:
+        model_name = sys.argv[2]
+    else:
+        model_name = os.environ['MODEL_NAME']
+
     predict = ImageIdentify()
-    predict.set_model_path("/data/corvidae/models")
-    predict.set_model_name("20200319-120518")
+    predict.set_model_path(os.path.join(project_root,"models"))
+    predict.set_model_name(model_name)
     predict.load_model()
     x = predict.predict(image)
     print(x)
 
-# sudo git pull; sudo docker-compose run tensorflow /code/image_identify.py /data/corvidae/images/eccbc87e4b/RMNH.AVES.47171_1.jpg
+    # export PROJECT_ROOT=20200319-120518
+    # export MODEL_NAME=20200319-120518
+    # sudo docker-compose run tensorflow /code/image_identify.py /data/corvidae/images/eccbc87e4b/RMNH.AVES.47171_1.jpg 20200319-120518
