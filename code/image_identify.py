@@ -30,7 +30,7 @@ class ImageIdentify:
         predictions = predictions[0].tolist()
         classes = {k: v for k, v in sorted(self.classes.items(), key=lambda item: item[1])}
         predictions = dict(zip(classes.keys(), predictions))
-        predictions = {k: v for k, v in sorted(self.classes.items(), key=lambda item: item[1])}
+        predictions = {k: v for k, v in sorted(predictions.items(), key=lambda item: item[1], reverse=True)}
 
         return json.dumps(predictions)
 
