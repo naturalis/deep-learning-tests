@@ -30,6 +30,7 @@ class ImageIdentify:
         p_list = predictions[0].tolist()
 
         print(self.classes)
+        print(dir(self.classes))
 
         zipped = zip(self.classes.items(), p_list)
 
@@ -51,3 +52,5 @@ if __name__ == '__main__':
     x = predict.predict(image)
     print(x)
     print(type(x))
+
+# sudo git pull; sudo docker-compose run tensorflow /code/image_identify.py /data/corvidae/images/eccbc87e4b/RMNH.AVES.47171_1.jpg
