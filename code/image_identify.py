@@ -27,21 +27,11 @@ class ImageIdentify:
         x = np.expand_dims(x, axis=0)
 
         predictions = self.model.predict(x)
-        p_list = predictions[0].tolist()
-
-        # print(self.classes)
-
-        aa = {k: v for k, v in sorted(self.classes.items(), key=lambda item: item[1], reverse=True)}
-        print(aa)
-
-        zipped = zip(self.classes.items(), p_list)
-
-        for (key, value), num_list_entry in zipped:
-            print(key)
-            print(value)
-            print(num_list_entry)
-
-        return p_list
+        predictions = predictions[0].tolist()
+        # sort classes
+        classes = {k: v for k, v in sorted(self.classes.items(), key=lambda item: item[1])}
+        predictions = zip(classes.items(), predictions)
+        return json.dumps(predictions)
 
 if __name__ == '__main__':
 
@@ -53,6 +43,5 @@ if __name__ == '__main__':
     predict.load_model()
     x = predict.predict(image)
     print(x)
-    print(type(x))
 
 # sudo git pull; sudo docker-compose run tensorflow /code/image_identify.py /data/corvidae/images/eccbc87e4b/RMNH.AVES.47171_1.jpg
