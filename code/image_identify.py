@@ -39,7 +39,7 @@ if __name__ == '__main__':
     project_root = os.environ['PROJECT_ROOT']
     image = sys.argv[1]
 
-    if 2 in sys.argv:
+    if len(sys.argv)>2:
         model_name = sys.argv[2]
     else:
         model_name = os.environ['MODEL_NAME']
