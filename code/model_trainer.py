@@ -21,6 +21,8 @@ def _csv_to_dataframe(filepath, usecols, encoding="utf-8-sig"):
 
 class ModelTrainer():
     debug = False
+    timestamp = None
+    model_name = None
     project_root = None
     image_root = None
     downloaded_images_list_file = None
@@ -55,10 +57,14 @@ class ModelTrainer():
         #     tf.get_logger().setLevel("INFO")
         #     tf.autograph.set_verbosity(1)
         self.set_timestamp()
+        self.set_model_name()
 
     def set_timestamp(self):
         d = datetime.now()
         self.timestamp = "{0}{1:02d}{2:02d}-{3:02d}{4:02d}{5:02d}".format(d.year,d.month,d.day,d.hour,d.minute,d.second)
+
+    def set_model_name(self):
+        self.model_name = self.timestamp
 
     def set_debug(self,state):
         self.debug = state
@@ -97,6 +103,12 @@ class ModelTrainer():
 
         self.class_list_file_class_col = class_col
 
+    def create_model_folder(self):
+        self.model_folder = os.path.join(self.project_root, "models", self.timestamp)
+        if not os.path.exists(self.model_folder):
+            os.mkdir(self.model_folder)
+            self.logger.info("created model folder {}".format(self.model_folder))
+
     # TODO: implement Test split
     def read_image_list_file(self):
         self.logger.info("reading images from: {}".format(self.downloaded_images_list_file))
@@ -122,15 +134,15 @@ class ModelTrainer():
         return self.class_list
 
     def get_model_save_path(self):
-        self.model_save_path = os.path.join(self.project_root, "models", self.timestamp + ".hdf5")
+        self.model_save_path = os.path.join(self.model_folder, "model.hdf5")
         return self.model_save_path
 
     def get_architecture_save_path(self):
-        self.architecture_save_path = os.path.join(self.project_root, "models", self.timestamp + "-architecture.json")
+        self.architecture_save_path = os.path.join(self.model_folder, "architecture.json")
         return self.architecture_save_path
 
     def get_classes_save_path(self):
-        self.classes_save_path = os.path.join(self.project_root, "models", self.timestamp + "-classes.json")
+        self.classes_save_path = os.path.join(self.model_folder, "classes.json")
         return self.classes_save_path
 
     def get_history_plot_save_path(self):
@@ -282,6 +294,7 @@ class ModelTrainer():
 
 
     def save_model(self):
+        self.create_model_folder()
         self.model.save(self.get_model_save_path())
         self.logger.info("saved model to {}".format(self.get_model_save_path()))
 
