@@ -31,7 +31,7 @@ class ImageIdentify:
 
         # print(self.classes)
 
-        aa = {k: v for k, v in sorted(self.classes.items(), key=lambda item: item[1])}
+        aa = {k: v for k, v in sorted(self.classes.items(), key=lambda item: item[1], reverse=reverse)}
         print(aa)
 
         zipped = zip(self.classes.items(), p_list)
