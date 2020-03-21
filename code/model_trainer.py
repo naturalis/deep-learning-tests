@@ -370,6 +370,9 @@ if __name__ == "__main__":
         # "base_model": tf.keras.applications.MobileNetV2(weights="imagenet", include_top=False),  
         # "base_model": tf.keras.applications.ResNet50(weights="imagenet", include_top=False),
 
+        # WARNING:tensorflow:Method (on_train_batch_end) is slow compared to the batch update (0.325404). Check your callbacks.
+        # maybe something with TensorBoard callback, as the other ones get called at epoch end, not batch end
+
     trainer.set_model_settings({
         "validation_split": 0.2,
         "base_model": tf.keras.applications.InceptionV3(weights="imagenet", include_top=False),  
@@ -381,16 +384,10 @@ if __name__ == "__main__":
         "callbacks" : [
             [ 
                 tf.keras.callbacks.EarlyStopping(monitor="val_loss", patience=5, mode="auto", restore_best_weights=True),
-                tf.keras.callbacks.TensorBoard(trainer.get_tensorboard_log_path()),
+                # tf.keras.callbacks.TensorBoard(trainer.get_tensorboard_log_path()),
                 tf.keras.callbacks.ReduceLROnPlateau(monitor="val_loss", factor=0.2, patience=2, min_lr=1e-7),
                 tf.keras.callbacks.ModelCheckpoint(trainer.get_model_save_path(), monitor="val_acc", save_best_only=True, save_freq="epoch")
-            ],
-            # [ 
-            #     tf.keras.callbacks.EarlyStopping(monitor="val_loss", patience=5, mode="auto", restore_best_weights=True),
-            #     tf.keras.callbacks.TensorBoard(trainer.get_tensorboard_log_path()),
-            #     tf.keras.callbacks.ReduceLROnPlateau(monitor="val_loss", factor=0.1, patience=4, min_lr=1e-8),
-            #     tf.keras.callbacks.ModelCheckpoint(trainer.get_model_save_path(), monitor="val_acc", save_best_only=True, save_freq="epoch")
-            # ]
+            ]
         ],
         "metrics" : [ "acc" ],
         "image_augmentation" : {
