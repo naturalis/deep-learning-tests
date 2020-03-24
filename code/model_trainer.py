@@ -380,7 +380,7 @@ if __name__ == "__main__":
         "optimizer": tf.keras.optimizers.RMSprop(learning_rate=1e-5),
         "batch_size": 64,
         "epochs": [ 10, 200 ], # epochs single value or list controls whether training is phased
-        "freeze_layers": [ 1, "none" ], # "base_model", # 249, # none
+        "freeze_layers": [ 249, "none" ], # "base_model", # 249, # none
         "callbacks" : [
             [ 
                 tf.keras.callbacks.ReduceLROnPlateau(monitor="val_loss", factor=0.2, patience=2, min_lr=1e-8),
