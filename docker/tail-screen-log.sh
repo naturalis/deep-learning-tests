@@ -3,7 +3,7 @@
 LOGFILE=$1
 
 if [[ -z "$LOGFILE" ]]; then
-  LOGFILE=screen.log
+    LOGFILE=../../screen-logs/screen.log
 fi
 
 tail -f $LOGFILE | grep -v shuffle
