@@ -379,8 +379,8 @@ if __name__ == "__main__":
         "loss": tf.keras.losses.CategoricalCrossentropy(),
         "optimizer": tf.keras.optimizers.RMSprop(learning_rate=1e-5),
         "batch_size": 64,
-        "epochs": [ 10, 201 ], # epochs single value or list controls whether training is phased
-        "freeze_layers": [ "base_model", "none" ], # "base_model", # 249, # none
+        "epochs": [ 10, 200 ], # epochs single value or list controls whether training is phased
+        "freeze_layers": [ "none", "none" ], # "base_model", # 249, # none
         "callbacks" : [
             [ 
                 tf.keras.callbacks.ReduceLROnPlateau(monitor="val_loss", factor=0.2, patience=2, min_lr=1e-8),
