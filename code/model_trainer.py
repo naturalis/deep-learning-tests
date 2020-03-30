@@ -1,153 +1,21 @@
-from __future__ import absolute_import, division, print_function, unicode_literals
-
-import os, json
+import os
 import tensorflow as tf
-import pandas as pd
-import numpy as np
 from datetime import datetime
-import matplotlib.pyplot as plt
-from lib import logclass
+from lib import baseclass
 
-
-def _csv_to_dataframe(filepath, usecols, encoding="utf-8-sig"):
-    f = open(filepath, "r", encoding=encoding)
-    line = f.readline()
-    if line.count('\t') > 0:
-        sep = '\t'
-    else:
-        sep = ','
-    return pd.read_csv(filepath, encoding=encoding, sep=sep, dtype="str", usecols=usecols, header=None)
-
-
-class ModelTrainer():
-    debug = False
+class ModelTrainer(baseclass.BaseClass):
     timestamp = None
-    model_name = None
-    project_root = None
-    image_root = None
-    downloaded_images_list_file = None
-    image_list_class_col = None
-    image_list_image_col = None
-    class_list_file = None
-    class_list_file_class_col = None
-    model_save_path = None
-    architecture_save_path = None
-    traindf = None
-    class_list = None
-    model_settings = None
     predictions = None
     history = None
     training_phase = None
     current_freeze = None
     current_optimizer = None
 
-    COL_CLASS = "class"
-    COL_IMAGE = "image"
-
-    model = None
     train_generator = None
     validation_generator = None
 
     def __init__(self):
-        self.logger = logclass.LogClass(self.__class__.__name__)
-        self.logger.info("TensorFlow v{}".format(tf.__version__))
-        # if self.debug:
-        #     tf.get_logger().setLevel("DEBUG")
-        #     tf.autograph.set_verbosity(10)
-        # else:
-        #     tf.get_logger().setLevel("INFO")
-        #     tf.autograph.set_verbosity(1)
-        self.set_timestamp()
-        self.set_model_name()
-
-    def set_timestamp(self):
-        d = datetime.now()
-        self.timestamp = "{0}{1:02d}{2:02d}-{3:02d}{4:02d}{5:02d}".format(d.year,d.month,d.day,d.hour,d.minute,d.second)
-
-    def set_model_name(self):
-        self.model_name = self.timestamp
-
-    def set_debug(self,state):
-        self.debug = state
-
-    def set_project_folders(self, project_root, image_root=None):
-        self.project_root = project_root
-
-        if not os.path.isdir(self.project_root):
-            raise FileNotFoundError("project root doesn't exist: {}".format(self.project_root))
-
-        if image_root is not None:
-            self.image_root = image_root
-        else:
-            self.image_root = os.path.join(self.project_root, 'images')
-
-        self.create_model_folder()
-
-
-    def set_downloaded_images_list_file(self, downloaded_images_list_file=None, class_col=0, image_col=1):
-        if downloaded_images_list_file is not None:
-            self.downloaded_images_list_file = downloaded_images_list_file
-        else:
-            self.downloaded_images_list_file = os.path.join(self.project_root, 'lists', 'downloaded_images.csv')
-
-        if not os.path.isfile(self.downloaded_images_list_file):
-            raise FileNotFoundError("downloaded list file not found: {}".format(self.downloaded_images_list_file))
-
-        self.image_list_class_col = class_col
-        self.image_list_image_col = image_col
-
-    def set_class_list_file(self, class_list_file=None, class_col=0):
-        if class_list_file is not None:
-            self.class_list_file = class_list_file
-        else:
-            self.class_list_file = os.path.join(self.project_root, 'lists', 'classes.csv')
-
-        if not os.path.isfile(self.class_list_file):
-            raise FileNotFoundError("class list file not found: {}".format(self.class_list_file))
-
-        self.class_list_file_class_col = class_col
-
-    def create_model_folder(self):
-        self.model_folder = os.path.join(self.project_root, "models", self.timestamp)
-        if not os.path.exists(self.model_folder):
-            os.mkdir(self.model_folder)
-            self.logger.info("created model folder {}".format(self.model_folder))
-
-    # TODO: implement Test split
-    def read_image_list_file(self):
-        self.logger.info("reading images from: {}".format(self.downloaded_images_list_file))
-
-        df = _csv_to_dataframe(filepath=self.downloaded_images_list_file,
-                               usecols=[self.image_list_class_col, self.image_list_image_col])
-        # if Test split
-        #   df = df.sample(frac=1)
-        #   msk = np.random.rand(len(df)) < 0.8
-        #   self.traindf = df[msk]
-        #   self.testdf = df[~msk]
-        # # print(len(df), len(self.traindf), len(self.testdf))
-        df[2] = self.image_root.rstrip("/") + "/" + df[2].astype(str)
-        df.columns = [self.COL_CLASS, self.COL_IMAGE]
-        self.traindf = df
-
-        self.logger.info("read {} images in {} classes".format(self.traindf[self.COL_IMAGE].nunique(),self.traindf[self.COL_CLASS].nunique()))
-
-    def read_class_list(self):
-        self.class_list = _csv_to_dataframe(self.class_list_file, [self.class_list_file_class_col])
-
-    def get_class_list(self):
-        return self.class_list
-
-    def get_model_save_path(self):
-        self.model_save_path = os.path.join(self.model_folder, "model.hdf5")
-        return self.model_save_path
-
-    def get_architecture_save_path(self):
-        self.architecture_save_path = os.path.join(self.model_folder, "architecture.json")
-        return self.architecture_save_path
-
-    def get_classes_save_path(self):
-        self.classes_save_path = os.path.join(self.model_folder, "classes.json")
-        return self.classes_save_path
+        pass
 
     def get_history_plot_save_path(self):
         self.history_plot_save_path = os.path.join(self.project_root, "log", self.timestamp + ".png")
@@ -156,12 +24,6 @@ class ModelTrainer():
     def get_tensorboard_log_path(self):
         self.tensorboard_log_path = os.path.join(self.project_root, "log", "logs_keras")
         return self.tensorboard_log_path
-
-    def set_model_settings(self, model_settings):
-        self.model_settings = model_settings
-        for setting in self.model_settings:
-            self.logger.info("setting - {}: {}".format(setting, str(self.model_settings[setting])))
-
 
     def configure_generators(self):
         a = self.model_settings["image_augmentation"] if "image_augmentation" in self.model_settings else []
@@ -207,12 +69,11 @@ class ModelTrainer():
             shuffle=True
         )
 
-        f = open(self.get_classes_save_path(), "w")
+        f = open(self.get_classes_path(), "w")
         f.write(json.dumps(self.train_generator.class_indices))
         f.close()
 
-        self.logger.info("saved model classes to {}".format(self.get_classes_save_path()))
-
+        self.logger.info("saved model classes to {}".format(self.get_classes_path()))
 
     def assemble_model(self):
         if "base_model" in self.model_settings:
@@ -334,8 +195,8 @@ class ModelTrainer():
 
 
     def save_model(self):
-        self.model.save(self.get_model_save_path())
-        self.logger.info("saved model to {}".format(self.get_model_save_path()))
+        self.model.save(self.get_model_path())
+        self.logger.info("saved model to {}".format(self.get_model_path()))
 
         f = open(self.get_architecture_save_path(), "w")
         f.write(self.model.to_json())
@@ -384,6 +245,7 @@ if __name__ == "__main__":
     trainer = ModelTrainer()
 
     trainer.set_debug(os.environ["DEBUG"]=="1" if "DEBUG" in os.environ else False)
+    trainer.set_model_name()
     trainer.set_project_folders(project_root=os.environ['PROJECT_ROOT'])
     trainer.set_downloaded_images_list_file(image_col=2)
     trainer.set_class_list_file()
@@ -410,13 +272,13 @@ if __name__ == "__main__":
         "callbacks" : [
             [ 
                 tf.keras.callbacks.ReduceLROnPlateau(monitor="val_loss", factor=0.2, patience=2, min_lr=1e-8),
-                tf.keras.callbacks.ModelCheckpoint(trainer.get_model_save_path(), monitor="val_acc", save_best_only=True, save_freq="epoch")
+                tf.keras.callbacks.ModelCheckpoint(trainer.get_model_path(), monitor="val_acc", save_best_only=True, save_freq="epoch")
             ],
             [ 
                 tf.keras.callbacks.EarlyStopping(monitor="val_loss", patience=5, mode="auto", restore_best_weights=True),
                 # tf.keras.callbacks.TensorBoard(trainer.get_tensorboard_log_path()),
                 tf.keras.callbacks.ReduceLROnPlateau(monitor="val_loss", factor=0.1, patience=4, min_lr=1e-8),
-                tf.keras.callbacks.ModelCheckpoint(trainer.get_model_save_path(), monitor="val_acc", save_best_only=True, save_freq="epoch")
+                tf.keras.callbacks.ModelCheckpoint(trainer.get_model_path(), monitor="val_acc", save_best_only=True, save_freq="epoch")
             ]
         ],
         "metrics" : [ "acc" ],

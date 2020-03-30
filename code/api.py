@@ -210,10 +210,4 @@ if __name__ == '__main__':
     app.run(debug=(os.getenv('FLASK_DEBUG')=="1"),host='0.0.0.0')
 
     # TODO: logging, tokens, users
-
-
     # curl -s  -XPOST  -F "image=@RMNH.AVES.1125_1.jpg"  http://0.0.0.0:5000/identify
-
-
-
-             

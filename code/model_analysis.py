@@ -1,75 +1,10 @@
-from __future__ import absolute_import, division, print_function, unicode_literals
-
-import os, json
-import tensorflow as tf
-import pandas as pd
-import numpy as np
-from datetime import datetime
-import matplotlib.pyplot as plt
-from lib import logclass
-
-
-def _csv_to_dataframe(filepath, usecols, encoding="utf-8-sig"):
-    f = open(filepath, "r", encoding=encoding)
-    line = f.readline()
-    if line.count('\t') > 0:
-        sep = '\t'
-    else:
-        sep = ','
-    return pd.read_csv(filepath, encoding=encoding, sep=sep, dtype="str", usecols=usecols, header=None)
-
+from lib import baseclass
 
 class ModelAnalysis():
-    debug = False
-    timestamp = None
-    model_name = None
-    project_root = None
-    image_root = None
-    downloaded_images_list_file = None
-    image_list_class_col = None
-    image_list_image_col = None
-    class_list_file = None
-    class_list_file_class_col = None
-    model_save_path = None
-    architecture_save_path = None
-    traindf = None
-    class_list = None
-    model_settings = None
-    predictions = None
-    history = None
-    training_phase = None
-    current_freeze = None
-
-    COL_CLASS = "class"
-    COL_IMAGE = "image"
-
-    model = None
-    train_generator = None
-    validation_generator = None
+    test_generator = None
 
     def __init__(self):
-        self.logger = logclass.LogClass(self.__class__.__name__)
-        self.logger.info("TensorFlow v{}".format(tf.__version__))
-        # if self.debug:
-        #     tf.get_logger().setLevel("DEBUG")
-        #     tf.autograph.set_verbosity(10)
-        # else:
-        #     tf.get_logger().setLevel("INFO")
-        #     tf.autograph.set_verbosity(1)
-
-    def set_debug(self,state):
-        self.debug = state
-
-    def set_project_folders(self, project_root, image_root=None):
-        self.project_root = project_root
-
-        if not os.path.isdir(self.project_root):
-            raise FileNotFoundError("project root doesn't exist: {}".format(self.project_root))
-
-        if image_root is not None:
-            self.image_root = image_root
-        else:
-            self.image_root = os.path.join(self.project_root, 'images')
+        pass
 
     def set_model_name(self,name):
         self.model_name = name
@@ -82,8 +17,17 @@ class ModelAnalysis():
             self.classes = json.load(f)
 
 
-
-
+    def configure_generator(self):
+        self.test_generator = tf.keras.preprocessing.image.ImageDataGenerator()
+            .flow_from_dataframe(
+                dataframe=self.traindf,
+                x_col=self.COL_IMAGE,
+                y_col=self.COL_CLASS,
+                class_mode="categorical",
+                target_size=(299, 299),
+                batch_size=self.model_settings["batch_size"],
+                interpolation="nearest",
+            )
 
 
 
@@ -100,6 +44,12 @@ if __name__ == "__main__":
 
     analysis.set_debug(os.environ["DEBUG"]=="1" if "DEBUG" in os.environ else False)
     analysis.set_project_folders(project_root=os.environ['PROJECT_ROOT'])
+    analysis.set_downloaded_images_list_file(image_col=2)
+    analysis.set_class_list_file()
+    analysis.read_image_list_file()
+    analysis.read_class_list()
+
+
 
     if len(sys.argv)>2:
         model_name = sys.argv[2]
@@ -108,6 +58,7 @@ if __name__ == "__main__":
 
     analysis.set_model_name(model_name)
     analysis.load_model()
+    configure_generator
 
 
 
