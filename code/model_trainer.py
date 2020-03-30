@@ -167,10 +167,7 @@ class ModelTrainer():
 
         datagen = tf.keras.preprocessing.image.ImageDataGenerator(
             rescale=1./255,
-            validation_split=self.model_settings["validation_split"]
-        )
-
-        self.train_generator = datagen(
+            validation_split=self.model_settings["validation_split"],
             rotation_range=a["rotation_range"] if "rotation_range" in a else 0,
             shear_range=a["shear_range"] if "shear_range" in a else 0.0,
             zoom_range=a["zoom_range"] if "zoom_range" in a else 0.0,
@@ -178,7 +175,9 @@ class ModelTrainer():
             height_shift_range=a["height_shift_range"] if "height_shift_range" in a else 0.0,
             horizontal_flip=a["horizontal_flip"] if "horizontal_flip" in a else False,
             vertical_flip=a["vertical_flip"] if "vertical_flip" in a else False
-        ).flow_from_dataframe(
+        )
+
+        self.train_generator = datagen.flow_from_dataframe(
             dataframe=self.traindf,
             x_col=self.COL_IMAGE,
             y_col=self.COL_CLASS,
@@ -188,6 +187,11 @@ class ModelTrainer():
             interpolation="nearest",
             subset="training",
             shuffle=True)
+
+        datagen = tf.keras.preprocessing.image.ImageDataGenerator(
+            rescale=1./255,
+            validation_split=self.model_settings["validation_split"],
+        )
 
         self.validation_generator = datagen.flow_from_dataframe(
             dataframe=self.traindf,
