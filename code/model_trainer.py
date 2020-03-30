@@ -1,5 +1,6 @@
 import os, json
 import tensorflow as tf
+import numpy as np
 from datetime import datetime
 from lib import baseclass
 
