@@ -211,50 +211,6 @@ class ModelTrainer():
         self.logger.info("saved model classes to {}".format(self.get_classes_save_path()))
 
 
-    def ORG_configure_generators(self):
-        a = self.model_settings["image_augmentation"] if "image_augmentation" in self.model_settings else []
-
-        datagen = tf.keras.preprocessing.image.ImageDataGenerator(
-            rescale=1./255,
-            validation_split=self.model_settings["validation_split"],
-            rotation_range=a["rotation_range"] if "rotation_range" in a else 0,
-            shear_range=a["shear_range"] if "shear_range" in a else 0.0,
-            zoom_range=a["zoom_range"] if "zoom_range" in a else 0.0,
-            width_shift_range=a["width_shift_range"] if "width_shift_range" in a else 0.0,
-            height_shift_range=a["height_shift_range"] if "height_shift_range" in a else 0.0,
-            horizontal_flip=a["horizontal_flip"] if "horizontal_flip" in a else False,
-            vertical_flip=a["vertical_flip"] if "vertical_flip" in a else False
-        )
-
-        self.train_generator = datagen.flow_from_dataframe(
-            dataframe=self.traindf,
-            x_col=self.COL_IMAGE,
-            y_col=self.COL_CLASS,
-            class_mode="categorical",
-            target_size=(299, 299),
-            batch_size=self.model_settings["batch_size"],
-            interpolation="nearest",
-            subset="training",
-            shuffle=True)
-
-        self.validation_generator = datagen.flow_from_dataframe(
-            dataframe=self.traindf,
-            x_col=self.COL_IMAGE,
-            y_col=self.COL_CLASS,
-            class_mode="categorical",
-            target_size=(299, 299),
-            batch_size=self.model_settings["batch_size"],
-            interpolation="nearest",
-            subset="validation",
-            shuffle=True)
-
-        f = open(self.get_classes_save_path(), "w")
-        f.write(json.dumps(self.train_generator.class_indices))
-        f.close()
-
-        self.logger.info("saved model classes to {}".format(self.get_classes_save_path()))
-
-
     def assemble_model(self):
         if "base_model" in self.model_settings:
             self.base_model = self.model_settings["base_model"]
