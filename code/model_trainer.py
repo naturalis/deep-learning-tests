@@ -161,10 +161,12 @@ class ModelTrainer():
         for setting in self.model_settings:
             self.logger.info("setting - {}: {}".format(setting, str(self.model_settings[setting])))
 
+
     def configure_generators(self):
         a = self.model_settings["image_augmentation"] if "image_augmentation" in self.model_settings else []
 
         datagen = tf.keras.preprocessing.image.ImageDataGenerator(
+            rescale=1./255,
             validation_split=self.model_settings["validation_split"],
             rotation_range=a["rotation_range"] if "rotation_range" in a else 0,
             shear_range=a["shear_range"] if "shear_range" in a else 0.0,
@@ -186,13 +188,17 @@ class ModelTrainer():
             subset="training",
             shuffle=True)
 
-        datagen["rotation_range"]=0
-        # datagen["shear_range"]=0.0
-        # datagen["zoom_range"]=0.0
-        # datagen["width_shift_range"]=0.0
-        # datagen["height_shift_range"]=0.0
-        # datagen["horizontal_flip"]=False
-        # datagen["vertical_flip"]=False
+        datagen = tf.keras.preprocessing.image.ImageDataGenerator(
+            # validation_split=self.model_settings["validation_split"],
+            rescale=1./255,
+            rotation_range=0,
+            shear_range=0.0,
+            zoom_range=0.0,
+            width_shift_range=0.0,
+            height_shift_range=0.0,
+            horizontal_flip=False,
+            vertical_flip=False
+        )
 
         self.validation_generator = datagen.flow_from_dataframe(
             dataframe=self.traindf,
