@@ -186,7 +186,7 @@ class ModelTrainer():
             subset="training",
             shuffle=True)
 
-        datagen(rotation_range=0)
+        datagen["rotation_range"]=0
         # datagen["shear_range"]=0.0
         # datagen["zoom_range"]=0.0
         # datagen["width_shift_range"]=0.0
