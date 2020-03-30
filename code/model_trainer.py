@@ -1,4 +1,4 @@
-import os
+import os, json
 import tensorflow as tf
 from datetime import datetime
 from lib import baseclass
