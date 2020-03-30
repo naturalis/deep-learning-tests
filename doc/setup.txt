@@ -120,3 +120,12 @@ https://ruder.io/optimizing-gradient-descent/
 
 source venv/bin/activate
 nvidia-smi
+
+
+
+
+
+Rescale is a value by which we will multiply the data before any other processing. Our original images consist in RGB coefficients in the 0-255, but such values would be too high for our model to process (given a typical learning rate), so we target values between 0 and 1 instead by scaling with a 1/255. factor (the description taken from https://blog.keras.io/building-powerful-image-classification-models-using-very-little-data.html)
+
+
+
