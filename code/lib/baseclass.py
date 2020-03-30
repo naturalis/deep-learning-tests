@@ -19,7 +19,7 @@ def _csv_to_dataframe(filepath, usecols, encoding="utf-8-sig"):
     return pd.read_csv(filepath, encoding=encoding, sep=sep, dtype="str", usecols=usecols, header=None)
 
 
-class BaseClass:
+class BaseClass():
     logger = None
     debug = False
     timestamp = None
