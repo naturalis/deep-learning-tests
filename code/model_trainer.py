@@ -186,13 +186,13 @@ class ModelTrainer():
             subset="training",
             shuffle=True)
 
-        datagen["rotation_range"]=0
-        datagen["shear_range"]=0.0
-        datagen["zoom_range"]=0.0
-        datagen["width_shift_range"]=0.0
-        datagen["height_shift_range"]=0.0
-        datagen["horizontal_flip"]=False
-        datagen["vertical_flip"]=False
+        datagen(rotation_range=0)
+        # datagen["shear_range"]=0.0
+        # datagen["zoom_range"]=0.0
+        # datagen["width_shift_range"]=0.0
+        # datagen["height_shift_range"]=0.0
+        # datagen["horizontal_flip"]=False
+        # datagen["vertical_flip"]=False
 
         self.validation_generator = datagen.flow_from_dataframe(
             dataframe=self.traindf,
