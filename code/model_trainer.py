@@ -403,7 +403,7 @@ if __name__ == "__main__":
         "optimizer": [
             tf.keras.optimizers.RMSprop(learning_rate=1e-5),
             tf.keras.optimizers.RMSprop(learning_rate=1e-7),
-        ]
+        ],
         "batch_size": 64,
         "epochs": [ 10, 200 ], # epochs single value or list controls whether training is phased
         "freeze_layers": [ "base_model", "none" ], # "base_model", # 249, # none
