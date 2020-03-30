@@ -1,24 +1,15 @@
+import os, sys
+import tensorflow as tf
 from lib import baseclass
 
-class ModelAnalysis():
+class ModelAnalysis(baseclass.BaseClass):
     test_generator = None
 
     def __init__(self):
         super().__init__()
 
-    def set_model_name(self,name):
-        self.model_name = name
-        self.model_path = os.path.join(self.project_root, "models", self.model_name, "model.hdf5")
-        self.classes_path = os.path.join(self.project_root, "models", self.model_name, "classes.json")
-
-    def load_model(self):
-        self.model = tf.keras.models.load_model(self.model_path,compile=False)
-        with open(self.classes_path) as f:
-            self.classes = json.load(f)
-
-
     def configure_generator(self):
-        self.test_generator = tf.keras.preprocessing.image.ImageDataGenerator()
+        self.test_generator = tf.keras.preprocessing.image.ImageDataGenerator() \
             .flow_from_dataframe(
                 dataframe=self.traindf,
                 x_col=self.COL_IMAGE,
@@ -29,36 +20,49 @@ class ModelAnalysis():
                 interpolation="nearest",
             )
 
-
-
-
-
-
-
-
+    def do_stuff(self):
+        batch_size = self.model_settings["batch_size"]
+        # target_names = ['O', 'R']
+        # Y_pred = self.model.predict_generator(self.test_generator, 2513 // batch_size+1)
+        Y_pred = self.model.predict(self.test_generator)
+        y_pred = np.argmax(Y_pred, axis=1)
+        print('Confusion Matrix')
+        cm = metrics.confusion_matrix(self.test_generator.classes, y_pred)
+        print(cm)
+        print('Classification Report')
+        print(metrics.classification_report(self.test_generator.classes, y_pred))        
 
 
 if __name__ == "__main__":
 
+    project_root = os.environ['PROJECT_ROOT']
+
+    if len(sys.argv)>1:
+        model_name = sys.argv[1]
+    else:
+        model_name = os.environ['MODEL_NAME']
+
     analysis = ModelAnalysis()
 
     analysis.set_debug(os.environ["DEBUG"]=="1" if "DEBUG" in os.environ else False)
-    analysis.set_project_folders(project_root=os.environ['PROJECT_ROOT'])
+    analysis.set_model_name(model_name)
+    analysis.set_project_folders(project_root=project_root)
+
+    analysis.load_model()
+
     analysis.set_downloaded_images_list_file(image_col=2)
     analysis.set_class_list_file()
     analysis.read_image_list_file()
     analysis.read_class_list()
 
+    analysis.set_model_settings({
+        "batch_size": 64,
+    })
+
+    analysis.configure_generator()
+    analysis.do_stuff()
 
 
-    if len(sys.argv)>2:
-        model_name = sys.argv[2]
-    else:
-        model_name = os.environ['MODEL_NAME']
-
-    analysis.set_model_name(model_name)
-    analysis.load_model()
-    configure_generator
 
 
 
