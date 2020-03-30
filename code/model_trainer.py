@@ -39,6 +39,7 @@ class ModelTrainer():
     history = None
     training_phase = None
     current_freeze = None
+    current_optimizer = None
 
     COL_CLASS = "class"
     COL_IMAGE = "image"
@@ -264,6 +265,18 @@ class ModelTrainer():
             self.current_callbacks = self.model_settings["callbacks"]
 
 
+    def set_optimizer(self):
+        if not "optimizer" in self.model_settings:
+            self.current_optimizer = None
+            return None
+
+        if isinstance(self.model_settings["optimizer"], list):
+            if self.training_phase < len(self.model_settings["optimizer"]):
+                self.current_optimizer = self.model_settings["optimizer"][self.training_phase]
+        else:
+            self.current_optimizer = self.model_settings["optimizer"]
+
+
     def train_model(self):
 
         self.logger.info("start training {}".format(self.project_root))
@@ -280,9 +293,10 @@ class ModelTrainer():
             self.logger.info("=== training phase {} ({}/{}) ===".format(self.training_phase,(self.training_phase+1),len(epochs)))
 
             self.set_frozen_layers()
+            self.set_optimizer()
 
             self.model.compile(
-                optimizer=self.model_settings["optimizer"],
+                optimizer=self.current_optimizer,
                 loss=self.model_settings["loss"],
                 metrics=self.model_settings["metrics"] if "metrics" in self.model_settings else [ "acc" ]
             )
@@ -386,15 +400,18 @@ if __name__ == "__main__":
         "validation_split": 0.2,
         "base_model": tf.keras.applications.InceptionV3(weights="imagenet", include_top=False),  
         "loss": tf.keras.losses.CategoricalCrossentropy(),
-        "optimizer": tf.keras.optimizers.RMSprop(learning_rate=1e-5),
+        "optimizer": [
+            tf.keras.optimizers.RMSprop(learning_rate=1e-5),
+            tf.keras.optimizers.RMSprop(learning_rate=1e-7),
+        ]
         "batch_size": 64,
         "epochs": [ 10, 200 ], # epochs single value or list controls whether training is phased
         "freeze_layers": [ "base_model", "none" ], # "base_model", # 249, # none
         "callbacks" : [
-            # [ 
-            #     tf.keras.callbacks.ReduceLROnPlateau(monitor="val_loss", factor=0.2, patience=2, min_lr=1e-8),
-            #     tf.keras.callbacks.ModelCheckpoint(trainer.get_model_save_path(), monitor="val_acc", save_best_only=True, save_freq="epoch")
-            # ],
+            [ 
+                tf.keras.callbacks.ReduceLROnPlateau(monitor="val_loss", factor=0.2, patience=2, min_lr=1e-8),
+                tf.keras.callbacks.ModelCheckpoint(trainer.get_model_save_path(), monitor="val_acc", save_best_only=True, save_freq="epoch")
+            ],
             [ 
                 tf.keras.callbacks.EarlyStopping(monitor="val_loss", patience=5, mode="auto", restore_best_weights=True),
                 # tf.keras.callbacks.TensorBoard(trainer.get_tensorboard_log_path()),
