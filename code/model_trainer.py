@@ -15,7 +15,7 @@ class ModelTrainer(baseclass.BaseClass):
     validation_generator = None
 
     def __init__(self):
-        pass
+        super().__init__()
 
     def get_history_plot_save_path(self):
         self.history_plot_save_path = os.path.join(self.project_root, "log", self.timestamp + ".png")
