@@ -186,7 +186,8 @@ class ModelTrainer():
             batch_size=self.model_settings["batch_size"],
             interpolation="nearest",
             subset="training",
-            shuffle=True)
+            shuffle=True
+        )
 
         datagen = tf.keras.preprocessing.image.ImageDataGenerator(
             rescale=1./255,
@@ -202,7 +203,8 @@ class ModelTrainer():
             batch_size=self.model_settings["batch_size"],
             interpolation="nearest",
             subset="validation",
-            shuffle=True)
+            shuffle=True
+        )
 
         f = open(self.get_classes_save_path(), "w")
         f.write(json.dumps(self.train_generator.class_indices))
@@ -387,7 +389,7 @@ if __name__ == "__main__":
         "optimizer": tf.keras.optimizers.RMSprop(learning_rate=1e-5),
         "batch_size": 64,
         "epochs": [ 10, 200 ], # epochs single value or list controls whether training is phased
-        "freeze_layers": [ "none", "none" ], # "base_model", # 249, # none
+        "freeze_layers": [ "base_model", "none" ], # "base_model", # 249, # none
         "callbacks" : [
             # [ 
             #     tf.keras.callbacks.ReduceLROnPlateau(monitor="val_loss", factor=0.2, patience=2, min_lr=1e-8),
