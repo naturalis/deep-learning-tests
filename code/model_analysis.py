@@ -4,7 +4,7 @@ class ModelAnalysis():
     test_generator = None
 
     def __init__(self):
-        pass
+        super().__init__()
 
     def set_model_name(self,name):
         self.model_name = name
