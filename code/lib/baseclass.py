@@ -63,6 +63,7 @@ class BaseClass:
             self.model_name = self.timestamp
         else:
             self.model_name = model_name
+        self.logger.info("model name: {}".format(self.model_name))
 
     def set_project_folders(self, project_root, image_path=None):
         self.project_root = project_root
