@@ -21,13 +21,16 @@ class ModelAnalysis(baseclass.BaseClass):
             )
 
     def do_stuff(self):
+        print("1")
         batch_size = self.model_settings["batch_size"]
         # target_names = ['O', 'R']
         # Y_pred = self.model.predict_generator(self.test_generator, 2513 // batch_size+1)
         Y_pred = self.model.predict(self.test_generator)
+        print("2")
         y_pred = np.argmax(Y_pred, axis=1)
         print('Confusion Matrix')
         cm = metrics.confusion_matrix(self.test_generator.classes, y_pred)
+        print("3")
         print(cm)
         print('Classification Report')
         print(metrics.classification_report(self.test_generator.classes, y_pred))        
