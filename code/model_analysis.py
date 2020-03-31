@@ -1,7 +1,7 @@
 import os, sys
 import tensorflow as tf
 import numpy as np
-import sklearn
+from sklearn.metrics import classification_report
 from lib import baseclass
 
 class ModelAnalysis(baseclass.BaseClass):
@@ -35,7 +35,7 @@ class ModelAnalysis(baseclass.BaseClass):
         print("3")
         print(cm)
         print('Classification Report')
-        print(sklearn.metrics.classification_report(self.test_generator.classes, y_pred))        
+        print(classification_report(self.test_generator.classes, y_pred))        
 
 
 if __name__ == "__main__":
