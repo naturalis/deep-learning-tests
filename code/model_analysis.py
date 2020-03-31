@@ -31,7 +31,7 @@ class ModelAnalysis(baseclass.BaseClass):
         print("2")
         y_pred = np.argmax(Y_pred, axis=1)
         print('Confusion Matrix')
-        cm = tf.keras.metrics.confusion_matrix(self.test_generator.classes, y_pred)
+        cm = tf.math.confusion_matrix(self.test_generator.classes, y_pred)
         print("3")
         print(cm)
         print('Classification Report')
