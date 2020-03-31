@@ -11,16 +11,22 @@ class ModelAnalysis(baseclass.BaseClass):
         super().__init__()
 
     def configure_generator(self):
-        self.test_generator = tf.keras.preprocessing.image.ImageDataGenerator() \
-            .flow_from_dataframe(
-                dataframe=self.traindf,
-                x_col=self.COL_IMAGE,
-                y_col=self.COL_CLASS,
-                class_mode="categorical",
-                target_size=(299, 299),
-                batch_size=self.model_settings["batch_size"],
-                interpolation="nearest",
-            )
+        datagen = tf.keras.preprocessing.image.ImageDataGenerator(
+            rescale=1./255,
+        )
+        print(self.COL_IMAGE)
+        print(self.COL_CLASS)
+        print(self.traindf)
+
+        self.test_generator = datagen.flow_from_dataframe(
+            dataframe=self.traindf,
+            x_col=self.COL_IMAGE,
+            y_col=self.COL_CLASS,
+            class_mode="categorical",
+            target_size=(299, 299),
+            batch_size=self.model_settings["batch_size"],
+            interpolation="nearest",
+        )
 
     def do_stuff(self):
         print("1")
