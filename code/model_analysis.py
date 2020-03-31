@@ -14,9 +14,6 @@ class ModelAnalysis(baseclass.BaseClass):
         datagen = tf.keras.preprocessing.image.ImageDataGenerator(
             # rescale=1./255,
         )
-        print(self.COL_IMAGE)
-        print(self.COL_CLASS)
-        print(self.traindf)
 
         self.test_generator = datagen.flow_from_dataframe(
             dataframe=self.traindf,
@@ -26,19 +23,17 @@ class ModelAnalysis(baseclass.BaseClass):
             target_size=(299, 299),
             batch_size=self.model_settings["batch_size"],
             interpolation="nearest",
+            shuffle=True
         )
 
     def do_stuff(self):
-        print("1")
         batch_size = self.model_settings["batch_size"]
         # target_names = ['O', 'R']
         # Y_pred = self.model.predict_generator(self.test_generator, 2513 // batch_size+1)
         Y_pred = self.model.predict(self.test_generator)
-        print("2")
         y_pred = np.argmax(Y_pred, axis=1)
         print('Confusion Matrix')
         cm = tf.math.confusion_matrix(self.test_generator.classes, y_pred)
-        print("3")
         print(cm)
         print('Classification Report')
         print(classification_report(self.test_generator.classes, y_pred))        
