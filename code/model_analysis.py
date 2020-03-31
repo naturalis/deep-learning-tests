@@ -12,7 +12,7 @@ class ModelAnalysis(baseclass.BaseClass):
 
     def configure_generator(self):
         datagen = tf.keras.preprocessing.image.ImageDataGenerator(
-            rescale=1./255,
+            # rescale=1./255,
         )
         print(self.COL_IMAGE)
         print(self.COL_CLASS)
