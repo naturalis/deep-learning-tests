@@ -1,6 +1,7 @@
 import os, sys
 import tensorflow as tf
 import numpy as np
+import sklearn
 from lib import baseclass
 
 class ModelAnalysis(baseclass.BaseClass):
@@ -30,11 +31,11 @@ class ModelAnalysis(baseclass.BaseClass):
         print("2")
         y_pred = np.argmax(Y_pred, axis=1)
         print('Confusion Matrix')
-        cm = metrics.confusion_matrix(self.test_generator.classes, y_pred)
+        cm = tf.keras.metrics.confusion_matrix(self.test_generator.classes, y_pred)
         print("3")
         print(cm)
         print('Classification Report')
-        print(metrics.classification_report(self.test_generator.classes, y_pred))        
+        print(sklearn.metrics.classification_report(self.test_generator.classes, y_pred))        
 
 
 if __name__ == "__main__":
