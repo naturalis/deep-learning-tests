@@ -5,7 +5,6 @@ import tensorflow as tf
 import pandas as pd
 import numpy as np
 from datetime import datetime
-import matplotlib.pyplot as plt
 from lib import logclass
 
 
@@ -32,7 +31,8 @@ class BaseClass():
     class_list_file = None
     class_list_file_class_col = None
     model_path = None
-    architecture_save_path = None
+    architecture_path = None
+    analysis_path = None
     traindf = None
     class_list = None
     model_settings = None
@@ -140,9 +140,13 @@ class BaseClass():
         self.model_path = os.path.join(self.model_folder, "model.hdf5")
         return self.model_path
 
-    def get_architecture_save_path(self):
-        self.architecture_save_path = os.path.join(self.model_folder, "architecture.json")
-        return self.architecture_save_path
+    def get_architecture_path(self):
+        self.architecture_path = os.path.join(self.model_folder, "architecture.json")
+        return self.architecture_path
+
+    def get_analysis_path(self):
+        self.analysis_path = os.path.join(self.model_folder, "analysis_path.json")
+        return self.analysis_path
 
     def get_classes_path(self):
         self.classes_save_path = os.path.join(self.model_folder, "classes.json")

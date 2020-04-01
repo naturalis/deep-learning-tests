@@ -47,7 +47,7 @@ PROJECT_ROOT/
 
 
 DwCA reader
-  python dwca_reader/dwca_reader.py 
+  python dwca_reader.py 
   in:
     PROJECT_ROOT *
     DWCA_FILE_PATH [$PROJECT_ROOT/dwca/Occurrence.txt]
@@ -59,7 +59,7 @@ DwCA reader
 
 
 Image Downloader
-  python image_downloader/image_downloader.py
+  python image_downloader.py
   in:
     PROJECT_ROOT *
     IMAGE_URL_TO_NAME [basename p.path]
@@ -69,7 +69,7 @@ Image Downloader
     downloaded images [$PROJECT_ROOT/images/<subdirs>] subdirs have random name, max 1000 images per subdir
     $PROJECT_ROOT/lists/downloaded_images.csv
 
-  (default skips locally existing images, yet always (re)writes downloaded_images.csv)
+  (default skips locally existing images, yet always (re)writes downloaded_images.csv, so also run when you've only changed the class minimum)
 
 
 ModelTrainer
@@ -77,6 +77,13 @@ ModelTrainer
 
 
 
+
+
+
+sudo docker-compose run tensorflow /code/dwca_reader.py
+sudo docker-compose run tensorflow /code/image_downloader.py
+sudo docker-compose run tensorflow /code/model_trainer.py
+sudo docker-compose run tensorflow /code/model_analysis.py v1.0
 
 
 

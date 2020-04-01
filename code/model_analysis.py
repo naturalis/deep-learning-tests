@@ -28,15 +28,27 @@ class ModelAnalysis(baseclass.BaseClass):
 
     def do_stuff(self):
         batch_size = self.model_settings["batch_size"]
-        # target_names = ['O', 'R']
-        # Y_pred = self.model.predict_generator(self.test_generator, 2513 // batch_size+1)
+
         Y_pred = self.model.predict(self.test_generator)
         y_pred = np.argmax(Y_pred, axis=1)
+
+        # self.logger.info("saved model to {}".format(self.get_model_path()))
+
         print('Confusion Matrix')
         cm = tf.math.confusion_matrix(self.test_generator.classes, y_pred)
-        print(cm)
+        for row in cm:
+            print("[ ",end='')
+            for cell in row:
+                print("{:>6d}".format(cell),end='')
+            print(" ]")
+
         print('Classification Report')
-        print(classification_report(self.test_generator.classes, y_pred))        
+        cp = classification_report(self.test_generator.classes, y_pred)
+        print(cp)
+
+        f = open(self.get_analysis_path(), "w")
+        f.write(json.dumps({"confusion matrix" : cm, "classification report" : cp})
+        f.close()
 
 
 if __name__ == "__main__":

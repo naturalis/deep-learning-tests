@@ -200,10 +200,10 @@ class ModelTrainer(baseclass.BaseClass):
         self.model.save(self.get_model_path())
         self.logger.info("saved model to {}".format(self.get_model_path()))
 
-        f = open(self.get_architecture_save_path(), "w")
+        f = open(self.get_architecture_path(), "w")
         f.write(self.model.to_json())
         f.close()
-        self.logger.info("saved model architecture to {}".format(self.get_architecture_save_path()))
+        self.logger.info("saved model architecture to {}".format(self.get_architecture_path()))
 
 
     def get_trainable_params(self):
@@ -260,6 +260,9 @@ if __name__ == "__main__":
         # WARNING:tensorflow:Method (on_train_batch_end) is slow compared to the batch update (0.325404). Check your callbacks.
         # maybe something with TensorBoard callback, as the other ones get called at epoch end, not batch end
 
+
+        # https://www.tensorflow.org/api_docs/python/tf/keras/callbacks/LearningRateScheduler
+
     trainer.set_model_settings({
         "validation_split": 0.2,
         "base_model": tf.keras.applications.InceptionV3(weights="imagenet", include_top=False),  
@@ -272,10 +275,10 @@ if __name__ == "__main__":
         "freeze_layers": [ "none" ], # "base_model", # 249, # none
         "callbacks" : [
             [ 
-                tf.keras.callbacks.EarlyStopping(monitor="val_loss", patience=5, mode="auto", restore_best_weights=True),
+                tf.keras.callbacks.EarlyStopping(monitor="val_loss", patience=5, mode="auto", restore_best_weights=True, verbose=1),
                 # tf.keras.callbacks.TensorBoard(trainer.get_tensorboard_log_path()),
-                tf.keras.callbacks.ReduceLROnPlateau(monitor="val_loss", factor=0.1, patience=4, min_lr=1e-8),
-                tf.keras.callbacks.ModelCheckpoint(trainer.get_model_path(), monitor="val_acc", save_best_only=True, save_freq="epoch")
+                tf.keras.callbacks.ReduceLROnPlateau(monitor="val_loss", factor=0.1, patience=4, min_lr=1e-8, verbose=1),
+                tf.keras.callbacks.ModelCheckpoint(trainer.get_model_path(), monitor="val_acc", save_best_only=True, save_freq="epoch", verbose=1)
             ]
         ],
         "metrics" : [ "acc" ],
