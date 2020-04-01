@@ -83,10 +83,6 @@ class BaseClass():
         else:
             self.image_path = os.path.join(self.project_root, "images")
 
-        self.set_model_folder()
-
-
-
     def set_model_folder(self):
         self.model_folder = os.path.join(self.project_root, "models", self.model_name)
         if not os.path.exists(self.model_folder):

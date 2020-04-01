@@ -77,8 +77,9 @@ if __name__ == "__main__":
     analysis = ModelAnalysis()
 
     analysis.set_debug(os.environ["DEBUG"]=="1" if "DEBUG" in os.environ else False)
-    analysis.set_model_name(model_name)
     analysis.set_project_folders(project_root=project_root)
+    analysis.set_model_name(model_name)
+    analysis.set_model_folder()
 
     analysis.load_model()
 

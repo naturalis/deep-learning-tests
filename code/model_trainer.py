@@ -247,8 +247,9 @@ if __name__ == "__main__":
     trainer = ModelTrainer()
 
     trainer.set_debug(os.environ["DEBUG"]=="1" if "DEBUG" in os.environ else False)
-    trainer.set_model_name()
     trainer.set_project_folders(project_root=os.environ['PROJECT_ROOT'])
+    trainer.set_model_name()
+    trainer.set_model_folder()
     trainer.set_downloaded_images_list_file(image_col=2)
     trainer.set_class_list_file()
     trainer.read_image_list_file()
