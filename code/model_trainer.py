@@ -250,7 +250,7 @@ if __name__ == "__main__":
     trainer.set_project_folders(project_root=os.environ['PROJECT_ROOT'])
     trainer.set_model_name()
     trainer.set_model_folder()
-    trainer.set_downloaded_images_list_file(image_col=2)
+    trainer.set_downloaded_images_file(image_col=2)
     trainer.read_image_list_file()
 
 

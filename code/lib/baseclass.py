@@ -91,8 +91,12 @@ class BaseClass():
             os.mkdir(self.image_path)
             self.logger.info("created image folder {}".format(self.image_path))
 
-        self.downloaded_images_file = os.path.join(self.project_root, "lists", "downloaded_images.csv")
         self.class_list_file = os.path.join(self.project_root, "lists", "classes.csv")
+
+        self.downloaded_images_file = os.path.join(self.project_root, "lists", "downloaded_images.csv")
+        self.image_list_class_col = class_col
+        self.image_list_image_col = image_col
+
 
     def copy_class_list_file(self):
         copyfile(self.class_list_file,self.class_list_file_model)
@@ -110,15 +114,15 @@ class BaseClass():
         for setting in self.model_settings:
             self.logger.info("setting - {}: {}".format(setting, str(self.model_settings[setting])))
 
-    def set_downloaded_images_list_file(self, downloaded_images_list_file=None, class_col=0, image_col=1):
-        if downloaded_images_list_file is not None:
-            self.downloaded_images_list_file = downloaded_images_list_file
+    # def set_downloaded_images_list_file(self, downloaded_images_list_file=None, class_col=0, image_col=1):
+    #     if downloaded_images_list_file is not None:
+    #         self.downloaded_images_list_file = downloaded_images_list_file
 
-        if not os.path.isfile(self.downloaded_images_list_file):
-            raise FileNotFoundError("downloaded list file not found: {}".format(self.downloaded_images_list_file))
+    #     if not os.path.isfile(self.downloaded_images_list_file):
+    #         raise FileNotFoundError("downloaded list file not found: {}".format(self.downloaded_images_list_file))
 
-        self.image_list_class_col = class_col
-        self.image_list_image_col = image_col
+    #     self.image_list_class_col = class_col
+    #     self.image_list_image_col = image_col
 
     def set_class_list_file(self, class_list_file=None, class_col=0):
         if class_list_file is not None:
@@ -131,6 +135,9 @@ class BaseClass():
 
     # TODO: implement Test split
     def read_image_list_file(self):
+
+        self.downloaded_images_list_file = self.downloaded_images_file
+
         self.logger.info("reading images from: {}".format(self.downloaded_images_list_file))
 
         df = _csv_to_dataframe(filepath=self.downloaded_images_list_file,
