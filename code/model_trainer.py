@@ -251,7 +251,7 @@ if __name__ == "__main__":
     trainer.set_model_name()
     trainer.set_model_folder()
     # trainer.set_downloaded_images_file(image_col=2)
-    trainer.read_image_list_file()
+    trainer.read_image_list_file(image_col=2)
 
 
     trainer.copy_class_list_file()
