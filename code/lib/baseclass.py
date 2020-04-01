@@ -74,7 +74,7 @@ class BaseClass():
         if not os.path.isdir(self.project_root):
             raise FileNotFoundError("project root doesn't exist: {}".format(self.project_root))
 
-        self.logger.info("project root: ".format(self.project_root))
+        self.logger.info("project root: {}".format(self.project_root))
 
         self.class_list_file_json = os.path.join(self.project_root, "lists", "classes.json")
         self.class_list_file_csv = os.path.join(self.project_root, "lists", "classes.csv")
