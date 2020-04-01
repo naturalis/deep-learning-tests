@@ -179,4 +179,4 @@ if __name__ == "__main__":
         classes.append(
             {"class": item.get_name(), "id_count": len(item.get_ids()), "image_count": len(item.get_images())})
 
-    print(json.dumps({"settings": settings, "classes": classes}))
+    print(json.dumps(classes))
