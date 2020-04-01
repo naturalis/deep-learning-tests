@@ -5,7 +5,7 @@ from hashlib import md5
 import urllib.request
 from lib import baseclass
 
-class ImageDownloader():
+class ImageDownloader(baseclass.BaseClass):
     image_list_file = None
     image_list = []
     previously_downloaded_files = []
