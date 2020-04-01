@@ -47,7 +47,7 @@ class ModelAnalysis(baseclass.BaseClass):
         print(cp)
 
         f = open(self.get_analysis_path(), "w")
-        f.write(json.dumps({"confusion matrix" : cm, "classification report" : cp})
+        f.write(json.dumps({"confusion matrix" : cm, "classification report" : cp}))
         f.close()
 
 
