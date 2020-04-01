@@ -134,7 +134,10 @@ class BaseClass():
         self.class_list_file_class_col = class_col
 
     # TODO: implement Test split
-    def read_image_list_file(self):
+    def read_image_list_file(self, class_col=0, image_col=1):
+
+        self.image_list_class_col = class_col
+        self.image_list_image_col = image_col
 
         self.downloaded_images_list_file = self.downloaded_images_file
 
