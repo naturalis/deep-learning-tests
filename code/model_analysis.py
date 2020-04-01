@@ -83,9 +83,10 @@ if __name__ == "__main__":
 
     analysis.load_model()
 
-    analysis.set_downloaded_images_list_file(image_col=2)
-    analysis.set_class_list_file()
+    analysis.read_image_list_file(image_col=2)
     analysis.read_image_list_file()
+
+    analysis.set_class_list_file()
     analysis.read_class_list()
 
     analysis.set_model_settings({

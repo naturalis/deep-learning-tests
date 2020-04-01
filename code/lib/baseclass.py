@@ -111,25 +111,6 @@ class BaseClass():
         for setting in self.model_settings:
             self.logger.info("setting - {}: {}".format(setting, str(self.model_settings[setting])))
 
-    # def set_downloaded_images_list_file(self, downloaded_images_list_file=None, class_col=0, image_col=1):
-    #     if downloaded_images_list_file is not None:
-    #         self.downloaded_images_list_file = downloaded_images_list_file
-
-    #     if not os.path.isfile(self.downloaded_images_list_file):
-    #         raise FileNotFoundError("downloaded list file not found: {}".format(self.downloaded_images_list_file))
-
-    #     self.image_list_class_col = class_col
-    #     self.image_list_image_col = image_col
-
-    def set_class_list_file(self, class_list_file=None, class_col=0):
-        if class_list_file is not None:
-            self.class_list_file_model = class_list_file
-
-        if not os.path.isfile(self.class_list_file_model):
-            raise FileNotFoundError("class list file not found: {}".format(self.class_list_file_model))
-
-        self.class_list_file_class_col = class_col
-
     # TODO: implement Test split
     def read_image_list_file(self, class_col=0, image_col=1):
 
@@ -154,7 +135,11 @@ class BaseClass():
 
         self.logger.info("read {} images in {} classes".format(self.traindf[self.COL_IMAGE].nunique(),self.traindf[self.COL_CLASS].nunique()))
 
-    def read_class_list(self):
+    def read_class_list(self, class_col=0):
+        if not os.path.isfile(self.class_list_file_model):
+            raise FileNotFoundError("class list file not found: {}".format(self.class_list_file_model))
+
+        self.class_list_file_class_col = class_col
         self.class_list = _csv_to_dataframe(self.class_list_file_model, [self.class_list_file_class_col])
 
     def get_class_list(self):

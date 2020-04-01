@@ -6,4 +6,4 @@ if [[ -z "$LOGFILE" ]]; then
     LOGFILE=../../screen-logs/screen.log
 fi
 
-tail -f $LOGFILE | grep -v shuffle
+tail -n 50 -f $LOGFILE | grep -v shuffle
