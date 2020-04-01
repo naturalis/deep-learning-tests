@@ -92,10 +92,7 @@ class BaseClass():
             self.logger.info("created image folder {}".format(self.image_path))
 
         self.class_list_file = os.path.join(self.project_root, "lists", "classes.csv")
-
         self.downloaded_images_file = os.path.join(self.project_root, "lists", "downloaded_images.csv")
-        self.image_list_class_col = class_col
-        self.image_list_image_col = image_col
 
 
     def copy_class_list_file(self):
