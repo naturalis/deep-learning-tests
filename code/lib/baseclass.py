@@ -21,6 +21,9 @@ def _csv_to_dataframe(filepath, usecols, encoding="utf-8-sig"):
 class BaseClass():
     logger = None
     debug = False
+    class_list_file_json = None
+    class_list_file_csv = None
+    image_list_file_csv = None
     timestamp = None
     model_name = None
     project_root = None
@@ -71,12 +74,18 @@ class BaseClass():
         if not os.path.isdir(self.project_root):
             raise FileNotFoundError("project root doesn't exist: {}".format(self.project_root))
 
+        self.class_list_file_json = os.path.join(self.project_root, 'lists', self.class_list_file_json)
+        self.class_list_file_csv = os.path.join(self.project_root, 'lists', self.class_list_file_csv)
+        self.image_list_file_csv = os.path.join(self.project_root, 'lists', self.image_list_file_csv)
+
         if image_path is not None:
             self.image_path = image_path
         else:
             self.image_path = os.path.join(self.project_root, "images")
 
         self.set_model_folder()
+
+
 
     def set_model_folder(self):
         self.model_folder = os.path.join(self.project_root, "models", self.model_name)

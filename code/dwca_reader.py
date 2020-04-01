@@ -2,6 +2,7 @@ import csv
 import json
 import os
 from lib import logclass
+from lib import baseclass
 
 
 class ClassificationClass:
@@ -28,7 +29,7 @@ class ClassificationClass:
         return self.ids
 
 
-class DwcaReader():
+class DwcaReader(baseclass.BaseClass):
     """
   DwCA reader:
   - extracts an imagelist from the occurence file from a DwCA archive
@@ -40,24 +41,11 @@ class DwcaReader():
     dwca_column_indices = {"id": None, "taxon": None, "images": None}
     classification_classes = []
     class_image_minimum = 2
-    class_list_file_json = "classes.json"
-    class_list_file_csv = "classes.csv"
-    image_list_file_csv = "images.csv"
 
     total_images = 0
 
     def __init__(self):
         self.logger = logclass.LogClass(self.__class__.__name__)
-
-    def set_project_root(self, project_root):
-        self.project_root = project_root
-
-        if not os.path.isdir(self.project_root):
-            raise FileNotFoundError("project root doesn't exist: {}".format(self.project_root))
-
-        self.class_list_file_json = os.path.join(self.project_root, 'lists', self.class_list_file_json)
-        self.class_list_file_csv = os.path.join(self.project_root, 'lists', self.class_list_file_csv)
-        self.image_list_file_csv = os.path.join(self.project_root, 'lists', self.image_list_file_csv)
 
     def set_dwca_file_path(self, dwca_file_path=None):
         if dwca_file_path is not None:
@@ -166,8 +154,11 @@ class DwcaReader():
 
 if __name__ == "__main__":
 
+    project_root = os.environ['PROJECT_ROOT']
+
     reader = DwcaReader()
-    reader.set_project_root(os.environ['PROJECT_ROOT'])
+    reader.set_debug(os.environ["DEBUG"]=="1" if "DEBUG" in os.environ else False)
+    reader.set_project_folders(project_root=project_root)
 
     if 'DWCA_FILE_PATH' in os.environ:
         reader.set_dwca_file_path(os.environ['DWCA_FILE_PATH'])

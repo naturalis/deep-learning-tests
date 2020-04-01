@@ -8,7 +8,8 @@ class ModelAnalysis(baseclass.BaseClass):
     test_generator = None
     cm = None
     cp = None
-    cm_printable = []
+    cm_exportable = []
+    cp_exportable = None
 
     def __init__(self):
         super().__init__()
@@ -35,19 +36,19 @@ class ModelAnalysis(baseclass.BaseClass):
         y_pred = np.argmax(Y_pred, axis=1)
         self.cm = tf.math.confusion_matrix(self.test_generator.classes, y_pred)
 
-        self.cm_printable = []
+        self.cm_exportable = []
         i = 0
         for row in self.cm:
-            self.cm_printable.append([])
+            self.cm_exportable.append([])
             for cell in row:
-                self.cm_printable[i].append(str(cell))
+                self.cm_exportable[i].append(str(cell))
             i += 1
 
-        self.cp = classification_report(self.test_generator.classes, y_pred,output_dict=True)
+        self.cp = classification_report(self.test_generator.classes, y_pred)
+        self.cp_exportable = classification_report(self.test_generator.classes, y_pred,output_dict=True)
 
     def print_analysis(self):
-        print("# model analysis")
-        print("## confusion matrix")
+        print("== confusion matrix ==")
 
         i = 0
         for row in self.cm:
@@ -56,12 +57,12 @@ class ModelAnalysis(baseclass.BaseClass):
                 print("{:>6d}".format(cell),end='')
             print(" ]")
 
-        print("## classification report")
-        print(self.cp)
+        print("== classification report ==")
+        print(self.cp_exportable)
 
     def save_analysis(self):
         f = open(self.get_analysis_path(), "w")
-        f.write(json.dumps({"confusion matrix" : self.cm_printable, "classification report" : self.cp}))
+        f.write(json.dumps({"confusion matrix" : self.cm_exportable, "classification report" : self.cp_exportable}))
         f.close()
 
 
