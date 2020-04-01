@@ -177,6 +177,6 @@ if __name__ == "__main__":
     classes = []
     for item in reader.get_class_list():
         classes.append(
-            {"class": item.get_name(), "id_count": len(item.get_ids()), "image_count": len(item.get_images())})
+            {"class": item.get_name(), "occurrence_count": len(item.get_ids()), "image_count": len(item.get_images())})
 
     print(json.dumps(classes))
