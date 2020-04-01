@@ -45,7 +45,7 @@ class DwcaReader(baseclass.BaseClass):
     total_images = 0
 
     def __init__(self):
-        self.logger = logclass.LogClass(self.__class__.__name__)
+        super().__init__()
 
     def set_dwca_file_path(self, dwca_file_path=None):
         if dwca_file_path is not None:

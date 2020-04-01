@@ -3,38 +3,21 @@ import os, csv, re
 from urllib.parse import urlparse
 from hashlib import md5
 import urllib.request
-from lib import logclass
+from lib import baseclass
 
 class ImageDownloader():
-    project_root = None
-    download_root_folder = None
     image_list_file = None
     image_list = []
     previously_downloaded_files = []
     skip_download_if_exists = True
     image_default_extension = None
     image_url_to_name = None
-    downloaded_images_file = None
-    downloaded_images_filename = 'lists/downloaded_images.csv'
     subfolder_max_files = 1000
     _subfolder_index = 0
     _current_subdir = None
 
     def __init__(self):
-        self.logger = logclass.LogClass(self.__class__.__name__)
-
-    def set_project_root(self, project_root):
-        self.project_root = project_root
-
-        if not os.path.isdir(self.project_root):
-            raise FileNotFoundError("project root doesn't exist: {}".format(self.project_root))
-
-        self.download_root_folder = 'images'
-
-        if not os.path.isdir(os.path.join(self.project_root, self.download_root_folder)):
-            os.mkdir(os.path.join(self.project_root, self.download_root_folder))
-
-        self.downloaded_images_file = os.path.join(self.project_root, self.downloaded_images_filename)
+        super().__init__()
 
     def set_image_url_to_name(self, image_url_to_name):
         self.image_url_to_name = image_url_to_name
@@ -67,9 +50,10 @@ class ImageDownloader():
                 self.image_list.append(row)
 
     def _get_previously_downloaded_files(self):
-        for subdir, dirs, files in os.walk(os.path.join(self.project_root, self.download_root_folder)):
+        for subdir, dirs, files in os.walk(self.image_path):
             for file in files:
-                self.previously_downloaded_files.append({"file": file, "path": os.path.join(subdir.replace(os.path.join(self.project_root, self.download_root_folder),""),file).lstrip("/")})
+                self.previously_downloaded_files.append( \
+                {"file": file, "path": os.path.join(subdir.replace(self.image_path,""),file).lstrip("/")})
 
     def download_images(self):
         if self.skip_download_if_exists:
@@ -105,8 +89,7 @@ class ImageDownloader():
                     self.logger.info("skipped downloading {}".format(url))
                     skipped += 1
                 else:
-                    file_to_save = os.path.join(self.project_root, self.download_root_folder, self._current_subdir,
-                                                filename)
+                    file_to_save = os.path.join(self.image_path, self._current_subdir,filename)
                     try:
                         urllib.request.urlretrieve(url, file_to_save)
                         c.writerow([item[0], url, os.path.join(self._current_subdir, filename)])
@@ -120,7 +103,7 @@ class ImageDownloader():
 
     def _set_download_subdir(self):
         self._current_subdir = md5(str(self._subfolder_index).encode('utf-8')).hexdigest()[:10]
-        subdir_path = os.path.join(self.project_root, self.download_root_folder, self._current_subdir)
+        subdir_path = os.path.join(self.image_path, self._current_subdir)
         if not os.path.isdir(subdir_path):
             os.mkdir(subdir_path)
 
@@ -129,14 +112,17 @@ class ImageDownloader():
             while True:
                 self._subfolder_index += 1
                 self._current_subdir = md5(str(self._subfolder_index).encode('utf-8')).hexdigest()[:10]
-                if not os.path.isdir(os.path.join(self.project_root, self.download_root_folder, self._current_subdir)):
-                    os.mkdir(os.path.join(self.project_root, self.download_root_folder, self._current_subdir))
+                if not os.path.isdir(os.path.join(self.image_path, self._current_subdir)):
+                    os.mkdir(os.path.join(self.image_path, self._current_subdir))
                     break
 
 
 if __name__ == "__main__":
+
+    project_root = os.environ['PROJECT_ROOT']
+
     downloader = ImageDownloader()
-    downloader.set_project_root(os.environ['PROJECT_ROOT'])
+    downloader.set_project_folders(project_root=project_root)
 
     if 'IMAGE_URL_TO_NAME' in os.environ:
         downloader.set_image_url_to_name(json.loads(os.environ['IMAGE_URL_TO_NAME']))

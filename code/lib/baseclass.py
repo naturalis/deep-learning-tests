@@ -24,6 +24,7 @@ class BaseClass():
     class_list_file_json = None
     class_list_file_csv = None
     image_list_file_csv = None
+    downloaded_images_file = None
     timestamp = None
     model_name = None
     project_root = None
@@ -84,6 +85,13 @@ class BaseClass():
             self.image_path = image_path
         else:
             self.image_path = os.path.join(self.project_root, "images")
+
+        if not os.path.exists(self.image_path):
+            os.mkdir(self.image_path)
+            self.logger.info("created image folder {}".format(self.image_path))
+
+        self.downloaded_images_file = os.path.join(self.project_root, "lists", "downloaded_images.csv")
+
 
     def set_model_folder(self):
         self.model_folder = os.path.join(self.project_root, "models", self.model_name)
