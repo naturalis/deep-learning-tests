@@ -58,7 +58,7 @@ class ModelAnalysis(baseclass.BaseClass):
             print(" ]")
 
         print("== classification report ==")
-        print(self.cp_exportable)
+        print(self.cp)
 
     def save_analysis(self):
         f = open(self.get_analysis_path(), "w")
