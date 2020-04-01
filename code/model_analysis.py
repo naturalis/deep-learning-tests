@@ -41,7 +41,7 @@ class ModelAnalysis(baseclass.BaseClass):
         for row in self.cm:
             self.cm_exportable.append([])
             for cell in row:
-                self.cm_exportable[i].append(str(cell.eval()))
+                self.cm_exportable[i].append(cell.numpy())
             i += 1
 
         self.cp = classification_report(self.test_generator.classes, y_pred)
