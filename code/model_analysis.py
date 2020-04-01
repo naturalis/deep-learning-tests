@@ -38,10 +38,10 @@ class ModelAnalysis(baseclass.BaseClass):
         self.cm_printable = []
         i = 0
         for row in self.cm:
-            i += 1
             self.cm_printable.append([])
             for cell in row:
                 self.cm_printable[i].append(cell)
+            i += 1
 
         self.cp = classification_report(self.test_generator.classes, y_pred)
 
