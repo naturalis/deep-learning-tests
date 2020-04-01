@@ -40,10 +40,10 @@ class ModelAnalysis(baseclass.BaseClass):
         for row in self.cm:
             self.cm_printable.append([])
             for cell in row:
-                self.cm_printable[i].append(cell)
+                self.cm_printable[i].append(str(cell))
             i += 1
 
-        self.cp = classification_report(self.test_generator.classes, y_pred)
+        self.cp = classification_report(self.test_generator.classes, y_pred,output_dict=True)
 
     def print_analysis(self):
         print("# model analysis")
@@ -61,8 +61,7 @@ class ModelAnalysis(baseclass.BaseClass):
 
     def save_analysis(self):
         f = open(self.get_analysis_path(), "w")
-        f.write(json.dumps({"confusion matrix" : self.cm_printable }))
-        # f.write(json.dumps({"confusion matrix" : self.cm_printable, "classification report" : self.cp}))
+        f.write(json.dumps({"confusion matrix" : self.cm_printable, "classification report" : self.cp}))
         f.close()
 
 
