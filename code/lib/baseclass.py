@@ -4,6 +4,7 @@ import os, json
 import tensorflow as tf
 import pandas as pd
 import numpy as np
+from shutil import copyfile
 from datetime import datetime
 from lib import logclass
 
@@ -91,13 +92,18 @@ class BaseClass():
             self.logger.info("created image folder {}".format(self.image_path))
 
         self.downloaded_images_file = os.path.join(self.project_root, "lists", "downloaded_images.csv")
+        self.class_list_file = os.path.join(self.project_root, "lists", "classes.csv")
 
+    def copy_class_list_file(self):
+        copyfile(self.class_list_file,self.class_list_file_model)
 
     def set_model_folder(self):
         self.model_folder = os.path.join(self.project_root, "models", self.model_name)
         if not os.path.exists(self.model_folder):
             os.mkdir(self.model_folder)
             self.logger.info("created model folder {}".format(self.model_folder))
+
+        self.class_list_file_model = os.path.join(self.model_folder, "classes.csv")
 
     def set_model_settings(self, model_settings):
         self.model_settings = model_settings
@@ -107,8 +113,6 @@ class BaseClass():
     def set_downloaded_images_list_file(self, downloaded_images_list_file=None, class_col=0, image_col=1):
         if downloaded_images_list_file is not None:
             self.downloaded_images_list_file = downloaded_images_list_file
-        else:
-            self.downloaded_images_list_file = os.path.join(self.project_root, 'lists', 'downloaded_images.csv')
 
         if not os.path.isfile(self.downloaded_images_list_file):
             raise FileNotFoundError("downloaded list file not found: {}".format(self.downloaded_images_list_file))
@@ -118,12 +122,10 @@ class BaseClass():
 
     def set_class_list_file(self, class_list_file=None, class_col=0):
         if class_list_file is not None:
-            self.class_list_file = class_list_file
-        else:
-            self.class_list_file = os.path.join(self.project_root, 'lists', 'classes.csv')
+            self.class_list_file_model = class_list_file
 
-        if not os.path.isfile(self.class_list_file):
-            raise FileNotFoundError("class list file not found: {}".format(self.class_list_file))
+        if not os.path.isfile(self.class_list_file_model):
+            raise FileNotFoundError("class list file not found: {}".format(self.class_list_file_model))
 
         self.class_list_file_class_col = class_col
 
@@ -146,7 +148,7 @@ class BaseClass():
         self.logger.info("read {} images in {} classes".format(self.traindf[self.COL_IMAGE].nunique(),self.traindf[self.COL_CLASS].nunique()))
 
     def read_class_list(self):
-        self.class_list = _csv_to_dataframe(self.class_list_file, [self.class_list_file_class_col])
+        self.class_list = _csv_to_dataframe(self.class_list_file_model, [self.class_list_file_class_col])
 
     def get_class_list(self):
         return self.class_list
