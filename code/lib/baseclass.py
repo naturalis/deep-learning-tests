@@ -74,9 +74,9 @@ class BaseClass():
         if not os.path.isdir(self.project_root):
             raise FileNotFoundError("project root doesn't exist: {}".format(self.project_root))
 
-        self.class_list_file_json = os.path.join(self.project_root, 'lists', self.class_list_file_json)
-        self.class_list_file_csv = os.path.join(self.project_root, 'lists', self.class_list_file_csv)
-        self.image_list_file_csv = os.path.join(self.project_root, 'lists', self.image_list_file_csv)
+        self.class_list_file_json = os.path.join(self.project_root, "lists", "classes.json")
+        self.class_list_file_csv = os.path.join(self.project_root, "lists", "classes.csv")
+        self.image_list_file_csv = os.path.join(self.project_root, "lists", "images.csv")
 
         if image_path is not None:
             self.image_path = image_path
