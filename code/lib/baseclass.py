@@ -137,7 +137,7 @@ class BaseClass():
         self.logger.info("read {} images in {} classes".format(self.traindf[self.COL_IMAGE].nunique(),self.traindf[self.COL_CLASS].nunique()))
 
     def set_class_image_max(self,max):
-        self.class_image_max = max
+        self.class_image_max = int(max)
 
     def impose_class_image_max(self):
         if self.class_image_max is None:
