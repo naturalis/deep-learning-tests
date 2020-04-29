@@ -34,6 +34,10 @@ class ModelAnalysis(baseclass.BaseClass):
         batch_size = self.model_settings["batch_size"]
         Y_pred = self.model.predict(self.test_generator)
         y_pred = np.argmax(Y_pred, axis=1)
+
+        print(Y_pred)
+        print(y_pred)
+
         self.cm = tf.math.confusion_matrix(self.test_generator.classes, y_pred)
 
         self.cm_exportable = []
@@ -44,8 +48,8 @@ class ModelAnalysis(baseclass.BaseClass):
                 self.cm_exportable[i].append(str(cell.numpy()))
             i += 1
 
-        self.cp = classification_report(self.test_generator.classes, y_pred)
-        self.cp_exportable = classification_report(self.test_generator.classes, y_pred,output_dict=True)
+        self.cr = classification_report(self.test_generator.classes, y_pred)
+        self.cr_exportable = classification_report(self.test_generator.classes, y_pred,output_dict=True)
 
     def print_analysis(self):
         print("== confusion matrix ==")
@@ -58,11 +62,11 @@ class ModelAnalysis(baseclass.BaseClass):
             print(" ]")
 
         print("== classification report ==")
-        print(self.cp)
+        print(self.cr)
 
     def save_analysis(self):
         f = open(self.get_analysis_path(), "w")
-        f.write(json.dumps({"confusion matrix" : self.cm_exportable, "classification report" : self.cp_exportable}))
+        f.write(json.dumps({"confusion matrix" : self.cm_exportable, "classification report" : self.cr_exportable}))
         f.close()
 
 
