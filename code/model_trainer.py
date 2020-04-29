@@ -92,7 +92,6 @@ class ModelTrainer(baseclass.BaseClass):
 
         self.logger.info("model has {} layers (base model: {})".format(len(self.model.layers), len(self.base_model.layers)))
 
-
     def set_frozen_layers(self):
         self.model.trainable = True
 
@@ -115,7 +114,6 @@ class ModelTrainer(baseclass.BaseClass):
             for layer in self.base_model.layers[:self.current_freeze]:
                 layer.trainable = False
 
-
     def set_callbacks(self):
         if not "callbacks" in self.model_settings:
             self.current_callbacks = None
@@ -127,7 +125,6 @@ class ModelTrainer(baseclass.BaseClass):
         else:
             self.current_callbacks = self.model_settings["callbacks"]
 
-
     def set_optimizer(self):
         if not "optimizer" in self.model_settings:
             self.current_optimizer = None
@@ -138,7 +135,6 @@ class ModelTrainer(baseclass.BaseClass):
                 self.current_optimizer = self.model_settings["optimizer"][self.training_phase]
         else:
             self.current_optimizer = self.model_settings["optimizer"]
-
 
     def train_model(self):
 
@@ -195,7 +191,6 @@ class ModelTrainer(baseclass.BaseClass):
 
             self.training_phase += 1
 
-
     def save_model(self):
         self.model.save(self.get_model_path())
         self.logger.info("saved model to {}".format(self.get_model_path()))
@@ -204,7 +199,6 @@ class ModelTrainer(baseclass.BaseClass):
         f.write(self.model.to_json())
         f.close()
         self.logger.info("saved model architecture to {}".format(self.get_architecture_path()))
-
 
     def get_trainable_params(self):
         trainable_count = np.sum([tf.keras.backend.count_params(w) for w in self.model.trainable_weights])
@@ -215,7 +209,6 @@ class ModelTrainer(baseclass.BaseClass):
             "trainable" : trainable_count,
             "non_trainable" : non_trainable_count
         }
-
 
     def evaluate(self):
         acc = self.history.history['acc']
@@ -250,7 +243,12 @@ if __name__ == "__main__":
     trainer.set_project_folders(project_root=os.environ['PROJECT_ROOT'])
     trainer.set_model_name()
     trainer.set_model_folder()
+    
     trainer.read_image_list_file(image_col=2)
+
+    if 'CLASS_IMAGE_MAXIMUM' in os.environ:
+        trainer.set_class_image_max(os.environ['CLASS_IMAGE_MAXIMUM'])
+        trainer.impose_class_image_max()
 
     trainer.copy_class_list_file()
     trainer.read_class_list()

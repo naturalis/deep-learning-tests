@@ -7,7 +7,12 @@ class LogClass:
         self.logger = logging.getLogger(name)
         self.logger.setLevel(logging.INFO)
 
-        fh = logging.FileHandler(os.path.join(os.environ['PROJECT_ROOT'], 'log', 'general.log'))
+        logfile = os.path.join(os.environ['PROJECT_ROOT'], 'log', 'general.log')
+
+        # if not os.path.exists(logfile):
+        #     logfile = 'general.log'
+
+        fh = logging.FileHandler(logfile)
 
         if 'DEBUGGING' in os.environ and os.environ['DEBUGGING'] == "1":
             fh.setLevel(logging.DEBUG)
