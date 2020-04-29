@@ -35,10 +35,10 @@ class ModelAnalysis(baseclass.BaseClass):
         Y_pred = self.model.predict(self.test_generator)
         y_pred = np.argmax(Y_pred, axis=1)
 
-        print(Y_pred)
-        print(y_pred)
-
         self.cm = tf.math.confusion_matrix(self.test_generator.classes, y_pred)
+
+        iets = tf.math.in_top_k(self.test_generator.classes, Y_pred, 3, "whatever")
+        print(iets)
 
         self.cm_exportable = []
         i = 0
