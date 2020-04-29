@@ -294,9 +294,9 @@ if __name__ == "__main__":
         }
     })
 
-    trainer.assemble_model()
-    trainer.configure_generators()
-    trainer.train_model()
-    trainer.save_model()
-    trainer.evaluate()
+    # trainer.assemble_model()
+    # trainer.configure_generators()
+    # trainer.train_model()
+    # trainer.save_model()
+    # trainer.evaluate()
 
