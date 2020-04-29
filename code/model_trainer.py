@@ -248,9 +248,8 @@ if __name__ == "__main__":
 
     if 'CLASS_IMAGE_MAXIMUM' in os.environ:
         trainer.set_class_image_max(os.environ['CLASS_IMAGE_MAXIMUM'])
-        trainer.impose_class_image_max()
-    else:
-        print("no max")
+
+    trainer.impose_class_image_max()
 
     trainer.copy_class_list_file()
     trainer.read_class_list()
@@ -294,9 +293,9 @@ if __name__ == "__main__":
         }
     })
 
-    # trainer.assemble_model()
-    # trainer.configure_generators()
-    # trainer.train_model()
-    # trainer.save_model()
-    # trainer.evaluate()
+    trainer.assemble_model()
+    trainer.configure_generators()
+    trainer.train_model()
+    trainer.save_model()
+    trainer.evaluate()
 
