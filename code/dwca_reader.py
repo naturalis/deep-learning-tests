@@ -166,7 +166,7 @@ if __name__ == "__main__":
         reader.set_dwca_file_path()
 
     if 'CLASS_IMAGE_MINIMUM' in os.environ:
-        reader.set_class_image_minimum(int(os.environ['CLASS_IMAGE_MINIMUM']))
+        reader.set_class_image_minimum(os.environ['CLASS_IMAGE_MINIMUM'])
 
     if 'CLASS_IMAGE_MAXIMUM' in os.environ:
         reader.set_class_image_maximum(os.environ['CLASS_IMAGE_MAXIMUM'])
