@@ -30,7 +30,6 @@ class BaseClass():
     model_name = None
     project_root = None
     image_path = None
-    downloaded_images_list_file = None
     image_list_class_col = None
     image_list_image_col = None
     class_list_file = None
@@ -106,6 +105,7 @@ class BaseClass():
             self.logger.info("created model folder {}".format(self.model_folder))
 
         self.class_list_file_model = os.path.join(self.model_folder, "classes.csv")
+        self.downloaded_images_file_model = os.path.join(self.model_folder, "downloaded_images.csv")
 
     def set_model_settings(self, model_settings):
         self.model_settings = model_settings
@@ -114,15 +114,16 @@ class BaseClass():
 
     # TODO: implement Test split
     def read_image_list_file(self, class_col=0, image_col=1):
+        if not os.path.exists(self.downloaded_images_file_model):
+            copyfile(self.downloaded_images_file, self.downloaded_images_file_model)
+            self.logger.info("copied downloaded images file {}".format(self.downloaded_images_file_model))
 
         self.image_list_class_col = class_col
         self.image_list_image_col = image_col
 
-        self.downloaded_images_list_file = self.downloaded_images_file
+        self.logger.info("reading images from: {}".format(self.downloaded_images_file_model))
 
-        self.logger.info("reading images from: {}".format(self.downloaded_images_list_file))
-
-        df = _csv_to_dataframe(filepath=self.downloaded_images_list_file,
+        df = _csv_to_dataframe(filepath=self.downloaded_images_file_model,
                                usecols=[self.image_list_class_col, self.image_list_image_col])
         # if Test split
         #   df = df.sample(frac=1)
