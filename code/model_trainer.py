@@ -275,7 +275,7 @@ if __name__ == "__main__":
         "freeze_layers": [ "none" ], # "base_model", # 249, # none
         "callbacks" : [
             [ 
-                tf.keras.callbacks.EarlyStopping(monitor="val_loss", patience=5, mode="auto", restore_best_weights=True, verbose=1),
+                # tf.keras.callbacks.EarlyStopping(monitor="val_loss", patience=5, mode="auto", restore_best_weights=True, verbose=1),
                 # tf.keras.callbacks.TensorBoard(trainer.get_tensorboard_log_path()),
                 tf.keras.callbacks.ReduceLROnPlateau(monitor="val_loss", factor=0.1, patience=4, min_lr=1e-8, verbose=1),
                 tf.keras.callbacks.ModelCheckpoint(trainer.get_model_path(), monitor="val_acc", save_best_only=True, save_freq="epoch", verbose=1)
@@ -299,3 +299,5 @@ if __name__ == "__main__":
     trainer.save_model()
     trainer.evaluate()
 
+
+get_downloaded_images_file_model_path
