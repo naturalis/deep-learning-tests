@@ -149,6 +149,7 @@ class BaseClass():
         reduced = pd.DataFrame(columns=[self.COL_CLASS, self.COL_IMAGE])
 
         for this_class, item in grouped:
+            print(this_class)
             n=1
             for item in grouped.get_group(this_class)["image"].iteritems():
                 reduced.loc[reduced.shape[0]]=[this_class,item]

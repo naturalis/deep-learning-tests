@@ -88,3 +88,4 @@ sudo docker-compose run tensorflow /code/model_analysis.py v1.x
 v1.1--min-20
 v1.1--min-50
 v1.1--min-100
+v1.1--min-350
