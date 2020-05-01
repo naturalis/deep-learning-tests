@@ -149,7 +149,6 @@ class BaseClass():
         reduced = pd.DataFrame(columns=[self.COL_CLASS, self.COL_IMAGE])
 
         for this_class, item in grouped:
-            print(this_class)
             n=1
             for item in grouped.get_group(this_class)["image"].iteritems():
                 reduced.loc[reduced.shape[0]]=[this_class,item]
@@ -158,6 +157,8 @@ class BaseClass():
                 n = n + 1
 
         self.traindf = reduced
+
+        print(reduced)
 
         self.logger.info("imposed class_image_max={}: {} images in {} classes".format(self.class_image_max,len(self.traindf),len(grouped)))
 
