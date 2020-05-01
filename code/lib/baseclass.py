@@ -151,9 +151,7 @@ class BaseClass():
         for this_class, item in grouped:
             n=1
             for item in grouped.get_group(this_class)["image"].iteritems():
-                print(item)
-                print(item[1])
-                reduced.loc[reduced.shape[0]]=[this_class,item]
+                reduced.loc[reduced.shape[0]]=[this_class,item[1]]
                 if n >= self.class_image_max:
                     break
                 n = n + 1
