@@ -129,7 +129,6 @@ class DwcaReader(baseclass.BaseClass):
             c = csv.writer(csvfile, delimiter=',', quotechar='"')
             for item in self.get_class_list():
                 self.total_images += len(item.get_images())
-                print(len(item.get_images()))
                 for image in item.get_images():
                     c.writerow([item.get_name(), image])
 
