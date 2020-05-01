@@ -294,5 +294,3 @@ if __name__ == "__main__":
     trainer.save_model()
     trainer.evaluate()
 
-
-get_downloaded_images_file_model_path
