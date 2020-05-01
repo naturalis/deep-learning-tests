@@ -22,6 +22,9 @@ class ClassificationClass:
     def get_images(self):
         return self.images
 
+    def get_image_count(self):
+        return len(self.images)
+
     def add_ids(self, ids):
         self.ids = self.ids + ids
 
@@ -40,8 +43,6 @@ class DwcaReader(baseclass.BaseClass):
     dwca_column_headers = {"id": None, "taxon": None, "images": None}
     dwca_column_indices = {"id": None, "taxon": None, "images": None}
     classification_classes = []
-    class_image_minimum = 2
-
     total_images = 0
 
     def __init__(self):
@@ -95,13 +96,11 @@ class DwcaReader(baseclass.BaseClass):
                     this_class = ClassificationClass(class_name)
                     self.classification_classes.append(this_class)
 
-                this_class.add_images(row[self.dwca_column_indices["images"]].split("|"))
-                this_class.add_ids(row[self.dwca_column_indices["id"]].split("|"))
+                if self.class_image_maximum == 0 or this_class.get_image_count() < self.class_image_maximum:
+                    this_class.add_images(row[self.dwca_column_indices["images"]].split("|"))
+                    this_class.add_ids(row[self.dwca_column_indices["id"]].split("|"))
 
-    def set_class_image_minimum(self, class_image_minimum):
-        self.class_image_minimum = class_image_minimum
-
-    def get_class_list(self, apply_class_image_minimum=True):
+    def get_class_list(self):
         return [x for x in self.classification_classes
                 if len(x.get_images()) >= self.class_image_minimum
                 or self.class_image_minimum == 0]
@@ -142,6 +141,7 @@ class DwcaReader(baseclass.BaseClass):
                 "dwca_file": self.dwca_file_path,
                 "dwca_column_headers": self.dwca_column_headers,
                 "class_image_minimum": self.class_image_minimum,
+                "class_image_maximum": self.class_image_maximum,
             },
             "output": {
                 "classes": len(self.get_class_list()),
@@ -167,6 +167,9 @@ if __name__ == "__main__":
 
     if 'CLASS_IMAGE_MINIMUM' in os.environ:
         reader.set_class_image_minimum(int(os.environ['CLASS_IMAGE_MINIMUM']))
+
+    if 'CLASS_IMAGE_MAXIMUM' in os.environ:
+        reader.set_class_image_maximum(os.environ['CLASS_IMAGE_MAXIMUM'])
 
     reader.set_dwca_column_headers(id_column="catalogNumber", taxon_column="scientificName",
                                    images_column="associatedMedia")

@@ -76,6 +76,7 @@ Image Downloader
 
 ModelTrainer
   TODO: implement Test split
+  TODO: image max is now in dwca downloader, should be configurable in trainer
 
 
 

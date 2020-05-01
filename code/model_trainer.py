@@ -246,11 +246,6 @@ if __name__ == "__main__":
     
     trainer.read_image_list_file(image_col=2)
 
-    if 'CLASS_IMAGE_MAXIMUM' in os.environ:
-        trainer.set_class_image_max(os.environ['CLASS_IMAGE_MAXIMUM'])
-
-    trainer.impose_class_image_max()
-
     trainer.copy_class_list_file()
     trainer.read_class_list()
 

@@ -34,7 +34,8 @@ class BaseClass():
     image_list_image_col = None
     class_list_file = None
     class_list_file_class_col = None
-    class_image_max = None
+    class_image_minimum = 2
+    class_image_maximum = 0
     model_path = None
     architecture_path = None
     analysis_path = None
@@ -137,28 +138,11 @@ class BaseClass():
 
         self.logger.info("read {} images in {} classes".format(self.traindf[self.COL_IMAGE].nunique(),self.traindf[self.COL_CLASS].nunique()))
 
-    def set_class_image_max(self,max):
-        self.class_image_max = int(max)
+    def set_class_image_minimum(self, class_image_minimum):
+        self.class_image_minimum = int(class_image_minimum)
 
-    def impose_class_image_max(self):
-        if self.class_image_max is None:
-            self.logger.info("call to impose_class_image_max ignored (class_image_max: {})".format(self.class_image_max))
-            return
-
-        grouped = self.traindf.groupby(by=self.COL_CLASS)
-        reduced = pd.DataFrame(columns=[self.COL_CLASS, self.COL_IMAGE])
-
-        for this_class, item in grouped:
-            n=1
-            for item in grouped.get_group(this_class)["image"].iteritems():
-                reduced.loc[reduced.shape[0]]=[this_class,item[1]]
-                if n >= self.class_image_max:
-                    break
-                n = n + 1
-
-        self.traindf = reduced
-        self.logger.info("imposed class_image_max={}: {} images in {} classes".format(self.class_image_max,len(self.traindf),len(grouped)))
-
+    def set_class_image_maximum(self,class_image_maximum):
+        self.class_image_maximum = int(class_image_maximum)
 
     def read_class_list(self, class_col=0):
         if not os.path.isfile(self.class_list_file_model):
