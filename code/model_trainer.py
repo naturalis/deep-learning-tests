@@ -284,7 +284,7 @@ if __name__ == "__main__":
             "horizontal_flip": True,
             "width_shift_range": 0.2,
             "height_shift_range": 0.2, 
-            "vertical_flip": False
+            "vertical_flip": True
         }
     })
 
