@@ -267,13 +267,13 @@ if __name__ == "__main__":
         ],
         "batch_size": 64,
         "epochs": [ 200 ], # epochs single value or list controls whether training is phased
-        "freeze_layers": [ "base_model" ], # "base_model", # 249, # none
+        "freeze_layers": [ "none" ], # "base_model", # 249, # none
         "callbacks" : [
             [ 
                 tf.keras.callbacks.EarlyStopping(monitor="val_loss", patience=5, mode="auto", restore_best_weights=True, verbose=1),
                 # tf.keras.callbacks.TensorBoard(trainer.get_tensorboard_log_path()),
                 tf.keras.callbacks.ReduceLROnPlateau(monitor="val_loss", factor=0.1, patience=4, min_lr=1e-8, verbose=1),
-                tf.keras.callbacks.ModelCheckpoint(trainer.get_model_path(), monitor="val_acc", save_best_only=True, save_freq="epoch", verbose=1)
+                tf.keras.callbacks.ModelCheckpoint(trainer.get_model_path(), monitor="val_loss", save_best_only=True, save_freq="epoch", verbose=1)
             ]
         ],
         "metrics" : [ "acc" ],
