@@ -263,14 +263,14 @@ if __name__ == "__main__":
         "base_model": tf.keras.applications.InceptionV3(weights="imagenet", include_top=False),  
         "loss": tf.keras.losses.CategoricalCrossentropy(),
         "optimizer": [
-            tf.keras.optimizers.RMSprop(learning_rate=1e-4),
+            tf.keras.optimizers.RMSprop(learning_rate=1e-5),
         ],
-        "batch_size": 64, # 64
+        "batch_size": 64,
         "epochs": [ 200 ], # epochs single value or list controls whether training is phased
         "freeze_layers": [ "none" ], # "base_model", # 249, # none
         "callbacks" : [
             [ 
-                # tf.keras.callbacks.EarlyStopping(monitor="val_loss", patience=5, mode="auto", restore_best_weights=True, verbose=1),
+                tf.keras.callbacks.EarlyStopping(monitor="val_loss", patience=5, mode="auto", restore_best_weights=True, verbose=1),
                 # tf.keras.callbacks.TensorBoard(trainer.get_tensorboard_log_path()),
                 tf.keras.callbacks.ReduceLROnPlateau(monitor="val_loss", factor=0.1, patience=4, min_lr=1e-8, verbose=1),
                 tf.keras.callbacks.ModelCheckpoint(trainer.get_model_path(), monitor="val_acc", save_best_only=True, save_freq="epoch", verbose=1)
