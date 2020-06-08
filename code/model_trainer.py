@@ -267,7 +267,7 @@ if __name__ == "__main__":
         ],
         "batch_size": 64,
         "epochs": [ 200 ], # epochs single value or list controls whether training is phased
-        "freeze_layers": [ "none" ], # "base_model", # 249, # none
+        "freeze_layers": [ "base_model" ], # "base_model", # 249, # none
         "callbacks" : [
             [ 
                 tf.keras.callbacks.EarlyStopping(monitor="val_loss", patience=5, mode="auto", restore_best_weights=True, verbose=1),
