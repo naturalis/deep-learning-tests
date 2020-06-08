@@ -263,7 +263,7 @@ if __name__ == "__main__":
         "base_model": tf.keras.applications.InceptionV3(weights="imagenet", include_top=False),  
         "loss": tf.keras.losses.CategoricalCrossentropy(),
         "optimizer": [
-            tf.keras.optimizers.RMSprop(learning_rate=1e-6),
+            tf.keras.optimizers.RMSprop(learning_rate=1e-4),
         ],
         "batch_size": 64,
         "epochs": [ 200 ], # epochs single value or list controls whether training is phased
