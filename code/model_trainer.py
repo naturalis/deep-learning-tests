@@ -265,9 +265,9 @@ if __name__ == "__main__":
         "optimizer": [
             tf.keras.optimizers.RMSprop(learning_rate=1e-4),
         ],
-        "batch_size": 32, # 64
+        "batch_size": 64, # 64
         "epochs": [ 200 ], # epochs single value or list controls whether training is phased
-        "freeze_layers": [ 249 ], # "base_model", # 249, # none
+        "freeze_layers": [ "none" ], # "base_model", # 249, # none
         "callbacks" : [
             [ 
                 # tf.keras.callbacks.EarlyStopping(monitor="val_loss", patience=5, mode="auto", restore_best_weights=True, verbose=1),
