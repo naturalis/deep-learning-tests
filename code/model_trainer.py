@@ -90,6 +90,7 @@ class ModelTrainer(baseclass.BaseClass):
         self.predictions = tf.keras.layers.Dense(len(self.class_list), activation='softmax')(x)
         self.model = tf.keras.models.Model(inputs=self.base_model.input, outputs=self.predictions)
 
+        self.logger.info("model has {} classes".format(len(self.class_list)))
         self.logger.info("model has {} layers (base model: {})".format(len(self.model.layers), len(self.base_model.layers)))
 
     def set_frozen_layers(self):
