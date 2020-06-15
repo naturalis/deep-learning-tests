@@ -258,12 +258,14 @@ if __name__ == "__main__":
 
         # https://www.tensorflow.org/api_docs/python/tf/keras/callbacks/LearningRateScheduler
 
+    learning_rate = float(os.environ["INITIAL_LR"]) if "INITIAL_LR" in os.environ else 1e-4
+
     trainer.set_model_settings({
         "validation_split": 0.2,
         "base_model": tf.keras.applications.InceptionV3(weights="imagenet", include_top=False),  
         "loss": tf.keras.losses.CategoricalCrossentropy(),
         "optimizer": [
-            tf.keras.optimizers.RMSprop(learning_rate=1e-4),
+            tf.keras.optimizers.RMSprop(learning_rate=learning_rate),
         ],
         "batch_size": 64,
         "epochs": [ 200 ], # epochs single value or list controls whether training is phased

@@ -79,6 +79,15 @@ ModelTrainer
   TODO: image max is now in dwca downloader, should be configurable in trainer
 
 
+have .env-file:
+PROJECT_ROOT=/data/sylviidae
+CLASS_IMAGE_MINIMUM=100
+#CLASS_IMAGE_MAXIMUM=1000
+IMAGE_URL_TO_NAME={"expression": "/file/id/|/format/[a-z]*", "replace": "", "postfix": ".jpg"}
+# DEBUG=1
+
+
+
 
 sudo docker-compose run tensorflow /code/dwca_reader.py
 sudo docker-compose run tensorflow /code/image_downloader.py
