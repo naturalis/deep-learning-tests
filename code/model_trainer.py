@@ -87,6 +87,10 @@ class ModelTrainer(baseclass.BaseClass):
         x = tf.keras.layers.GlobalAveragePooling2D()(x)
         # x = tf.keras.layers.Dense(1024, activation='relu')(x)
 
+        x = tf.keras.layers.Dropout(.2)(x)
+        x = tf.keras.layers.Dense(1024, activation='relu')(x)
+
+
         self.predictions = tf.keras.layers.Dense(len(self.class_list), activation='softmax')(x)
         self.model = tf.keras.models.Model(inputs=self.base_model.input, outputs=self.predictions)
 
@@ -273,7 +277,7 @@ if __name__ == "__main__":
         ],
         "batch_size": batch_size,
         "epochs": [ 200 ], # epochs single value or list controls whether training is phased
-        "freeze_layers": [ "base_model" ], # "base_model", # 249, # none
+        "freeze_layers": [ "none" ], # "base_model", # 249, # none
         "callbacks" : [
             [ 
                 tf.keras.callbacks.EarlyStopping(monitor="val_loss", patience=5, mode="auto", restore_best_weights=True, verbose=1),
