@@ -264,7 +264,7 @@ if __name__ == "__main__":
         # https://www.tensorflow.org/api_docs/python/tf/keras/callbacks/LearningRateScheduler
 
     learning_rate = float(os.environ["INITIAL_LR"]) if "INITIAL_LR" in os.environ else 1e-4
-    batch_size = float(os.environ["BATCH_SIZE"]) if "BATCH_SIZE" in os.environ else 64
+    batch_size = int(os.environ["BATCH_SIZE"]) if "BATCH_SIZE" in os.environ else 64
     print(learning_rate)
     print(batch_size)
 
