@@ -259,6 +259,7 @@ if __name__ == "__main__":
         # https://www.tensorflow.org/api_docs/python/tf/keras/callbacks/LearningRateScheduler
 
     learning_rate = float(os.environ["INITIAL_LR"]) if "INITIAL_LR" in os.environ else 1e-4
+    print(learning_rate)
 
     trainer.set_model_settings({
         "validation_split": 0.2,
