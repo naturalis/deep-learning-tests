@@ -260,7 +260,9 @@ if __name__ == "__main__":
         # https://www.tensorflow.org/api_docs/python/tf/keras/callbacks/LearningRateScheduler
 
     learning_rate = float(os.environ["INITIAL_LR"]) if "INITIAL_LR" in os.environ else 1e-4
+    batch_size = float(os.environ["BATCH_SIZE"]) if "BATCH_SIZE" in os.environ else 64
     print(learning_rate)
+    print(batch_size)
 
     trainer.set_model_settings({
         "validation_split": 0.2,
@@ -269,9 +271,9 @@ if __name__ == "__main__":
         "optimizer": [
             tf.keras.optimizers.RMSprop(learning_rate=learning_rate),
         ],
-        "batch_size": 64,
+        "batch_size": batch_size,
         "epochs": [ 200 ], # epochs single value or list controls whether training is phased
-        "freeze_layers": [ "none" ], # "base_model", # 249, # none
+        "freeze_layers": [ "base_model" ], # "base_model", # 249, # none
         "callbacks" : [
             [ 
                 tf.keras.callbacks.EarlyStopping(monitor="val_loss", patience=5, mode="auto", restore_best_weights=True, verbose=1),
