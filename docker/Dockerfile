@@ -9,6 +9,9 @@ MAINTAINER maarten.schermer@naturalis.nl
 COPY . /app
 WORKDIR /app
 
+RUN apt-get update && apt-get install -y \
+    nvidia-docker2
+
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 
