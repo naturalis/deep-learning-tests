@@ -114,7 +114,7 @@ class BaseClass():
         with open(self.class_list_file_model, 'r', encoding='utf-8-sig') as file:
             c = csv.reader(file)
             for row in c:
-                print(c)
+                print(c[0],c[1])
 
 
     def class_list_apply_image_minimum(self):
