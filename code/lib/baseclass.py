@@ -123,7 +123,7 @@ class BaseClass():
         print(self.class_list)
         # is_2002 =  self.class_list[self.class_list_file_class_col] in self.classes_to_use
         # self.class_list = self.class_list[is_2002]
-        self.class_list = self.class_list[self.class_list[self.class_list_file_class_col] in self.classes_to_use]
+        self.class_list = self.class_list[self.class_list[self.class_list_file_class_col].isin(self.classes_to_use)]
         print(self.class_list)
 
         return 
