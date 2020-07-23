@@ -173,6 +173,15 @@ class BaseClass():
 
 
     def image_list_apply_class_list(self):
+        print(self.traindf)
+        pass
+
+        keys_before = len(self.class_list)
+        self.class_list = self.class_list[self.class_list[self.class_list_file_class_col].isin(self.classes_to_use)]
+        keys_after = len(self.class_list)
+        self.logger.info("dropped {} out of {} classes due to {} image minimum".format(
+            keys_before - keys_after, keys_before, self.class_image_minimum))
+
         pass
         # print(self.traindf)
 
