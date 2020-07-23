@@ -259,8 +259,6 @@ if __name__ == "__main__":
     trainer.read_image_list_file(image_col=2)
     trainer.image_list_apply_class_list()
 
-    exit(0)
-
         # "base_model": tf.keras.applications.MobileNetV2(weights="imagenet", include_top=False),  
         # "base_model": tf.keras.applications.ResNet50(weights="imagenet", include_top=False),
 
