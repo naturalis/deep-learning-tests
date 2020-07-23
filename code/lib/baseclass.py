@@ -111,11 +111,16 @@ class BaseClass():
         self.class_list_file_class_col = class_col
         self.class_list = _csv_to_dataframe(self.class_list_file_model, [self.class_list_file_class_col])
 
+        with open(self.class_list_file_model, 'r', encoding='utf-8-sig') as file:
+            c = csv.reader(file)
+            for row in c:
+                print(c)
+
+
     def class_list_apply_image_minimum(self):
         print(self.class_list)
         is_2002 =  self.class_list[self.class_list_file_class_col]=="Papilio (Menelaides) memnon memnon Linnaeus, 1758"
         self.class_list = self.class_list[is_2002]
-        self.class_list.reindex()
         print(self.class_list)
 
         return 
