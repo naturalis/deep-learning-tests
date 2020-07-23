@@ -115,6 +115,7 @@ class BaseClass():
         print(self.class_list)
         is_2002 =  self.class_list[self.class_list_file_class_col]=="Papilio (Menelaides) memnon memnon Linnaeus, 1758"
         self.class_list = self.class_list[is_2002]
+        self.class_list.reindex()
         print(self.class_list)
 
         return 
@@ -175,7 +176,7 @@ class BaseClass():
 
 
     def image_list_apply_class_list(self):
-        print(self.traindf)
+        # print(self.traindf)
 
         # keys_before = set(self.class_list.keys())
         # self.class_list = { k : v for k,v in self.class_list.items() if v >= self.class_image_minimum }
