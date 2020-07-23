@@ -123,7 +123,7 @@ class BaseClass():
         before = len(self.class_list)
         self.class_list = self.class_list[self.class_list[self.class_list_file_class_col].isin(self.classes_to_use)]
         after = len(self.class_list)
-        self.logger.info("dropped {} out of {} classes due to {} image minimum".format(
+        self.logger.info("dropped {} out of {} classes due to image minimum of {}".format(
             before - after, before, self.class_image_minimum))
 
     def get_class_list(self):
@@ -175,10 +175,10 @@ class BaseClass():
         before = len(self.traindf)
         self.traindf = self.traindf[self.traindf[self.COL_CLASS].isin(self.classes_to_use)]
         after = len(self.traindf)
-        self.logger.info("dropped {} out of {} images due to {} image minimum".format(
+        self.logger.info("dropped {} out of {} images due to image minimum of {}".format(
             before - after, before, self.class_image_minimum))
 
-        self.logger.info("read {} images in {} classes".format(self.traindf[self.COL_IMAGE].nunique(),self.traindf[self.COL_CLASS].nunique()))
+        self.logger.info("retained {} images in {} classes".format(self.traindf[self.COL_IMAGE].nunique(),self.traindf[self.COL_CLASS].nunique()))
 
 
     def get_model_path(self):
