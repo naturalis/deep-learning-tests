@@ -109,16 +109,15 @@ class BaseClass():
         if not os.path.isfile(self.class_list_file_model):
             raise FileNotFoundError("class list file not found: {}".format(self.class_list_file_model))
         self.class_list_file_class_col = class_col
-        self.class_list = _csv_to_dataframe(self.class_list_file_model, [self.class_list_file_class_col,1])
+        self.class_list = _csv_to_dataframe(self.class_list_file_model, [self.class_list_file_class_col])
 
     def class_list_apply_image_minimum(self):
         keys_before = set(self.class_list.keys())
 
+        for k,v in self.class_list.items():
+            print(v)
 
-        print(self.class_list)
-        print(self.class_image_minimum)
-
-        self.class_list = { k : v for k,v in self.class_list.items() if v[1] >= self.class_image_minimum }
+        self.class_list = { k : v for k,v in self.class_list.items() if v >= self.class_image_minimum }
         keys_after = set(self.class_list.keys())
         self.logger.info("classes dropped due to {} image minimum: {}".format(self.class_image_minimum,', '.join(keys_before - keys_after)))
 
