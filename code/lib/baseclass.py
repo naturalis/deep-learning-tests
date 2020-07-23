@@ -120,10 +120,10 @@ class BaseClass():
                     self.classes_to_use.append(row[0])
 
     def class_list_apply_image_minimum(self):
-        keys_before = set(self.class_list.keys())
+        keys_before = len(self.class_list)
         self.class_list = self.class_list[self.class_list[self.class_list_file_class_col].isin(self.classes_to_use)]
-        keys_after = set(self.class_list.keys())
-        self.logger.info("classes dropped due to {} image minimum: {}".format(self.class_image_minimum,'; '.join(keys_before - keys_after)))
+        keys_after = len(self.class_list)
+        self.logger.info("classes dropped due to {} image minimum: {}".format(keys_before,keys_after))
 
     def get_class_list(self):
         return self.class_list
