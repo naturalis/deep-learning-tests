@@ -120,11 +120,11 @@ class BaseClass():
                     self.classes_to_use.append(row[0])
 
     def class_list_apply_image_minimum(self):
-        keys_before = len(self.class_list)
+        before = len(self.class_list)
         self.class_list = self.class_list[self.class_list[self.class_list_file_class_col].isin(self.classes_to_use)]
-        keys_after = len(self.class_list)
+        after = len(self.class_list)
         self.logger.info("dropped {} out of {} classes due to {} image minimum".format(
-            keys_before - keys_after, keys_before, self.class_image_minimum))
+            before - after, before, self.class_image_minimum))
 
     def get_class_list(self):
         return self.class_list
@@ -171,25 +171,14 @@ class BaseClass():
 
         self.logger.info("read {} images in {} classes".format(self.traindf[self.COL_IMAGE].nunique(),self.traindf[self.COL_CLASS].nunique()))
 
-
     def image_list_apply_class_list(self):
-        print(self.traindf)
-        pass
+        before = len(self.traindf)
+        self.traindf = self.traindf[self.traindf[self.COL_CLASS].isin(self.classes_to_use)]
+        after = len(self.traindf)
+        self.logger.info("dropped {} out of {} images due to {} image minimum".format(
+            before - after, before, self.class_image_minimum))
 
-        keys_before = len(self.class_list)
-        self.class_list = self.class_list[self.class_list[self.class_list_file_class_col].isin(self.classes_to_use)]
-        keys_after = len(self.class_list)
-        self.logger.info("dropped {} out of {} classes due to {} image minimum".format(
-            keys_before - keys_after, keys_before, self.class_image_minimum))
-
-        pass
-        # print(self.traindf)
-
-        # keys_before = set(self.class_list.keys())
-        # self.class_list = { k : v for k,v in self.class_list.items() if v >= self.class_image_minimum }
-        # keys_after = set(self.class_list.keys())
-        # self.logger.info("classes dropped due to {} image minimum: {}".format(self.class_image_minimum,', '.join(keys_before - keys_after)))
-
+        self.logger.info("read {} images in {} classes".format(self.traindf[self.COL_IMAGE].nunique(),self.traindf[self.COL_CLASS].nunique()))
 
 
     def get_model_path(self):
