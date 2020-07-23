@@ -123,7 +123,8 @@ class BaseClass():
         keys_before = len(self.class_list)
         self.class_list = self.class_list[self.class_list[self.class_list_file_class_col].isin(self.classes_to_use)]
         keys_after = len(self.class_list)
-        self.logger.info("dropped {} classes due to {} image minimum".format(keys_before - keys_after, self.class_image_minimum))
+        self.logger.info("dropped {} classes out of {} due to {} image minimum".format(
+            keys_before - keys_after, keys_before, self.class_image_minimum))
 
     def get_class_list(self):
         return self.class_list
