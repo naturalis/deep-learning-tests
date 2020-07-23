@@ -41,6 +41,7 @@ class BaseClass():
     analysis_path = None
     traindf = None
     class_list = None
+    classes_to_use = None
     model_settings = None
     COL_CLASS = "class"
     COL_IMAGE = "image"
@@ -111,15 +112,16 @@ class BaseClass():
         self.class_list_file_class_col = class_col
         self.class_list = _csv_to_dataframe(self.class_list_file_model, [self.class_list_file_class_col])
 
+        # making a list of just the classes that make the image minimum
         with open(self.class_list_file_model, 'r', encoding='utf-8-sig') as file:
             c = csv.reader(file)
             for row in c:
-                print(row[0],row[1],self.class_image_minimum,int(row[1])>=self.class_image_minimum)
-
+                if int(row[1])>=self.class_image_minimum:
+                    self.classes_to_use.append(row[0])
 
     def class_list_apply_image_minimum(self):
         print(self.class_list)
-        is_2002 =  self.class_list[self.class_list_file_class_col]=="Papilio (Menelaides) memnon memnon Linnaeus, 1758"
+        is_2002 =  self.class_list[self.class_list_file_class_col] in self.classes_to_use
         self.class_list = self.class_list[is_2002]
         print(self.class_list)
 
