@@ -41,7 +41,7 @@ class BaseClass():
     analysis_path = None
     traindf = None
     class_list = None
-    classes_to_use = None
+    classes_to_use = []
     model_settings = None
     COL_CLASS = "class"
     COL_IMAGE = "image"
@@ -117,7 +117,7 @@ class BaseClass():
             c = csv.reader(file)
             for row in c:
                 if int(row[1])>=self.class_image_minimum:
-                    self.classes_to_use.push(row[0])
+                    self.classes_to_use.append(row[0])
 
     def class_list_apply_image_minimum(self):
         print(self.class_list)
