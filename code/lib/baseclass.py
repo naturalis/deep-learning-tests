@@ -115,7 +115,7 @@ class BaseClass():
         keys_before = set(self.class_list.keys())
 
         for k,v in self.class_list.items():
-            print(v)
+            print(dir(v))
 
         self.class_list = { k : v for k,v in self.class_list.items() if v >= self.class_image_minimum }
         keys_after = set(self.class_list.keys())
