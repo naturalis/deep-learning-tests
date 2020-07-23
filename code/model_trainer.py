@@ -269,8 +269,9 @@ if __name__ == "__main__":
 
     learning_rate = float(os.environ["INITIAL_LR"]) if "INITIAL_LR" in os.environ else 1e-4
     batch_size = int(os.environ["BATCH_SIZE"]) if "BATCH_SIZE" in os.environ else 64
-    print(learning_rate)
-    print(batch_size)
+
+    trainer.logger.info("learning_rate: {}".format(learning_rate))
+    trainer.logger.info("batch_size: {}".format(batch_size))
 
     trainer.set_model_settings({
         "validation_split": 0.2,
