@@ -166,11 +166,12 @@ if __name__ == "__main__":
 
 
 
- mkdir /data/maarten.schermer/data/corvidae/log
- touch  /data/maarten.schermer/data/corvidae/log/general.log
- mkdir  /data/maarten.schermer/data/corvidae/dwca
- mkdir  /data/maarten.schermer/data/corvidae/lists
- mkdir  /data/maarten.schermer/data/corvidae/images
- mkdir  /data/maarten.schermer/data/corvidae/models
+mkdir /data/maarten.schermer/data/corvidae/log
+touch  /data/maarten.schermer/data/corvidae/log/general.log
+mkdir  /data/maarten.schermer/data/corvidae/dwca
+mkdir  /data/maarten.schermer/data/corvidae/lists
+mkdir  /data/maarten.schermer/data/corvidae/images
+mkdir  /data/maarten.schermer/data/corvidae/models
+mkdir  /data/maarten.schermer/data/corvidae/config
 
- mkdir  /data/maarten.schermer/data/corvidae/config
+chmdo 777  the lot
