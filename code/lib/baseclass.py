@@ -113,6 +113,11 @@ class BaseClass():
 
     def class_list_apply_image_minimum(self):
         keys_before = set(self.class_list.keys())
+
+
+        print(self.class_list)
+        print(self.class_image_minimum)
+
         self.class_list = { k : v for k,v in self.class_list.items() if v >= self.class_image_minimum }
         keys_after = set(self.class_list.keys())
         self.logger.info("classes dropped due to {} image minimum: {}".format(self.class_image_minimum,', '.join(keys_before - keys_after)))
