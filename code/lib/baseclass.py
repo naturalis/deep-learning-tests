@@ -121,8 +121,9 @@ class BaseClass():
 
     def class_list_apply_image_minimum(self):
         print(self.class_list)
-        is_2002 =  self.class_list[self.class_list_file_class_col] in self.classes_to_use
-        self.class_list = self.class_list[is_2002]
+        # is_2002 =  self.class_list[self.class_list_file_class_col] in self.classes_to_use
+        # self.class_list = self.class_list[is_2002]
+        self.class_list = self.class_list[self.class_list[self.class_list_file_class_col] in self.classes_to_use]
         print(self.class_list)
 
         return 
