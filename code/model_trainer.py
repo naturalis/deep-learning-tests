@@ -247,17 +247,25 @@ if __name__ == "__main__":
     trainer.set_model_name()
     trainer.set_model_folder()
     
-    trainer.read_image_list_file(image_col=2)
+    if 'CLASS_IMAGE_MINIMUM' in os.environ:
+        trainer.set_class_image_minimum(os.environ['CLASS_IMAGE_MINIMUM'])
 
-    trainer.copy_class_list_file()
+    # if 'CLASS_IMAGE_MAXIMUM' in os.environ:
+    #     trainer.set_class_image_maximum(os.environ['CLASS_IMAGE_MAXIMUM'])
+
     trainer.read_class_list()
+    trainer.copy_class_list_file()
+    trainer.class_list_apply_image_minimum()
+    trainer.read_image_list_file(image_col=2)
+    trainer.image_list_apply_class_list()
+
+    exit(0)
 
         # "base_model": tf.keras.applications.MobileNetV2(weights="imagenet", include_top=False),  
         # "base_model": tf.keras.applications.ResNet50(weights="imagenet", include_top=False),
 
         # WARNING:tensorflow:Method (on_train_batch_end) is slow compared to the batch update (0.325404). Check your callbacks.
         # maybe something with TensorBoard callback, as the other ones get called at epoch end, not batch end
-
 
         # https://www.tensorflow.org/api_docs/python/tf/keras/callbacks/LearningRateScheduler
 

@@ -95,6 +95,30 @@ class BaseClass():
         self.class_list_file = os.path.join(self.project_root, "lists", "classes.csv")
         self.downloaded_images_file = os.path.join(self.project_root, "lists", "downloaded_images.csv")
 
+    def set_class_image_minimum(self, class_image_minimum):
+        class_image_minimum = int(class_image_minimum)
+        if class_image_minimum > 2:
+            self.class_image_minimum = class_image_minimum
+        else:
+            raise ValueError("class minimum must be greater than 2 ({})".format(class_image_minimum))
+
+    def set_class_image_maximum(self,class_image_maximum):
+        self.class_image_maximum = int(class_image_maximum)
+
+    def read_class_list(self, class_col=0):
+        if not os.path.isfile(self.class_list_file_model):
+            raise FileNotFoundError("class list file not found: {}".format(self.class_list_file_model))
+        self.class_list_file_class_col = class_col
+        self.class_list = _csv_to_dataframe(self.class_list_file_model, [self.class_list_file_class_col])
+
+    def class_list_apply_image_minimum(self):
+        keys_before = set(self.class_list.keys())
+        self.class_list = { k : v for k,v in self.class_list.items() if v >= self.class_image_minimum }
+        keys_after = set(self.class_list.keys())
+        self.logger.info("classes dropped due to {} image minimum: {}".format(self.class_image_minimum,', '.join(keys_before - keys_after)))
+
+    def get_class_list(self):
+        return self.class_list
 
     def copy_class_list_file(self):
         copyfile(self.class_list_file,self.class_list_file_model)
@@ -138,21 +162,16 @@ class BaseClass():
 
         self.logger.info("read {} images in {} classes".format(self.traindf[self.COL_IMAGE].nunique(),self.traindf[self.COL_CLASS].nunique()))
 
-    def set_class_image_minimum(self, class_image_minimum):
-        self.class_image_minimum = int(class_image_minimum)
 
-    def set_class_image_maximum(self,class_image_maximum):
-        self.class_image_maximum = int(class_image_maximum)
+    def image_list_apply_class_list(self):
+        print(self.traindf)
 
-    def read_class_list(self, class_col=0):
-        if not os.path.isfile(self.class_list_file_model):
-            raise FileNotFoundError("class list file not found: {}".format(self.class_list_file_model))
+        # keys_before = set(self.class_list.keys())
+        # self.class_list = { k : v for k,v in self.class_list.items() if v >= self.class_image_minimum }
+        # keys_after = set(self.class_list.keys())
+        # self.logger.info("classes dropped due to {} image minimum: {}".format(self.class_image_minimum,', '.join(keys_before - keys_after)))
 
-        self.class_list_file_class_col = class_col
-        self.class_list = _csv_to_dataframe(self.class_list_file_model, [self.class_list_file_class_col])
 
-    def get_class_list(self):
-        return self.class_list
 
     def get_model_path(self):
         self.model_path = os.path.join(self.model_folder, "model.hdf5")
