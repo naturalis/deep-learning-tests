@@ -176,6 +176,7 @@ class BaseClass():
 
 
     def image_list_apply_class_list(self):
+        pass
         # print(self.traindf)
 
         # keys_before = set(self.class_list.keys())
