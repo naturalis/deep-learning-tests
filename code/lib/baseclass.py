@@ -109,7 +109,7 @@ class BaseClass():
         if not os.path.isfile(self.class_list_file_model):
             raise FileNotFoundError("class list file not found: {}".format(self.class_list_file_model))
         self.class_list_file_class_col = class_col
-        self.class_list = _csv_to_dataframe(self.class_list_file_model, [self.class_list_file_class_col])
+        self.class_list = _csv_to_dataframe(self.class_list_file_model, [self.class_list_file_class_col,1])
 
     def class_list_apply_image_minimum(self):
         keys_before = set(self.class_list.keys())
