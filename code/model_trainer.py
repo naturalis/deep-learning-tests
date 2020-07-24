@@ -289,12 +289,7 @@ if __name__ == "__main__":
 
     # print(dir(basemodel))
     print(basemodel.summary)
-    print(basemodel.weights)
-    print(basemodel.get_config)
-    print(basemodel.metrics)
-    print(basemodel.metrics_names)
     print(basemodel.name)
-    print(basemodel.name_scope)
 
     # print(dir(off))
     # print(dir(andd))
