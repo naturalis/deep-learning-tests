@@ -30,8 +30,6 @@ class ModelAnalysis(baseclass.BaseClass):
             shuffle=False
         )
 
-        print(self.test_generator.classes)
-
     def do_analysis(self):
         batch_size = self.model_settings["batch_size"]
         Y_pred = self.model.predict(self.test_generator)
