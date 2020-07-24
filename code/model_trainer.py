@@ -252,9 +252,10 @@ if __name__ == "__main__":
         }
 
 
-    print(type(fuck))
-    print(type(os.environ["FUCK"]))
-    print(type(json.loads(os.environ["FUCK"])))
+    print(fuck)
+    fuck = json.loads(os.environ["FUCK"])
+    print(fuck)
+
 
     exit(0)
 
