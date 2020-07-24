@@ -208,7 +208,11 @@ class BaseClass():
 
         self.traindfUCK = self.traindf[self.traindf[self.COL_CLASS].isin(self.classes_to_use)]
 
+        print("================================================================================")
+
         self.fuck()
+
+        exit(0)
 
         after = len(self.traindf)
         self.logger.info("dropped {} out of {} images due to image minimum of {}".format(
