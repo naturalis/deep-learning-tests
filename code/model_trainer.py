@@ -274,8 +274,8 @@ if __name__ == "__main__":
     trainer.logger.info("batch_size: {}".format(batch_size))
 
 
-    repr(tf.keras.losses.CategoricalCrossentropy())
-    str(tf.keras.losses.CategoricalCrossentropy())
+    print(repr(tf.keras.losses.CategoricalCrossentropy()))
+    print(str(tf.keras.losses.CategoricalCrossentropy()))
     print(tf.keras.losses.CategoricalCrossentropy())
 
     exit(0)
