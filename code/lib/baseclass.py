@@ -222,15 +222,11 @@ class BaseClass():
                 "vertical_flip": False
             } } )
 
-        print(self.presets)
-
-        return
-
-        self.presets['validation_split'] = float(os_environ["VALIDATION_SPLIT"]) if "VALIDATION_SPLIT" in os_environ else 0.2
-        self.presets['learning_rate'] = float(os_environ["INITIAL_LR"]) if "INITIAL_LR" in os_environ else 1e-4
-        self.presets['batch_size'] = int(os_environ["BATCH_SIZE"]) if "BATCH_SIZE" in os_environ else 64
-        self.presets['epochs'] = json.loads(os_environ["EPOCHS"]) if "EPOCHS" in os_environ else [ 200 ] # [ 10, 200 ] 
-        self.presets['freeze_layers'] = json.loads(os_environ["FREEZE_LAYERS"]) if "FREEZE_LAYERS" in os_environ else [ "none" ]
+        self.presets.update( { "validation_split" : float(os_environ.get("VALIDATION_SPLIT")) if "VALIDATION_SPLIT" in os_environ else 0.2 } )
+        self.presets.update( { "learning_rate" : float(os_environ.get("INITIAL_LR")) if "INITIAL_LR" in os_environ else 1e-4 } )
+        self.presets.update( { "batch_size" : int(os_environ.get("BATCH_SIZE")) if "BATCH_SIZE" in os_environ else 64 } )
+        self.presets.update( { "epochs" : json.loads(os_environ.get("EPOCHS")) if "EPOCHS" in os_environ else [ 200 ] # [ 10, 200 ]  } )
+        self.presets.update( { "freeze_layers" : json.loads(os_environ.get("FREEZE_LAYERS")) if "FREEZE_LAYERS" in os_environ else [ "none" ] } )
             # [ "base_model", "none" ] # 249
 
 
