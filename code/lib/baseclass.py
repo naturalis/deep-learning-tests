@@ -175,8 +175,9 @@ class BaseClass():
     def fuck(self):
         for col in self.traindf.columns: 
             print(col) 
-        list(self.traindf.index)
-
+        
+        for row in self.traindf.index: 
+            print(row, end= " ") 
 
     def image_list_apply_class_list(self):
         before = len(self.traindf)
