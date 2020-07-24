@@ -243,7 +243,7 @@ if __name__ == "__main__":
     trainer = ModelTrainer()
 
     trainer.set_presets(os.environ)
-    print(trainer.presets["initial_learning_rate"])
+    print(trainer.get_preset("initial_learning_rate"))
 
     exit(0)
 
