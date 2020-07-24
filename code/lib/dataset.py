@@ -5,6 +5,10 @@ class DataSet():
     model_trainer = None
     model_summary = None
     model_summary_hash = None
+    model_note = None
+
+    def set_note(self):
+        self.model_note = input("model note:")
 
     def make_dataset(self,model_trainer):
         self.model_trainer = model_trainer
@@ -12,7 +16,7 @@ class DataSet():
 
         print(" ==> " + self.model_trainer.model_name)
         print(" ==> " + self.model_trainer.base_model.name)
-        print(" ==> " + self.model_summary)
+        # print(" ==> " + self.model_summary)
         print(" ==> " + self.model_summary_hash)
         print(" ==> " + str(self.model_trainer.get_preset("image_augmentation")))
         print(" ==> " + str(self.model_trainer.get_preset("validation_split")))
@@ -29,6 +33,13 @@ class DataSet():
         print(" ==> " + str(self.model_trainer.image_path))
         print(" ==> " + str(self.model_trainer.class_list_file))
         print(" ==> " + str(self.model_trainer.downloaded_images_file))
+        print(" ==> " + self.model_note)
+
+    # list of images
+    #     list of URLs!
+    #     classes?
+
+    # naam / notes
 
 
 

@@ -285,7 +285,8 @@ if __name__ == "__main__":
 
     trainer.assemble_model()
     trainer.configure_generators()
-    
+        
+    dataset.set_note()
     dataset.make_dataset(trainer)
 
     exit(0)
@@ -307,14 +308,3 @@ if __name__ == "__main__":
 
 
 
-    # env variables
-    #     PROJECT_ROOT
-    #     CLASS_IMAGE_MINIMUM=10 / 2
-    #     CLASS_IMAGE_MAXIMUM=1000 / None
-
-
-    # list of images
-    #     list of URLs!
-    #     classes?
-
-    # naam / notes
