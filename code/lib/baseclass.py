@@ -227,6 +227,7 @@ class BaseClass():
         self.presets.update( { "batch_size" : int(os_environ.get("BATCH_SIZE")) if "BATCH_SIZE" in os_environ else 64 } )
         self.presets.update( { "epochs" : json.loads(os_environ.get("EPOCHS")) if "EPOCHS" in os_environ else [ 200 ]   } )
         self.presets.update( { "freeze_layers" : json.loads(os_environ.get("FREEZE_LAYERS")) if "FREEZE_LAYERS" in os_environ else [ "none" ] } )
+        self.presets.update( { "metrics" : json.loads(os_environ.get("METRICS")) if "METRICS" in os_environ else [ "acc" ] } )
         # epochs [ 10, 200 ]
         # freeze_layers [ "base_model", "none" ] # 249
 

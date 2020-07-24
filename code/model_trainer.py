@@ -242,13 +242,9 @@ if __name__ == "__main__":
 
     trainer = ModelTrainer()
 
-    trainer.set_presets(os.environ)
-    print(trainer.get_preset("initial_learning_rate"))
-
-    exit(0)
-
     trainer.set_debug(os.environ["DEBUG"]=="1" if "DEBUG" in os.environ else False)
     trainer.set_project_folders(project_root=os.environ['PROJECT_ROOT'])
+    trainer.set_presets(os.environ)
     trainer.set_model_name()
     trainer.set_model_folder()
     
@@ -265,18 +261,15 @@ if __name__ == "__main__":
     trainer.image_list_apply_class_list()
 
     trainer.set_model_settings({
-        "validation_split": 0.2,
+        "validation_split": trainer.get_preset("validation_split"),
         "base_model": tf.keras.applications.InceptionV3(weights="imagenet", include_top=False),
         "loss": tf.keras.losses.CategoricalCrossentropy(),
         "optimizer": [
-            tf.keras.optimizers.RMSprop(learning_rate=initial_learning_rate),
+            tf.keras.optimizers.RMSprop(learning_rate=trainer.get_preset("initial_learning_rate")),
         ],
-        "optimizer_learning_rate": [
-            learning_rate
-        ],
-        "batch_size": batch_size,
-        "epochs": epochs, 
-        "freeze_layers": [ "none" ], # "base_model", # 249, # none
+        "batch_size": trainer.get_preset("batch_size"),
+        "epochs": trainer.get_preset("epochs"), 
+        "freeze_layers": trainer.get_preset("freeze_layers"), 
         "callbacks" : [
             [ 
                 tf.keras.callbacks.EarlyStopping(monitor="val_loss", patience=5, mode="auto", restore_best_weights=True, verbose=1),
@@ -285,8 +278,8 @@ if __name__ == "__main__":
                 tf.keras.callbacks.ModelCheckpoint(trainer.get_model_path(), monitor="val_acc", save_best_only=True, save_freq="epoch", verbose=1)
             ]
         ],
-        "metrics" : [ "acc" ],
-        "image_augmentation" : image_augmentation
+        "metrics" : trainer.get_preset("metrics"),
+        "image_augmentation" : trainer.get_preset("image_augmentation")
     })
 
     trainer.assemble_model()
