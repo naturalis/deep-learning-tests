@@ -42,7 +42,7 @@ class DataSet():
         print(" ==> " + str(self.model_trainer.timestamp))
 
 
-        print(self.model_trainer.traindf.tolist())
+        print([self.model_trainer.traindf.columns.values.tolist()] +  self.model_trainer.traindf.values().tolist())
 
     # list of images
     #     classes?
