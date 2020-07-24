@@ -240,15 +240,14 @@ class ModelTrainer(baseclass.BaseClass):
 
 if __name__ == "__main__":
 
+    trainer = ModelTrainer()
+    dataset = dataset.DataSet()
+
     parser = argparse.ArgumentParser() 
     parser.add_argument("--dataset_note") 
     args = parser.parse_args() 
     if args.dataset_note: 
-        print("fuck: {}".format(args.dataset_note))
-    exit(0)
-
-    trainer = ModelTrainer()
-    dataset = dataset.DataSet()
+        dataset.set_note(args.dataset_note)
 
     trainer.set_debug(os.environ["DEBUG"]=="1" if "DEBUG" in os.environ else False)
     trainer.set_project_folders(project_root=os.environ['PROJECT_ROOT'])
@@ -293,7 +292,7 @@ if __name__ == "__main__":
     trainer.assemble_model()
     trainer.configure_generators()
         
-    dataset.set_note()
+    dataset.ask_note()
     dataset.make_dataset(trainer)
 
     exit(0)

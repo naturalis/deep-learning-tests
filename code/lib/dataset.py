@@ -7,8 +7,13 @@ class DataSet():
     model_summary_hash = None
     model_note = None
 
-    def set_note(self):
-        self.model_note = input("model note: ")
+    def set_note(self,note):
+        if not note is None:
+            self.model_note = note
+
+    def ask_note(self):
+        if self.model_note is None:
+            self.model_note = input("enter model note: ")
 
     def make_dataset(self,model_trainer):
         self.model_trainer = model_trainer
