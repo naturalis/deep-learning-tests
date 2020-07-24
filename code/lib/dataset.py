@@ -41,11 +41,13 @@ class DataSet():
         print(" ==> " + self.model_note)
         print(" ==> " + str(self.model_trainer.timestamp))
 
+
+        print(self.model_trainer.traindf[self.model_trainer.COL_CLASS])
+        print(self.model_trainer.traindf[self.model_trainer.COL_IMAGE])
+
     # list of images
-    #     list of URLs!
     #     classes?
 
-    # naam / notes
 
 
 
