@@ -171,9 +171,21 @@ class BaseClass():
 
         self.logger.info("read {} images in {} classes".format(self.traindf[self.COL_IMAGE].nunique(),self.traindf[self.COL_CLASS].nunique()))
 
+
+    def fuck(self):
+        for col in self.traindf.columns: 
+            print(col) 
+
+
     def image_list_apply_class_list(self):
         before = len(self.traindf)
+        
+        self.fuck()
+
         self.traindf = self.traindf[self.traindf[self.COL_CLASS].isin(self.classes_to_use)]
+
+        self.fuck()
+        
         after = len(self.traindf)
         self.logger.info("dropped {} out of {} images due to image minimum of {}".format(
             before - after, before, self.class_image_minimum))
