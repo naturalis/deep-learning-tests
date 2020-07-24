@@ -163,6 +163,15 @@ class ModelTrainer(baseclass.BaseClass):
                 metrics=self.model_settings["metrics"] if "metrics" in self.model_settings else [ "acc" ]
             )
 
+
+            stringlist = []
+            self.model.summary(print_fn=lambda x: stringlist.append(x))
+            short_model_summary = "\n".join(stringlist)
+            print(short_model_summary)
+            exit(0)
+
+            
+
             if self.debug:
                 self.model.summary()
             else:
@@ -287,15 +296,12 @@ if __name__ == "__main__":
     # ['__class__', '__delattr__', '__dict__', '__dir__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__', '__gt__', '__hash__', '__init__', '__init_subclass__', '__le__', '__lt__', '__module__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__str__', '__subclasshook__', '__weakref__', '_chief_worker_only', '_keras_api_names', '_keras_api_names_v1', 'baseline', 'best_weights', 'get_monitor_value', 'min_delta', 'model', 'monitor', 'monitor_op', 'on_batch_begin', 'on_batch_end', 'on_epoch_begin', 'on_epoch_end', 'on_predict_batch_begin', 'on_predict_batch_end', 'on_predict_begin', 'on_predict_end', 'on_test_batch_begin', 'on_test_batch_end', 'on_test_begin', 'on_test_end', 'on_train_batch_begin', 'on_train_batch_end', 'on_train_begin', 'on_train_end', 'patience', 'restore_best_weights', 'set_model', 'set_params', 'stopped_epoch', 'validation_data', 'verbose', 'wait']
 
 
-    # print(dir(basemodel))
-    print(basemodel.summary)
     print(basemodel.name)
 
     # print(dir(off))
     # print(dir(andd))
     # print(dir(die))
 
-    exit(0)
 
 
     trainer.set_model_settings({
