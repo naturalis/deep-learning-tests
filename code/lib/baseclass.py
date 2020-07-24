@@ -40,6 +40,9 @@ class BaseClass():
     architecture_path = None
     analysis_path = None
     traindf = None
+
+    traindfUCK = None
+
     class_list = None
     classes_to_use = []
     model_settings = None
@@ -175,18 +178,19 @@ class BaseClass():
     def fuck(self):
 
         self.traindf.info()
+        self.traindfUCK.info()
 
-        for col in self.traindf.columns: 
-            print(col) 
+        # for col in self.traindf.columns: 
+        #     print(col) 
 
-        self.traindf.shape
-        len(self.traindf)
-        self.traindf.size
-        self.traindf.ndim
-        self.traindf.count()
+        # self.traindf.shape
+        # len(self.traindf)
+        # self.traindf.size
+        # self.traindf.ndim
+        # self.traindf.count()
 
-        print(self.traindf[self.COL_CLASS])
-        print(self.traindf[self.COL_IMAGE])
+        # print(self.traindf[self.COL_CLASS])
+        # print(self.traindf[self.COL_IMAGE])
 
         # for row in self.traindf.index: 
         #     print(row, end= " ") 
@@ -197,7 +201,7 @@ class BaseClass():
         
         self.fuck()
 
-        self.traindf = self.traindf[self.traindf[self.COL_CLASS].isin(self.classes_to_use)]
+        self.traindfUCK = self.traindf[self.traindf[self.COL_CLASS].isin(self.classes_to_use)]
 
         self.fuck()
 
