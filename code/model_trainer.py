@@ -301,7 +301,7 @@ if __name__ == "__main__":
 
     # print(dir(andd))
 
-    print(string(die))
+    print(str(die))
 # monitor
 # factor
 # patience
