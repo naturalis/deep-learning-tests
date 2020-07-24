@@ -240,7 +240,15 @@ class ModelTrainer(baseclass.BaseClass):
 
 if __name__ == "__main__":
 
-    print(sys.argv[1])
+    try:
+        arguments, values = getopt.getopt(["dataset_note="])
+        print(arguments)
+        print(values)
+
+    except getopt.error as err:
+        # Output error, and return with an error code
+        print (str(err))
+
     exit(0)
 
     trainer = ModelTrainer()
