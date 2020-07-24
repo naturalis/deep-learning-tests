@@ -20,15 +20,15 @@ class DataSet():
         print(" ==> " + str(self.model_trainer.get_preset("batch_size")))
         print(" ==> " + str(self.model_trainer.get_preset("epochs")))
         print(" ==> " + str(self.model_trainer.get_preset("freeze_layers")))
-        print(" ==> " + self.model_trainer.class_image_minimum)
-        print(" ==> " + self.model_trainer.class_image_maximum)
-        print(" ==> " + self.model_trainer.project_root)
-        print(" ==> " + self.model_trainer.class_list_file_json)
-        print(" ==> " + self.model_trainer.class_list_file_csv)
-        print(" ==> " + self.model_trainer.image_list_file_csv)
-        print(" ==> " + self.model_trainer.image_path)
-        print(" ==> " + self.model_trainer.class_list_file)
-        print(" ==> " + self.model_trainer.downloaded_images_file)
+        print(" ==> " + str(self.model_trainer.class_image_minimum)) # do not convert
+        print(" ==> " + str(self.model_trainer.class_image_maximum)) # do not convert
+        print(" ==> " + str(self.model_trainer.project_root))
+        print(" ==> " + str(self.model_trainer.class_list_file_json))
+        print(" ==> " + str(self.model_trainer.class_list_file_csv))
+        print(" ==> " + str(self.model_trainer.image_list_file_csv))
+        print(" ==> " + str(self.model_trainer.image_path))
+        print(" ==> " + str(self.model_trainer.class_list_file))
+        print(" ==> " + str(self.model_trainer.downloaded_images_file))
 
 
 
