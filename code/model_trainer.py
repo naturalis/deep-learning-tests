@@ -1,4 +1,4 @@
-import os, json, getopt
+import sys, os, json, getopt
 import tensorflow as tf
 import numpy as np
 from datetime import datetime
