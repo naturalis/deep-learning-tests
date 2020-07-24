@@ -212,7 +212,7 @@ class BaseClass():
 
 
         if 'IMAGE_AUGMENTATION' in os_environ:
-            self.presets['image_augmentation'] = json.loads(os_environ.get("IMAGE_AUGMENTATION"))
+            a = json.loads(os_environ.get("IMAGE_AUGMENTATION"))
         else:
             self.presets['image_augmentation'] = {
                 "rotation_range": 90,
