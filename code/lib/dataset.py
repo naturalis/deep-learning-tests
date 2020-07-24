@@ -12,7 +12,7 @@ class DataSet():
             self.model_note = note
 
     def ask_note(self):
-        while self.model_note is None:
+        while not self.model_note:
             self.model_note = input("enter model note: ")
 
     def make_dataset(self,model_trainer):
