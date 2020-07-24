@@ -3,7 +3,7 @@ import tensorflow as tf
 import numpy as np
 from datetime import datetime
 import matplotlib.pyplot as plt
-from lib import baseclass
+from lib import baseclass, dataset
 
 class ModelTrainer(baseclass.BaseClass):
     timestamp = None
@@ -241,6 +241,7 @@ class ModelTrainer(baseclass.BaseClass):
 if __name__ == "__main__":
 
     trainer = ModelTrainer()
+    dataset = DataSet()
 
     trainer.set_debug(os.environ["DEBUG"]=="1" if "DEBUG" in os.environ else False)
     trainer.set_project_folders(project_root=os.environ['PROJECT_ROOT'])
@@ -284,6 +285,11 @@ if __name__ == "__main__":
 
     trainer.assemble_model()
     trainer.configure_generators()
+    
+    dataset.make_dataset(trainer)
+
+    exit(0)
+
     trainer.train_model()
     trainer.save_model()
     trainer.evaluate()
