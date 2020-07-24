@@ -243,7 +243,7 @@ if __name__ == "__main__":
     trainer = ModelTrainer()
 
     trainer.set_presets(os.environ)
-    print(trainer.presets)
+    print(trainer.presets["initial_learning_rate"])
 
     exit(0)
 
@@ -264,15 +264,12 @@ if __name__ == "__main__":
     trainer.read_image_list_file(image_col=2)
     trainer.image_list_apply_class_list()
 
-    trainer.logger.info("learning_rate: {}".format(learning_rate))
-    trainer.logger.info("batch_size: {}".format(batch_size))
-
     trainer.set_model_settings({
         "validation_split": 0.2,
         "base_model": tf.keras.applications.InceptionV3(weights="imagenet", include_top=False),
         "loss": tf.keras.losses.CategoricalCrossentropy(),
         "optimizer": [
-            tf.keras.optimizers.RMSprop(learning_rate=learning_rate),
+            tf.keras.optimizers.RMSprop(learning_rate=initial_learning_rate),
         ],
         "optimizer_learning_rate": [
             learning_rate
