@@ -9,12 +9,12 @@ class DataSet():
         print(" ==> " + self.model_trainer.model_name)
         print(" ==> " + self.model_trainer.base_model.name)
         print(" ==> " + self.model_summary)
-        print(" ==> " + self.model_trainer.get_preset("image_augmentation"))
-        print(" ==> " + self.model_trainer.get_preset("validation_split"))
-        print(" ==> " + self.model_trainer.get_preset("initial_learning_rate"))
-        print(" ==> " + self.model_trainer.get_preset("batch_size"))
-        print(" ==> " + self.model_trainer.get_preset("epochs"))
-        print(" ==> " + self.model_trainer.get_preset("freeze_layers"))
+        print(" ==> " + str(self.model_trainer.get_preset("image_augmentation")))
+        print(" ==> " + str(self.model_trainer.get_preset("validation_split")))
+        print(" ==> " + str(self.model_trainer.get_preset("initial_learning_rate")))
+        print(" ==> " + str(self.model_trainer.get_preset("batch_size")))
+        print(" ==> " + str(self.model_trainer.get_preset("epochs")))
+        print(" ==> " + str(self.model_trainer.get_preset("freeze_layers")))
 
 
     def _set_model_summary(self):
