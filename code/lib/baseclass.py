@@ -233,7 +233,7 @@ class BaseClass():
 
     def get_preset(self, preset):
         if preset in self.presets:
-            return self.presets["preset"]
+            return self.presets[preset]
         else:
             raise ValueError("preset {} doesn't exist: {}".format(preset))
 
