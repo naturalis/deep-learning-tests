@@ -240,26 +240,12 @@ class ModelTrainer(baseclass.BaseClass):
 
 if __name__ == "__main__":
 
+    trainer = ModelTrainer()
 
-    fuck = {
-            "rotation_range": 90,
-            "shear_range": 0.2,
-            "zoom_range": 0.2,
-            "horizontal_flip": True,
-            "width_shift_range": 0.2,
-            "height_shift_range": 0.2, 
-            "vertical_flip": False
-        }
-
-
-    print(fuck)
-    fuck = json.loads(os.environ["FUCK"])
-    print(fuck)
-
+    trainer.fuck(os.environ)
+    print(trainer.presets)
 
     exit(0)
-
-    trainer = ModelTrainer()
 
     trainer.set_debug(os.environ["DEBUG"]=="1" if "DEBUG" in os.environ else False)
     trainer.set_project_folders(project_root=os.environ['PROJECT_ROOT'])
@@ -278,17 +264,6 @@ if __name__ == "__main__":
     trainer.read_image_list_file(image_col=2)
     trainer.image_list_apply_class_list()
 
-        # "base_model": tf.keras.applications.MobileNetV2(weights="imagenet", include_top=False),  
-        # "base_model": tf.keras.applications.ResNet50(weights="imagenet", include_top=False),
-
-        # WARNING:tensorflow:Method (on_train_batch_end) is slow compared to the batch update (0.325404). Check your callbacks.
-        # maybe something with TensorBoard callback, as the other ones get called at epoch end, not batch end
-
-        # https://www.tensorflow.org/api_docs/python/tf/keras/callbacks/LearningRateScheduler
-
-    learning_rate = float(os.environ["INITIAL_LR"]) if "INITIAL_LR" in os.environ else 1e-4
-    batch_size = int(os.environ["BATCH_SIZE"]) if "BATCH_SIZE" in os.environ else 64
-
     trainer.logger.info("learning_rate: {}".format(learning_rate))
     trainer.logger.info("batch_size: {}".format(batch_size))
 
@@ -303,7 +278,7 @@ if __name__ == "__main__":
             learning_rate
         ],
         "batch_size": batch_size,
-        "epochs": [ 200 ], # epochs single value or list controls whether training is phased
+        "epochs": epochs, 
         "freeze_layers": [ "none" ], # "base_model", # 249, # none
         "callbacks" : [
             [ 
@@ -314,15 +289,7 @@ if __name__ == "__main__":
             ]
         ],
         "metrics" : [ "acc" ],
-        "image_augmentation" : {
-            "rotation_range": 90,
-            "shear_range": 0.2,
-            "zoom_range": 0.2,
-            "horizontal_flip": True,
-            "width_shift_range": 0.2,
-            "height_shift_range": 0.2, 
-            "vertical_flip": False
-        }
+        "image_augmentation" : image_augmentation
     })
 
     trainer.assemble_model()
@@ -330,6 +297,18 @@ if __name__ == "__main__":
     trainer.train_model()
     trainer.save_model()
     trainer.evaluate()
+
+
+        # "base_model": tf.keras.applications.MobileNetV2(weights="imagenet", include_top=False),  
+        # "base_model": tf.keras.applications.ResNet50(weights="imagenet", include_top=False),
+
+        # WARNING:tensorflow:Method (on_train_batch_end) is slow compared to the batch update (0.325404). Check your callbacks.
+        # maybe something with TensorBoard callback, as the other ones get called at epoch end, not batch end
+
+        # https://www.tensorflow.org/api_docs/python/tf/keras/callbacks/LearningRateScheduler
+
+
+
 
 
     # env variables

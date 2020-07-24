@@ -46,6 +46,7 @@ class BaseClass():
     COL_CLASS = "class"
     COL_IMAGE = "image"
     model = None
+    presets = []
 
     def __init__(self):
         self.logger = logclass.LogClass(self.__class__.__name__)
@@ -206,4 +207,31 @@ class BaseClass():
             self.classes = json.load(f)
 
         self.logger.info("loaded {} classes from {}".format(len(self.classes),self.get_classes_path()))
+
+    def fuck(self,os_environ):
+
+        if 'IMAGE_AUGMENTATION' in os_environ:
+            self.presets['image_augmentation'] = json.loads(os_environ["IMAGE_AUGMENTATION"])
+        else:
+            self.presets['image_augmentation'] = {
+                "rotation_range": 90,
+                "shear_range": 0.2,
+                "zoom_range": 0.2,
+                "horizontal_flip": True,
+                "width_shift_range": 0.2,
+                "height_shift_range": 0.2, 
+                "vertical_flip": False
+            }
+
+        self.presets['validation_split'] = float(os_environ["VALIDATION_SPLIT"]) if "VALIDATION_SPLIT" in os_environ else 0.2
+        self.presets['learning_rate'] = float(os_environ["INITIAL_LR"]) if "INITIAL_LR" in os_environ else 1e-4
+        self.presets['batch_size'] = int(os_environ["BATCH_SIZE"]) if "BATCH_SIZE" in os_environ else 64
+        self.presets['epochs'] = json.loads(os_environ["EPOCHS"]) if "EPOCHS" in os_environ else [ 200 ] # [ 10, 200 ] 
+        self.presets['freeze_layers'] = json.loads(os_environ["FREEZE_LAYERS"]) if "FREEZE_LAYERS" in os_environ else [ "none" ]
+            # [ "base_model", "none" ] # 249
+
+
+
+
+
 
