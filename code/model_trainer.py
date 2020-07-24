@@ -161,16 +161,7 @@ class ModelTrainer(baseclass.BaseClass):
                 optimizer=self.current_optimizer,
                 loss=self.model_settings["loss"],
                 metrics=self.model_settings["metrics"] if "metrics" in self.model_settings else [ "acc" ]
-            )
-
-
-            stringlist = []
-            self.model.summary(print_fn=lambda x: stringlist.append(x))
-            short_model_summary = "\n".join(stringlist)
-            print(short_model_summary)
-            exit(0)
-
-            
+            )           
 
             if self.debug:
                 self.model.summary()
@@ -289,24 +280,14 @@ if __name__ == "__main__":
 
 
     off = tf.keras.losses.CategoricalCrossentropy()
-    # ['__call__', '__class__', '__delattr__', '__dict__', '__dir__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__', '__gt__', '__hash__', '__init__', '__init_subclass__', '__le__', '__lt__', '__module__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__str__', '__subclasshook__', '__weakref__', '_fn_kwargs', '_get_reduction', '_keras_api_names', '_keras_api_names_v1', 'call', 'fn', 'from_config', 'get_config', 'name', 'reduction']
 
     andd = tf.keras.optimizers.RMSprop(learning_rate=learning_rate)
-    # ['__abstractmethods__', '__class__', '__delattr__', '__dict__', '__dir__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__', '__gt__', '__hash__', '__init__', '__init_subclass__', '__le__', '__lt__', '__module__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__str__', '__subclasshook__', '__weakref__', '_abc_cache', '_abc_negative_cache', '_abc_negative_cache_version', '_abc_registry', '_add_variable_with_custom_getter', '_assert_valid_dtypes', '_call_if_callable', '_checkpoint_dependencies', '_compute_gradients', '_create_hypers', '_create_or_restore_slot_variable', '_create_slots', '_decayed_lr', '_deferred_dependencies', '_deferred_slot_restorations', '_dense_apply_args', '_distributed_apply', '_fallback_apply_state', '_gather_saveables_for_checkpoint', '_get_hyper', '_handle_deferred_dependencies', '_hyper', '_hypers_created', '_init_set_name', '_initial_decay', '_iterations', '_keras_api_names', '_keras_api_names_v1', '_list_extra_dependencies_for_serialization', '_list_functions_for_serialization', '_lookup_dependency', '_maybe_initialize_trackable', '_momentum', '_name', '_name_based_attribute_restore', '_name_based_restores', '_no_dependency', '_object_identifier', '_preload_simple_restoration', '_prepare', '_prepare_local', '_resource_apply_dense', '_resource_apply_sparse', '_resource_apply_sparse_duplicate_indices', '_resource_scatter_add', '_resource_scatter_update', '_restore_from_checkpoint_position', '_restore_slot_variable', '_serialize_hyperparameter', '_set_hyper', '_setattr_tracking', '_single_restoration_from_checkpoint_position', '_slot_names', '_slots', '_sparse_apply_args', '_track_trackable', '_tracking_metadata', '_unconditional_checkpoint_dependencies', '_unconditional_dependency_names', '_update_uid', '_use_locking', '_valid_dtypes', '_weights', 'add_slot', 'add_weight', 'apply_gradients', 'centered', 'epsilon', 'from_config', 'get_config', 'get_gradients', 'get_slot', 'get_slot_names', 'get_updates', 'get_weights', 'iterations', 'minimize', 'set_weights', 'variables', 'weights']
 
-    die =tf.keras.callbacks.ReduceLROnPlateau(monitor="val_loss", factor=0.1, patience=4, min_lr=1e-8, verbose=1)
-   
+    print(dir(off))
 
-    # print(dir(off))
+    print(dir(andd))
 
-    # print(dir(andd))
-
-    print(str(die))
-# monitor
-# factor
-# patience
-# min_lr
-
+    exit(0)
 
     trainer.set_model_settings({
         "validation_split": 0.2,
