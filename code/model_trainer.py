@@ -312,34 +312,6 @@ if __name__ == "__main__":
     #     CLASS_IMAGE_MINIMUM=10 / 2
     #     CLASS_IMAGE_MAXIMUM=1000 / None
 
-    # model params /  hyperparameters
-    #     "validation_split": 0.2,
-    #     "base_model": tf.keras.applications.InceptionV3(weights="imagenet", include_top=False),  
-    #     "loss": tf.keras.losses.CategoricalCrossentropy(),
-    #     "optimizer": [
-    #         tf.keras.optimizers.RMSprop(learning_rate=learning_rate),
-    #     ],
-    #     "batch_size": batch_size,
-    #     "epochs": [ 200 ], # epochs single value or list controls whether training is phased
-    #     "freeze_layers": [ "none" ], # "base_model", # 249, # none
-    #     "callbacks" : [
-    #         [ 
-    #             tf.keras.callbacks.EarlyStopping(monitor="val_loss", patience=5, mode="auto", restore_best_weights=True, verbose=1),
-    #             # tf.keras.callbacks.TensorBoard(trainer.get_tensorboard_log_path()),
-    #             tf.keras.callbacks.ReduceLROnPlateau(monitor="val_loss", factor=0.1, patience=4, min_lr=1e-8, verbose=1),
-    #             tf.keras.callbacks.ModelCheckpoint(trainer.get_model_path(), monitor="val_acc", save_best_only=True, save_freq="epoch", verbose=1)
-    #         ]
-    #     ],
-    #     "metrics" : [ "acc" ],
-    #     "image_augmentation" : {
-    #         "rotation_range": 90,
-    #         "shear_range": 0.2,
-    #         "zoom_range": 0.2,
-    #         "horizontal_flip": True,
-    #         "width_shift_range": 0.2,
-    #         "height_shift_range": 0.2, 
-    #         "vertical_flip": False
-    #     }
 
     # list of images
     #     list of URLs!
