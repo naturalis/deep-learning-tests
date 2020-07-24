@@ -1,4 +1,4 @@
-import sys, os, json, getopt
+import os, json, argparse
 import tensorflow as tf
 import numpy as np
 from datetime import datetime
@@ -240,15 +240,11 @@ class ModelTrainer(baseclass.BaseClass):
 
 if __name__ == "__main__":
 
-    try:
-        arguments, values = getopt.getopt(sys.argv[1:],"",["dataset_note="])
-        print(arguments)
-        print(values)
-
-    except getopt.error as err:
-        # Output error, and return with an error code
-        print (str(err))
-
+    parser = argparse.ArgumentParser() 
+    parser.add_argument("--dataset_note") 
+    args = parser.parse_args() 
+    if args.dataset_note: 
+        print("fuck: {}".format(args.dataset_note))
     exit(0)
 
     trainer = ModelTrainer()
