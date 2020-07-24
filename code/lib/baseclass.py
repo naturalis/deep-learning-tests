@@ -210,6 +210,10 @@ class BaseClass():
 
     def fuck(self,os_environ):
 
+        print(os_environ.HOSTNAME)
+        print(os_environ['HOSTNAME'])
+        return;
+
         if 'IMAGE_AUGMENTATION' in os_environ:
             self.presets['image_augmentation'] = json.loads(os_environ["IMAGE_AUGMENTATION"])
         else:
