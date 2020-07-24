@@ -240,6 +240,22 @@ class ModelTrainer(baseclass.BaseClass):
 
 if __name__ == "__main__":
 
+
+    fuck = {
+            "rotation_range": 90,
+            "shear_range": 0.2,
+            "zoom_range": 0.2,
+            "horizontal_flip": True,
+            "width_shift_range": 0.2,
+            "height_shift_range": 0.2, 
+            "vertical_flip": False
+        }
+
+    print(type(fuck))
+
+
+    exit(0)
+
     trainer = ModelTrainer()
 
     trainer.set_debug(os.environ["DEBUG"]=="1" if "DEBUG" in os.environ else False)
@@ -273,30 +289,15 @@ if __name__ == "__main__":
     trainer.logger.info("learning_rate: {}".format(learning_rate))
     trainer.logger.info("batch_size: {}".format(batch_size))
 
-
-
-
-
-
-
-    off = tf.keras.losses.CategoricalCrossentropy()
-
-    andd = tf.keras.optimizers.RMSprop(learning_rate=learning_rate)
-
-    print(str(off))
-    print(dir(off))
-
-    print(str(andd))
-    print(dir(andd))
-
-    exit(0)
-
     trainer.set_model_settings({
         "validation_split": 0.2,
         "base_model": tf.keras.applications.InceptionV3(weights="imagenet", include_top=False),
         "loss": tf.keras.losses.CategoricalCrossentropy(),
         "optimizer": [
             tf.keras.optimizers.RMSprop(learning_rate=learning_rate),
+        ],
+        "optimizer_learning_rate": [
+            learning_rate
         ],
         "batch_size": batch_size,
         "epochs": [ 200 ], # epochs single value or list controls whether training is phased
