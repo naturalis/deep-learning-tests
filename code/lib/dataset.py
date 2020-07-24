@@ -26,7 +26,7 @@ class DataSet():
         stringlist = []
         self.model_trainer.model.summary(print_fn=lambda x: stringlist.append(x))
         self.model_summary = "\n".join(stringlist)
-        self.model_summary_hash = md5(self.model_summary)
+        self.model_summary_hash = md5(self.model_summary.encode('utf-8'))
 
 
 # "callbacks" :
