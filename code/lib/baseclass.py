@@ -40,9 +40,6 @@ class BaseClass():
     architecture_path = None
     analysis_path = None
     traindf = None
-
-    traindfUCK = None
-
     class_list = None
     classes_to_use = []
     model_settings = None
@@ -51,10 +48,6 @@ class BaseClass():
     model = None
 
     def __init__(self):
-
-        self.traindfUCK = pd.DataFrame() 
-
-
         self.logger = logclass.LogClass(self.__class__.__name__)
         self.logger.info("TensorFlow v{}".format(tf.__version__))
         self.set_timestamp()
@@ -179,40 +172,9 @@ class BaseClass():
         self.logger.info("read {} images in {} classes".format(self.traindf[self.COL_IMAGE].nunique(),self.traindf[self.COL_CLASS].nunique()))
 
 
-    def fuck(self):
-
-        self.traindf.info()
-        self.traindfUCK.info()
-
-        # for col in self.traindf.columns: 
-        #     print(col) 
-
-        # self.traindf.shape
-        # len(self.traindf)
-        # self.traindf.size
-        # self.traindf.ndim
-        # self.traindf.count()
-
-        # print(self.traindf[self.COL_CLASS])
-        # print(self.traindf[self.COL_IMAGE])
-
-        # for row in self.traindf.index: 
-        #     print(row, end= " ") 
-
-
     def image_list_apply_class_list(self):
         before = len(self.traindf)
-        
-        self.fuck()
-
-        self.traindfUCK = self.traindf[self.traindf[self.COL_CLASS].isin(self.classes_to_use)]
-
-        print("================================================================================")
-
-        self.fuck()
-
-        exit(0)
-
+        self.traindf = self.traindf[self.traindf[self.COL_CLASS].isin(self.classes_to_use)]
         after = len(self.traindf)
         self.logger.info("dropped {} out of {} images due to image minimum of {}".format(
             before - after, before, self.class_image_minimum))

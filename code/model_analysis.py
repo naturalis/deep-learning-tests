@@ -89,10 +89,16 @@ if __name__ == "__main__":
 
     analysis.load_model()
 
-    analysis.read_image_list_file(image_col=2)
-    analysis.image_list_apply_class_list()
+    if 'CLASS_IMAGE_MINIMUM' in os.environ:
+        analysis.set_class_image_minimum(os.environ['CLASS_IMAGE_MINIMUM'])
+
+    # if 'CLASS_IMAGE_MAXIMUM' in os.environ:
+    #     analysis.set_class_image_maximum(os.environ['CLASS_IMAGE_MAXIMUM'])
+
     analysis.read_class_list()
     analysis.class_list_apply_image_minimum()
+    analysis.read_image_list_file(image_col=2)
+    analysis.image_list_apply_class_list()
 
     batch_size = int(os.environ["BATCH_SIZE"]) if "BATCH_SIZE" in os.environ else 64
     analysis.logger.info("batch_size: {}".format(batch_size))
