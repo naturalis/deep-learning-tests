@@ -19,10 +19,6 @@ class ModelAnalysis(baseclass.BaseClass):
             rescale=1./255,
         )
 
-        print("== " + self.COL_IMAGE)
-        print("== " + self.COL_CLASS)
-
-
         self.test_generator = datagen.flow_from_dataframe(
             dataframe=self.traindf,
             x_col=self.COL_IMAGE,
@@ -33,6 +29,8 @@ class ModelAnalysis(baseclass.BaseClass):
             interpolation="nearest",
             shuffle=False
         )
+
+        print(self.test_generator.classes)
 
     def do_analysis(self):
         batch_size = self.model_settings["batch_size"]
