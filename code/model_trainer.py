@@ -241,7 +241,7 @@ class ModelTrainer(baseclass.BaseClass):
 if __name__ == "__main__":
 
     trainer = ModelTrainer()
-    dataset = DataSet()
+    dataset = dataset.DataSet()
 
     trainer.set_debug(os.environ["DEBUG"]=="1" if "DEBUG" in os.environ else False)
     trainer.set_project_folders(project_root=os.environ['PROJECT_ROOT'])
