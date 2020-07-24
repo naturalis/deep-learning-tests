@@ -8,7 +8,7 @@ class DataSet():
     model_note = None
 
     def set_note(self):
-        self.model_note = input("model note:")
+        self.model_note = input("model note: ")
 
     def make_dataset(self,model_trainer):
         self.model_trainer = model_trainer
@@ -34,6 +34,7 @@ class DataSet():
         print(" ==> " + str(self.model_trainer.class_list_file))
         print(" ==> " + str(self.model_trainer.downloaded_images_file))
         print(" ==> " + self.model_note)
+        print(" ==> " + self.model_trainer.timestamp)
 
     # list of images
     #     list of URLs!
