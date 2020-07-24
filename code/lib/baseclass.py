@@ -178,7 +178,7 @@ class BaseClass():
     def fuck(self):
 
         self.traindf.info()
-        if self.traindfUCK:
+        if len(self.traindfUCK)>0:
             self.traindfUCK.info()
 
         # for col in self.traindf.columns: 
