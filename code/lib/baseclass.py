@@ -46,7 +46,7 @@ class BaseClass():
     COL_CLASS = "class"
     COL_IMAGE = "image"
     model = None
-    presets = []
+    presets = {}
 
     def __init__(self):
         self.logger = logclass.LogClass(self.__class__.__name__)
@@ -209,12 +209,10 @@ class BaseClass():
         self.logger.info("loaded {} classes from {}".format(len(self.classes),self.get_classes_path()))
 
     def fuck(self,os_environ):
-
-
         if 'IMAGE_AUGMENTATION' in os_environ:
-            a = json.loads(os_environ.get("IMAGE_AUGMENTATION"))
+            self.presets.update( {'image_augmentation' : json.loads(os_environ.get("IMAGE_AUGMENTATION")) } )    
         else:
-            self.presets['image_augmentation'] = {
+            self.presets.update( {'image_augmentation' : {
                 "rotation_range": 90,
                 "shear_range": 0.2,
                 "zoom_range": 0.2,
@@ -222,8 +220,9 @@ class BaseClass():
                 "width_shift_range": 0.2,
                 "height_shift_range": 0.2, 
                 "vertical_flip": False
-            }
+            } } )
 
+        print(self.presets)
 
         return
 
