@@ -60,15 +60,20 @@ class BaseClass():
         #     tf.autograph.set_verbosity(1)
 
     def set_timestamp(self):
-        d = datetime.now()
-        self.timestamp = "{0}{1:02d}{2:02d}-{3:02d}{4:02d}{5:02d}".format(d.year,d.month,d.day,d.hour,d.minute,d.second)
+        self.timestamp = datetime.now()
 
     def set_debug(self,state):
         self.debug = state
 
     def set_model_name(self,model_name=None):
         if model_name is None:
-            self.model_name = self.timestamp
+            self.model_name = "{0}{1:02d}{2:02d}-{3:02d}{4:02d}{5:02d}".format(
+                self.timestamp.year,
+                self.timestamp.month,
+                self.timestamp.day,
+                self.timestamp.hour,
+                self.timestamp.minute,
+                self.timestamp.second)
         else:
             self.model_name = model_name
         self.logger.info("model name: {}".format(self.model_name))

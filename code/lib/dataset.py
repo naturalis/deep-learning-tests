@@ -34,7 +34,7 @@ class DataSet():
         print(" ==> " + str(self.model_trainer.class_list_file))
         print(" ==> " + str(self.model_trainer.downloaded_images_file))
         print(" ==> " + self.model_note)
-        print(" ==> " + self.model_trainer.timestamp)
+        print(" ==> " + str(self.model_trainer.timestamp))
 
     # list of images
     #     list of URLs!
