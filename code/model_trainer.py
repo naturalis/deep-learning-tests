@@ -297,12 +297,15 @@ if __name__ == "__main__":
     die =tf.keras.callbacks.ReduceLROnPlateau(monitor="val_loss", factor=0.1, patience=4, min_lr=1e-8, verbose=1)
    
 
-    print(dir(off))
+    # print(dir(off))
 
-    print(dir(andd))
+    # print(dir(andd))
 
-    print(dir(die))
-
+    print(string(die))
+# monitor
+# factor
+# patience
+# min_lr
 
 
     trainer.set_model_settings({
