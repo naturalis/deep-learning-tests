@@ -283,8 +283,10 @@ if __name__ == "__main__":
 
     andd = tf.keras.optimizers.RMSprop(learning_rate=learning_rate)
 
+    print(str(off))
     print(dir(off))
 
+    print(str(andd))
     print(dir(andd))
 
     exit(0)
