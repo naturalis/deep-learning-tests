@@ -184,6 +184,7 @@ class BaseClass():
         self.traindf = self.traindf[self.traindf[self.COL_CLASS].isin(self.classes_to_use)]
 
         self.fuck()
+        print("wtf")
 
         for row in self.traindf.index: 
             print(row, end= " ") 
