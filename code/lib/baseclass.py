@@ -208,7 +208,7 @@ class BaseClass():
 
         self.logger.info("loaded {} classes from {}".format(len(self.classes),self.get_classes_path()))
 
-    def fuck(self,os_environ):
+    def set_presets(self,os_environ):
         if 'IMAGE_AUGMENTATION' in os_environ:
             self.presets.update( {'image_augmentation' : json.loads(os_environ.get("IMAGE_AUGMENTATION")) } )    
         else:
