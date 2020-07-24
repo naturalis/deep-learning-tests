@@ -274,9 +274,14 @@ if __name__ == "__main__":
     trainer.logger.info("batch_size: {}".format(batch_size))
 
 
-    print(repr(tf.keras.applications.InceptionV3(weights="imagenet", include_top=False)))
-    print(str(tf.keras.applications.InceptionV3(weights="imagenet", include_top=False)))
-    print(tf.keras.applications.InceptionV3(weights="imagenet", include_top=False))
+    fuck = tf.keras.applications.InceptionV3(weights="imagenet", include_top=False)
+    off = tf.keras.losses.CategoricalCrossentropy()
+    andd = tf.keras.optimizers.RMSprop(learning_rate=learning_rate)
+    die = tf.keras.callbacks.EarlyStopping(monitor="val_loss", patience=5, mode="auto", restore_best_weights=True, verbose=1)
+    print(dir(fuck))
+    print(dir(off))
+    print(dir(andd))
+    print(dir(die))
 
     exit(0)
 
