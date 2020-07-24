@@ -51,6 +51,10 @@ class BaseClass():
     model = None
 
     def __init__(self):
+
+        self.traindfUCK = pd.DataFrame() 
+
+
         self.logger = logclass.LogClass(self.__class__.__name__)
         self.logger.info("TensorFlow v{}".format(tf.__version__))
         self.set_timestamp()
