@@ -210,12 +210,9 @@ class BaseClass():
 
     def fuck(self,os_environ):
 
-        print(os_environ.HOSTNAME)
-        print(os_environ['HOSTNAME'])
-        return;
 
         if 'IMAGE_AUGMENTATION' in os_environ:
-            self.presets['image_augmentation'] = json.loads(os_environ["IMAGE_AUGMENTATION"])
+            self.presets['image_augmentation'] = json.loads(os_environ.get(["IMAGE_AUGMENTATION"]))
         else:
             self.presets['image_augmentation'] = {
                 "rotation_range": 90,
@@ -226,6 +223,9 @@ class BaseClass():
                 "height_shift_range": 0.2, 
                 "vertical_flip": False
             }
+
+
+        return
 
         self.presets['validation_split'] = float(os_environ["VALIDATION_SPLIT"]) if "VALIDATION_SPLIT" in os_environ else 0.2
         self.presets['learning_rate'] = float(os_environ["INITIAL_LR"]) if "INITIAL_LR" in os_environ else 1e-4
