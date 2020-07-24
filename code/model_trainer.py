@@ -274,16 +274,16 @@ if __name__ == "__main__":
     trainer.logger.info("batch_size: {}".format(batch_size))
 
 
-    print(repr(tf.keras.losses.CategoricalCrossentropy()))
-    print(str(tf.keras.losses.CategoricalCrossentropy()))
-    print(tf.keras.losses.CategoricalCrossentropy())
+    print(repr(tf.keras.applications.InceptionV3(weights="imagenet", include_top=False)))
+    print(str(tf.keras.applications.InceptionV3(weights="imagenet", include_top=False)))
+    print(tf.keras.applications.InceptionV3(weights="imagenet", include_top=False))
 
     exit(0)
 
 
     trainer.set_model_settings({
         "validation_split": 0.2,
-        "base_model": tf.keras.applications.InceptionV3(weights="imagenet", include_top=False),  
+        "base_model": tf.keras.applications.InceptionV3(weights="imagenet", include_top=False),
         "loss": tf.keras.losses.CategoricalCrossentropy(),
         "optimizer": [
             tf.keras.optimizers.RMSprop(learning_rate=learning_rate),
