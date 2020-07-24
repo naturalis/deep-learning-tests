@@ -237,7 +237,3 @@ class BaseClass():
         else:
             raise ValueError("preset {} doesn't exist: {}".format(preset))
 
-
-
-
-
