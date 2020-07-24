@@ -231,9 +231,9 @@ class BaseClass():
         # epochs [ 10, 200 ]
         # freeze_layers [ "base_model", "none" ] # 249
 
-    def get_preset(self,preset):
+    def get_preset(self, preset):
         if preset in self.presets:
-            return self.presets
+            return self.presets["preset"]
         else:
             raise ValueError("preset {} doesn't exist: {}".format(preset))
 
