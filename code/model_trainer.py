@@ -240,6 +240,9 @@ class ModelTrainer(baseclass.BaseClass):
 
 if __name__ == "__main__":
 
+    print(sys.argv[1])
+    exit(0)
+
     trainer = ModelTrainer()
     dataset = dataset.DataSet()
 
