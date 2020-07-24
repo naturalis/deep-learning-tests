@@ -241,7 +241,7 @@ class ModelTrainer(baseclass.BaseClass):
 if __name__ == "__main__":
 
     try:
-        arguments, values = getopt.getopt(["dataset_note="])
+        arguments, values = getopt.getopt(sys.argv[1:],"",["dataset_note="])
         print(arguments)
         print(values)
 
