@@ -242,6 +242,7 @@ if __name__ == "__main__":
 
     trainer = ModelTrainer()
 
+    print(os.environ)
     trainer.fuck(os.environ)
     print(trainer.presets)
 
