@@ -1,6 +1,10 @@
+from hashlib import md5
+
 class DataSet():
 
     model_trainer = None
+    model_summary = None
+    model_summary_hash = None
 
     def make_dataset(self,model_trainer):
         self.model_trainer = model_trainer
@@ -9,6 +13,7 @@ class DataSet():
         print(" ==> " + self.model_trainer.model_name)
         print(" ==> " + self.model_trainer.base_model.name)
         print(" ==> " + self.model_summary)
+        print(" ==> " + self.model_summary_hash)
         print(" ==> " + str(self.model_trainer.get_preset("image_augmentation")))
         print(" ==> " + str(self.model_trainer.get_preset("validation_split")))
         print(" ==> " + str(self.model_trainer.get_preset("initial_learning_rate")))
@@ -21,10 +26,7 @@ class DataSet():
         stringlist = []
         self.model_trainer.model.summary(print_fn=lambda x: stringlist.append(x))
         self.model_summary = "\n".join(stringlist)
-
-        pass
-
-
+        self.model_summary_hash = md5(self.model_summary)
 
 
 # "callbacks" :
