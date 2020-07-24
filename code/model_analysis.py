@@ -19,6 +19,10 @@ class ModelAnalysis(baseclass.BaseClass):
             rescale=1./255,
         )
 
+        print("== " + self.COL_IMAGE)
+        print("== " + self.COL_CLASS)
+
+
         self.test_generator = datagen.flow_from_dataframe(
             dataframe=self.traindf,
             x_col=self.COL_IMAGE,
