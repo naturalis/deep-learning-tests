@@ -6,8 +6,8 @@ class DataSet():
         self.model_trainer = model_trainer
         self._set_model_summary()
 
-        print(" ==> " + trainer.model_name)
-        print(" ==> " + trainer.base_model.name)
+        print(" ==> " + self.model_trainer.model_name)
+        print(" ==> " + self.model_trainer.base_model.name)
         print(" ==> " + self.model_summary)
         print(" ==> " + self.model_trainer.get_preset("image_augmentation"))
         print(" ==> " + self.model_trainer.get_preset("validation_split"))
