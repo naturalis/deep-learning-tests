@@ -61,8 +61,11 @@ class DataSet():
     
         
         print(dir(self.model_trainer.model.optimizer))
-        print(self.model_trainer.model.optimizer)
+        print(str(self.model_trainer.model.optimizer))
     
+
+        print(dir(self.model_trainer.model.optimizer_v2))
+        print(str(self.model_trainer.model.optimizer_v2))
 
     def _set_model_summary(self):
         stringlist = []
