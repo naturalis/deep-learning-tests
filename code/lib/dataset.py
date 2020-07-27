@@ -8,7 +8,7 @@ class DataSet():
     model_summary = None
     model_summary_hash = None
     model_note = None
-    data_set = []
+    data_set = {}
 
     def set_note(self,note):
         if not note is None:
