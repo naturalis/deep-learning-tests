@@ -59,9 +59,11 @@ class DataSet():
                     print("   ReduceLROnPlateau ==> " + str(callback.patience))
                     print("   ReduceLROnPlateau ==> " + str(callback.min_lr))
     
-        for phase, optimizers in enumerate(self.model_trainer.model_settings["optimizer"]):
-            print(optimizers)
-            print(isinstance(optimizers, list))
+        if isinstance(self.model_trainer.model_settings["optimizer"], list):
+            for phase, optimizer in enumerate(self.model_trainer.model_settings["optimizer"]):
+                print(str(phase) + " ==> " + str(optimizer))
+        else:
+            print(" ==> " + str(optimizer))
 
 
         
