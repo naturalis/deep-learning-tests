@@ -59,8 +59,8 @@ class DataSet():
                     print("   ReduceLROnPlateau ==> " + str(callback.patience))
                     print("   ReduceLROnPlateau ==> " + str(callback.min_lr))
     
-        # print(tf.keras.backend(self.model_trainer.model.optimizer.lr))
-        print(tf.keras.backend(self.model_trainer.model.optimizer))
+        
+        print(dir(self.model_trainer.model))
     
 
     def _set_model_summary(self):
