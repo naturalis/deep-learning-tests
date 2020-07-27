@@ -52,10 +52,10 @@ class DataSet():
             tmp = str(callback)
             print(" ==> " + str(tmp))
             if tmp.find("ReduceLROnPlateau") > -1:
-                print("   ReduceLROnPlateau ==> " + tmp.monitor)
-                print("   ReduceLROnPlateau ==> " + tmp.factor)
-                print("   ReduceLROnPlateau ==> " + tmp.patience)
-                print("   ReduceLROnPlateau ==> " + tmp.min_lr)
+                print("   ReduceLROnPlateau ==> " + str(callback.monitor))
+                print("   ReduceLROnPlateau ==> " + str(callback.factor))
+                print("   ReduceLROnPlateau ==> " + str(callback.patience))
+                print("   ReduceLROnPlateau ==> " + str(callback.min_lr))
     
     
 
