@@ -47,6 +47,15 @@ class DataSet():
         print(image_table)
 
         print(" ==> " + str(self.model_trainer.class_list))
+
+        for callback in self.model_trainer.model_settings["callbacks"]:
+            tmp = str(callback)
+            print(" ==> " + str(tmp))
+            if tmp.find("ReduceLROnPlateau") > -1:
+                print("   ReduceLROnPlateau ==> " + tmp.monitor)
+                print("   ReduceLROnPlateau ==> " + tmp.factor)
+                print("   ReduceLROnPlateau ==> " + tmp.patience)
+                print("   ReduceLROnPlateau ==> " + tmp.min_lr)
     
     
 
