@@ -60,7 +60,8 @@ class DataSet():
     
         for phase, optimizer in enumerate(self.model_trainer.model_settings["optimizer"]):
             print(str(phase) + " ==> " + str(optimizer))    
-            print(" ==> " + self.model_trainer.get_preset("learning_rate"))
+            x = self.model_trainer.get_preset("learning_rate")
+            print(" ==> " + x[phase])
 
 
         
