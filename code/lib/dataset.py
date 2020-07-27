@@ -48,10 +48,10 @@ class DataSet():
 
         print(" ==> " + str(self.model_trainer.class_list))
 
-        for k, phase in enumerate(self.model_trainer.model_settings["callbacks"]):
-            for callback in phase:
+        for phase, callbacks in enumerate(self.model_trainer.model_settings["callbacks"]):
+            for callback in callbacks:
                 tmp = str(callback)
-                print(str(k) + " ==> " + str(tmp))
+                print(str(phase) + " ==> " + str(tmp))
                 if tmp.find("ReduceLROnPlateau") > -1:
                     print("   ReduceLROnPlateau ==> " + str(callback.monitor))
                     print("   ReduceLROnPlateau ==> " + str(callback.factor))
