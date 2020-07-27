@@ -1,3 +1,4 @@
+import os
 from hashlib import md5
 
 class DataSet():
