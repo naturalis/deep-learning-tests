@@ -60,7 +60,8 @@ class DataSet():
                     print("   ReduceLROnPlateau ==> " + str(callback.min_lr))
     
         
-        print(dir(self.model_trainer.model))
+        print(dir(self.model_trainer.model.optimizer))
+        print(self.model_trainer.model.optimizer)
     
 
     def _set_model_summary(self):
