@@ -56,7 +56,7 @@ class DataSet():
                         )
                     )
                 else:
-                    c.append(regex.sub('',str(callback)))
+                    call.append(regex.sub('',str(callback)))
     
         opt = []
         for phase, optimizer in enumerate(self.model_trainer.model_settings["optimizer"]):
