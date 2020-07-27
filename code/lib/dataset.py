@@ -43,7 +43,7 @@ class DataSet():
 
         # THESE SHOULD BE FULL URLS! (maybe not, what if we get a harddrive?)
         table = self.model_trainer.traindf.sort_values(by=[self.model_trainer.COL_CLASS,self.model_trainer.COL_IMAGE]).values.tolist()
-        table = map(lambda x: os.path.basename[1], table)
+        table = list(map(lambda x: os.path.basename[1], table))
         print(table)
 
     
