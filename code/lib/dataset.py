@@ -60,7 +60,7 @@ class DataSet():
                     print("   ReduceLROnPlateau ==> " + str(callback.min_lr))
     
         
-        print(self.model_trainer.settings)
+        print(self.model_trainer.model_settings)
 
     def _set_model_summary(self):
         stringlist = []
