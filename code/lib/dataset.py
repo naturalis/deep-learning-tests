@@ -59,9 +59,10 @@ class DataSet():
                     print("   ReduceLROnPlateau ==> " + str(callback.min_lr))
     
         for phase, optimizer in enumerate(self.model_trainer.model_settings["optimizer"]):
-            print(str(phase) + " ==> " + str(optimizer))    
             x = self.model_trainer.get_preset("learning_rate")
-            print(x)
+            print(x[0])
+            print(x[phase])
+            print(str(phase) + " ==> " + str(optimizer))    
 
 
         
