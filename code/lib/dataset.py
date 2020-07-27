@@ -48,14 +48,15 @@ class DataSet():
 
         print(" ==> " + str(self.model_trainer.class_list))
 
-        for callback in self.model_trainer.model_settings["callbacks"]:
-            tmp = str(callback)
-            print(" ==> " + str(tmp))
-            if tmp.find("ReduceLROnPlateau") > -1:
-                print("   ReduceLROnPlateau ==> " + str(callback.monitor))
-                print("   ReduceLROnPlateau ==> " + str(callback.factor))
-                print("   ReduceLROnPlateau ==> " + str(callback.patience))
-                print("   ReduceLROnPlateau ==> " + str(callback.min_lr))
+        for phase in self.model_trainer.model_settings["callbacks"]:
+            for callback in phase:
+                tmp = str(callback)
+                print(" ==> " + str(tmp))
+                if tmp.find("ReduceLROnPlateau") > -1:
+                    print("   ReduceLROnPlateau ==> " + str(callback.monitor))
+                    print("   ReduceLROnPlateau ==> " + str(callback.factor))
+                    print("   ReduceLROnPlateau ==> " + str(callback.patience))
+                    print("   ReduceLROnPlateau ==> " + str(callback.min_lr))
     
     
 
