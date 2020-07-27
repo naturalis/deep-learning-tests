@@ -42,12 +42,14 @@ class DataSet():
         print(" ==> " + self.model_note)
         print(" ==> " + str(self.model_trainer.timestamp))
 
-        # THESE SHOULD BE FULL URLS! (maybe not, what if we get a harddrive?)
-        table = self.model_trainer.traindf.sort_values(by=[self.model_trainer.COL_CLASS,self.model_trainer.COL_IMAGE]).values.tolist()
-        table = list(map(lambda x: [x[0], os.path.basename(x[1]) ], table))
-        print(table)
+        image_table = self.model_trainer.traindf.sort_values(by=[self.model_trainer.COL_CLASS,self.model_trainer.COL_IMAGE]).values.tolist()
+        image_table = list(map(lambda x: [x[0], os.path.basename(x[1]) ], image_table))
+        print(image_table)
 
+        print(" ==> " + str(self.model_trainer.class_list))
     
+    
+
 
         # list of classes
 
