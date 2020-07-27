@@ -267,13 +267,15 @@ if __name__ == "__main__":
     trainer.read_image_list_file(image_col=2)
     trainer.image_list_apply_class_list()
 
+    optimizers = []
+    for learning_rate in trainer.get_preset("learning_rate"):
+        optimizers.append(tf.keras.optimizers.RMSprop(learning_rate=learning_rate))
+
     trainer.set_model_settings({
         "validation_split": trainer.get_preset("validation_split"),
         "base_model": tf.keras.applications.InceptionV3(weights="imagenet", include_top=False),
         "loss": tf.keras.losses.CategoricalCrossentropy(),
-        "optimizer": [
-            tf.keras.optimizers.RMSprop(learning_rate=trainer.get_preset("initial_learning_rate")),
-        ],
+        "optimizer": optimizers,
         "batch_size": trainer.get_preset("batch_size"),
         "epochs": trainer.get_preset("epochs"), 
         "freeze_layers": trainer.get_preset("freeze_layers"), 

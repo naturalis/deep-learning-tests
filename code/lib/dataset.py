@@ -27,7 +27,6 @@ class DataSet():
         print(" ==> " + self.model_summary_hash)
         print(" ==> " + str(self.model_trainer.get_preset("image_augmentation")))
         print(" ==> " + str(self.model_trainer.get_preset("validation_split")))
-        print(" ==> " + str(self.model_trainer.get_preset("initial_learning_rate")))
         print(" ==> " + str(self.model_trainer.get_preset("batch_size")))
         print(" ==> " + str(self.model_trainer.get_preset("epochs")))
         print(" ==> " + str(self.model_trainer.get_preset("freeze_layers")))
@@ -59,11 +58,9 @@ class DataSet():
                     print("   ReduceLROnPlateau ==> " + str(callback.patience))
                     print("   ReduceLROnPlateau ==> " + str(callback.min_lr))
     
-        if isinstance(self.model_trainer.model_settings["optimizer"], list):
-            for phase, optimizer in enumerate(self.model_trainer.model_settings["optimizer"]):
-                print(str(phase) + " ==> " + str(optimizer))
-        else:
-            print(" ==> " + str(optimizer))
+        for phase, optimizer in enumerate(self.model_trainer.model_settings["optimizer"]):
+            print(str(phase) + " ==> " + str(optimizer))    
+            print(" ==> " + self.model_trainer.get_preset("learning_rate")[phase])
 
 
         
@@ -79,11 +76,4 @@ class DataSet():
         self.model_trainer.model.summary(print_fn=lambda x: stringlist.append(x))
         self.model_summary = "\n".join(stringlist)
         self.model_summary_hash = md5(self.model_summary.encode('utf-8')).hexdigest()
-
-
-#         <tensorflow.python.keras.optimizer_v2.rmsprop.RMSprop object at 0x7f1aa6f4d0b8>
-#         "optimizer_learning_rate": [
-#             learning_rate
-#         ],
-
 
