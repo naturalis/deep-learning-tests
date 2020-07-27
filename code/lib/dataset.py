@@ -1,6 +1,5 @@
 import os
 from hashlib import md5
-import keras.backend as K
 
 class DataSet():
 
@@ -59,8 +58,8 @@ class DataSet():
                     print("   ReduceLROnPlateau ==> " + str(callback.patience))
                     print("   ReduceLROnPlateau ==> " + str(callback.min_lr))
     
-        print(K.eval(self.model_trainer.model.optimizer.lr))
-        print(K.eval(self.model_trainer.model.optimizer))
+        print(tf.keras.backend(self.model_trainer.model.optimizer.lr))
+        print(tf.keras.backend(self.model_trainer.model.optimizer))
     
 
     def _set_model_summary(self):
