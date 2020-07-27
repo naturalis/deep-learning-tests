@@ -28,7 +28,6 @@ class DataSet():
 
         self.data_set["model"] = { 
             "base_model" : str(self.model_trainer.base_model.name),
-            "summary" : self.model_summary,
             "summary_hash" : self.model_summary_hash
         }
         
@@ -72,6 +71,9 @@ class DataSet():
         }
 
         print(self.data_set)
+
+        # separate files
+            # "summary" : self.model_summary,
         
 
         # print(" ==> " + str(self.model_trainer.project_root))
