@@ -41,17 +41,16 @@ class DataSet():
         print(" ==> " + self.model_note)
         print(" ==> " + str(self.model_trainer.timestamp))
 
-        print(self.model_trainer.traindf.sort_values(by=[self.model_trainer.COL_CLASS,self.model_trainer.COL_IMAGE] , ascending=False).values.tolist())
+        # THESE SHOULD BE FULL URLS! (maybe not, what if we get a harddrive?)
+        table = self.model_trainer.traindf.sort_values(by=[self.model_trainer.COL_CLASS,self.model_trainer.COL_IMAGE]).values.tolist()
+        table = map(lambda x: os.path.basename[1], table)
+        print(table)
 
-        # print(self.model_trainer.traindf[self.model_trainer.COL_CLASS])
-        # print(self.model_trainer.traindf[self.model_trainer.COL_IMAGE])
+    
 
+        # list of classes
 
-    # list of images
-    #     classes?
-
-
-
+        # callbacks
 
 
     def _set_model_summary(self):
