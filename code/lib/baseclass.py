@@ -175,8 +175,11 @@ class BaseClass():
 
 
     def image_list_apply_class_list(self):
+
+        print(self.class_list)
+
         before = len(self.traindf)
-        self.traindf = self.traindf[self.traindf[self.COL_CLASS].isin(self.classes_to_use)]
+        self.traindf = self.traindf[self.traindf[self.COL_CLASS].isin(self.class_list)]
         after = len(self.traindf)
         self.logger.info("dropped {} out of {} images due to image minimum of {}".format(
             before - after, before, self.class_image_minimum))
