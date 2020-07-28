@@ -108,7 +108,7 @@ class BaseClass():
         if class_image_minimum >= 2:
             self.class_image_minimum = class_image_minimum
         else:
-            raise ValueError("class minimum must be greater than 2 ({})".format(class_image_minimum))
+            raise ValueError("class minimum must be equal to or greater than 2 ({})".format(class_image_minimum))
 
     def set_class_image_maximum(self,class_image_maximum):
         self.class_image_maximum = int(class_image_maximum)
@@ -119,7 +119,7 @@ class BaseClass():
         self.class_list_file_class_col = class_col
         self.class_list = _csv_to_dataframe(self.class_list_file_model, [self.class_list_file_class_col])
 
-        print("---------------------> " + len(self.class_list))
+        print("---------------------> " + str(len(self.class_list)))
 
         # making a list of just the classes that make the image minimum
         with open(self.class_list_file_model, 'r', encoding='utf-8-sig') as file:
@@ -129,7 +129,7 @@ class BaseClass():
                     self.classes_to_use.append(row[0])
                     self.class_list.append(row)
 
-        print("---------------------> " + len(self.class_list))
+        print("---------------------> " + str(len(self.class_list)))
 
 
 
