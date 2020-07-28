@@ -66,8 +66,8 @@ class DataSet():
         self.data_set["training_phases"] = { 
             "epochs" : str(self.model_trainer.get_preset("epochs")),
             "freeze_layers" : str(self.model_trainer.get_preset("freeze_layers")),
-            "optimizer" : opt,
-            "callbacks" : call
+            "optimizer" : list(opt),
+            "callbacks" : list(call)
         }
 
         print(self.data_set)
