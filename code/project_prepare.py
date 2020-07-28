@@ -141,7 +141,7 @@ class ProjectPrepare():
 if __name__ == "__main__":
 
     reader = DwcaReader()
-    reader.set_project_root(os.environ['PROJECT_ROOT'])
+    reader.set_project(os.environ)
 
     if 'DWCA_FILE_PATH' in os.environ:
         reader.set_dwca_file_path(os.environ['DWCA_FILE_PATH'])

@@ -20,7 +20,7 @@ class ModelTrainer(baseclass.BaseClass):
         super().__init__()
 
     def get_history_plot_save_path(self):
-        self.history_plot_save_path = os.path.join(self.project_root, "log", self.timestamp + ".png")
+        self.history_plot_save_path = os.path.join(self.project_root, "log", "history_plot.png")
         return self.history_plot_save_path
 
     def get_tensorboard_log_path(self):
@@ -152,7 +152,7 @@ class ModelTrainer(baseclass.BaseClass):
 
         for epoch in epochs: 
 
-            self.logger.info("=== training phase {} ({}/{}) ===".format(self.training_phase,(self.training_phase+1),len(epochs)))
+            self.logger.info("=== training phase {}/{} ===".format((self.training_phase+1),len(epochs)))
 
             self.set_frozen_layers()
             self.set_optimizer()
@@ -179,6 +179,9 @@ class ModelTrainer(baseclass.BaseClass):
             step_size_validate = self.validation_generator.n // self.validation_generator.batch_size
 
             self.set_callbacks()
+
+            print("FUCK")
+            exit(0)
 
             self.history = self.model.fit(
                 x=self.train_generator,
@@ -242,15 +245,15 @@ if __name__ == "__main__":
 
     trainer = ModelTrainer()
     dataset = dataset.DataSet()
+    trainer.set_debug(os.environ["DEBUG"]=="1" if "DEBUG" in os.environ else False)
 
     parser = argparse.ArgumentParser() 
     parser.add_argument("--dataset_note") 
     args = parser.parse_args() 
     if args.dataset_note: 
         dataset.set_note(args.dataset_note)
-
-    trainer.set_debug(os.environ["DEBUG"]=="1" if "DEBUG" in os.environ else False)
-    trainer.set_project_folders(project_root=os.environ['PROJECT_ROOT'])
+    
+    trainer.set_project(os.environ)
     trainer.set_presets(os.environ)
     trainer.set_model_name()
     trainer.set_model_folder()
@@ -270,6 +273,10 @@ if __name__ == "__main__":
     for learning_rate in trainer.get_preset("learning_rate"):
         optimizers.append(tf.keras.optimizers.RMSprop(learning_rate=learning_rate))
 
+
+    a = { monitor : "val_loss", patience : 5, mode: "auto", restore_best_weights : True, verbose : 1 }
+    b = { monitor : "val_loss", factor : 0.1, patience : 4, min_lr : 1e-8, verbose : 1 }
+
     trainer.set_model_settings({
         "validation_split": trainer.get_preset("validation_split"),
         "base_model": tf.keras.applications.InceptionV3(weights="imagenet", include_top=False),
@@ -279,11 +286,13 @@ if __name__ == "__main__":
         "epochs": trainer.get_preset("epochs"), 
         "freeze_layers": trainer.get_preset("freeze_layers"), 
         "callbacks" : [
-            [ 
-                tf.keras.callbacks.EarlyStopping(monitor="val_loss", patience=5, mode="auto", restore_best_weights=True, verbose=1),
+            [
+                # tf.keras.callbacks.EarlyStopping(monitor="val_loss", patience=5, mode="auto", restore_best_weights=True, verbose=1),
+                tf.keras.callbacks.EarlyStopping(a),
+                # tf.keras.callbacks.ReduceLROnPlateau(monitor="val_loss", factor=0.1, patience=4, min_lr=1e-8, verbose=1),
+                tf.keras.callbacks.ReduceLROnPlateau(b),
+                tf.keras.callbacks.ModelCheckpoint(monitor=trainer.get_preset("checkpoint_monitor"), save_best_only=True, save_freq="epoch", verbose=1)
                 # tf.keras.callbacks.TensorBoard(trainer.get_tensorboard_log_path()),
-                tf.keras.callbacks.ReduceLROnPlateau(monitor="val_loss", factor=0.1, patience=4, min_lr=1e-8, verbose=1),
-                tf.keras.callbacks.ModelCheckpoint(trainer.get_model_path(), monitor="val_acc", save_best_only=True, save_freq="epoch", verbose=1)
             ]
         ],
         "metrics" : trainer.get_preset("metrics"),

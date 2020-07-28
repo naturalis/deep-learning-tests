@@ -40,6 +40,7 @@ class DataSet():
         self.data_set_file = os.path.join(self.model_trainer.model_folder, "dataset.json")
 
     def _make_dataset(self):
+        self.data_set["project_name"] = self.model_trainer.project_name
         self.data_set["project_root"] = self.model_trainer.project_root
         self.data_set["model_name"] = self.model_trainer.model_name
         self.data_set["timestamp"] = str(self.model_trainer.timestamp)
@@ -80,7 +81,7 @@ class DataSet():
         opt = []
         for phase, optimizer in enumerate(self.model_trainer.model_settings["optimizer"]):
             lr = self.model_trainer.get_preset("learning_rate")
-            opt.append("{} (lr: {})".format(str(optimizer), str(lr[phase])))
+            opt.append("{} (lr: {})".format(regex.sub('',str(optimizer)), str(lr[phase])))
 
         self.data_set["training_phases"] = { 
             "epochs" : self.model_trainer.get_preset("epochs"),

@@ -24,7 +24,10 @@ class ImageIdentify(baseclass.BaseClass):
 
 if __name__ == '__main__':
 
-    project_root = os.environ['PROJECT_ROOT']
+    predict = ImageIdentify()
+    predict.set_debug(os.environ["DEBUG"]=="1" if "DEBUG" in os.environ else False)
+    predict.set_project(os.environ)
+
     image = sys.argv[1]
 
     if len(sys.argv)>2:
@@ -32,11 +35,7 @@ if __name__ == '__main__':
     else:
         model_name = os.environ['MODEL_NAME']
 
-    predict = ImageIdentify()
-
-    predict.set_debug(os.environ["DEBUG"]=="1" if "DEBUG" in os.environ else False)
     predict.set_model_name(model_name)
-    predict.set_project_folders(project_root=os.environ['PROJECT_ROOT'])
 
     predict.load_model()
 

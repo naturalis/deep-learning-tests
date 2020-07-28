@@ -154,11 +154,9 @@ class DwcaReader(baseclass.BaseClass):
 
 if __name__ == "__main__":
 
-    project_root = os.environ['PROJECT_ROOT']
-
     reader = DwcaReader()
     reader.set_debug(os.environ["DEBUG"]=="1" if "DEBUG" in os.environ else False)
-    reader.set_project_folders(project_root=project_root)
+    reader.set_project(os.environ)
 
     if 'DWCA_FILE_PATH' in os.environ:
         reader.set_dwca_file_path(os.environ['DWCA_FILE_PATH'])

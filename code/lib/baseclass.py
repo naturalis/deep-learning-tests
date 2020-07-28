@@ -22,13 +22,14 @@ def _csv_to_dataframe(filepath, usecols, encoding="utf-8-sig"):
 class BaseClass():
     logger = None
     debug = False
+    project_root = None
+    project_name = None
     class_list_file_json = None
     class_list_file_csv = None
     image_list_file_csv = None
     downloaded_images_file = None
     timestamp = None
     model_name = None
-    project_root = None
     image_path = None
     image_list_class_col = None
     image_list_image_col = None
@@ -76,6 +77,23 @@ class BaseClass():
         else:
             self.model_name = model_name
         self.logger.info("model name: {}".format(self.model_name))
+
+
+    def set_project(self,os_environ):
+        if 'PROJECT_NAME' in os_environ:
+            self.set_project_name(os_environ.get("PROJECT_NAME"))
+        else:
+            raise ValueError("need a project name (PROJECT_NAME missing from .env)")
+
+        if 'PROJECT_ROOT' in os_environ:
+            self.set_project_folders(project_root=os_environ.get("PROJECT_ROOT"))
+        else:
+            raise ValueError("need a project root (PROJECT_ROOT missing from .env)")
+
+
+    def set_project_name(self, project_name):
+        self.project_name = project_name
+
 
     def set_project_folders(self, project_root, image_path=None):
         self.project_root = project_root
@@ -224,9 +242,9 @@ class BaseClass():
         self.presets.update( { "epochs" : json.loads(os_environ.get("EPOCHS")) if "EPOCHS" in os_environ else [ 200 ]   } )
         self.presets.update( { "freeze_layers" : json.loads(os_environ.get("FREEZE_LAYERS")) if "FREEZE_LAYERS" in os_environ else [ "none" ] } )
         self.presets.update( { "metrics" : json.loads(os_environ.get("METRICS")) if "METRICS" in os_environ else [ "acc" ] } )
+        self.presets.update( { "checkpoint_monitor" : os_environ.get("CHECKPOINT_MONITOR") if "CHECKPOINT_MONITOR" in os_environ else "val_acc" } )
         # epochs [ 10, 200 ]
         # freeze_layers [ "base_model", "none" ] # 249
-        print(self.presets)
 
     def get_preset(self, preset):
         if preset in self.presets:

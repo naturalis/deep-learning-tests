@@ -119,10 +119,8 @@ class ImageDownloader(baseclass.BaseClass):
 
 if __name__ == "__main__":
 
-    project_root = os.environ['PROJECT_ROOT']
-
     downloader = ImageDownloader()
-    downloader.set_project_folders(project_root=project_root)
+    downloader.set_project(os.environ)
 
     if 'IMAGE_URL_TO_NAME' in os.environ:
         downloader.set_image_url_to_name(json.loads(os.environ['IMAGE_URL_TO_NAME']))
