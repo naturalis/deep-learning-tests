@@ -64,10 +64,10 @@ class DataSet():
 
 
         self.data_set["training_phases"] = { 
-            "epochs" : str(self.model_trainer.get_preset("epochs")),
-            "freeze_layers" : str(self.model_trainer.get_preset("freeze_layers")),
-            "optimizer" : list(opt),
-            "callbacks" : list(call)
+            "epochs" : self.model_trainer.get_preset("epochs"),
+            "freeze_layers" : self.model_trainer.get_preset("freeze_layers"),
+            "optimizer" : opt,
+            "callbacks" : call
         }
 
         print(self.data_set)
