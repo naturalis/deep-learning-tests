@@ -274,8 +274,8 @@ if __name__ == "__main__":
         optimizers.append(tf.keras.optimizers.RMSprop(learning_rate=learning_rate))
 
 
-    a = { monitor : "val_loss", patience : 5, mode: "auto", restore_best_weights : True, verbose : 1 }
-    b = { monitor : "val_loss", factor : 0.1, patience : 4, min_lr : 1e-8, verbose : 1 }
+    a = { "monitor" : "val_loss", "patience" : 5, "mode": "auto", "restore_best_weights" : True, "verbose"   : 1 }
+    b = { "monitor" : "val_loss", "factor" : 0.1, "patience" : 4, "min_lr" : 1e-8, "verbose" : 1 }
 
     trainer.set_model_settings({
         "validation_split": trainer.get_preset("validation_split"),
