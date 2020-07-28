@@ -243,7 +243,6 @@ class ModelTrainer(baseclass.BaseClass):
     def get_callbacks(self):
         phases = []
         for item in trainer.get_preset("reduce_lr_params"):
-            print(item)
             phase = []
             phase.append(tf.keras.callbacks.EarlyStopping(monitor=trainer.get_preset("early_stopping_monitor"), patience=5, mode="auto", restore_best_weights=True, verbose=1))
             phase.append(tf.keras.callbacks.ModelCheckpoint(trainer.get_model_path(), monitor=trainer.get_preset("checkpoint_monitor"), save_best_only=True, save_freq="epoch", verbose=1))
@@ -270,12 +269,6 @@ if __name__ == "__main__":
     trainer.set_presets(os.environ)
     trainer.set_model_name()
     trainer.set_model_folder()
-
-
-
-    print(trainer.get_callbacks())
-
-
     
     if 'CLASS_IMAGE_MINIMUM' in os.environ:
         trainer.set_class_image_minimum(os.environ['CLASS_IMAGE_MINIMUM'])
