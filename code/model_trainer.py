@@ -240,6 +240,17 @@ class ModelTrainer(baseclass.BaseClass):
         # plt.show()
         plt.savefig(self.get_history_plot_save_path())
 
+    def get_callbacks(self):
+        phases = []
+        for item in trainer.get_preset("reduce_lr_params"):
+            phase = []
+            phase.append(tf.keras.callbacks.EarlyStopping(monitor=trainer.get_preset("early_stopping_monitor"), patience=5, mode="auto", restore_best_weights=True, verbose=1))
+            phase.append(tf.keras.callbacks.ModelCheckpoint(trainer.get_model_path(), monitor=trainer.get_preset("checkpoint_monitor"), save_best_only=True, save_freq="epoch", verbose=1))
+            phase.append(tf.keras.callbacks.ReduceLROnPlateau(json.loads(item)))
+            phases.append(phase)
+
+        return phases
+
 
 if __name__ == "__main__":
 
@@ -274,8 +285,17 @@ if __name__ == "__main__":
         optimizers.append(tf.keras.optimizers.RMSprop(learning_rate=learning_rate))
 
 
-    a = { "monitor" : "val_loss", "patience" : 5, "mode": "auto", "restore_best_weights" : True, "verbose"   : 1 }
-    b = { "monitor" : "val_loss", "factor" : 0.1, "patience" : 4, "min_lr" : 1e-8, "verbose" : 1 }
+    print([
+        [
+            tf.keras.callbacks.EarlyStopping(monitor=trainer.get_preset("early_stopping_monitor"), patience=5, mode="auto", restore_best_weights=True, verbose=1),
+            tf.keras.callbacks.ModelCheckpoint(trainer.get_model_path(), monitor=trainer.get_preset("checkpoint_monitor"), save_best_only=True, save_freq="epoch", verbose=1)
+            tf.keras.callbacks.ReduceLROnPlateau(b),
+        ]
+    ])
+
+    print(trainer.get_callbacks())
+
+    exit(0)
 
     trainer.set_model_settings({
         "validation_split": trainer.get_preset("validation_split"),
@@ -285,15 +305,7 @@ if __name__ == "__main__":
         "batch_size": trainer.get_preset("batch_size"),
         "epochs": trainer.get_preset("epochs"), 
         "freeze_layers": trainer.get_preset("freeze_layers"), 
-        "callbacks" : [
-            [
-                # tf.keras.callbacks.EarlyStopping(monitor="val_loss", patience=5, mode="auto", restore_best_weights=True, verbose=1),
-                tf.keras.callbacks.EarlyStopping(a),
-                # tf.keras.callbacks.ReduceLROnPlateau(monitor="val_loss", factor=0.1, patience=4, min_lr=1e-8, verbose=1),
-                tf.keras.callbacks.ReduceLROnPlateau(b),
-                tf.keras.callbacks.ModelCheckpoint(trainer.get_model_path(), monitor=trainer.get_preset("checkpoint_monitor"), save_best_only=True, save_freq="epoch", verbose=1)
-            ]
-        ],
+        "callbacks" : trainer.get_callbacks(),
         "metrics" : trainer.get_preset("metrics"),
         "image_augmentation" : trainer.get_preset("image_augmentation")
     })

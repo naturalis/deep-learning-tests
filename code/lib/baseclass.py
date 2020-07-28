@@ -236,6 +236,11 @@ class BaseClass():
                 "vertical_flip": False
             } } )
 
+        if 'REDUCE_LR_PARAMS' in os_environ:
+            self.presets.update( {'reduce_lr_params' : json.loads(os_environ.get("REDUCE_LR_PARAMS")) } )    
+        else:
+            self.presets.update( {'reduce_lr_params' : { "monitor" : "val_loss", "factor" : 0.1, "patience" : 4, "min_lr" : 1e-8, "verbose" : 1 } } )
+
         self.presets.update( { "validation_split" : float(os_environ.get("VALIDATION_SPLIT")) if "VALIDATION_SPLIT" in os_environ else 0.2 } )
         self.presets.update( { "learning_rate" : json.loads(os_environ.get("LEARNING_RATE")) if "LEARNING_RATE" in os_environ else [ 1e-4 ] } )
         self.presets.update( { "batch_size" : int(os_environ.get("BATCH_SIZE")) if "BATCH_SIZE" in os_environ else 64 } )
@@ -243,6 +248,7 @@ class BaseClass():
         self.presets.update( { "freeze_layers" : json.loads(os_environ.get("FREEZE_LAYERS")) if "FREEZE_LAYERS" in os_environ else [ "none" ] } )
         self.presets.update( { "metrics" : json.loads(os_environ.get("METRICS")) if "METRICS" in os_environ else [ "acc" ] } )
         self.presets.update( { "checkpoint_monitor" : os_environ.get("CHECKPOINT_MONITOR") if "CHECKPOINT_MONITOR" in os_environ else "val_acc" } )
+        self.presets.update( { "early_stopping_monitor" : os_environ.get("EARLY_STOPPING_MONITOR") if "EARLY_STOPPING_MONITOR" in os_environ else "val_loss" } )
         # epochs [ 10, 200 ]
         # freeze_layers [ "base_model", "none" ] # 249
 
