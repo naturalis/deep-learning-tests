@@ -41,7 +41,7 @@ class BaseClass():
     analysis_path = None
     traindf = None
     class_list = None
-    class_list_with_count = None
+    class_list_with_count = []
     classes_to_use = []
     model_settings = None
     COL_CLASS = "class"
