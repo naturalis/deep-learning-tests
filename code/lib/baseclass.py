@@ -105,7 +105,7 @@ class BaseClass():
 
     def set_class_image_minimum(self, class_image_minimum):
         class_image_minimum = int(class_image_minimum)
-        if class_image_minimum > 2:
+        if class_image_minimum >= 2:
             self.class_image_minimum = class_image_minimum
         else:
             raise ValueError("class minimum must be greater than 2 ({})".format(class_image_minimum))
