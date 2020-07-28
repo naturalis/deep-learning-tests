@@ -254,6 +254,11 @@ class ModelTrainer(baseclass.BaseClass):
 
 if __name__ == "__main__":
 
+    print(os.environ.get("REDUCE_LR_PARAMS"))
+    print(json.loads(os.environ.get("REDUCE_LR_PARAMS")))
+    exit(0)
+
+
     trainer = ModelTrainer()
     dataset = dataset.DataSet()
     trainer.set_debug(os.environ["DEBUG"]=="1" if "DEBUG" in os.environ else False)
