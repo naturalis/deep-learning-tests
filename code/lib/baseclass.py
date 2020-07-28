@@ -41,6 +41,7 @@ class BaseClass():
     analysis_path = None
     traindf = None
     class_list = None
+    class_list_with_count = None
     classes_to_use = []
     model_settings = None
     COL_CLASS = "class"
@@ -124,6 +125,7 @@ class BaseClass():
             for row in c:
                 if int(row[1])>=self.class_image_minimum:
                     self.classes_to_use.append(row[0])
+                    self.class_list_with_count.append(row)
 
     def class_list_apply_image_minimum(self):
         before = len(self.class_list)

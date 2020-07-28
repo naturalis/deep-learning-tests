@@ -48,7 +48,7 @@ class DataSet():
             "summary_hash" : self.model_summary_hash
         }
 
-        print(self.model_trainer.class_list)
+        print(self.model_trainer.class_list_with_count)
         # self.data_set["classes"] = list(self.model_trainer.class_list)
         
         self.data_set["training_settings"] = { 
