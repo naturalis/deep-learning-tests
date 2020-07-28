@@ -40,9 +40,7 @@ class BaseClass():
     architecture_path = None
     analysis_path = None
     traindf = None
-    class_list = None
-    class_list_with_count = []
-    classes_to_use = []
+    class_list = []
     model_settings = None
     COL_CLASS = "class"
     COL_IMAGE = "image"
