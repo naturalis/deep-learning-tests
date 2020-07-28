@@ -268,12 +268,14 @@ if __name__ == "__main__":
     
     trainer.set_project(os.environ)
     trainer.set_presets(os.environ)
+    trainer.set_model_name()
+    trainer.set_model_folder()
+
+
 
     print(trainer.get_callbacks())
 
 
-    trainer.set_model_name()
-    trainer.set_model_folder()
     
     if 'CLASS_IMAGE_MINIMUM' in os.environ:
         trainer.set_class_image_minimum(os.environ['CLASS_IMAGE_MINIMUM'])
