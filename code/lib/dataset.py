@@ -110,7 +110,7 @@ class DataSet():
         f = open(self.data_set_file, "w")
         f.write(json.dumps(self.data_set))
         f.close()
-        self.logger.info("saved data set: {}".format(self.data_set))
+        self.logger.info("saved data set: {}".format(self.data_set_file))
 
 
 
