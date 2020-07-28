@@ -50,6 +50,8 @@ class DataSet():
             "model_summary_hash" : self.model_summary_hash
         }
 
+        print(str(self.model_trainer.class_list))
+
         self.data_set["classes_hash"] = md5(str(self.model_trainer.class_list).encode('utf-8')).hexdigest()
 
         self.data_set["training_settings"] = { 

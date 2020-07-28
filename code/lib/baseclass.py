@@ -170,30 +170,14 @@ class BaseClass():
         df[2] = self.image_path.rstrip("/") + "/" + df[2].astype(str)
         df.columns = [self.COL_CLASS, self.COL_IMAGE]
         self.traindf = df
-
         self.logger.info("read {} images in {} classes".format(self.traindf[self.COL_IMAGE].nunique(),self.traindf[self.COL_CLASS].nunique()))
 
-
     def image_list_apply_class_list(self):
-
-        print(self.class_list)
-
-        self.logger.info("before {} images in {} classes".format(self.traindf[self.COL_IMAGE].nunique(),self.traindf[self.COL_CLASS].nunique()))
-
-    
-
-        new_list = [i[0] for i in self.class_list if True]
-
         before = len(self.traindf)
-        self.traindf = self.traindf[self.traindf[self.COL_CLASS].isin(new_list)]
+        self.traindf = self.traindf[self.traindf[self.COL_CLASS].isin([i[0] for i in self.class_list if True])]
         after = len(self.traindf)
-        self.logger.info("dropped {} out of {} images due to image minimum of {}".format(
-            before - after, before, self.class_image_minimum))
-
+        self.logger.info("dropped {} out of {} images due to image minimum of {}".format(before - after, before, self.class_image_minimum))
         self.logger.info("retained {} images in {} classes".format(self.traindf[self.COL_IMAGE].nunique(),self.traindf[self.COL_CLASS].nunique()))
-
-        print(self.traindf[self.COL_CLASS])
-
 
     def get_model_path(self):
         self.model_path = os.path.join(self.model_folder, "model.hdf5")
