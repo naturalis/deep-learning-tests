@@ -229,7 +229,7 @@ class BaseClass():
 
         self.presets.update( { "validation_split" : float(os_environ.get("VALIDATION_SPLIT")) if "VALIDATION_SPLIT" in os_environ else 0.2 } )
         self.presets.update( { "learning_rate" : json.loads(os_environ.get("LEARNING_RATE")) if "LEARNING_RATE" in os_environ else [ 1e-4 ] } )
-        self.presets.update( { "batch_size" : list(os_environ.get("BATCH_SIZE")) if "BATCH_SIZE" in os_environ else 64 } )
+        self.presets.update( { "batch_size" : str(os_environ.get("BATCH_SIZE")) if "BATCH_SIZE" in os_environ else 64 } )
         self.presets.update( { "epochs" : json.loads(os_environ.get("EPOCHS")) if "EPOCHS" in os_environ else [ 200 ]   } )
         self.presets.update( { "freeze_layers" : json.loads(os_environ.get("FREEZE_LAYERS")) if "FREEZE_LAYERS" in os_environ else [ "none" ] } )
         self.presets.update( { "metrics" : json.loads(os_environ.get("METRICS")) if "METRICS" in os_environ else [ "acc" ] } )
