@@ -188,6 +188,8 @@ class BaseClass():
 
         self.logger.info("retained {} images in {} classes".format(self.traindf[self.COL_IMAGE].nunique(),self.traindf[self.COL_CLASS].nunique()))
 
+        print(self.traindf[self.COL_CLASS])
+
 
     def get_model_path(self):
         self.model_path = os.path.join(self.model_folder, "model.hdf5")
