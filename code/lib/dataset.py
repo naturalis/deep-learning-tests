@@ -14,8 +14,6 @@ class DataSet():
 
     def __init__(self):
         self.logger = logclass.LogClass(self.__class__.__name__)
-        self.data_set_file = os.path.join(self.model_trainer.model_folder, "dataset.json")
-
 
     def set_note(self,note):
         if not note is None:
@@ -26,7 +24,7 @@ class DataSet():
             self.model_note = input("enter model note: ")
 
     def make_dataset(self,model_trainer):
-        self.model_trainer = model_trainer
+        self._set_model_trainer(self,model_trainer)
         self._set_model_summary()
 
         self._make_dataset()
@@ -36,6 +34,9 @@ class DataSet():
 
         print(self.data_set)
 
+    def _set_model_trainer(self,model_trainer):
+        self.model_trainer = model_trainer
+        self.data_set_file = os.path.join(self.model_trainer.model_folder, "dataset.json")
 
     def _make_dataset(self):
         self.data_set["model_name"] = self.model_trainer.model_name
