@@ -50,7 +50,7 @@ class DataSet():
             "model_summary_hash" : self.model_summary_hash
         }
 
-        self.data_set["classes_hash"] = md5(str(self.model_trainer.class_list_with_count).encode('utf-8')).hexdigest()
+        self.data_set["classes_hash"] = md5(str(self.model_trainer.class_list).encode('utf-8')).hexdigest()
 
         self.data_set["training_settings"] = { 
             "validation_split" : str(self.model_trainer.get_preset("validation_split")),
@@ -107,7 +107,7 @@ class DataSet():
         # image_table = list(map(lambda x: [x[0], os.path.basename(x[1]) ], image_table))
         # print(image_table)
 
-        # self.data_set["classes"] = self.model_trainer.class_list_with_count
+        # self.data_set["classes"] = self.model_trainer.class_list
 
 
     def _save_dataset(self):

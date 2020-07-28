@@ -263,7 +263,6 @@ if __name__ == "__main__":
 
     trainer.copy_class_list_file()
     trainer.read_class_list()
-    trainer.class_list_apply_image_minimum()
     trainer.read_image_list_file(image_col=2)
     trainer.image_list_apply_class_list()
 

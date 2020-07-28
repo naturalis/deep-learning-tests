@@ -33,7 +33,7 @@ class BaseClass():
     image_list_class_col = None
     image_list_image_col = None
     class_list_file = None
-    class_list_file_class_col = None
+    # class_list_file_class_col = None
     class_image_minimum = 2
     class_image_maximum = 0
     model_path = None
@@ -113,33 +113,22 @@ class BaseClass():
     def set_class_image_maximum(self,class_image_maximum):
         self.class_image_maximum = int(class_image_maximum)
 
-    def read_class_list(self, class_col=0):
+    def read_class_list(self):
         if not os.path.isfile(self.class_list_file_model):
             raise FileNotFoundError("class list file not found: {}".format(self.class_list_file_model))
-        self.class_list_file_class_col = class_col
-        self.class_list = _csv_to_dataframe(self.class_list_file_model, [self.class_list_file_class_col])
 
-        print("---------------------> " + str(len(self.class_list)))
-
-        # making a list of just the classes that make the image minimum
+        # self.class_list_file_class_col = class_col
+        # self.class_list = _csv_to_dataframe(self.class_list_file_model, [self.class_list_file_class_col])
+        tot_classes = 0        
         with open(self.class_list_file_model, 'r', encoding='utf-8-sig') as file:
             c = csv.reader(file)
             for row in c:
+                tot_classes += 1
                 if int(row[1])>=self.class_image_minimum:
-                    self.classes_to_use.append(row[0])
                     self.class_list.append(row)
 
-        print("---------------------> " + str(len(self.class_list)))
-
-
-
-    def class_list_apply_image_minimum(self):
-        pass
-        # before = len(self.class_list)
-        # self.class_list = self.class_list[self.class_list[self.class_list_file_class_col].isin(self.classes_to_use)]
-        # after = len(self.class_list)
-        # self.logger.info("dropped {} out of {} classes due to image minimum of {}".format(
-        #     before - after, before, self.class_image_minimum))
+        self.logger.info("retained {} classes (dropped {} due to image minimum of {})".format(
+            len(self.class_list), str(tot_classes - len(self.class_list)), self.class_image_minimum))
 
     def get_class_list(self):
         return self.class_list
