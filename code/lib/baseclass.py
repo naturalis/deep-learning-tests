@@ -178,6 +178,8 @@ class BaseClass():
 
         print(self.class_list)
 
+        self.logger.info("before {} images in {} classes".format(self.traindf[self.COL_IMAGE].nunique(),self.traindf[self.COL_CLASS].nunique()))
+
         before = len(self.traindf)
         self.traindf = self.traindf[self.traindf[self.COL_CLASS].isin(self.class_list[0])]
         after = len(self.traindf)
