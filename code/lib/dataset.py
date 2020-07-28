@@ -24,7 +24,7 @@ class DataSet():
             self.model_note = input("enter model note: ")
 
     def make_dataset(self,model_trainer):
-        self._set_model_trainer(self,model_trainer)
+        self._set_model_trainer(model_trainer)
         self._set_model_summary()
 
         self._make_dataset()
