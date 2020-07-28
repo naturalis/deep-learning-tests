@@ -30,9 +30,11 @@ class DataSet():
         self._make_dataset()
         self._save_dataset()
 
-        # self._make_file_list()
 
-        print(self.data_set)
+        # self._save_dataset()
+        # self._save_dataset()
+
+        # self._make_file_list()
 
     def _set_model_trainer(self,model_trainer):
         self.model_trainer = model_trainer
@@ -45,11 +47,11 @@ class DataSet():
 
         self.data_set["model"] = { 
             "base_model" : str(self.model_trainer.base_model.name),
-            "summary_hash" : self.model_summary_hash
+            "model_summary_hash" : self.model_summary_hash
         }
 
-        self.data_set["classes"] = self.model_trainer.class_list_with_count
-        
+        self.data_set["classes_hash"] = md5(str(self.model_trainer.class_list_with_count).encode('utf-8')).hexdigest()
+
         self.data_set["training_settings"] = { 
             "validation_split" : str(self.model_trainer.get_preset("validation_split")),
             "image_augmentation" : str(self.model_trainer.get_preset("image_augmentation")),
@@ -105,7 +107,7 @@ class DataSet():
         # image_table = list(map(lambda x: [x[0], os.path.basename(x[1]) ], image_table))
         # print(image_table)
 
-        
+        # self.data_set["classes"] = self.model_trainer.class_list_with_count
 
 
     def _save_dataset(self):

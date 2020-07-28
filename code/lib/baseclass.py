@@ -119,20 +119,27 @@ class BaseClass():
         self.class_list_file_class_col = class_col
         self.class_list = _csv_to_dataframe(self.class_list_file_model, [self.class_list_file_class_col])
 
+        print("---------------------> " + len(self.class_list))
+
         # making a list of just the classes that make the image minimum
         with open(self.class_list_file_model, 'r', encoding='utf-8-sig') as file:
             c = csv.reader(file)
             for row in c:
                 if int(row[1])>=self.class_image_minimum:
                     self.classes_to_use.append(row[0])
-                    self.class_list_with_count.append(row)
+                    self.class_list.append(row)
+
+        print("---------------------> " + len(self.class_list))
+
+
 
     def class_list_apply_image_minimum(self):
-        before = len(self.class_list)
-        self.class_list = self.class_list[self.class_list[self.class_list_file_class_col].isin(self.classes_to_use)]
-        after = len(self.class_list)
-        self.logger.info("dropped {} out of {} classes due to image minimum of {}".format(
-            before - after, before, self.class_image_minimum))
+        pass
+        # before = len(self.class_list)
+        # self.class_list = self.class_list[self.class_list[self.class_list_file_class_col].isin(self.classes_to_use)]
+        # after = len(self.class_list)
+        # self.logger.info("dropped {} out of {} classes due to image minimum of {}".format(
+        #     before - after, before, self.class_image_minimum))
 
     def get_class_list(self):
         return self.class_list
