@@ -235,6 +235,7 @@ class BaseClass():
         self.presets.update( { "metrics" : json.loads(os_environ.get("METRICS")) if "METRICS" in os_environ else [ "acc" ] } )
         # epochs [ 10, 200 ]
         # freeze_layers [ "base_model", "none" ] # 249
+        print(self.presets)
 
     def get_preset(self, preset):
         if preset in self.presets:
