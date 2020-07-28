@@ -27,6 +27,24 @@ class ModelTrainer(baseclass.BaseClass):
         self.tensorboard_log_path = os.path.join(self.project_root, "log", "logs_keras")
         return self.tensorboard_log_path
 
+    def get_optimizers(self):
+        optimizers = []
+        for learning_rate in trainer.get_preset("learning_rate"):
+            optimizers.append(tf.keras.optimizers.RMSprop(learning_rate=learning_rate))
+
+        return optimizers
+
+    def get_callbacks(self):
+        phases = []
+        for item in trainer.get_preset("reduce_lr_params"):
+            phase = []
+            phase.append(tf.keras.callbacks.EarlyStopping(monitor=trainer.get_preset("early_stopping_monitor"), patience=5, mode="auto", restore_best_weights=True, verbose=1))
+            phase.append(tf.keras.callbacks.ModelCheckpoint(trainer.get_model_path(), monitor=trainer.get_preset("checkpoint_monitor"), save_best_only=True, save_freq="epoch", verbose=1))
+            phase.append(tf.keras.callbacks.ReduceLROnPlateau(item))
+            phases.append(phase)
+
+        return phases
+
     def configure_generators(self):
         a = self.model_settings["image_augmentation"] if "image_augmentation" in self.model_settings else []
 
@@ -180,9 +198,6 @@ class ModelTrainer(baseclass.BaseClass):
 
             self.set_callbacks()
 
-            print("FUCK")
-            exit(0)
-
             self.history = self.model.fit(
                 x=self.train_generator,
                 steps_per_epoch=step_size_train,
@@ -240,17 +255,6 @@ class ModelTrainer(baseclass.BaseClass):
         # plt.show()
         plt.savefig(self.get_history_plot_save_path())
 
-    def get_callbacks(self):
-        phases = []
-        for item in trainer.get_preset("reduce_lr_params"):
-            phase = []
-            phase.append(tf.keras.callbacks.EarlyStopping(monitor=trainer.get_preset("early_stopping_monitor"), patience=5, mode="auto", restore_best_weights=True, verbose=1))
-            phase.append(tf.keras.callbacks.ModelCheckpoint(trainer.get_model_path(), monitor=trainer.get_preset("checkpoint_monitor"), save_best_only=True, save_freq="epoch", verbose=1))
-            phase.append(tf.keras.callbacks.ReduceLROnPlateau(item))
-            phases.append(phase)
-
-        return phases
-
 
 if __name__ == "__main__":
 
@@ -281,28 +285,11 @@ if __name__ == "__main__":
     trainer.read_image_list_file(image_col=2)
     trainer.image_list_apply_class_list()
 
-    optimizers = []
-    for learning_rate in trainer.get_preset("learning_rate"):
-        optimizers.append(tf.keras.optimizers.RMSprop(learning_rate=learning_rate))
-
-
-    print([
-        [
-            tf.keras.callbacks.EarlyStopping(monitor="val_loss", patience=5, mode="auto", restore_best_weights=True, verbose=1),
-            tf.keras.callbacks.ReduceLROnPlateau(monitor="val_loss", factor=0.1, patience=4, min_lr=1e-8, verbose=1),
-            tf.keras.callbacks.ModelCheckpoint(trainer.get_model_path(), monitor="val_acc", save_best_only=True, save_freq="epoch", verbose=1)
-        ]
-    ])
-
-    print(trainer.get_callbacks())
-
-    exit(0)
-
     trainer.set_model_settings({
         "validation_split": trainer.get_preset("validation_split"),
         "base_model": tf.keras.applications.InceptionV3(weights="imagenet", include_top=False),
         "loss": tf.keras.losses.CategoricalCrossentropy(),
-        "optimizer": optimizers,
+        "optimizer": trainer.get_optimizers(),
         "batch_size": trainer.get_preset("batch_size"),
         "epochs": trainer.get_preset("epochs"), 
         "freeze_layers": trainer.get_preset("freeze_layers"), 
@@ -322,15 +309,8 @@ if __name__ == "__main__":
     trainer.evaluate()
 
 
-        # "base_model": tf.keras.applications.MobileNetV2(weights="imagenet", include_top=False),  
-        # "base_model": tf.keras.applications.ResNet50(weights="imagenet", include_top=False),
-
         # WARNING:tensorflow:Method (on_train_batch_end) is slow compared to the batch update (0.325404). Check your callbacks.
         # maybe something with TensorBoard callback, as the other ones get called at epoch end, not batch end
 
         # https://www.tensorflow.org/api_docs/python/tf/keras/callbacks/LearningRateScheduler
-
-
-
-
 

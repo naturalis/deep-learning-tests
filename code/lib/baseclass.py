@@ -237,7 +237,7 @@ class BaseClass():
             } } )
 
         if 'REDUCE_LR_PARAMS' in os_environ:
-            self.presets.update( {'reduce_lr_params' : json.loads(os_environ.get("REDUCE_LR_PARAMS")) } )    
+            self.presets.update( {'reduce_lr_params' : json.loads(os_environ.get("REDUCE_LR_PARAMS")) } )
         else:
             self.presets.update( {'reduce_lr_params' : { "monitor" : "val_loss", "factor" : 0.1, "patience" : 4, "min_lr" : 1e-8, "verbose" : 1 } } )
 
