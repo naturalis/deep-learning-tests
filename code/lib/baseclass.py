@@ -180,8 +180,12 @@ class BaseClass():
 
         self.logger.info("before {} images in {} classes".format(self.traindf[self.COL_IMAGE].nunique(),self.traindf[self.COL_CLASS].nunique()))
 
+    
+
+        new_list = [i[0] for i in self.class_list if True]
+
         before = len(self.traindf)
-        self.traindf = self.traindf[self.traindf[self.COL_CLASS].isin(self.class_list[0])]
+        self.traindf = self.traindf[self.traindf[self.COL_CLASS].isin(new_list)]
         after = len(self.traindf)
         self.logger.info("dropped {} out of {} images due to image minimum of {}".format(
             before - after, before, self.class_image_minimum))
