@@ -48,8 +48,8 @@ class DataSet():
             "summary_hash" : self.model_summary_hash
         }
 
-        self.data_set["classes"] = list(self.model_trainer.class_list)
-        
+        self.data_set["classes"] = self.model_trainer.train_generator.class_indices
+
         self.data_set["training_settings"] = { 
             "validation_split" : str(self.model_trainer.get_preset("validation_split")),
             "image_augmentation" : str(self.model_trainer.get_preset("image_augmentation")),
