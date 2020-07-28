@@ -14,7 +14,7 @@ class DataSet():
 
     def __init__(self):
         self.logger = logclass.LogClass(self.__class__.__name__)
-        self.data_set_file = os.path.join(self.model_folder, "dataset.json")
+        self.data_set_file = os.path.join(self.model_trainer.model_folder, "dataset.json")
 
 
     def set_note(self,note):
