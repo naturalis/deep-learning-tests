@@ -7,7 +7,6 @@ class DataSet():
 
     model_trainer = None
     model_summary = None
-    model_summary_hash = None
     model_note = None
     data_set = {}
     data_set_file = None
@@ -41,18 +40,16 @@ class DataSet():
         self.data_set_file = os.path.join(self.model_trainer.model_folder, "dataset.json")
 
     def _make_dataset(self):
+        self.data_set["project_root"] = self.model_trainer.project_root
         self.data_set["model_name"] = self.model_trainer.model_name
         self.data_set["timestamp"] = str(self.model_trainer.timestamp)
         self.data_set["model_note"] = self.model_note
 
-        self.data_set["model"] = { 
-            "base_model" : str(self.model_trainer.base_model.name),
-            "model_summary_hash" : self.model_summary_hash
-        }
+        self.data_set["base_model"] = str(self.model_trainer.base_model.name)
+        self.data_set["model_summary_hash"] = md5(self.model_summary.encode('utf-8')).hexdigest()
 
-        print(str(self.model_trainer.class_list))
-
-        self.data_set["classes_hash"] = md5(str(self.model_trainer.class_list).encode('utf-8')).hexdigest()
+        self.data_set["class_count"] = len(self.model_trainer.class_list)
+        self.data_set["class_list_hash"] = md5(str(self.model_trainer.class_list).encode('utf-8')).hexdigest()
 
         self.data_set["training_settings"] = { 
             "validation_split" : str(self.model_trainer.get_preset("validation_split")),
@@ -85,7 +82,6 @@ class DataSet():
             lr = self.model_trainer.get_preset("learning_rate")
             opt.append("{} (lr: {})".format(str(optimizer), str(lr[phase])))
 
-
         self.data_set["training_phases"] = { 
             "epochs" : self.model_trainer.get_preset("epochs"),
             "freeze_layers" : self.model_trainer.get_preset("freeze_layers"),
@@ -93,18 +89,7 @@ class DataSet():
             "callbacks" : call
         }
 
-
-
-        # separate files
-            # "summary" : self.model_summary,
-        # print(" ==> " + str(self.model_trainer.project_root))
-        # print(" ==> " + str(self.model_trainer.class_list_file_json))
-        # print(" ==> " + str(self.model_trainer.class_list_file_csv))
-        # print(" ==> " + str(self.model_trainer.image_list_file_csv))
-        # print(" ==> " + str(self.model_trainer.image_path))
-        # print(" ==> " + str(self.model_trainer.class_list_file))
-        # print(" ==> " + str(self.model_trainer.downloaded_images_file))
-
+        # self.model_summary,
         # image_table = self.model_trainer.traindf.sort_values(by=[self.model_trainer.COL_CLASS,self.model_trainer.COL_IMAGE]).values.tolist()
         # image_table = list(map(lambda x: [x[0], os.path.basename(x[1]) ], image_table))
         # print(image_table)
@@ -118,11 +103,8 @@ class DataSet():
         f.close()
         self.logger.info("saved data set: {}".format(self.data_set_file))
 
-
-
     def _set_model_summary(self):
         stringlist = []
         self.model_trainer.model.summary(print_fn=lambda x: stringlist.append(x))
         self.model_summary = "\n".join(stringlist)
-        self.model_summary_hash = md5(self.model_summary.encode('utf-8')).hexdigest()
 

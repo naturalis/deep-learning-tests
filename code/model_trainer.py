@@ -296,8 +296,6 @@ if __name__ == "__main__":
     dataset.ask_note()
     dataset.make_dataset(trainer)
 
-    exit(0)
-
     trainer.train_model()
     trainer.save_model()
     trainer.evaluate()
