@@ -291,8 +291,7 @@ if __name__ == "__main__":
                 tf.keras.callbacks.EarlyStopping(a),
                 # tf.keras.callbacks.ReduceLROnPlateau(monitor="val_loss", factor=0.1, patience=4, min_lr=1e-8, verbose=1),
                 tf.keras.callbacks.ReduceLROnPlateau(b),
-                tf.keras.callbacks.ModelCheckpoint(monitor=trainer.get_preset("checkpoint_monitor"), save_best_only=True, save_freq="epoch", verbose=1)
-                # tf.keras.callbacks.TensorBoard(trainer.get_tensorboard_log_path()),
+                tf.keras.callbacks.ModelCheckpoint(trainer.get_model_path(), monitor=trainer.get_preset("checkpoint_monitor"), save_best_only=True, save_freq="epoch", verbose=1)
             ]
         ],
         "metrics" : trainer.get_preset("metrics"),
