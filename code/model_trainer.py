@@ -243,6 +243,7 @@ class ModelTrainer(baseclass.BaseClass):
     def get_callbacks(self):
         phases = []
         for item in trainer.get_preset("reduce_lr_params"):
+            print(item)
             phase = []
             phase.append(tf.keras.callbacks.EarlyStopping(monitor=trainer.get_preset("early_stopping_monitor"), patience=5, mode="auto", restore_best_weights=True, verbose=1))
             phase.append(tf.keras.callbacks.ModelCheckpoint(trainer.get_model_path(), monitor=trainer.get_preset("checkpoint_monitor"), save_best_only=True, save_freq="epoch", verbose=1))
@@ -254,12 +255,8 @@ class ModelTrainer(baseclass.BaseClass):
 
 if __name__ == "__main__":
 
-    print(os.environ.get("REDUCE_LR_PARAMS"))
-    print(json.loads(os.environ.get("REDUCE_LR_PARAMS")))
-    exit(0)
-
-
     trainer = ModelTrainer()
+
     dataset = dataset.DataSet()
     trainer.set_debug(os.environ["DEBUG"]=="1" if "DEBUG" in os.environ else False)
 
@@ -271,6 +268,10 @@ if __name__ == "__main__":
     
     trainer.set_project(os.environ)
     trainer.set_presets(os.environ)
+
+    print(trainer.get_callbacks())
+
+
     trainer.set_model_name()
     trainer.set_model_folder()
     
