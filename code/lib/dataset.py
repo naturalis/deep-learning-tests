@@ -1,6 +1,7 @@
 import os, re
 from hashlib import md5
 import tensorflow as tf
+from lib import logclass
 
 class DataSet():
 
@@ -9,6 +10,12 @@ class DataSet():
     model_summary_hash = None
     model_note = None
     data_set = {}
+    data_set_file = None
+
+    def __init__(self):
+        self.logger = logclass.LogClass(self.__class__.__name__)
+        self.data_set_file = os.path.join(self.model_folder, "dataset.json")
+
 
     def set_note(self,note):
         if not note is None:
@@ -22,6 +29,15 @@ class DataSet():
         self.model_trainer = model_trainer
         self._set_model_summary()
 
+        self._make_dataset()
+        self._save_dataset()
+
+        # self._make_file_list()
+
+        print(self.data_set)
+
+
+    def _make_dataset(self):
         self.data_set["model_name"] = self.model_trainer.model_name
         self.data_set["timestamp"] = str(self.model_trainer.timestamp)
         self.data_set["model_note"] = self.model_note
@@ -46,7 +62,7 @@ class DataSet():
             for callback in callbacks:
                 if str(callback).find("ReduceLROnPlateau") > -1:
                     call.append(
-                        "{} (monitor: {}; factor: {}; patience: {}; min_lr: {}".format(
+                        "{} (monitor: {}; factor: {}; patience: {}; min_lr: {})".format(
                             regex.sub('',str(callback)),
                             str(callback.monitor),
                             str(callback.factor),
@@ -70,12 +86,10 @@ class DataSet():
             "callbacks" : call
         }
 
-        print(self.data_set)
+
 
         # separate files
             # "summary" : self.model_summary,
-        
-
         # print(" ==> " + str(self.model_trainer.project_root))
         # print(" ==> " + str(self.model_trainer.class_list_file_json))
         # print(" ==> " + str(self.model_trainer.class_list_file_csv))
@@ -89,6 +103,13 @@ class DataSet():
         # print(image_table)
 
         # print(" ==> " + str(self.model_trainer.class_list))
+
+
+    def _save_dataset(self):
+        f = open(self.data_set_file, "w")
+        f.write(json.dumps(self.data_set))
+        f.close()
+        self.logger.info("saved data set: {}".format(self.data_set))
 
 
 
