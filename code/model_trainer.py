@@ -160,22 +160,17 @@ class ModelTrainer(baseclass.BaseClass):
             self.current_callbacks = None
 
         print(self.training_phase)
-        print(isinstance(self.model_settings["callbacks"], list))
-        print(len(self.model_settings["callbacks"]))
-        print(self.model_settings["callbacks"])
+        print(self.model_settings["callbacks"][self.training_phase])
 
         if isinstance(self.model_settings["callbacks"], list):
-            print('1')
             if self.training_phase < len(self.model_settings["callbacks"]):
-                print('2')
                 self.current_callbacks = self.model_settings["callbacks"][self.training_phase]
         else:
-            print('3')
             self.current_callbacks = self.model_settings["callbacks"]
 
     def train_model(self):
 
-        self.logger.info("start training {} ({})".format(self.project_name,self.project_root))
+        self.logger.info("start training \"{}\" ({})".format(self.project_name,self.project_root))
 
         self.training_phase = 0
 

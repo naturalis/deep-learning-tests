@@ -93,6 +93,7 @@ class DataSet():
         # print(image_table)
 
         # self.data_set["classes"] = self.model_trainer.class_list
+        print(self.model_trainer.class_list)
 
 
     def save_dataset(self):
