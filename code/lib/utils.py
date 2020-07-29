@@ -34,6 +34,8 @@ class Timer:
         self.milestones = []
 
     def get_time_passed(self,format="pretty"):
+        if None is self.end_time:
+            self.set_end_time()
         time = float(self.end_time - self.start_time)
         day = time // (24 * 3600)
         time = time % (24 * 3600)
