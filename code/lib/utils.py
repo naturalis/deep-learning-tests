@@ -20,6 +20,8 @@ class Timer:
 
     def _set_time(self,var):
         var = self.get_timestamp()
+        print(var)
+        print(self.start_time)
 
     def get_timestamp(self):
         return time.time()
