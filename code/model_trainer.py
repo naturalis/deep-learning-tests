@@ -234,11 +234,15 @@ class ModelTrainer(baseclass.BaseClass):
         self.logger.info("saved model architecture to {}".format(self.get_architecture_path()))
 
     def save_history(self):
-        for phase,history in enumerate(self.history):
+        for phase,hist in enumerate(self.history):
             self.save_history_plot(phase)
-            path = os.path.join(self.model_folder, "history_phase_{}.csv".format(phase))
-            pd.DataFrame.from_dict(history).to_csv(path,index=False)
-            self.logger.info("saved history {}".format(path))
+            print(str(phase) + ": " + hist.history['loss'])
+            print(str(phase) + ": " + hist.history['val_loss'])
+            print(str(phase) + ": " + hist.history['acc'])
+            print(str(phase) + ": " + hist.history['val_acc'])
+
+            # path = os.path.join(self.model_folder, "history_phase_{}.csv".format(phase))
+            # self.logger.info("saved history {}".format(path))
 
     def save_history_plot(self,phase=None):
         if phase is None:
