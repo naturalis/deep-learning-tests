@@ -235,8 +235,10 @@ class ModelTrainer(baseclass.BaseClass):
         for phase,history in enumerate(self.history):
             self.save_history_plot(phase)
             print("============>" + str(phase))
-            print(history)
             print(dir(history))
+            print(history["history"])
+            print(history["model"])
+            print(history["params"])
 
     def save_history_plot(self,phase=None):
         if phase is None:
