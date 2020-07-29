@@ -62,8 +62,9 @@ class DataSet():
 
         regex = re.compile('(^<|[\s](.*)$)')
         
-        call = []
+        calls = []
         for phase, callbacks in enumerate(self.model_trainer.model_settings["callbacks"]):
+            call = []
             for callback in callbacks:
                 if str(callback).find("ReduceLROnPlateau") > -1:
                     call.append(
@@ -77,6 +78,7 @@ class DataSet():
                     )
                 else:
                     call.append(regex.sub('',str(callback)))
+            calls.append(call)
     
         opt = []
         for phase, optimizer in enumerate(self.model_trainer.model_settings["optimizer"]):
@@ -87,7 +89,7 @@ class DataSet():
             "epochs" : self.model_trainer.get_preset("epochs"),
             "freeze_layers" : self.model_trainer.get_preset("freeze_layers"),
             "optimizer" : opt,
-            "callbacks" : call
+            "callbacks" : calls
         }
 
         # self.model_summary,

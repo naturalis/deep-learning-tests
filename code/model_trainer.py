@@ -219,6 +219,7 @@ class ModelTrainer(baseclass.BaseClass):
         self.model.save(self.get_model_path())
         self.logger.info("saved model to {}".format(self.get_model_path()))
 
+    def save_model_architecture(self):
         f = open(self.get_architecture_path(), "w")
         f.write(self.model.to_json())
         f.close()
@@ -303,7 +304,8 @@ if __name__ == "__main__":
 
     trainer.assemble_model()
     trainer.configure_generators()
-        
+    trainer.save_model_architecture()
+
     dataset.ask_note()
     dataset.make_dataset(trainer)
 
