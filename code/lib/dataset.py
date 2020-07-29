@@ -44,6 +44,8 @@ class DataSet():
         self.data_set["base_model"] = str(self.model_trainer.base_model.name)
         self.data_set["model_summary_hash"] = md5(self.model_summary.encode('utf-8')).hexdigest()
 
+        self.data_set["class_image_minimum"] =str(self.model_trainer.class_image_minimum)
+        self.data_set["class_image_maximum"] =str(self.model_trainer.class_image_maximum)
         self.data_set["class_count"] = len(self.model_trainer.class_list)
         self.data_set["class_list_hash"] = md5(str(self.model_trainer.class_list).encode('utf-8')).hexdigest()
 
@@ -51,8 +53,6 @@ class DataSet():
             "validation_split" : str(self.model_trainer.get_preset("validation_split")),
             "image_augmentation" : str(self.model_trainer.get_preset("image_augmentation")),
             "batch_size" : str(self.model_trainer.get_preset("batch_size")),
-            "class_image_minimum" : str(self.model_trainer.class_image_minimum),
-            "class_image_maximum" : str(self.model_trainer.class_image_maximum),
         }
 
         regex = re.compile('(^<|[\s](.*)$)')
@@ -93,7 +93,7 @@ class DataSet():
         # print(image_table)
 
         # self.data_set["classes"] = self.model_trainer.class_list
-        print(self.model_trainer.class_list)
+        # print(self.model_trainer.class_list)
 
 
     def save_dataset(self):

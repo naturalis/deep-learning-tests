@@ -234,7 +234,7 @@ class ModelTrainer(baseclass.BaseClass):
     def save_history(self):
         for phase,history in enumerate(self.history):
             self.save_history_plot(phase)
-            print("============>" + phase)
+            print("============>" + str(phase))
             print(history)
 
     def save_history_plot(self,phase=None):
