@@ -23,6 +23,16 @@ class ModelTrainer(baseclass.BaseClass):
         self.tensorboard_log_path = os.path.join(self.project_root, "log", "logs_keras")
         return self.tensorboard_log_path
 
+    def get_trainable_params(self):
+        trainable_count = np.sum([tf.keras.backend.count_params(w) for w in self.model.trainable_weights])
+        non_trainable_count = np.sum([tf.keras.backend.count_params(w) for w in self.model.non_trainable_weights])
+
+        return {
+            "total" : trainable_count + non_trainable_count,
+            "trainable" : trainable_count,
+            "non_trainable" : non_trainable_count
+        }
+
     def configure_optimizers(self):
         optimizers = []
         for learning_rate in trainer.get_preset("learning_rate"):
@@ -43,8 +53,6 @@ class ModelTrainer(baseclass.BaseClass):
             callbacks.append(phase)
 
         return callbacks
-
-
 
     def configure_generators(self):
         a = self.model_settings["image_augmentation"] if "image_augmentation" in self.model_settings else []
@@ -136,7 +144,18 @@ class ModelTrainer(baseclass.BaseClass):
             for layer in self.base_model.layers[:self.current_freeze]:
                 layer.trainable = False
 
-    def set_callbacks(self):
+    def set_current_optimizer(self):
+        if not "optimizer" in self.model_settings:
+            self.current_optimizer = None
+            return None
+
+        if isinstance(self.model_settings["optimizer"], list):
+            if self.training_phase < len(self.model_settings["optimizer"]):
+                self.current_optimizer = self.model_settings["optimizer"][self.training_phase]
+        else:
+            self.current_optimizer = self.model_settings["optimizer"]
+
+    def set_current_callbacks(self):
         if not "callbacks" in self.model_settings:
             self.current_callbacks = None
 
@@ -150,27 +169,6 @@ class ModelTrainer(baseclass.BaseClass):
                 self.current_callbacks = self.model_settings["callbacks"][self.training_phase]
         else:
             self.current_callbacks = self.model_settings["callbacks"]
-
-    def set_optimizer(self):
-        if not "optimizer" in self.model_settings:
-            self.current_optimizer = None
-            return None
-
-        if isinstance(self.model_settings["optimizer"], list):
-            if self.training_phase < len(self.model_settings["optimizer"]):
-                self.current_optimizer = self.model_settings["optimizer"][self.training_phase]
-        else:
-            self.current_optimizer = self.model_settings["optimizer"]
-
-    def get_trainable_params(self):
-        trainable_count = np.sum([tf.keras.backend.count_params(w) for w in self.model.trainable_weights])
-        non_trainable_count = np.sum([tf.keras.backend.count_params(w) for w in self.model.non_trainable_weights])
-
-        return {
-            "total" : trainable_count + non_trainable_count,
-            "trainable" : trainable_count,
-            "non_trainable" : non_trainable_count
-        }
 
     def train_model(self):
 
@@ -188,7 +186,7 @@ class ModelTrainer(baseclass.BaseClass):
             self.logger.info("=== training phase {}/{} ===".format((self.training_phase+1),len(self.epochs)))
 
             self.set_frozen_layers()
-            self.set_optimizer()
+            self.set_current_optimizer()
 
             self.model.compile(
                 optimizer=self.current_optimizer,
@@ -211,7 +209,7 @@ class ModelTrainer(baseclass.BaseClass):
             step_size_train = self.train_generator.n // self.train_generator.batch_size
             step_size_validate = self.validation_generator.n // self.validation_generator.batch_size
 
-            self.set_callbacks()
+            self.set_current_callbacks()
 
             self.history[self.training_phase] = self.model.fit(
                 x=self.train_generator,
