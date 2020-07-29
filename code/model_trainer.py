@@ -23,15 +23,15 @@ class ModelTrainer(baseclass.BaseClass):
         self.tensorboard_log_path = os.path.join(self.project_root, "log", "logs_keras")
         return self.tensorboard_log_path
 
-    def get_optimizers(self):
+    def configure_optimizers(self):
         optimizers = []
         for learning_rate in trainer.get_preset("learning_rate"):
             optimizers.append(tf.keras.optimizers.RMSprop(learning_rate=learning_rate))
 
         return optimizers
 
-    def get_callbacks(self):
-        phases = []
+    def configure_callbacks(self):
+        callbacks = []
         for item in trainer.get_preset("reduce_lr_params"):
             phase = []
             phase.append(tf.keras.callbacks.EarlyStopping(
@@ -40,9 +40,11 @@ class ModelTrainer(baseclass.BaseClass):
                 monitor=trainer.get_preset("checkpoint_monitor"), save_best_only=True, save_freq="epoch", verbose=1))
             phase.append(tf.keras.callbacks.ReduceLROnPlateau(
                 monitor=item["monitor"],factor=item["factor"],patience=item["patience"],min_lr=item["min_lr"],verbose=item["verbose"]))
-            phases.append(phase)
+            callbacks.append(phase)
 
-        return phases
+        return callbacks
+
+
 
     def configure_generators(self):
         a = self.model_settings["image_augmentation"] if "image_augmentation" in self.model_settings else []
@@ -137,7 +139,11 @@ class ModelTrainer(baseclass.BaseClass):
     def set_callbacks(self):
         if not "callbacks" in self.model_settings:
             self.current_callbacks = None
-            return None
+
+        print(self.training_phase)
+        print(isinstance(self.model_settings["callbacks"], list))
+        print(len(self.model_settings["callbacks"]))
+        print(self.model_settings["callbacks"])
 
         if isinstance(self.model_settings["callbacks"], list):
             if self.training_phase < len(self.model_settings["callbacks"]):
@@ -302,11 +308,11 @@ if __name__ == "__main__":
         "validation_split": trainer.get_preset("validation_split"),
         "base_model": tf.keras.applications.InceptionV3(weights="imagenet", include_top=False),
         "loss": tf.keras.losses.CategoricalCrossentropy(),
-        "optimizer": trainer.get_optimizers(),
+        "optimizer": trainer.configure_optimizers(),
         "batch_size": trainer.get_preset("batch_size"),
         "epochs": trainer.get_preset("epochs"), 
         "freeze_layers": trainer.get_preset("freeze_layers"), 
-        "callbacks" : trainer.get_callbacks(),
+        "callbacks" : trainer.configure_callbacks(),
         "metrics" : trainer.get_preset("metrics"),
         "image_augmentation" : trainer.get_preset("image_augmentation")
     })

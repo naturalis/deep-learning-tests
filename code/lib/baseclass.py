@@ -249,7 +249,7 @@ class BaseClass():
         if 'REDUCE_LR_PARAMS' in os_environ:
             self.presets.update( {'reduce_lr_params' : json.loads(os_environ.get("REDUCE_LR_PARAMS")) } )
         else:
-            self.presets.update( {'reduce_lr_params' : { "monitor" : "val_loss", "factor" : 0.1, "patience" : 4, "min_lr" : 1e-8, "verbose" : 1 } } )
+            self.presets.update( {'reduce_lr_params' : [ { "monitor" : "val_loss", "factor" : 0.1, "patience" : 4, "min_lr" : 1e-8, "verbose" : 1 } ] } )
 
         self.presets.update( { "validation_split" : float(os_environ.get("VALIDATION_SPLIT")) if "VALIDATION_SPLIT" in os_environ else 0.2 } )
         self.presets.update( { "learning_rate" : json.loads(os_environ.get("LEARNING_RATE")) if "LEARNING_RATE" in os_environ else [ 1e-4 ] } )
