@@ -212,8 +212,6 @@ class ModelTrainer(baseclass.BaseClass):
             step_size_train = self.train_generator.n // self.train_generator.batch_size
             step_size_validate = self.validation_generator.n // self.validation_generator.batch_size
 
-            print(self.current_callbacks)
-
             self.set_current_callbacks()
 
             print(self.current_callbacks)
