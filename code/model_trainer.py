@@ -165,9 +165,12 @@ class ModelTrainer(baseclass.BaseClass):
         print(self.model_settings["callbacks"])
 
         if isinstance(self.model_settings["callbacks"], list):
+            print('1')
             if self.training_phase < len(self.model_settings["callbacks"]):
+                print('2')
                 self.current_callbacks = self.model_settings["callbacks"][self.training_phase]
         else:
+            print('3')
             self.current_callbacks = self.model_settings["callbacks"]
 
     def train_model(self):
@@ -209,7 +212,11 @@ class ModelTrainer(baseclass.BaseClass):
             step_size_train = self.train_generator.n // self.train_generator.batch_size
             step_size_validate = self.validation_generator.n // self.validation_generator.batch_size
 
+            print(self.current_callbacks)
+
             self.set_current_callbacks()
+
+            print(self.current_callbacks)
 
             self.history[self.training_phase] = self.model.fit(
                 x=self.train_generator,
