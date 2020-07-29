@@ -156,6 +156,16 @@ class ModelTrainer(baseclass.BaseClass):
         else:
             self.current_optimizer = self.model_settings["optimizer"]
 
+    def get_trainable_params(self):
+        trainable_count = np.sum([tf.keras.backend.count_params(w) for w in self.model.trainable_weights])
+        non_trainable_count = np.sum([tf.keras.backend.count_params(w) for w in self.model.non_trainable_weights])
+
+        return {
+            "total" : trainable_count + non_trainable_count,
+            "trainable" : trainable_count,
+            "non_trainable" : non_trainable_count
+        }
+
     def train_model(self):
 
         self.logger.info("start training {}".format(self.project_root))
@@ -221,16 +231,6 @@ class ModelTrainer(baseclass.BaseClass):
         f.close()
         self.logger.info("saved model architecture to {}".format(self.get_architecture_path()))
 
-    def get_trainable_params(self):
-        trainable_count = np.sum([tf.keras.backend.count_params(w) for w in self.model.trainable_weights])
-        non_trainable_count = np.sum([tf.keras.backend.count_params(w) for w in self.model.non_trainable_weights])
-
-        return {
-            "total" : trainable_count + non_trainable_count,
-            "trainable" : trainable_count,
-            "non_trainable" : non_trainable_count
-        }
-
     def save_history(self):
         for phase,history in enumerate(self.history):
             self.save_history_plot(phase)
@@ -265,7 +265,7 @@ class ModelTrainer(baseclass.BaseClass):
 
         path = os.path.join(self.model_folder, "history_plot_phase_{}.png".format(phase))
         plt.savefig(path)
-        self.logger.info("saved plot {}".format(path)
+        self.logger.info("saved plot {}".format(path))
 
 
 if __name__ == "__main__":
