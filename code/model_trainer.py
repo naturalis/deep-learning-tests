@@ -159,10 +159,6 @@ class ModelTrainer(baseclass.BaseClass):
         if not "callbacks" in self.model_settings:
             self.current_callbacks = None
 
-        print("==>" + str(self.training_phase))
-        print(self.training_phase)
-        print(self.model_settings["callbacks"][self.training_phase])
-
         if isinstance(self.model_settings["callbacks"], list):
             if self.training_phase < len(self.model_settings["callbacks"]):
                 self.current_callbacks = self.model_settings["callbacks"][self.training_phase]
@@ -210,29 +206,19 @@ class ModelTrainer(baseclass.BaseClass):
 
             self.set_current_callbacks()
 
-            print(self.current_callbacks)
-
-            self.current_callbacks = [ 
-                tf.keras.callbacks.EarlyStopping(
-                    monitor="val_loss", patience=5, mode="auto", restore_best_weights=True, verbose=1),
-                tf.keras.callbacks.ModelCheckpoint(trainer.get_model_path(), 
-                    monitor="val_acc", save_best_only=True, save_freq="epoch", verbose=1)
-            ]
-
-            print(self.current_callbacks)
-
-            self.history[self.training_phase] = self.model.fit(
-                callbacks=self.current_callbacks,
+            history = self.model.fit(
                 x=self.train_generator,
                 steps_per_epoch=step_size_train,
                 epochs=epoch,
                 validation_data=self.validation_generator,
-                validation_steps=step_size_validate
+                validation_steps=step_size_validate,
+                callbacks=self.current_callbacks
             )
 
             # If x is a dataset, generator, or keras.utils.Sequence instance, y should not be specified (since targets
             # will be obtained from x)
 
+            self.history.append(history)
             self.training_phase += 1
 
     def save_model(self):
