@@ -236,10 +236,15 @@ class ModelTrainer(baseclass.BaseClass):
     def save_history(self):
         for phase,hist in enumerate(self.history):
             self.save_history_plot(phase)
-            print(str(phase) + ": " + hist.history['loss'])
-            print(str(phase) + ": " + hist.history['val_loss'])
-            print(str(phase) + ": " + hist.history['acc'])
-            print(str(phase) + ": " + hist.history['val_acc'])
+            print(type(hist.history['loss']))
+            print(type(hist.history['val_loss']))
+            print(type(hist.history['acc']))
+            print(type(hist.history['val_acc']))
+
+            print(dir(hist.history['loss']))
+            print(dir(hist.history['val_loss']))
+            print(dir(hist.history['acc']))
+            print(dir(hist.history['val_acc']))
 
             # path = os.path.join(self.model_folder, "history_phase_{}.csv".format(phase))
             # self.logger.info("saved history {}".format(path))
