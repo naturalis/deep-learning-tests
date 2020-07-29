@@ -8,7 +8,7 @@ from lib import baseclass, dataset, utils
 class ModelTrainer(baseclass.BaseClass):
     timestamp = None
     predictions = None
-    history = None
+    history = []
     training_phase = None
     current_freeze = None
     current_optimizer = None
@@ -18,10 +18,6 @@ class ModelTrainer(baseclass.BaseClass):
 
     def __init__(self):
         super().__init__()
-
-    def get_history_plot_save_path(self):
-        self.history_plot_save_path = os.path.join(self.project_root, "log", "history_plot.png")
-        return self.history_plot_save_path
 
     def get_tensorboard_log_path(self):
         self.tensorboard_log_path = os.path.join(self.project_root, "log", "logs_keras")
@@ -167,11 +163,11 @@ class ModelTrainer(baseclass.BaseClass):
         self.training_phase = 0
 
         if isinstance(self.model_settings["epochs"], int):
-            epochs = [self.model_settings["epochs"]]
+            self.epochs = [self.model_settings["epochs"]]
         else:
-            epochs = self.model_settings["epochs"]
+            self.epochs = self.model_settings["epochs"]
 
-        for epoch in epochs: 
+        for epoch in self.epochs: 
 
             self.logger.info("=== training phase {}/{} ===".format((self.training_phase+1),len(epochs)))
 
@@ -201,7 +197,7 @@ class ModelTrainer(baseclass.BaseClass):
 
             self.set_callbacks()
 
-            self.history = self.model.fit(
+            self.history[self.training_phase] = self.model.fit(
                 x=self.train_generator,
                 steps_per_epoch=step_size_train,
                 epochs=epoch,
@@ -235,14 +231,23 @@ class ModelTrainer(baseclass.BaseClass):
             "non_trainable" : non_trainable_count
         }
 
-    def evaluate(self):
-        acc = self.history.history['acc']
-        val_acc = self.history.history['val_acc']
+    def save_history(self):
+        for phase,history in enumerate(self.history):
+            self.save_history_plot(phase)
+            print("============>" + phase)
+            print(history)
 
-        loss = self.history.history['loss']
-        val_loss = self.history.history['val_loss']
+    def save_history_plot(self,phase=None):
+        if phase is None:
+            phase = self.training_phase
 
-        epochs_range = range(len(self.history.history["loss"]))
+        acc = self.history[phase].history['acc']
+        val_acc = self.history[phase].history['val_acc']
+
+        loss = self.history[phase].history['loss']
+        val_loss = self.history[phase].history['val_loss']
+
+        epochs_range = range(len(self.history[phase].history["loss"]))
 
         plt.figure(figsize=(8, 8))
         plt.subplot(1, 2, 1)
@@ -257,19 +262,18 @@ class ModelTrainer(baseclass.BaseClass):
         plt.legend(loc='upper right')
         plt.title('Training and Validation Loss')
         # plt.show()
-        plt.savefig(self.get_history_plot_save_path())
+
+        path = os.path.join(self.model_folder, "history_plot_phase_{}.png".format(phase))
+        plt.savefig(path)
+        self.logger.info("saved plot {}".format(path)
 
 
 if __name__ == "__main__":
 
-    timer = utils.Timer()
-
     trainer = ModelTrainer()
-
-    print(timer.get_time_passed())
-    exit(0)
-
+    timer = utils.Timer()
     dataset = dataset.DataSet()
+
     trainer.set_debug(os.environ["DEBUG"]=="1" if "DEBUG" in os.environ else False)
 
     parser = argparse.ArgumentParser() 
@@ -321,7 +325,7 @@ if __name__ == "__main__":
     dataset.save_dataset()
 
     trainer.save_model()
-    trainer.evaluate()
+    trainer.save_history()
 
 
         # WARNING:tensorflow:Method (on_train_batch_end) is slow compared to the batch update (0.325404). Check your callbacks.
