@@ -168,7 +168,7 @@ class ModelTrainer(baseclass.BaseClass):
 
     def train_model(self):
 
-        self.logger.info("start training {}".format(self.project_root))
+        self.logger.info("start training {} ({})".format(self.project_name,self.project_root))
 
         self.training_phase = 0
 
@@ -179,7 +179,7 @@ class ModelTrainer(baseclass.BaseClass):
 
         for epoch in self.epochs: 
 
-            self.logger.info("=== training phase {}/{} ===".format((self.training_phase+1),len(epochs)))
+            self.logger.info("=== training phase {}/{} ===".format((self.training_phase+1),len(self.epochs)))
 
             self.set_frozen_layers()
             self.set_optimizer()
