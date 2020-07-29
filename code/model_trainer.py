@@ -236,6 +236,7 @@ class ModelTrainer(baseclass.BaseClass):
             self.save_history_plot(phase)
             print("============>" + str(phase))
             print(history)
+            print(dir(history))
 
     def save_history_plot(self,phase=None):
         if phase is None:
