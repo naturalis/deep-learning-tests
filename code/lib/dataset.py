@@ -27,6 +27,8 @@ class DataSet():
         self._set_model_summary()
         self._make_dataset()
 
+        # self._make_file_list()
+
     def _set_model_trainer(self,model_trainer):
         self.model_trainer = model_trainer
         self.data_set_file = os.path.join(self.model_trainer.model_folder, "dataset.json")
@@ -35,8 +37,8 @@ class DataSet():
         self.data_set["project_name"] = self.model_trainer.project_name
         self.data_set["project_root"] = self.model_trainer.project_root
         self.data_set["model_name"] = self.model_trainer.model_name
-        self.data_set["timestamp"] = str(self.model_trainer.timestamp)
-        self.data_set["training_time"] = ""
+        self.data_set["created"] = str(self.model_trainer.timestamp)
+        self.data_set["training_time"] = "n/a"
         self.data_set["model_note"] = self.model_note
 
         self.data_set["base_model"] = str(self.model_trainer.base_model.name)

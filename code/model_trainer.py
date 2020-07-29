@@ -31,15 +31,17 @@ class ModelTrainer(baseclass.BaseClass):
         return optimizers
 
     def get_callbacks(self):
+        lr = self.get_preset("reduce_lr_params")
         phases = []
-        for item in trainer.get_preset("reduce_lr_params"):
+        for k,v in enumerate(self.epochs):
             phase = []
             phase.append(tf.keras.callbacks.EarlyStopping(
                 monitor=trainer.get_preset("early_stopping_monitor"), patience=5, mode="auto", restore_best_weights=True, verbose=1))
             phase.append(tf.keras.callbacks.ModelCheckpoint(trainer.get_model_path(), 
                 monitor=trainer.get_preset("checkpoint_monitor"), save_best_only=True, save_freq="epoch", verbose=1))
-            phase.append(tf.keras.callbacks.ReduceLROnPlateau(
-                monitor=item["monitor"],factor=item["factor"],patience=item["patience"],min_lr=item["min_lr"],verbose=item["verbose"]))
+            if k in lr:
+                phase.append(tf.keras.callbacks.ReduceLROnPlateau(
+                    monitor=lr[k]["monitor"],factor=lr[k]["factor"],patience=lr[k]["patience"],min_lr=lr[k]["min_lr"],verbose=lr[k]["verbose"]))
             phases.append(phase)
 
         return phases
@@ -137,7 +139,6 @@ class ModelTrainer(baseclass.BaseClass):
     def set_callbacks(self):
         if not "callbacks" in self.model_settings:
             self.current_callbacks = None
-            return None
 
         if isinstance(self.model_settings["callbacks"], list):
             if self.training_phase < len(self.model_settings["callbacks"]):
@@ -171,11 +172,6 @@ class ModelTrainer(baseclass.BaseClass):
         self.logger.info("start training {} ({})".format(self.project_name,self.project_root))
 
         self.training_phase = 0
-
-        if isinstance(self.model_settings["epochs"], int):
-            self.epochs = [self.model_settings["epochs"]]
-        else:
-            self.epochs = self.model_settings["epochs"]
 
         for epoch in self.epochs: 
 
