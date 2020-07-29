@@ -65,17 +65,21 @@ class BaseClass():
     def set_debug(self,state):
         self.debug = state
 
+    def make_model_name(self):
+        return = "{0}{1:02d}{2:02d}-{3:02d}{4:02d}{5:02d}".format(
+            self.timestamp.year,
+            self.timestamp.month,
+            self.timestamp.day,
+            self.timestamp.hour,
+            self.timestamp.minute,
+            self.timestamp.second)
+
     def set_model_name(self,model_name=None):
-        if model_name is None:
-            self.model_name = "{0}{1:02d}{2:02d}-{3:02d}{4:02d}{5:02d}".format(
-                self.timestamp.year,
-                self.timestamp.month,
-                self.timestamp.day,
-                self.timestamp.hour,
-                self.timestamp.minute,
-                self.timestamp.second)
-        else:
+        if not model_name is None:
             self.model_name = model_name
+        else:
+            raise ValueError("need a model name")
+
         self.logger.info("model name: {}".format(self.model_name))
 
 

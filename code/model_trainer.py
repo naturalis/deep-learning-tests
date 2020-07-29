@@ -3,7 +3,7 @@ import tensorflow as tf
 import numpy as np
 from datetime import datetime
 import matplotlib.pyplot as plt
-from lib import baseclass, dataset
+from lib import baseclass, dataset, utils
 
 class ModelTrainer(baseclass.BaseClass):
     timestamp = None
@@ -262,7 +262,12 @@ class ModelTrainer(baseclass.BaseClass):
 
 if __name__ == "__main__":
 
+    timer = utils.Timer()
+
     trainer = ModelTrainer()
+
+    print(timer.get_time_passed())
+    exit(0)
 
     dataset = dataset.DataSet()
     trainer.set_debug(os.environ["DEBUG"]=="1" if "DEBUG" in os.environ else False)
@@ -275,7 +280,7 @@ if __name__ == "__main__":
     
     trainer.set_project(os.environ)
     trainer.set_presets(os.environ)
-    trainer.set_model_name()
+    trainer.set_model_name(trainer.make_model_name())
     trainer.set_model_folder()
     
     if 'CLASS_IMAGE_MINIMUM' in os.environ:
@@ -308,8 +313,13 @@ if __name__ == "__main__":
 
     dataset.ask_note()
     dataset.make_dataset(trainer)
+    dataset.save_dataset()
 
     trainer.train_model()
+    
+    dataset.set_training_time(timer.get_time_passed())
+    dataset.save_dataset()
+
     trainer.save_model()
     trainer.evaluate()
 

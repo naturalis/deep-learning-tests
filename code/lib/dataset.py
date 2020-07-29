@@ -25,15 +25,7 @@ class DataSet():
     def make_dataset(self,model_trainer):
         self._set_model_trainer(model_trainer)
         self._set_model_summary()
-
         self._make_dataset()
-        self._save_dataset()
-
-
-        # self._save_dataset()
-        # self._save_dataset()
-
-        # self._make_file_list()
 
     def _set_model_trainer(self,model_trainer):
         self.model_trainer = model_trainer
@@ -44,6 +36,7 @@ class DataSet():
         self.data_set["project_root"] = self.model_trainer.project_root
         self.data_set["model_name"] = self.model_trainer.model_name
         self.data_set["timestamp"] = str(self.model_trainer.timestamp)
+        self.data_set["training_time"] = ""
         self.data_set["model_note"] = self.model_note
 
         self.data_set["base_model"] = str(self.model_trainer.base_model.name)
@@ -100,7 +93,7 @@ class DataSet():
         # self.data_set["classes"] = self.model_trainer.class_list
 
 
-    def _save_dataset(self):
+    def save_dataset(self):
         f = open(self.data_set_file, "w")
         f.write(json.dumps(self.data_set))
         f.close()
@@ -110,4 +103,8 @@ class DataSet():
         stringlist = []
         self.model_trainer.model.summary(print_fn=lambda x: stringlist.append(x))
         self.model_summary = "\n".join(stringlist)
+
+    def set_training_time(self,time_passed):
+        self.data_set["training_time"]=time_passed
+
 
