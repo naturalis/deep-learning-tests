@@ -159,7 +159,8 @@ class ModelTrainer(baseclass.BaseClass):
         if not "callbacks" in self.model_settings:
             self.current_callbacks = None
 
-        print("==>" + self.training_phase)
+        print("==>" + str(self.training_phase))
+        print(self.training_phase)
         print(self.model_settings["callbacks"][self.training_phase])
 
         if isinstance(self.model_settings["callbacks"], list):
