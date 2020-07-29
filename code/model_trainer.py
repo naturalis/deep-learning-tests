@@ -237,11 +237,11 @@ class ModelTrainer(baseclass.BaseClass):
             print("============>" + str(phase))
             print("dir(history)")
             print(dir(history))
-            print("dir(history["history"])")
+            print("dir(history[history])")
             print(dir(history["history"]))
-            print("dir(history["model"])")
+            print("dir(history[model])")
             print(dir(history["model"]))
-            print("dir(history["params"])")
+            print("dir(history[params])")
             print(dir(history["params"]))
 
     def save_history_plot(self,phase=None):
