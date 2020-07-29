@@ -212,6 +212,15 @@ class ModelTrainer(baseclass.BaseClass):
 
             print(self.current_callbacks)
 
+            self.current_callbacks = [ 
+                tf.keras.callbacks.EarlyStopping(
+                    monitor=trainer.get_preset("early_stopping_monitor"), patience=5, mode="auto", restore_best_weights=True, verbose=1),
+                tf.keras.callbacks.ModelCheckpoint(trainer.get_model_path(), 
+                    monitor=trainer.get_preset("checkpoint_monitor"), save_best_only=True, save_freq="epoch", verbose=1)
+            ]
+
+            print(self.current_callbacks)
+
             self.history[self.training_phase] = self.model.fit(
                 x=self.train_generator,
                 steps_per_epoch=step_size_train,
