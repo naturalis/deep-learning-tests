@@ -13,15 +13,10 @@ class Timer:
         self.set_start_time()
 
     def set_start_time(self):
-        self._set_time(self.start_time)
+        self.start_time = self.get_timestamp()
 
     def set_end_time(self):
-        self._set_time(self.end_time)
-
-    def _set_time(self,var):
-        var = self.get_timestamp()
-        print(var)
-        print(self.start_time)
+        self.end_time = self.get_timestamp()
 
     def get_timestamp(self):
         return time.time()
