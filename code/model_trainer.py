@@ -3,7 +3,9 @@ import tensorflow as tf
 import numpy as np
 from datetime import datetime
 import matplotlib.pyplot as plt
+import pandas as pd
 from lib import baseclass, dataset, utils
+
 
 class ModelTrainer(baseclass.BaseClass):
     timestamp = None
@@ -234,15 +236,9 @@ class ModelTrainer(baseclass.BaseClass):
     def save_history(self):
         for phase,history in enumerate(self.history):
             self.save_history_plot(phase)
-            print("============>" + str(phase))
-            print("dir(history)")
-            print(dir(history))
-            print("dir(history[history])")
-            print(dir(history["history"]))
-            print("dir(history[model])")
-            print(dir(history["model"]))
-            print("dir(history[params])")
-            print(dir(history["params"]))
+            path = os.path.join(self.model_folder, "history_phase_{}.csv".format(phase))
+            pd.DataFrame.from_dict(history).to_csv(path,index=False)
+            self.logger.info("saved history {}".format(path))
 
     def save_history_plot(self,phase=None):
         if phase is None:
