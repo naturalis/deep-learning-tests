@@ -12,25 +12,25 @@ class Timer:
     def __init__(self):
         self.set_start_time()
 
-    def set_start_time(self)
+    def set_start_time(self):
         self._set_time(self.start_time)
 
-    def set_end_time(self)
+    def set_end_time(self):
         self._set_time(self.end_time)
 
-    def _set_time(self,var)
+    def _set_time(self,var):
         var = self.get_timestamp()
 
     def get_timestamp(self):
         return time.time()
 
-    def add_milestone(self,label)
+    def add_milestone(self,label):
         self.milestones.append({ "label" : label, "timestamp" : self.get_timestamp() })
 
-    def get_milestones(self)
+    def get_milestones(self):
         return self.milestones
 
-    def reset_milestones(self)
+    def reset_milestones(self):
         self.milestones = []
 
     def get_time_passed(self,format="pretty"):
