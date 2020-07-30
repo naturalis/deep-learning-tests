@@ -317,6 +317,7 @@ if __name__ == "__main__":
         trainer.read_image_list_file(image_col=2)
         trainer.image_list_apply_class_list()
         dataset.ask_retrain_note()
+        dataset.set_model_trainer(trainer)
         dataset.open_dataset()
         dataset.ask_retrain_note()
         dataset.save_dataset()
@@ -331,7 +332,8 @@ if __name__ == "__main__":
         # trainer.configure_generators()
         trainer.save_model_architecture()
         dataset.ask_note()
-        dataset.make_dataset(trainer)
+        dataset.set_model_trainer(trainer)
+        dataset.make_dataset()
         dataset.save_dataset()
 
     trainer.configure_generators()

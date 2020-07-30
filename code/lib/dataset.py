@@ -15,6 +15,11 @@ class DataSet():
     def __init__(self):
         self.logger = logclass.LogClass(self.__class__.__name__)
 
+    def set_model_trainer(self,model_trainer):
+        self.model_trainer = model_trainer
+        self.data_set_file = os.path.join(self.model_trainer.model_folder, "dataset.json")
+        self._set_model_summary()
+
     def set_note(self,note):
         if not note is None:
             self.model_note = note
@@ -28,25 +33,15 @@ class DataSet():
             self.model_retrain_note = input("{}: ".format(message))
         self.data_set["model_retrain_note"] = self.model_retrain_note
 
-    def make_dataset(self,model_trainer):
-        self._set_model_trainer(model_trainer)
-        self._set_model_summary()
+    def make_dataset(self):
         self._make_dataset()
-
         # self._make_file_list()
 
-    def open_dataset(self,model_trainer):
-        self._set_model_trainer(model_trainer)
-
+    def open_dataset(self):
         with open(self.data_set_file) as f:
             self.data_set = json.load(f)
         f.close()
         self.logger.info("opened data set: {}".format(self.data_set_file))
-
-
-    def _set_model_trainer(self,model_trainer):
-        self.model_trainer = model_trainer
-        self.data_set_file = os.path.join(self.model_trainer.model_folder, "dataset.json")
 
     def _make_dataset(self):
         self.data_set["project_name"] = self.model_trainer.project_name
