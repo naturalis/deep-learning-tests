@@ -49,12 +49,12 @@ class ModelTrainer(baseclass.BaseClass):
             phase.append(tf.keras.callbacks.ModelCheckpoint(trainer.get_model_path(), 
                 monitor=trainer.get_preset("checkpoint_monitor"), save_best_only=True, save_freq="epoch", verbose=1))
 
-            if key < len(trainer.get_preset("early_stopping_monitor"))
+            if key < len(trainer.get_preset("early_stopping_monitor")):
                 item = trainer.get_preset("early_stopping_monitor")[key]
                 if not item == "none":
                     phase.append(tf.keras.callbacks.EarlyStopping(monitor=item, patience=5, mode="auto", restore_best_weights=True, verbose=1))
 
-            if key < len(trainer.get_preset("reduce_lr_params"))
+            if key < len(trainer.get_preset("reduce_lr_params")):
                 item = trainer.get_preset("reduce_lr_params")[key]
                 phase.append(tf.keras.callbacks.ReduceLROnPlateau(
                     monitor=item["monitor"],factor=item["factor"],patience=item["patience"],min_lr=item["min_lr"],verbose=item["verbose"]))
