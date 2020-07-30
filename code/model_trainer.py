@@ -312,7 +312,7 @@ if __name__ == "__main__":
 
     if args.load_model: 
 
-        self.model_settings["freeze_layers"] = None
+        trainer.model_settings["freeze_layers"] = None
 
         trainer.load_model()
         trainer.read_class_list()
