@@ -287,6 +287,13 @@ if __name__ == "__main__":
     trainer.set_class_image_minimum(trainer.get_preset("class_image_minimum"))
     trainer.set_class_image_maximum(trainer.get_preset("class_image_maximum"))
 
+    if args.load_model: 
+        trainer.set_model_name(args.load_model)
+    else:
+        trainer.set_model_name(trainer.make_model_name())
+
+    trainer.set_model_folder()
+
     trainer.set_model_settings({
         "validation_split": trainer.get_preset("validation_split"),
         "base_model": tf.keras.applications.InceptionV3(weights="imagenet", include_top=False),
@@ -305,14 +312,10 @@ if __name__ == "__main__":
 
     if args.load_model: 
 
-        trainer.set_model_name(args.load_model)
-        trainer.set_model_folder()
         trainer.load_model()
-
         trainer.read_class_list()
         trainer.read_image_list_file(image_col=2)
         trainer.image_list_apply_class_list()
-        
         dataset.ask_retrain_note()
         dataset.open_dataset()
         dataset.ask_retrain_note()
@@ -320,18 +323,13 @@ if __name__ == "__main__":
 
     else:
 
-        trainer.set_model_name(trainer.make_model_name())
-        trainer.set_model_folder()
         trainer.copy_class_list_file()
-
         trainer.read_class_list()
         trainer.read_image_list_file(image_col=2)
         trainer.image_list_apply_class_list()
-
         trainer.assemble_model()
         # trainer.configure_generators()
         trainer.save_model_architecture()
-
         dataset.ask_note()
         dataset.make_dataset(trainer)
         dataset.save_dataset()
