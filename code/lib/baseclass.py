@@ -258,7 +258,7 @@ class BaseClass():
         self.presets.update( { "freeze_layers" : json.loads(os_environ.get("FREEZE_LAYERS")) if "FREEZE_LAYERS" in os_environ else [ "none" ] } )
         self.presets.update( { "metrics" : json.loads(os_environ.get("METRICS")) if "METRICS" in os_environ else [ "acc" ] } )
         self.presets.update( { "checkpoint_monitor" : os_environ.get("CHECKPOINT_MONITOR") if "CHECKPOINT_MONITOR" in os_environ else "val_acc" } )
-        self.presets.update( { "early_stopping_monitor" : os_environ.get("EARLY_STOPPING_MONITOR") if "EARLY_STOPPING_MONITOR" in os_environ else "val_loss" } )
+        self.presets.update( { "early_stopping_monitor" : json.loads(os_environ.get("EARLY_STOPPING_MONITOR")) if "EARLY_STOPPING_MONITOR" in os_environ else [ "val_loss" ] } )
         self.presets.update( { "class_image_minimum" : int(os_environ.get("CLASS_IMAGE_MINIMUM")) if "CLASS_IMAGE_MINIMUM" in os_environ else 2 } )
         self.presets.update( { "class_image_maximum" : int(os_environ.get("CLASS_IMAGE_MAXIMUM")) if "CLASS_IMAGE_MAXIMUM" in os_environ else 0 } )
         # epochs [ 10, 200 ]

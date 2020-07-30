@@ -44,17 +44,36 @@ class ModelTrainer(baseclass.BaseClass):
 
     def configure_callbacks(self):
         callbacks = []
-        for item in trainer.get_preset("reduce_lr_params"):
+        for key,epoch in enumerate(trainer.get_preset("epochs")):
             phase = []
-            phase.append(tf.keras.callbacks.EarlyStopping(
-                monitor=trainer.get_preset("early_stopping_monitor"), patience=5, mode="auto", restore_best_weights=True, verbose=1))
             phase.append(tf.keras.callbacks.ModelCheckpoint(trainer.get_model_path(), 
                 monitor=trainer.get_preset("checkpoint_monitor"), save_best_only=True, save_freq="epoch", verbose=1))
-            phase.append(tf.keras.callbacks.ReduceLROnPlateau(
-                monitor=item["monitor"],factor=item["factor"],patience=item["patience"],min_lr=item["min_lr"],verbose=item["verbose"]))
+
+            if key < len(trainer.get_preset("early_stopping_monitor"))
+                item = trainer.get_preset("early_stopping_monitor")[key]
+                if not item == "none":
+                    phase.append(tf.keras.callbacks.EarlyStopping(monitor=item, patience=5, mode="auto", restore_best_weights=True, verbose=1))
+
+            if key < len(trainer.get_preset("reduce_lr_params"))
+                item = trainer.get_preset("reduce_lr_params")[key]
+                phase.append(tf.keras.callbacks.ReduceLROnPlateau(
+                    monitor=item["monitor"],factor=item["factor"],patience=item["patience"],min_lr=item["min_lr"],verbose=item["verbose"]))
+
             callbacks.append(phase)
 
         return callbacks
+
+        # for item in trainer.get_preset("reduce_lr_params"):
+        #     phase = []
+        #     phase.append(tf.keras.callbacks.EarlyStopping(
+        #         monitor=trainer.get_preset("early_stopping_monitor"), patience=5, mode="auto", restore_best_weights=True, verbose=1))
+        #     phase.append(tf.keras.callbacks.ModelCheckpoint(trainer.get_model_path(), 
+        #         monitor=trainer.get_preset("checkpoint_monitor"), save_best_only=True, save_freq="epoch", verbose=1))
+        #     phase.append(tf.keras.callbacks.ReduceLROnPlateau(
+        #         monitor=item["monitor"],factor=item["factor"],patience=item["patience"],min_lr=item["min_lr"],verbose=item["verbose"]))
+        #     callbacks.append(phase)
+
+        # return callbacks
 
     def configure_generators(self):
         a = self.model_settings["image_augmentation"] if "image_augmentation" in self.model_settings else []
@@ -321,8 +340,6 @@ if __name__ == "__main__":
         dataset.ask_retrain_note()
         dataset.set_model_trainer(trainer)
         dataset.open_dataset()
-        dataset.ask_retrain_note()
-        dataset.save_dataset()
 
     else:
 
@@ -331,12 +348,12 @@ if __name__ == "__main__":
         trainer.read_image_list_file(image_col=2)
         trainer.image_list_apply_class_list()
         trainer.assemble_model()
-        # trainer.configure_generators()
         trainer.save_model_architecture()
         dataset.ask_note()
         dataset.set_model_trainer(trainer)
         dataset.make_dataset()
-        dataset.save_dataset()
+
+    dataset.save_dataset()
 
     trainer.configure_generators()
     trainer.train_model()
