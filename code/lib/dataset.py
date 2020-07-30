@@ -8,6 +8,7 @@ class DataSet():
     model_trainer = None
     model_summary = None
     model_note = None
+    model_retrain_note = None
     data_set = {}
     data_set_file = None
 
@@ -23,9 +24,9 @@ class DataSet():
             self.model_note = input("{}: ".format(message))
 
     def ask_retrain_note(self,message="enter retrain note"):
-        while not model_retrain_note:
-            model_retrain_note = input("{}: ".format(message))
-        self.data_set["model_retrain_note"] = model_retrain_note
+        while not self.model_retrain_note:
+            self.model_retrain_note = input("{}: ".format(message))
+        self.data_set["model_retrain_note"] = self.model_retrain_note
 
     def make_dataset(self,model_trainer):
         self._set_model_trainer(model_trainer)
