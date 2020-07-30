@@ -18,9 +18,14 @@ class DataSet():
         if not note is None:
             self.model_note = note
 
-    def ask_note(self):
+    def ask_note(self,message="enter model note"):
         while not self.model_note:
-            self.model_note = input("enter model note: ")
+            self.model_note = input("{}: ".format(message))
+
+    def ask_retrain_note(self,message="enter retrain note"):
+        while not model_retrain_note:
+            model_retrain_note = input("{}: ".format(message))
+        self.data_set["model_retrain_note"] = model_retrain_note
 
     def make_dataset(self,model_trainer):
         self._set_model_trainer(model_trainer)
@@ -28,6 +33,15 @@ class DataSet():
         self._make_dataset()
 
         # self._make_file_list()
+
+    def open_dataset(self,model_trainer):
+        self._set_model_trainer(model_trainer)
+
+        with open(self.data_set_file) as f:
+            self.data_set = json.load(f)
+        f.close()
+        self.logger.info("opened data set: {}".format(self.data_set_file))
+
 
     def _set_model_trainer(self,model_trainer):
         self.model_trainer = model_trainer

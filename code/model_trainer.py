@@ -272,33 +272,20 @@ class ModelTrainer(baseclass.BaseClass):
 
 if __name__ == "__main__":
 
+    parser = argparse.ArgumentParser() 
+    parser.add_argument("--dataset_note",type=str)
+    parser.add_argument("--load_model",type=str)
+    args = parser.parse_args() 
+
     trainer = ModelTrainer()
     timer = utils.Timer()
     dataset = dataset.DataSet()
 
-    trainer.set_debug(os.environ["DEBUG"]=="1" if "DEBUG" in os.environ else False)
-
-    parser = argparse.ArgumentParser() 
-    parser.add_argument("--dataset_note") 
-    args = parser.parse_args() 
-    if args.dataset_note: 
-        dataset.set_note(args.dataset_note)
-    
+    trainer.set_debug(os.environ["DEBUG"]=="1" if "DEBUG" in os.environ else False)    
     trainer.set_project(os.environ)
     trainer.set_presets(os.environ)
-    trainer.set_model_name(trainer.make_model_name())
-    trainer.set_model_folder()
-    
-    if 'CLASS_IMAGE_MINIMUM' in os.environ:
-        trainer.set_class_image_minimum(os.environ['CLASS_IMAGE_MINIMUM'])
-
-    # if 'CLASS_IMAGE_MAXIMUM' in os.environ:
-    #     trainer.set_class_image_maximum(os.environ['CLASS_IMAGE_MAXIMUM'])
-
-    trainer.copy_class_list_file()
-    trainer.read_class_list()
-    trainer.read_image_list_file(image_col=2)
-    trainer.image_list_apply_class_list()
+    trainer.set_class_image_minimum(trainer.get_preset("class_image_minimum"))
+    trainer.set_class_image_maximum(trainer.get_preset("class_image_maximum"))
 
     trainer.set_model_settings({
         "validation_split": trainer.get_preset("validation_split"),
@@ -313,16 +300,45 @@ if __name__ == "__main__":
         "image_augmentation" : trainer.get_preset("image_augmentation")
     })
 
-    trainer.assemble_model()
+    if args.dataset_note: 
+        dataset.set_note(args.dataset_note)
+
+    if args.load_model: 
+
+        trainer.set_model_name(args.load_model)
+        trainer.set_model_folder()
+        trainer.load_model()
+
+        trainer.read_class_list()
+        trainer.read_image_list_file(image_col=2)
+        trainer.image_list_apply_class_list()
+        
+        dataset.ask_retrain_note()
+        dataset.open_dataset()
+        dataset.ask_retrain_note()
+        dataset.save_dataset()
+
+    else:
+
+        trainer.set_model_name(trainer.make_model_name())
+        trainer.set_model_folder()
+        trainer.copy_class_list_file()
+
+        trainer.read_class_list()
+        trainer.read_image_list_file(image_col=2)
+        trainer.image_list_apply_class_list()
+
+        trainer.assemble_model()
+        # trainer.configure_generators()
+        trainer.save_model_architecture()
+
+        dataset.ask_note()
+        dataset.make_dataset(trainer)
+        dataset.save_dataset()
+
     trainer.configure_generators()
-    trainer.save_model_architecture()
-
-    dataset.ask_note()
-    dataset.make_dataset(trainer)
-    dataset.save_dataset()
-
     trainer.train_model()
-    
+
     dataset.set_training_time(timer.get_time_passed())
     dataset.save_dataset()
 
