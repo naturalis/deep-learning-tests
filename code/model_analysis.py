@@ -95,7 +95,6 @@ if __name__ == "__main__":
     #     analysis.set_class_image_maximum(os.environ['CLASS_IMAGE_MAXIMUM'])
 
     analysis.read_class_list()
-    analysis.class_list_apply_image_minimum()
     analysis.read_image_list_file(image_col=2)
     analysis.image_list_apply_class_list()
 

@@ -199,7 +199,6 @@ class BaseClass():
         df.columns = [self.COL_CLASS, self.COL_IMAGE]
         self.traindf = df
         self.logger.info("read {} images in {} classes".format(self.traindf[self.COL_IMAGE].nunique(),self.traindf[self.COL_CLASS].nunique()))
-        self.logger.info("test?")
 
     def image_list_apply_class_list(self):
         before = len(self.traindf)
