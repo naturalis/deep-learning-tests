@@ -120,7 +120,10 @@ class ModelCompare(baseclass.BaseClass):
             dataset = os.path.join(self.models_folder, entry.name, "dataset.json")
             model = os.path.join(self.models_folder, entry.name, "model.hdf5")
 
-            if os.path.exists(dataset):
+            if not os.path.exists(dataset):
+                # broken
+                continue
+            else:
                 with open(dataset) as json_file:
                     tmp = json.load(json_file)
                     self.names.append(tmp["model_name"])
