@@ -1,4 +1,4 @@
-import os, sys, json, textwrap
+import os, sys, json, textwrap, math
 # import tensorflow as tf
 # import numpy as np
 # from sklearn.metrics import classification_report
@@ -35,7 +35,7 @@ class ModelCompare(baseclass.BaseClass):
     def print_data(self):
 
         per_line = 3
-        lines = ceil(len(self.names) / per_line)
+        lines = math.ceil(len(self.names) / per_line)
 
         for i in range(len(lines)):
 
