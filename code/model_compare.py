@@ -61,8 +61,8 @@ class ModelCompare(baseclass.BaseClass):
                             tmp["class_image_maximum"]
                        )
                     )
-                    self.epochs.append("{} {}".format("; ".join(map(str,dataset["training_phases"]["epochs"]))))
-                    self.layers.append("{} {}".format("; ".join(map(str,dataset["training_phases"]["freeze_layers"]))))
+                    self.epochs.append("{} {}".format("; ".join(map(str,tmp["training_phases"]["epochs"]))))
+                    self.layers.append("{} {}".format("; ".join(map(str,tmp["training_phases"]["freeze_layers"]))))
                     
         
 #         scan dirs
