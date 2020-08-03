@@ -123,14 +123,19 @@ class ModelCompare(baseclass.BaseClass):
         self.layers = []
         self.model_sizes = []
 
-        for entry in sorted(os.scandir(self.models_folder)):
-            analysis = os.path.join(self.models_folder, entry.name, "analysis.json")
-            classes = os.path.join(self.models_folder, entry.name, "classes.json")
-            dataset = os.path.join(self.models_folder, entry.name, "dataset.json")
-            model = os.path.join(self.models_folder, entry.name, "model.hdf5")
+        folders = []
+
+        for entry in os.scandir(self.models_folder):
+            folders.append(entry.name)
+
+        for folder in sortted(folders):
+            analysis = os.path.join(self.models_folder, folder, "analysis.json")
+            classes = os.path.join(self.models_folder, folder, "classes.json")
+            dataset = os.path.join(self.models_folder, folder.name, "dataset.json")
+            model = os.path.join(self.models_folder, folder, "model.hdf5")
 
             if not os.path.exists(dataset):
-                self.broken_models.append(entry.name)
+                self.broken_models.append(folder)
                 continue
             else:
                 with open(dataset) as json_file:
