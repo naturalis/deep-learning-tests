@@ -31,6 +31,7 @@ class BaseClass():
     timestamp = None
     model_name = None
     image_path = None
+    models_folder = None
     image_list_class_col = None
     image_list_image_col = None
     class_list_file = None
@@ -119,6 +120,13 @@ class BaseClass():
         if not os.path.exists(self.image_path):
             os.mkdir(self.image_path)
             self.logger.info("created image folder {}".format(self.image_path))
+
+        self.models_folder = os.path.join(self.project_root, "models")
+
+        if not os.path.exists(self.models_folder):
+            os.mkdir(self.models_folder)
+            self.logger.info("created models folder {}".format(self.models_folder))
+
 
         self.class_list_file = os.path.join(self.project_root, "lists", "classes.csv")
         self.downloaded_images_file = os.path.join(self.project_root, "lists", "downloaded_images.csv")
