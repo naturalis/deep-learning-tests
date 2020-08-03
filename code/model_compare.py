@@ -16,7 +16,7 @@ class ModelCompare(baseclass.BaseClass):
             classes = os.path.join(self.models_folder, entry.name, "classes.json")
             dataset = os.path.join(self.models_folder, entry.name, "dataset.json")
             if os.path.exists(dataset):
-                with open(dataset) as json_file
+                with open(dataset) as json_file:
                     dataset = json.load(json_file)
                     print(dataset.model_name)
         
