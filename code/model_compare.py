@@ -53,8 +53,9 @@ class ModelCompare(baseclass.BaseClass):
 
         for x in range(100):
             for note in notes:
+                print(note)
                 if x in note:
-                    print("{:<30}".forma(note[x]))
+                    print("{:<30}".format(note[x]))
 
 
 
