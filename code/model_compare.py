@@ -69,7 +69,7 @@ class ModelCompare(baseclass.BaseClass):
 
             print(index.format("name: ") + general.format(*batch_names))
             print(index.format("date: ") + general.format(*batch_dates))
-            print(index.format("size: ") + general.format(*batch_model_sizes))
+            print(index.format("size: ") + general.format(*map(lambda x : str(math.ceil(x/1e6)) + "mb",batch_model_sizes)))
 
             notes = []
             max_l = 0
