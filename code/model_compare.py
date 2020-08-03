@@ -30,7 +30,7 @@ class ModelCompare(baseclass.BaseClass):
         for x in range(len(self.names)):
             general += "{:<30}"
 
-        index = "{:>10}"
+        index = "{:>12}"
         print(index.format("name: ") + general.format(*map("*** {} ***".format,self.names)))
         print(index.format("date: ") + general.format(*self.dates))
         # print(index.format("note: ") + general.format(*self.notes))
