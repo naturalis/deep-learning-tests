@@ -170,11 +170,11 @@ class BaseClass():
         for setting in self.model_settings:
             self.logger.info("setting - {}: {}".format(setting, str(self.model_settings[setting])))
 
-        if isinstance(self.model_settings["epochs"], int):
-            self.epochs = [self.model_settings["epochs"]]
-        else:
-            self.epochs = self.model_settings["epochs"]
-
+        if "epochs" in self.model_settings:
+            if isinstance(self.model_settings["epochs"], int):
+                self.epochs = [self.model_settings["epochs"]]
+            else:
+                self.epochs = self.model_settings["epochs"]
 
     # TODO: implement Test split
     def read_image_list_file(self, class_col=0, image_col=1):
