@@ -99,7 +99,7 @@ if __name__ == "__main__":
     analysis.image_list_apply_class_list()
 
     analysis.set_model_settings({
-        "batch_size": trainer.get_preset("batch_size")
+        "batch_size": analysis.get_preset("batch_size")
     })
 
     analysis.configure_generator()
