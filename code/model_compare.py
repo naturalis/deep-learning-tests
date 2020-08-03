@@ -54,15 +54,15 @@ class ModelCompare(baseclass.BaseClass):
                     tmp = json.load(json_file)
                     self.names.append(tmp["model_name"])
                     self.dates.append(tmp["created"])
-                    self.notes.append(textwrap.wrap(tmp["model_note"],30))
+                    self.notes.append(tmp["model_note"])
                     self.classes.append("{} ({}/{})".format(
                             tmp["class_count"],
                             tmp["class_image_minimum"],
                             tmp["class_image_maximum"]
                        )
                     )
-                    self.epochs.append("{} {}".format("; ".join(map(str,tmp["training_phases"]["epochs"]))))
-                    self.layers.append("{} {}".format("; ".join(map(str,tmp["training_phases"]["freeze_layers"]))))
+                    self.epochs.append("; ".join(map(str,tmp["training_phases"]["epochs"])))
+                    self.layers.append("; ".join(map(str,tmp["training_phases"]["freeze_layers"])))
                     
         
 #         scan dirs
