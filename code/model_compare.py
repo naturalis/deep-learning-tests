@@ -25,6 +25,8 @@ class ModelCompare(baseclass.BaseClass):
     weighted_precision_max = 0
     weighted_recall_max = 0
     weighted_f1_max = 0
+    broken_models = []
+
 
     def __init__(self):
         super().__init__()
@@ -33,7 +35,7 @@ class ModelCompare(baseclass.BaseClass):
 
         print("")
         
-        per_line = 2
+        per_line = 5
 
         lines = math.ceil(len(self.names) / per_line)
 
@@ -101,6 +103,13 @@ class ModelCompare(baseclass.BaseClass):
             print("")
             print("")
 
+    def print_broken(self):
+        if len(self.broken_models)==0:
+            return
+
+        print("broken models (no dataset.json):")
+        for item in self.broken_models:
+            print("{}".format(item))
 
     def _mark_max_val(self,value_max,value_list):
         return map(lambda x : str(x) + " *" if x == value_max else x, value_list)
@@ -121,7 +130,7 @@ class ModelCompare(baseclass.BaseClass):
             model = os.path.join(self.models_folder, entry.name, "model.hdf5")
 
             if not os.path.exists(dataset):
-                # broken
+                self.broken_models.append(entry.name)
                 continue
             else:
                 with open(dataset) as json_file:
@@ -190,3 +199,4 @@ if __name__ == "__main__":
     compare.set_project(os.environ)
     compare.collect_data()
     compare.print_data()
+    compare.print_broken()
