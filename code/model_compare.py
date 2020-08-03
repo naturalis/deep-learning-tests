@@ -33,43 +33,59 @@ class ModelCompare(baseclass.BaseClass):
         super().__init__()
 
     def print_data(self):
-        general = ""
-        for x in range(len(self.names)):
-            general += "{:<30}"
 
-        index = "{:>12}"
-        print("")
-        print(index.format("name: ") + general.format(*self.names))
-        print(index.format("date: ") + general.format(*self.dates))
+        per_line = 5
+        lines = ceil(len(self.names) / per_line)
 
-        notes = []
-        max_l = 0
-        for k,v in enumerate(self.notes):
-            t = textwrap.wrap(v.strip(),28,subsequent_indent="")
-            notes.append(t)
-            max_l = len(t) if len(t) > max_l else max_l
+        for i in range(lines)
 
-        for x in range(max_l):
-            s = ""
-            for note in notes:
-                try:
-                    s += "{:<30}".format(note[x])
-                except IndexError:
-                    s += "{:<30}".format("")
-                    pass
-            print(index.format("" if x > 0 else "note: ") + s)
+            batch_names = self.names[(i*per_line):(i*per_line)+per_line]
+            batch_dates= self.dates[(i*per_line):(i*per_line)+per_line]
+            batch_notes= self.notes[(i*per_line):(i*per_line)+per_line]
+            batch_classes= self.classes[(i*per_line):(i*per_line)+per_line]
 
-        print(index.format("classes: ") + general.format(*self.classes))
-        print(index.format("images: ") + general.format(*self.macro_support))
-        print(index.format("epochs: ") + general.format(*self.epochs))
-        print(index.format("frozen: ") + general.format(*self.layers))
-        print(index.format("accuracy: ") + general.format(*map(lambda x : str(x) + " *" if x == self.accuracy_max else x, self.accuracy)))
-        print(index.format("precision: ") + general.format(*map(lambda x : str(x) + " *" if x == self.macro_precision_max else x, self.macro_precision)))
-        print(index.format("") + general.format(*map(lambda x : str(x) + " *" if x == self.weighted_precision_max else x, self.weighted_precision)))
-        print(index.format("recall: ") + general.format(*map(lambda x : str(x) + " *" if x == self.macro_recall_max else x, self.macro_recall)))
-        print(index.format("") + general.format(*map(lambda x : str(x) + " *" if x == self.weighted_recall_max else x, self.weighted_recall)))
-        print(index.format("f1: ") + general.format(*map(lambda x : str(x) + " *" if x == self.macro_f1_max else x, self.macro_f1)))
-        print(index.format("") + general.format(*map(lambda x : str(x) + " *" if x == self.weighted_f1_max else x, self.weighted_f1)))
+            batch_macro_support= self.macro_support[(i*per_line):(i*per_line)+per_line]
+            batch_epochs= self.epochs[(i*per_line):(i*per_line)+per_line]
+            batch_layers= self.layers[(i*per_line):(i*per_line)+per_line]
+
+
+            general = ""
+            for x in range(len(batch_names)):
+                general += "{:<30}"
+
+            index = "{:>12}"
+            print("")
+            print(index.format("name: ") + general.format(*batch_names))
+            print(index.format("date: ") + general.format(*batch_dates))
+
+            notes = []
+            max_l = 0
+            for k,v in enumerate(batch_notes):
+                t = textwrap.wrap(v.strip(),28,subsequent_indent="")
+                notes.append(t)
+                max_l = len(t) if len(t) > max_l else max_l
+
+            for x in range(max_l):
+                s = ""
+                for note in notes:
+                    try:
+                        s += "{:<30}".format(note[x])
+                    except IndexError:
+                        s += "{:<30}".format("")
+                        pass
+                print(index.format("" if x > 0 else "note: ") + s)
+
+            print(index.format("classes: ") + general.format(*batch_classes))
+            print(index.format("images: ") + general.format(*batch_macro_support))
+            print(index.format("epochs: ") + general.format(*batch_epochs))
+            print(index.format("frozen: ") + general.format(*batch_layers))
+            # print(index.format("accuracy: ") + general.format(*map(lambda x : str(x) + " *" if x == self.accuracy_max else x, self.accuracy)))
+            # print(index.format("precision: ") + general.format(*map(lambda x : str(x) + " *" if x == self.macro_precision_max else x, self.macro_precision)))
+            # print(index.format("") + general.format(*map(lambda x : str(x) + " *" if x == self.weighted_precision_max else x, self.weighted_precision)))
+            # print(index.format("recall: ") + general.format(*map(lambda x : str(x) + " *" if x == self.macro_recall_max else x, self.macro_recall)))
+            # print(index.format("") + general.format(*map(lambda x : str(x) + " *" if x == self.weighted_recall_max else x, self.weighted_recall)))
+            # print(index.format("f1: ") + general.format(*map(lambda x : str(x) + " *" if x == self.macro_f1_max else x, self.macro_f1)))
+            # print(index.format("") + general.format(*map(lambda x : str(x) + " *" if x == self.weighted_f1_max else x, self.weighted_f1)))
 
     def collect_data(self):
         self.names = []
