@@ -31,7 +31,8 @@ class ModelCompare(baseclass.BaseClass):
             general += "{:<30}"
 
         index = "{:>12}"
-        print(index.format("name: ") + general.format(*map("*** {} ***".format,self.names)))
+        print("")
+        print(index.format("name: ") + general.format(*self.names))
         print(index.format("date: ") + general.format(*self.dates))
         # print(index.format("note: ") + general.format(*self.notes))
         print(index.format("classes: ") + general.format(*self.classes))
@@ -45,6 +46,10 @@ class ModelCompare(baseclass.BaseClass):
         print(index.format("") + general.format(*self.weighted_recall))
         print(index.format("f1: ") + general.format(*self.macro_f1))
         print(index.format("") + general.format(*self.weighted_f1))
+
+        print("")
+        for k,v in enumerate(self.notes):
+            print(textwrap.wrap(v))
 
 
     def collect_data(self):
