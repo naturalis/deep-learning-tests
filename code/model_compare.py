@@ -48,10 +48,13 @@ class ModelCompare(baseclass.BaseClass):
         print(index.format("") + general.format(*self.weighted_f1))
 
         notes = []
+        max_l = 0
         for k,v in enumerate(self.notes):
-            notes.append(textwrap.wrap(v.strip(),30))
+            t = textwrap.wrap(v.strip(),28)
+            notes.append(t)
+            max_l = len(t) if len(t) > max_l else max_l
 
-        for x in range(3):
+        for x in range(max_l):
             s = ""
             for note in notes:
                 try:
@@ -59,7 +62,7 @@ class ModelCompare(baseclass.BaseClass):
                 except IndexError:
                     s += "{:<30}".format("")
                     pass
-            print(s)
+            print(index.format("") + s)
 
 
     def collect_data(self):
