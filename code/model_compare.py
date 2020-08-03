@@ -22,11 +22,11 @@ class ModelCompare(baseclass.BaseClass):
         classes = ""
         epochs = ""
         for x in range(len(self.names)):
-            names += "{<30}"
-            dates += "{<30}"
-            notes += "{<30}"
-            classes += "{>30}"
-            epochs += "{>30}"
+            names += "{:<30}"
+            dates += "{:<30}"
+            notes += "{:<30}"
+            classes += "{:>30}"
+            epochs += "{:>30}"
         print(names.format(*self.names))
         print(dates.format(*self.dates))
         print(notes.format(*self.notes))
