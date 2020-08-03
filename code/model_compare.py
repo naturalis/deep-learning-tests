@@ -38,7 +38,7 @@ class ModelCompare(baseclass.BaseClass):
         notes = []
         max_l = 0
         for k,v in enumerate(self.notes):
-            t = textwrap.wrap(v.strip(),28)
+            t = textwrap.wrap(v.strip(),28,subsequent_indent=" ")
             notes.append(t)
             max_l = len(t) if len(t) > max_l else max_l
 
