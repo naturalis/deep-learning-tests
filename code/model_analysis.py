@@ -66,7 +66,7 @@ class ModelAnalysis(baseclass.BaseClass):
 
     def save_analysis(self):
         f = open(self.get_analysis_path(), "w")
-        f.write(json.dumps({"confusion matrix" : self.cm_exportable, "classification report" : self.cr_exportable}))
+        f.write(json.dumps({"confusion_matrix" : self.cm_exportable, "classification_report" : self.cr_exportable}))
         f.close()
 
 
@@ -90,11 +90,8 @@ if __name__ == "__main__":
     analysis.set_model_folder()
     analysis.load_model()
 
-    if 'CLASS_IMAGE_MINIMUM' in os.environ:
-        analysis.set_class_image_minimum(os.environ['CLASS_IMAGE_MINIMUM'])
-
-    # if 'CLASS_IMAGE_MAXIMUM' in os.environ:
-    #     analysis.set_class_image_maximum(os.environ['CLASS_IMAGE_MAXIMUM'])
+    analysis.set_class_image_minimum(analysis.get_preset("class_image_minimum"))
+    analysis.set_class_image_maximum(analysis.get_preset("class_image_maximum"))
 
     analysis.read_class_list()
     analysis.read_image_list_file(image_col=2)

@@ -12,6 +12,15 @@ class ModelCompare(baseclass.BaseClass):
     classes = []
     epochs = []
     layers = []
+    accuracy = []
+    macro_precision = []
+    macro_recall = []
+    macro_f1 = []
+    macro_support = []
+    weighted_precision = []
+    weighted_recall = []
+    weighted_f1 = []
+    weighted_support = []
 
     def __init__(self):
         super().__init__()
@@ -23,19 +32,23 @@ class ModelCompare(baseclass.BaseClass):
         classes = ""
         epochs = ""
         layers = ""
+        accuracy = ""
         for x in range(len(self.names)):
-            names += "** {:<23} ** "
+            names += "{:<30}"
             dates += "{:<30}"
             notes += "{:<30}"
             classes += "{:<30}"
             epochs += "{:<30}"
             layers += "{:<30}"
-        print(names.format(*self.names))
+            accuracy += "{:<30}"
+
+        print(names.format(*map("*** {} ***".format,self.names)))
         print(dates.format(*self.dates))
         # print(notes.format(*self.notes))
         print(classes.format(*self.classes))
-        print(classes.format(*self.epochs))
-        print(classes.format(*self.layers))
+        print(epochs.format(*self.epochs))
+        print(layers.format(*self.layers))
+        print(accuracy.format(*self.accuracy))
 
     def collect_data(self):
         self.names = []
@@ -63,21 +76,19 @@ class ModelCompare(baseclass.BaseClass):
                     )
                     self.epochs.append("; ".join(map(str,tmp["training_phases"]["epochs"])))
                     self.layers.append("; ".join(map(str,tmp["training_phases"]["freeze_layers"])))
-                    
-        
-#         scan dirs
-#         see if there is
-#             classes
-#             dataset
-#             result
 
-
-#     accuracy                           0.90      6920
-#    macro avg       0.83      0.79      0.78      6920
-# weighted avg       0.89      0.90      0.89      692        
-
-
-
+            if os.path.exists(analysis):
+                with open(analysis) as json_file:
+                    tmp = json.load(json_file)
+                    self.accuracy.append(tmp["classification_report"]["accuracy"])
+                    self.macro_precision.append(tmp["classification_report"]["macro avg"]["precision"])
+                    self.macro_recall.append(tmp["classification_report"]["macro avg"]["recall"])
+                    self.macro_f1.append(tmp["classification_report"]["macro avg"]["f1-score"])
+                    self.macro_support.append(tmp["classification_report"]["macro avg"]["support"])
+                    self.weighted_precision.append(tmp["classification_report"]["weighted avg"]["precision"])
+                    self.weighted_recall.append(tmp["classification_report"]["weighted avg"]["recall"])
+                    self.weighted_f1.append(tmp["classification_report"]["weighted avg"]["f1-score"])
+                    self.weighted_support.append(tmp["classification_report"]["weighted avg"]["support"])
 
 
 
