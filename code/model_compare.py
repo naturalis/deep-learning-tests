@@ -11,14 +11,17 @@ class ModelCompare(baseclass.BaseClass):
 
     def fuck(self):
         for entry in os.scandir(self.models_folder):
-            print(entry.name)
             analysis = os.path.join(self.models_folder, entry.name, "analysis.json")
             classes = os.path.join(self.models_folder, entry.name, "classes.json")
             dataset = os.path.join(self.models_folder, entry.name, "dataset.json")
             if os.path.exists(dataset):
                 with open(dataset) as json_file:
                     dataset = json.load(json_file)
-                    print(dataset["model_name"])
+                    print("{} ({})".format(dataset["model_name"],dataset["created"]))
+                    print("\"{}\"".format(dataset["model_note"]))
+                    print("classes: {} (image min/max: {} / {})".format(dataset["class_count"],dataset["class_image_minimum"],dataset["class_image_maximum"]))
+                    print("epoch: {}".format("; ".join(dataset["training_phases"]["epochs"])))
+                    print("frozen layers: {}".format("; ".join(dataset["training_phases"]["freeze_layers"])))
         
 #         scan dirs
 #         see if there is
@@ -26,14 +29,6 @@ class ModelCompare(baseclass.BaseClass):
 #             dataset
 #             result
 
-#         present
-#             model name
-#             note
-#             created
-#             class image max & min
-#             num of classes
-#             epochs
-#             freeze layers
 
 #     accuracy                           0.90      6920
 #    macro avg       0.83      0.79      0.78      6920
