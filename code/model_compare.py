@@ -112,25 +112,25 @@ class ModelCompare(baseclass.BaseClass):
                     self.weighted_f1.append(tmp["classification_report"]["weighted avg"]["f1-score"])
                     self.weighted_support.append(tmp["classification_report"]["weighted avg"]["support"])
 
-                    self.accuracy_max = tmp["classification_report"]["accuracy"]
+                    self.accuracy_max = tmp["classification_report"]["accuracy"] \
                         if tmp["classification_report"]["accuracy"] > self.accuracy_max else self.accuracy_max
 
-                    self.macro_precision_max = tmp["classification_report"]["macro avg"]["precision"]
+                    self.macro_precision_max = tmp["classification_report"]["macro avg"]["precision"] \
                         if tmp["classification_report"]["macro avg"]["precision"] > self.macro_precision_max else self.macro_precision_max
 
-                    self.macro_recall_max = tmp["classification_report"]["macro avg"]["recall"]
+                    self.macro_recall_max = tmp["classification_report"]["macro avg"]["recall"] \
                         if tmp["classification_report"]["macro avg"]["recall"] > self.macro_recall_max else self.macro_recall_max
 
-                    self.macro_f1_max = tmp["classification_report"]["macro avg"]["f1-score"]
+                    self.macro_f1_max = tmp["classification_report"]["macro avg"]["f1-score"] \
                         if tmp["classification_report"]["macro avg"]["f1-score"] > self.macro_f1_max else self.macro_f1_max
 
-                    self.weighted_precision_max = tmp["classification_report"]["weighted avg"]["precision"]
+                    self.weighted_precision_max = tmp["classification_report"]["weighted avg"]["precision"] \
                         if tmp["classification_report"]["weighted avg"]["precision"] > self.weighted_precision_max else self.weighted_precision_max
 
-                    self.weighted_recall_max = tmp["classification_report"]["weighted avg"]["recall"]
+                    self.weighted_recall_max = tmp["classification_report"]["weighted avg"]["recall"] \
                         if tmp["classification_report"]["weighted avg"]["recall"] > self.weighted_recall_max else self.weighted_recall_max
 
-                    self.weighted_f1_max = tmp["classification_report"]["weighted avg"]["f1-score"]
+                    self.weighted_f1_max = tmp["classification_report"]["weighted avg"]["f1-score"] \
                         if tmp["classification_report"]["weighted avg"]["f1-score"] > self.weighted_f1_max else self.weighted_f1_max
 
 
