@@ -1,4 +1,4 @@
-import os, sys, json
+import os, sys, json, textwrap
 # import tensorflow as tf
 # import numpy as np
 # from sklearn.metrics import classification_report
@@ -22,11 +22,11 @@ class ModelCompare(baseclass.BaseClass):
         classes = ""
         epochs = ""
         for x in range(len(self.names)):
-            names += "{:<30}"
+            names += "{:*^30}"
             dates += "{:<30}"
             notes += "{:<30}"
-            classes += "{:>30}"
-            epochs += "{:>30}"
+            classes += "{:<30}"
+            epochs += "{:<30}"
         print(names.format(*self.names))
         print(dates.format(*self.dates))
         print(notes.format(*self.notes))
@@ -52,7 +52,7 @@ class ModelCompare(baseclass.BaseClass):
                     tmp = json.load(json_file)
                     self.names.append(tmp["model_name"])
                     self.dates.append(tmp["created"])
-                    self.notes.append(tmp["model_note"])
+                    self.notes.append(textwrap.wrap(tmp["model_note"],30))
                     self.classes.append("{} ({}/{})".format(
                             tmp["class_count"],
                             tmp["class_image_minimum"],
