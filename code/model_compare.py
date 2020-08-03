@@ -12,9 +12,9 @@ class ModelCompare(baseclass.BaseClass):
     def fuck(self):
         for entry in os.scandir(self.models_folder):
             print(entry.name)
-            analysis = os.path.join(entry.name, "analysis.json")
-            classes = os.path.join(entry.name, "classes.json")
-            dataset = os.path.join(entry.name, "dataset.json")
+            analysis = os.path.join(self.models_folder, entry.name, "analysis.json")
+            classes = os.path.join(self.models_folder, entry.name, "classes.json")
+            dataset = os.path.join(self.models_folder, entry.name, "dataset.json")
             if os.path.exists(dataset):
                 dataset = json.loads(dataset)
                 print(dataset.model_name)
