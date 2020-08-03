@@ -52,11 +52,14 @@ class ModelCompare(baseclass.BaseClass):
             notes.append(textwrap.wrap(v.strip(),30))
 
         for x in range(100):
+            s = ""
             for note in notes:
                 try:
-                    print("{:<30}".format(note[x]))
+                    s += "{:<30}".format(note[x])
                 except IndexError:
+                    s += "{:<30}".format("")
                     pass
+            print(s)
 
 
     def collect_data(self):
