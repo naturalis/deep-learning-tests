@@ -34,7 +34,7 @@ class ModelCompare(baseclass.BaseClass):
 
     def print_data(self):
 
-        per_line = 5
+        per_line = 3
         lines = ceil(len(self.names) / per_line)
 
         for i in range(lines)
