@@ -85,7 +85,7 @@ class ModelCompare(baseclass.BaseClass):
                         pass
                 print(index.format("" if x > 0 else "note: ") + s)
 
-            print(index.format("size: ") + general.format(*map(lambda x : str(math.ceil(x/1e6)) + "MB",batch_model_sizes)))
+            print(index.format("size: ") + general.format(*map(lambda x : x if x =="-" else str(math.ceil(x/1e6)) + "MB",batch_model_sizes)))
             print(index.format("classes: ") + general.format(*batch_classes))
             print(index.format("support: ") + general.format(*batch_macro_support))
             print(index.format("epochs: ") + general.format(*batch_epochs))
