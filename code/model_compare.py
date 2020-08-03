@@ -45,7 +45,7 @@ class ModelCompare(baseclass.BaseClass):
         notes = []
         max_l = 0
         for k,v in enumerate(self.notes):
-            t = textwrap.wrap(v.strip(),28,subsequent_indent=" ")
+            t = textwrap.wrap(v.strip(),28,subsequent_indent="")
             notes.append(t)
             max_l = len(t) if len(t) > max_l else max_l
 
@@ -64,13 +64,12 @@ class ModelCompare(baseclass.BaseClass):
         print(index.format("epochs: ") + general.format(*self.epochs))
         print(index.format("frozen: ") + general.format(*self.layers))
         print(index.format("accuracy: ") + general.format(*map(lambda x : str(x) + " *" if x == self.accuracy_max else x, self.accuracy)))
-        print(index.format("precision: ") + general.format(*self.macro_precision))
-        print(index.format("") + general.format(*self.weighted_precision))
-        print(index.format("recall: ") + general.format(*self.macro_recall))
-        print(index.format("") + general.format(*self.weighted_recall))
-        print(index.format("f1: ") + general.format(*self.macro_f1))
-        print(index.format("") + general.format(*self.weighted_f1))
-
+        print(index.format("precision: ") + general.format(*map(lambda x : str(x) + " *" if x == self.macro_precision_max else x, self.macro_precision)))
+        print(index.format("") + general.format(*map(lambda x : str(x) + " *" if x == self.weighted_precision_max else x, self.weighted_precision)))
+        print(index.format("recall: ") + general.format(*map(lambda x : str(x) + " *" if x == self.macro_recall_max else x, self.macro_recall)))
+        print(index.format("") + general.format(*map(lambda x : str(x) + " *" if x == self.weighted_recall_max else x, self.weighted_recall)))
+        print(index.format("f1: ") + general.format(*map(lambda x : str(x) + " *" if x == self.macro_f1_max else x, self.macro_f1)))
+        print(index.format("") + general.format(*map(lambda x : str(x) + " *" if x == self.weighted_f1_max else x, self.weighted_f1)))
 
     def collect_data(self):
         self.names = []
