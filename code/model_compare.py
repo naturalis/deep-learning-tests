@@ -29,10 +29,10 @@ class ModelCompare(baseclass.BaseClass):
         names = ""
         dates = ""
         notes = ""
-        classes = "classes: "
+        classes = ""
         epochs = ""
         layers = ""
-        accuracy = "acc: "
+        accuracy = ""
         for x in range(len(self.names)):
             names += "{:<30}"
             dates += "{:<30}"
@@ -42,13 +42,14 @@ class ModelCompare(baseclass.BaseClass):
             layers += "{:<30}"
             accuracy += "{:<30}"
 
-        print(names.format(*map("*** {} ***".format,self.names)))
-        print(dates.format(*self.dates))
-        # print(notes.format(*self.notes))
-        print(classes.format(*self.classes))
-        print(epochs.format(*self.epochs))
-        print(layers.format(*self.layers))
-        print(accuracy.format(*self.accuracy))
+        index = "{:<10}"
+        print(index.format("name:") + names.format(*map("*** {} ***".format,self.names)))
+        print(index.format("date:") + dates.format(*self.dates))
+        # print(index.format("note:") + notes.format(*self.notes))
+        print(index.format("classes:") + classes.format(*self.classes))
+        print(index.format("epochs:") + epochs.format(*self.epochs))
+        print(index.format("frozen:") + layers.format(*self.layers))
+        print(index.format("accuracy:") + accuracy.format(*self.accuracy))
 
     def collect_data(self):
         self.names = []
