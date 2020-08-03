@@ -128,10 +128,10 @@ class ModelCompare(baseclass.BaseClass):
         for entry in os.scandir(self.models_folder):
             folders.append(entry.name)
 
-        for folder in sortted(folders):
+        for folder in sorted(folders):
             analysis = os.path.join(self.models_folder, folder, "analysis.json")
             classes = os.path.join(self.models_folder, folder, "classes.json")
-            dataset = os.path.join(self.models_folder, folder.name, "dataset.json")
+            dataset = os.path.join(self.models_folder, folder, "dataset.json")
             model = os.path.join(self.models_folder, folder, "model.hdf5")
 
             if not os.path.exists(dataset):
