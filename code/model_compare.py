@@ -51,7 +51,7 @@ class ModelCompare(baseclass.BaseClass):
         for k,v in enumerate(self.notes):
             notes.append(textwrap.wrap(v.strip(),30))
 
-        for x in range(100):
+        for x in range(3):
             s = ""
             for note in notes:
                 try:
