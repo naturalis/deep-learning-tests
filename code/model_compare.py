@@ -49,14 +49,14 @@ class ModelCompare(baseclass.BaseClass):
             dataset = os.path.join(self.models_folder, entry.name, "dataset.json")
             if os.path.exists(dataset):
                 with open(dataset) as json_file:
-                    self.dataset = json.load(json_file)
-                    self.names.append(str(dataset["model_name"]))
-                    self.dates.append(str(dataset["created"]))
-                    self.notes.append(str(dataset["model_note"]))
+                    tmp = json.load(json_file)
+                    self.names.append(tmp["model_name"])
+                    self.dates.append(tmp["created"])
+                    self.notes.append(tmp["model_note"])
                     self.classes.append("{} ({}/{})".format(
-                            str(dataset["class_count"]),
-                            str(dataset["class_image_minimum"]),
-                            str(dataset["class_image_maximum"])
+                            tmp["class_count"],
+                            tmp["class_image_minimum"],
+                            tmp["class_image_maximum"]
                        )
                     )
                     # epochs.append()
