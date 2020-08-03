@@ -63,7 +63,7 @@ class ModelCompare(baseclass.BaseClass):
         print(index.format("images: ") + general.format(*self.macro_support))
         print(index.format("epochs: ") + general.format(*self.epochs))
         print(index.format("frozen: ") + general.format(*self.layers))
-        print(index.format("accuracy: ") + general.format(*map(lambda x : x = x + " *" if x == self.accuracy_max else x, self.accuracy)))
+        print(index.format("accuracy: ") + general.format(*map(lambda x : x + " *" if x == self.accuracy_max else x, self.accuracy)))
         print(index.format("precision: ") + general.format(*self.macro_precision))
         print(index.format("") + general.format(*self.weighted_precision))
         print(index.format("recall: ") + general.format(*self.macro_recall))
