@@ -268,5 +268,5 @@ class BaseClass():
         if preset in self.presets:
             return self.presets[preset]
         else:
-            raise ValueError("preset {} doesn't exist: {}".format(preset))
+            raise ValueError("preset {} doesn't exist".format(preset))
 
