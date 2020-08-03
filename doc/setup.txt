@@ -93,9 +93,4 @@ sudo docker-compose run tensorflow /code/dwca_reader.py
 sudo docker-compose run tensorflow /code/image_downloader.py
 sudo docker-compose run tensorflow /code/model_trainer.py
 sudo docker-compose run tensorflow /code/model_analysis.py v1.x
-
-
-v1.1--min-20
-v1.1--min-50
-v1.1--min-100
-v1.1--min-350
+sudo docker-compose run tensorflow /code/model_compare.py
