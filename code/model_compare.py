@@ -34,18 +34,6 @@ class ModelCompare(baseclass.BaseClass):
         print("")
         print(index.format("name: ") + general.format(*self.names))
         print(index.format("date: ") + general.format(*self.dates))
-        # print(index.format("note: ") + general.format(*self.notes))
-        print(index.format("classes: ") + general.format(*self.classes))
-        print(index.format("images: ") + general.format(*self.macro_support))
-        print(index.format("epochs: ") + general.format(*self.epochs))
-        print(index.format("frozen: ") + general.format(*self.layers))
-        print(index.format("accuracy: ") + general.format(*self.accuracy))
-        print(index.format("precision: ") + general.format(*self.macro_precision))
-        print(index.format("") + general.format(*self.weighted_precision))
-        print(index.format("recall: ") + general.format(*self.macro_recall))
-        print(index.format("") + general.format(*self.weighted_recall))
-        print(index.format("f1: ") + general.format(*self.macro_f1))
-        print(index.format("") + general.format(*self.weighted_f1))
 
         notes = []
         max_l = 0
@@ -62,7 +50,19 @@ class ModelCompare(baseclass.BaseClass):
                 except IndexError:
                     s += "{:<30}".format("")
                     pass
-            print(index.format("") + s)
+            print(index.format("" if x > 0 else "note: ") + s)
+
+        print(index.format("classes: ") + general.format(*self.classes))
+        print(index.format("images: ") + general.format(*self.macro_support))
+        print(index.format("epochs: ") + general.format(*self.epochs))
+        print(index.format("frozen: ") + general.format(*self.layers))
+        print(index.format("accuracy: ") + general.format(*self.accuracy))
+        print(index.format("precision: ") + general.format(*self.macro_precision))
+        print(index.format("") + general.format(*self.weighted_precision))
+        print(index.format("recall: ") + general.format(*self.macro_recall))
+        print(index.format("") + general.format(*self.weighted_recall))
+        print(index.format("f1: ") + general.format(*self.macro_f1))
+        print(index.format("") + general.format(*self.weighted_f1))
 
 
     def collect_data(self):
