@@ -53,10 +53,10 @@ class ModelCompare(baseclass.BaseClass):
 
         for x in range(100):
             for note in notes:
-                print(note)
-                if x in note:
+                try:
                     print("{:<30}".format(note[x]))
-
+                except IndexError:
+                    pass
 
 
     def collect_data(self):
