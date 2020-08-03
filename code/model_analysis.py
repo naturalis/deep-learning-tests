@@ -1,4 +1,4 @@
-import os, sys, json
+import os, sys, json, argparse
 import tensorflow as tf
 import numpy as np
 from sklearn.metrics import classification_report
@@ -71,20 +71,21 @@ class ModelAnalysis(baseclass.BaseClass):
 
 
 if __name__ == "__main__":
-    project_root = os.environ['PROJECT_ROOT']
 
-    if len(sys.argv)>1:
-        model_name = sys.argv[1]
-    else:
-        model_name = os.environ['MODEL_NAME']
+    parser = argparse.ArgumentParser() 
+    parser.add_argument("--load_model",type=str)
+    args = parser.parse_args() 
 
     analysis = ModelAnalysis()
 
     analysis.set_debug(os.environ["DEBUG"]=="1" if "DEBUG" in os.environ else False)
     analysis.set_project(os.environ)
-    analysis.set_model_name(model_name)
-    analysis.set_model_folder()
+    if args.load_model: 
+        analysis.set_model_name(model_name)
+    else:
+        raise ValueError("need a model name (--load_model=<model name>)")
 
+    analysis.set_model_folder()
     analysis.load_model()
 
     if 'CLASS_IMAGE_MINIMUM' in os.environ:
@@ -98,15 +99,11 @@ if __name__ == "__main__":
     analysis.read_image_list_file(image_col=2)
     analysis.image_list_apply_class_list()
 
-    batch_size = int(os.environ["BATCH_SIZE"]) if "BATCH_SIZE" in os.environ else 64
-    analysis.logger.info("batch_size: {}".format(batch_size))
-
     analysis.set_model_settings({
-        "batch_size": batch_size,
+        "batch_size": trainer.get_preset("batch_size")
     })
 
     analysis.configure_generator()
-
     analysis.do_analysis()
     analysis.print_analysis()
     analysis.save_analysis()
