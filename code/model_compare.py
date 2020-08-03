@@ -47,9 +47,15 @@ class ModelCompare(baseclass.BaseClass):
         print(index.format("f1: ") + general.format(*self.macro_f1))
         print(index.format("") + general.format(*self.weighted_f1))
 
-        print("")
+        notes = []
         for k,v in enumerate(self.notes):
-            print(textwrap.wrap(v.strip(),30))
+            notes.append(textwrap.wrap(v.strip(),30))
+
+        for x in range(100):
+            for note in notes:
+                if x in note:
+                    print("{:<30}".forma(note[x]))
+
 
 
     def collect_data(self):
