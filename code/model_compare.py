@@ -37,7 +37,7 @@ class ModelCompare(baseclass.BaseClass):
         per_line = 3
         lines = ceil(len(self.names) / per_line)
 
-        for i in range(lines)
+        for i in range(len(lines))
 
             batch_names = self.names[(i*per_line):(i*per_line)+per_line]
             batch_dates= self.dates[(i*per_line):(i*per_line)+per_line]
