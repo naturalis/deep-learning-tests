@@ -10,7 +10,7 @@ class ModelCompare(baseclass.BaseClass):
         super().__init__()
 
     def fuck(self):
-        for entry in os.scan_dir(self.models_folder):
+        for entry in os.scandir(self.models_folder):
             print(entry.name)
             analysis = os.path.join(entry.name, "analysis.json")
             classes = os.path.join(entry.name, "classes.json")
