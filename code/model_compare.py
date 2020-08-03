@@ -17,11 +17,21 @@ class ModelCompare(baseclass.BaseClass):
             if os.path.exists(dataset):
                 with open(dataset) as json_file:
                     dataset = json.load(json_file)
-                    print("{} ({})".format(dataset["model_name"],dataset["created"]))
-                    print("\"{}\"".format(dataset["model_note"]))
-                    print("classes: {} (image min/max: {} / {})".format(dataset["class_count"],dataset["class_image_minimum"],dataset["class_image_maximum"]))
-                    print("epoch: {}".format("; ".join(map(str,dataset["training_phases"]["epochs"]))))
-                    print("frozen layers: {}".format("; ".join(dataset["training_phases"]["freeze_layers"])))
+                    print("{} ({}): {}".format(dataset["model_name"],dataset["created"],dataset["model_note"].strip()))
+                    print("{} classes (min {}, max {} images)".
+                        format(
+                            dataset["class_count"],
+                            dataset["class_image_minimum"],
+                            dataset["class_image_maximum"]
+                           )
+                    )
+                    print("trained {} epochs ({})".
+                        format(
+                            "; ".join(map(str,dataset["training_phases"]["epochs"])),
+                            "; ".join(dataset["training_phases"]["freeze_layers"])
+                        )
+                    )
+                    
         
 #         scan dirs
 #         see if there is
