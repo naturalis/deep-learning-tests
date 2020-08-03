@@ -11,6 +11,7 @@ class ModelCompare(baseclass.BaseClass):
     notes = []
     classes = []
     epochs = []
+    layers = []
 
     def __init__(self):
         super().__init__()
@@ -21,20 +22,20 @@ class ModelCompare(baseclass.BaseClass):
         notes = ""
         classes = ""
         epochs = ""
+        layers = ""
         for x in range(len(self.names)):
-            names += "{:*^30}"
+            names += "** {:<23} ** "
             dates += "{:<30}"
             notes += "{:<30}"
             classes += "{:<30}"
             epochs += "{:<30}"
+            layers += "{:<30}"
         print(names.format(*self.names))
         print(dates.format(*self.dates))
-        print(notes.format(*self.notes))
+        # print(notes.format(*self.notes))
         print(classes.format(*self.classes))
-        # self.dates = []
-        # self.notes = []
-        # self.classes = []
-        # self.epochs = []
+        print(classes.format(*self.epochs))
+        print(classes.format(*self.layers))
 
     def collect_data(self):
         self.names = []
@@ -42,6 +43,7 @@ class ModelCompare(baseclass.BaseClass):
         self.notes = []
         self.classes = []
         self.epochs = []
+        self.layers = []
 
         for entry in os.scandir(self.models_folder):
             analysis = os.path.join(self.models_folder, entry.name, "analysis.json")
@@ -59,23 +61,8 @@ class ModelCompare(baseclass.BaseClass):
                             tmp["class_image_maximum"]
                        )
                     )
-                    # epochs.append()
-
-
-                    # print("{} ({}): {}".format(dataset["model_name"],dataset[""],dataset["model_note"].strip()))
-                    # print("{} classes (min {}, max {} images)".
-                        # format(
-                        #     dataset["class_count"],
-                        #     dataset["class_image_minimum"],
-                        #     dataset["class_image_maximum"]
-                        #    )
-                    # )
-                    # print("trained {} epochs ({})".
-                    #     format(
-                    #         "; ".join(map(str,dataset["training_phases"]["epochs"])),
-                    #         "; ".join(dataset["training_phases"]["freeze_layers"])
-                    #     )
-                    # )
+                    self.epochs.append("{} {}".format("; ".join(map(str,dataset["training_phases"]["epochs"]))))
+                    self.layers.append("{} {}".format("; ".join(map(str,dataset["training_phases"]["freeze_layers"]))))
                     
         
 #         scan dirs
