@@ -26,32 +26,25 @@ class ModelCompare(baseclass.BaseClass):
         super().__init__()
 
     def print_data(self):
-        names = ""
-        dates = ""
-        notes = ""
-        classes = ""
-        epochs = ""
-        layers = ""
-        accuracy = ""
+        general = ""
         for x in range(len(self.names)):
-            names += "{:<30}"
-            dates += "{:<30}"
-            notes += "{:<30}"
-            classes += "{:<30}"
-            epochs += "{:<30}"
-            layers += "{:<30}"
-            accuracy += "{:<30}"
+            general += "{:<30}"
 
-        index = "{: >10}"
-        print(index.format("name:") + names.format(*map("*** {} ***".format,self.names)))
-        print(index.format("date:") + dates.format(*self.dates))
-        # print(index.format("note:") + notes.format(*self.notes))
-        print(index.format("classes:") + classes.format(*self.classes))
-        print(index.format("epochs:") + epochs.format(*self.epochs))
-        print(index.format("frozen:") + layers.format(*self.layers))
-        print(index.format("accuracy:") + accuracy.format(*self.accuracy))
-        print(index.format("precision:") + accuracy.format(*self.macro_precision))
-        print(index.format("(macro/weighed)") + accuracy.format(*self.weighted_precision))
+        index = "{:>10}"
+        print(index.format("name: ") + general.format(*map("*** {} ***".format,self.names)))
+        print(index.format("date: ") + general.format(*self.dates))
+        # print(index.format("note: ") + general.format(*self.notes))
+        print(index.format("classes: ") + general.format(*self.classes))
+        print(index.format("images: ") + general.format(*self.macro_support))
+        print(index.format("epochs: ") + general.format(*self.epochs))
+        print(index.format("frozen: ") + general.format(*self.layers))
+        print(index.format("accuracy: ") + general.format(*self.accuracy))
+        print(index.format("precision: ") + general.format(*self.macro_precision))
+        print(index.format("") + general.format(*self.weighted_precision))
+        print(index.format("recall: ") + general.format(*self.macro_recall))
+        print(index.format("") + general.format(*self.weighted_recall))
+        print(index.format("f1: ") + general.format(*self.macro_f1))
+        print(index.format("") + general.format(*self.weighted_f1))
 
 
     def collect_data(self):
