@@ -1,7 +1,4 @@
 import os, sys, json, textwrap, math
-# import tensorflow as tf
-# import numpy as np
-# from sklearn.metrics import classification_report
 from lib import baseclass
 
 class ModelCompare(baseclass.BaseClass):
