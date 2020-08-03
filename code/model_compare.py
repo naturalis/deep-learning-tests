@@ -96,7 +96,7 @@ class ModelCompare(baseclass.BaseClass):
             print(index.format("f1: ") + general.format(self._mark_max_val(self.macro_f1_max,batch_macro_f1)))
             print(index.format("") + general.format(self._mark_max_val(self.weighted_f1_max,batch_weighted_f1)))
 
-    def _mark_max_val(self,value_max,val_list):
+    def _mark_max_val(self,value_max,value_list):
         return map(lambda x : str(x) + " *" if x == value_max else x, value_list)
 
     def collect_data(self):
