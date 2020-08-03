@@ -20,7 +20,7 @@ class ModelCompare(baseclass.BaseClass):
                     print("{} ({})".format(dataset["model_name"],dataset["created"]))
                     print("\"{}\"".format(dataset["model_note"]))
                     print("classes: {} (image min/max: {} / {})".format(dataset["class_count"],dataset["class_image_minimum"],dataset["class_image_maximum"]))
-                    print("epoch: {}".format("; ".join(dataset["training_phases"]["epochs"])))
+                    print("epoch: {}".format("; ".join(map(str,dataset["training_phases"]["epochs"]))))
                     print("frozen layers: {}".format("; ".join(dataset["training_phases"]["freeze_layers"])))
         
 #         scan dirs
