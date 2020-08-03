@@ -29,10 +29,10 @@ class ModelCompare(baseclass.BaseClass):
         names = ""
         dates = ""
         notes = ""
-        classes = ""
+        classes = "classes: "
         epochs = ""
         layers = ""
-        accuracy = ""
+        accuracy = "acc: "
         for x in range(len(self.names)):
             names += "{:<30}"
             dates += "{:<30}"
