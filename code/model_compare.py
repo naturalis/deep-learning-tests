@@ -33,7 +33,7 @@ class ModelCompare(baseclass.BaseClass):
 
         print("")
         
-        per_line = 15
+        per_line = 2
 
         lines = math.ceil(len(self.names) / per_line)
 
