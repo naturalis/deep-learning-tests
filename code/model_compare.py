@@ -34,6 +34,8 @@ class ModelCompare(baseclass.BaseClass):
 
     def print_data(self):
 
+        print("")
+        
         per_line = 3
         lines = math.ceil(len(self.names) / per_line)
 
@@ -44,6 +46,7 @@ class ModelCompare(baseclass.BaseClass):
 
             batch_names = self.names[a:b]
             batch_dates= self.dates[a:b]
+            batch_model_sizes= self.model_sizes[a:b]
             batch_notes= self.notes[a:b]
             batch_classes= self.classes[a:b]
             batch_macro_support= self.macro_support[a:b]
@@ -63,9 +66,10 @@ class ModelCompare(baseclass.BaseClass):
                 general += "{:<30}"
 
             index = "{:>12}"
-            print("")
+
             print(index.format("name: ") + general.format(*batch_names))
             print(index.format("date: ") + general.format(*batch_dates))
+            print(index.format("size: ") + general.format(*batch_model_sizes))
 
             notes = []
             max_l = 0
@@ -96,6 +100,10 @@ class ModelCompare(baseclass.BaseClass):
             print(index.format("f1: ") + general.format(*self._mark_max_val(self.macro_f1_max,batch_macro_f1)))
             print(index.format("") + general.format(*self._mark_max_val(self.weighted_f1_max,batch_weighted_f1)))
 
+            print("")
+            print("")
+
+
     def _mark_max_val(self,value_max,value_list):
         return map(lambda x : str(x) + " *" if x == value_max else x, value_list)
 
@@ -106,11 +114,14 @@ class ModelCompare(baseclass.BaseClass):
         self.classes = []
         self.epochs = []
         self.layers = []
+        self.model_sizes = []
 
         for entry in os.scandir(self.models_folder):
             analysis = os.path.join(self.models_folder, entry.name, "analysis.json")
             classes = os.path.join(self.models_folder, entry.name, "classes.json")
             dataset = os.path.join(self.models_folder, entry.name, "dataset.json")
+            model = os.path.join(self.models_folder, entry.name, "model.hdf5")
+
             if os.path.exists(dataset):
                 with open(dataset) as json_file:
                     tmp = json.load(json_file)
@@ -163,6 +174,11 @@ class ModelCompare(baseclass.BaseClass):
                 self.weighted_recall.append("")
                 self.weighted_f1.append("")
                 self.weighted_support.append("")
+
+            if os.path.exists(model):
+                self.model_sizes.append(os.path.getsize(model))
+            else:
+                self.model_sizes.append("-")
 
 
 if __name__ == "__main__":
