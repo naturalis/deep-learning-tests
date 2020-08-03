@@ -18,7 +18,7 @@ class ModelCompare(baseclass.BaseClass):
             if os.path.exists(dataset):
                 with open(dataset) as json_file:
                     dataset = json.load(json_file)
-                    print(dataset.model_name)
+                    print(dataset["model_name"])
         
 #         scan dirs
 #         see if there is
