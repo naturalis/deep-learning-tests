@@ -39,17 +39,26 @@ class ModelCompare(baseclass.BaseClass):
 
         for i in range(lines):
 
-            batch_names = self.names[(i*per_line):(i*per_line)+per_line]
-            batch_dates= self.dates[(i*per_line):(i*per_line)+per_line]
-            batch_notes= self.notes[(i*per_line):(i*per_line)+per_line]
-            batch_classes= self.classes[(i*per_line):(i*per_line)+per_line]
+            a = (i*per_line)
+            b = (i*per_line)+per_line
 
-            batch_macro_support= self.macro_support[(i*per_line):(i*per_line)+per_line]
-            batch_epochs= self.epochs[(i*per_line):(i*per_line)+per_line]
-            batch_layers= self.layers[(i*per_line):(i*per_line)+per_line]
-
+            batch_names = self.names[a:b]
+            batch_dates= self.dates[a:b]
+            batch_notes= self.notes[a:b]
+            batch_classes= self.classes[a:b]
+            batch_macro_support= self.macro_support[a:b]
+            batch_epochs= self.epochs[a:b]
+            batch_layers= self.layers[a:b]
+            batch_accuracy = self.accuracy[a:b]
+            batch_macro_precision = self.macro_precision[a:b]
+            batch_weighted_precision = self.weighted_precision[a:b]
+            batch_macro_recall = self.macro_recall[a:b]
+            batch_weighted_recall = self.weighted_recall[a:b]
+            batch_macro_f1 = self.macro_f1[a:b]
+            batch_weighted_f1 = self.weighted_f1[a:b]
 
             general = ""
+
             for x in range(len(batch_names)):
                 general += "{:<30}"
 
@@ -79,13 +88,16 @@ class ModelCompare(baseclass.BaseClass):
             print(index.format("images: ") + general.format(*batch_macro_support))
             print(index.format("epochs: ") + general.format(*batch_epochs))
             print(index.format("frozen: ") + general.format(*batch_layers))
-            # print(index.format("accuracy: ") + general.format(*map(lambda x : str(x) + " *" if x == self.accuracy_max else x, self.accuracy)))
-            # print(index.format("precision: ") + general.format(*map(lambda x : str(x) + " *" if x == self.macro_precision_max else x, self.macro_precision)))
-            # print(index.format("") + general.format(*map(lambda x : str(x) + " *" if x == self.weighted_precision_max else x, self.weighted_precision)))
-            # print(index.format("recall: ") + general.format(*map(lambda x : str(x) + " *" if x == self.macro_recall_max else x, self.macro_recall)))
-            # print(index.format("") + general.format(*map(lambda x : str(x) + " *" if x == self.weighted_recall_max else x, self.weighted_recall)))
-            # print(index.format("f1: ") + general.format(*map(lambda x : str(x) + " *" if x == self.macro_f1_max else x, self.macro_f1)))
-            # print(index.format("") + general.format(*map(lambda x : str(x) + " *" if x == self.weighted_f1_max else x, self.weighted_f1)))
+            print(index.format("accuracy: ") + general.format(self._mark_max_val(self.accuracy_max,batch_accuracy)))
+            print(index.format("precision: ") + general.format(self._mark_max_val(self.macro_precision_max,batch_macro_precision)))
+            print(index.format("") + general.format(self._mark_max_val(self.weighted_precision_max,batch_weighted_precision)))
+            print(index.format("recall: ") + general.format(self._mark_max_val(self.macro_recall_max,batch_macro_recall)))
+            print(index.format("") + general.format(self._mark_max_val(self.weighted_recall_max,batch_weighted_recall)))
+            print(index.format("f1: ") + general.format(self._mark_max_val(self.macro_f1_max,batch_macro_f1)))
+            print(index.format("") + general.format(self._mark_max_val(self.weighted_f1_max,batch_weighted_f1)))
+
+    def _mark_max_val(self,value_max,val_list):
+        return map(lambda x : str(x) + " *" if x == value_max else x, value_list)
 
     def collect_data(self):
         self.names = []
