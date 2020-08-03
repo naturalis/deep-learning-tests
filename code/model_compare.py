@@ -123,7 +123,7 @@ class ModelCompare(baseclass.BaseClass):
         self.layers = []
         self.model_sizes = []
 
-        for entry in os.scandir(self.models_folder):
+        for entry in sorted(os.scandir(self.models_folder)):
             analysis = os.path.join(self.models_folder, entry.name, "analysis.json")
             classes = os.path.join(self.models_folder, entry.name, "classes.json")
             dataset = os.path.join(self.models_folder, entry.name, "dataset.json")
