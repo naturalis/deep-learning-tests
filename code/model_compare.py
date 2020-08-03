@@ -42,7 +42,7 @@ class ModelCompare(baseclass.BaseClass):
             layers += "{:<30}"
             accuracy += "{:<30}"
 
-        index = "{:>10}"
+        index = "{: >10}"
         print(index.format("name:") + names.format(*map("*** {} ***".format,self.names)))
         print(index.format("date:") + dates.format(*self.dates))
         # print(index.format("note:") + notes.format(*self.notes))
