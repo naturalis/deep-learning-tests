@@ -21,6 +21,13 @@ class ModelCompare(baseclass.BaseClass):
     weighted_recall = []
     weighted_f1 = []
     weighted_support = []
+    accuracy_max = 0
+    macro_precision_max = 0
+    macro_recall_max = 0
+    macro_f1_max = 0
+    weighted_precision_max = 0
+    weighted_recall_max = 0
+    weighted_f1_max = 0
 
     def __init__(self):
         super().__init__()
@@ -56,7 +63,7 @@ class ModelCompare(baseclass.BaseClass):
         print(index.format("images: ") + general.format(*self.macro_support))
         print(index.format("epochs: ") + general.format(*self.epochs))
         print(index.format("frozen: ") + general.format(*self.layers))
-        print(index.format("accuracy: ") + general.format(*self.accuracy))
+        print(index.format("accuracy: ") + general.format(*map(lambda x : x = x + " *" if x == self.accuracy_max else x, self.accuracy))
         print(index.format("precision: ") + general.format(*self.macro_precision))
         print(index.format("") + general.format(*self.weighted_precision))
         print(index.format("recall: ") + general.format(*self.macro_recall))
@@ -104,6 +111,29 @@ class ModelCompare(baseclass.BaseClass):
                     self.weighted_recall.append(tmp["classification_report"]["weighted avg"]["recall"])
                     self.weighted_f1.append(tmp["classification_report"]["weighted avg"]["f1-score"])
                     self.weighted_support.append(tmp["classification_report"]["weighted avg"]["support"])
+
+                    self.accuracy_max = tmp["classification_report"]["accuracy"]
+                        if tmp["classification_report"]["accuracy"] > self.accuracy_max else self.accuracy_max
+
+                    self.macro_precision_max = tmp["classification_report"]["macro avg"]["precision"]
+                        if tmp["classification_report"]["macro avg"]["precision"] > self.macro_precision_max else self.macro_precision_max
+
+                    self.macro_recall_max = tmp["classification_report"]["macro avg"]["recall"]
+                        if tmp["classification_report"]["macro avg"]["recall"] > self.macro_recall_max else self.macro_recall_max
+
+                    self.macro_f1_max = tmp["classification_report"]["macro avg"]["f1-score"]
+                        if tmp["classification_report"]["macro avg"]["f1-score"] > self.macro_f1_max else self.macro_f1_max
+
+                    self.weighted_precision_max = tmp["classification_report"]["weighted avg"]["precision"]
+                        if tmp["classification_report"]["weighted avg"]["precision"] > self.weighted_precision_max else self.weighted_precision_max
+
+                    self.weighted_recall_max = tmp["classification_report"]["weighted avg"]["recall"]
+                        if tmp["classification_report"]["weighted avg"]["recall"] > self.weighted_recall_max else self.weighted_recall_max
+
+                    self.weighted_f1_max = tmp["classification_report"]["weighted avg"]["f1-score"]
+                        if tmp["classification_report"]["weighted avg"]["f1-score"] > self.weighted_f1_max else self.weighted_f1_max
+
+
 
 
 
