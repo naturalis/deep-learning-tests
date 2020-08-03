@@ -49,7 +49,7 @@ class ModelCompare(baseclass.BaseClass):
 
         print("")
         for k,v in enumerate(self.notes):
-            print(textwrap.wrap(v))
+            print(textwrap.wrap(v.strip(),30))
 
 
     def collect_data(self):
