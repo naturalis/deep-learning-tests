@@ -64,6 +64,14 @@ class ModelAnalysis(baseclass.BaseClass):
         print("== classification report ==")
         print(self.cr)
 
+    def backup_previous_analysis(self):
+        # i = 0
+        # while os.path.exists(self.get_analysis_path(str(i))):
+        pass
+
+
+
+
     def save_analysis(self):
         f = open(self.get_analysis_path(), "w")
         f.write(json.dumps({"confusion_matrix" : self.cm_exportable, "classification_report" : self.cr_exportable}))
@@ -104,4 +112,5 @@ if __name__ == "__main__":
     analysis.configure_generator()
     analysis.do_analysis()
     analysis.print_analysis()
+    analysis.backup_previous_analysis()
     analysis.save_analysis()

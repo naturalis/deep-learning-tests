@@ -76,7 +76,13 @@ class ModelTrainer(baseclass.BaseClass):
         # return callbacks
 
     def configure_generators(self):
-        a = self.model_settings["image_augmentation"] if "image_augmentation" in self.model_settings else []
+        if "image_augmentation" in self.model_settings and not self.model_settings["image_augmentation"] is None:
+            a = self.model_settings["image_augmentation"]
+        else:
+            a = []
+
+        print(a)
+        exit(0)
 
         datagen = tf.keras.preprocessing.image.ImageDataGenerator(
             rescale=1./255,
