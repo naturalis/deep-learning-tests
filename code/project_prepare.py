@@ -15,7 +15,7 @@ class ProjectPrepare(baseclass.BaseClass):
             if not os.path.exists(f):
                 os.mkdir(f)
                 os.chmod(f,0o777)
-                self.logger.info("created folder \"{}\".format(f))
+                self.logger.info("created folder \"{}\"".format(f))
             else:
                 self.logger.info("folder \"{}\" already exists".format(f))
 
