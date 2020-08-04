@@ -242,21 +242,19 @@ class BaseClass():
 
     def set_presets(self,os_environ):
         if 'IMAGE_AUGMENTATION' in os_environ:
-            # 'none' in .env translates to 'null'!
-            if os_environ.get("IMAGE_AUGMENTATION") == "null":
-                self.presets.update( {'image_augmentation' : None } )
-            else:
-                self.presets.update( {'image_augmentation' : json.loads(os_environ.get("IMAGE_AUGMENTATION")) } )
+            self.presets.update( {'image_augmentation' : json.loads(os_environ.get("IMAGE_AUGMENTATION")) } )    
         else:
-            self.presets.update( {'image_augmentation' : {
-                "rotation_range": 90,
-                "shear_range": 0.2,
-                "zoom_range": 0.2,
-                "horizontal_flip": True,
-                "width_shift_range": 0.2,
-                "height_shift_range": 0.2, 
-                "vertical_flip": False
-            } } )
+            self.presets.update( {'image_augmentation' : None } )
+
+            # self.presets.update( {'image_augmentation' : {
+            #     "rotation_range": 90,
+            #     "shear_range": 0.2,
+            #     "zoom_range": 0.2,
+            #     "horizontal_flip": True,
+            #     "width_shift_range": 0.2,
+            #     "height_shift_range": 0.2, 
+            #     "vertical_flip": False
+            # } } )
 
         if 'REDUCE_LR_PARAMS' in os_environ:
             self.presets.update( {'reduce_lr_params' : json.loads(os_environ.get("REDUCE_LR_PARAMS")) } )
