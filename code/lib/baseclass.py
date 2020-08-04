@@ -56,12 +56,12 @@ class BaseClass():
         print(pr)
         exit(0)
 
-        if not "PROJECT_ROOT" in os.environ:
-            raise ValueError("need a project root (PROJECT_ROOT missing from .env)") 
-        else:
-            path = os.path.join(, "log")
-            logfile = os.path.join(os.environ['PROJECT_ROOT'], 'log', 'general.log')
-            logfile = os.path.join(os.environ['PROJECT_ROOT'], 'log', 'general.log')
+        # if not "PROJECT_ROOT" in os.environ:
+        #     raise ValueError("need a project root (PROJECT_ROOT missing from .env)") 
+        # else:
+        #     path = os.path.join(, "log")
+        #     logfile = os.path.join(os.environ['PROJECT_ROOT'], 'log', 'general.log')
+        #     logfile = os.path.join(os.environ['PROJECT_ROOT'], 'log', 'general.log')
 
 
         logfile = os.path.join(os.environ['PROJECT_ROOT'], 'log', 'general.log')
