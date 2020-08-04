@@ -91,7 +91,7 @@ class BaseClass():
             raise ValueError("need a project name (PROJECT_NAME missing from .env)")
 
         if 'PROJECT_ROOT' in os_environ:
-            self.set_project_folders(project_root=os_environ.get("PROJECT_ROOT"))
+            self.set_project_folders(project_root=os_environ.get("PROJECT_ROOT"),image_path=os_environ.get("IMAGES_ROOT"))
         else:
             raise ValueError("need a project root (PROJECT_ROOT missing from .env)")
 
@@ -114,6 +114,7 @@ class BaseClass():
 
         if image_path is not None:
             self.image_path = image_path
+            self.logger.info("using override image folder {}".format(self.image_path))
         else:
             self.image_path = os.path.join(self.project_root, "images")
 
