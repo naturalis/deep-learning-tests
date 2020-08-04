@@ -81,9 +81,6 @@ class ModelTrainer(baseclass.BaseClass):
         else:
             a = []
 
-        print(a)
-        exit(0)
-
         datagen = tf.keras.preprocessing.image.ImageDataGenerator(
             rescale=1./255,
             validation_split=self.model_settings["validation_split"],
