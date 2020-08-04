@@ -9,7 +9,7 @@ class ProjectPrepare(baseclass.BaseClass):
         super().__init__()
 
     def print_project_name(self):
-        self.logger.info(self.project_name)
+        self.logger.info("project name: {}".format(self.project_name))
         # self.logger.info(self.project_root)
 
     def make_folders(self):
