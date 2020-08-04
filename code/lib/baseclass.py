@@ -242,6 +242,8 @@ class BaseClass():
 
     def set_presets(self,os_environ):
         if 'IMAGE_AUGMENTATION' in os_environ:
+            print(os_environ.get("IMAGE_AUGMENTATION"))
+            print(type(os_environ.get("IMAGE_AUGMENTATION")))
             if os_environ.get("IMAGE_AUGMENTATION") == "none":
                 self.presets.update( {'image_augmentation' : None } )
             else:
