@@ -19,13 +19,6 @@ class ProjectPrepare(baseclass.BaseClass):
             else:
                 self.logger.info("folder {} already exists".format(f))
 
-    def make_files(self):
-        log = os.path.join(self.project_root, folder, "general.log")
-        with open(log, 'w') as fp: 
-            pass
-        os.chmod(log,0o777)
-
-
 if __name__ == "__main__":
 
     prepare = ProjectPrepare()

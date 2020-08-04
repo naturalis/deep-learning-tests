@@ -51,21 +51,22 @@ class BaseClass():
 
     def __init__(self):
         pr = os.environ.get("PROJECT_ROOT")
-        print(pr)
-        pr = os.environ.get("PROJECT_ROOTZ")
-        print(pr)
-        exit(0)
 
-        # if not "PROJECT_ROOT" in os.environ:
-        #     raise ValueError("need a project root (PROJECT_ROOT missing from .env)") 
-        # else:
-        #     path = os.path.join(, "log")
-        #     logfile = os.path.join(os.environ['PROJECT_ROOT'], 'log', 'general.log')
-        #     logfile = os.path.join(os.environ['PROJECT_ROOT'], 'log', 'general.log')
+        if pr is None
+            raise ValueError("need a project root (PROJECT_ROOT missing from .env)") 
 
+        logfile = os.path.join(pr, "log", "general.log")
 
-        logfile = os.path.join(os.environ['PROJECT_ROOT'], 'log', 'general.log')
-        
+        if not os.path.exists(logfile):
+            path = os.path.join(pr, "log")
+            if not os.path.exists(path):
+                os.mkdir(path)
+                os.chmod(path,0o777)
+
+            with open(logfile, 'w') as fp: 
+                pass
+            os.chmod(logfile,0o777)
+
         self.logger = logclass.LogClass(self.__class__.__name__,logfile)
         self.logger.info("TensorFlow v{}".format(tf.__version__))
         self.set_timestamp()
