@@ -2,8 +2,9 @@ import os, re, json
 from hashlib import md5
 import tensorflow as tf
 from lib import logclass
+from lib import baseclass
 
-class DataSet():
+class DataSet(baseclass.BaseClass):
 
     model_trainer = None
     model_summary = None
@@ -13,7 +14,7 @@ class DataSet():
     data_set_file = None
 
     def __init__(self):
-        self.logger = logclass.LogClass(self.__class__.__name__)
+        super().__init__()
 
     def set_model_trainer(self,model_trainer):
         self.model_trainer = model_trainer
