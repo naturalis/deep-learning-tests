@@ -1,7 +1,7 @@
 import os
-from lib import logclass
+from lib import baseclass, logclass
 
-class ProjectPrepare():
+class ProjectPrepare(baseclass.BaseClass):
 
     folders = [ "config", "dwca", "images", "lists", "log", "models" ]
 
