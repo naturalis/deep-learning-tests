@@ -142,7 +142,12 @@ class ModelCompare(baseclass.BaseClass):
                     tmp = json.load(json_file)
                     self.names.append(tmp["model_name"])
                     self.dates.append(tmp["created"])
-                    self.notes.append(tmp["model_note"])
+
+                    if "model_retrain_note" in tmp:
+                        self.notes.append("{} / {}".format(tmp["model_note"],tmp["model_retrain_note"]))
+                    else:
+                        self.notes.append(tmp["model_note"])
+
                     self.classes.append("{} ({}/{})".format(
                             tmp["class_count"],
                             tmp["class_image_minimum"],

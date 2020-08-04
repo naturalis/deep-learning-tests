@@ -1,6 +1,7 @@
 import os, sys, json, argparse
 import tensorflow as tf
 import numpy as np
+from datetime import datetime
 from sklearn.metrics import classification_report
 from lib import baseclass
 
@@ -65,12 +66,12 @@ class ModelAnalysis(baseclass.BaseClass):
         print(self.cr)
 
     def backup_previous_analysis(self):
-        # i = 0
-        # while os.path.exists(self.get_analysis_path(str(i))):
-        pass
-
-
-
+        if os.path.exists(self.get_analysis_path()):
+            now = datetime.now()
+            a = self.get_analysis_path()
+            b = self.get_analysis_path(now.strftime('%Y%m%d%H%M%S'))
+            os.rename(a,b)
+            self.logger.info("moved existing analysis file {} to {}".format(a,b))
 
     def save_analysis(self):
         f = open(self.get_analysis_path(), "w")

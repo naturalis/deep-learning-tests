@@ -223,8 +223,8 @@ class BaseClass():
         self.architecture_path = os.path.join(self.model_folder, "architecture.json")
         return self.architecture_path
 
-    def get_analysis_path(self):
-        self.analysis_path = os.path.join(self.model_folder, "analysis.json")
+    def get_analysis_path(self,add_on=None):
+        self.analysis_path = os.path.join(self.model_folder, "analysis{}.json".format("" if add_on is None else "--"+add_on))
         return self.analysis_path
 
     def get_classes_path(self):
