@@ -50,7 +50,23 @@ class BaseClass():
     presets = {}
 
     def __init__(self):
-        self.logger = logclass.LogClass(self.__class__.__name__)
+        pr = os.environ.get("PROJECT_ROOT")
+        print(pr)
+        pr = os.environ.get("PROJECT_ROOTZ")
+        print(pr)
+        exit(0)
+
+        if not "PROJECT_ROOT" in os.environ:
+            raise ValueError("need a project root (PROJECT_ROOT missing from .env)") 
+        else:
+            path = os.path.join(, "log")
+            logfile = os.path.join(os.environ['PROJECT_ROOT'], 'log', 'general.log')
+            logfile = os.path.join(os.environ['PROJECT_ROOT'], 'log', 'general.log')
+
+
+        logfile = os.path.join(os.environ['PROJECT_ROOT'], 'log', 'general.log')
+        
+        self.logger = logclass.LogClass(self.__class__.__name__,logfile)
         self.logger.info("TensorFlow v{}".format(tf.__version__))
         self.set_timestamp()
         # if self.debug:

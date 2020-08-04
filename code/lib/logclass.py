@@ -3,7 +3,7 @@ import os, logging
 
 class LogClass:
 
-    def __init__(self, name):
+    def __init__(self, name, logfile):
         self.logger = logging.getLogger(name)
         self.logger.setLevel(logging.INFO)
 
