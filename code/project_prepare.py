@@ -7,8 +7,10 @@ class ProjectPrepare(baseclass.BaseClass):
 
     def __init__(self):
         super().__init__()
+
+    def print_project_name(self):
         self.logger.info(self.project_name)
-        self.logger.info(self.project_root)
+        # self.logger.info(self.project_root)
 
     def make_folders(self):
         for folder in self.folders:
@@ -24,4 +26,5 @@ if __name__ == "__main__":
 
     prepare = ProjectPrepare()
     prepare.set_project(os.environ)
+    prepare.print_project_name()
     prepare.make_folders()
