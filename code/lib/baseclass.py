@@ -52,7 +52,7 @@ class BaseClass():
     def __init__(self):
         pr = os.environ.get("PROJECT_ROOT")
 
-        if pr is None
+        if pr is None:
             raise ValueError("need a project root (PROJECT_ROOT missing from .env)") 
 
         logfile = os.path.join(pr, "log", "general.log")
