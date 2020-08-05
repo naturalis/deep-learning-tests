@@ -67,6 +67,7 @@ Image Downloader
     IMAGE_URL_TO_NAME [basename p.path]
         example: {'expression': '/file/id/|/format/[a-z]*', 'replace': '', 'postfix': '.jpg'}
     IMAGE_LIST_FILE [$PROJECT_ROOT/lists/images.csv]
+      classes.csv
   out:
     downloaded images [$PROJECT_ROOT/images/<subdirs>] subdirs have random name, max 1000 images per subdir
     $PROJECT_ROOT/lists/downloaded_images.csv
@@ -88,7 +89,7 @@ IMAGE_URL_TO_NAME={"expression": "/file/id/|/format/[a-z]*", "replace": "", "pos
 
 
 
-
+sudo docker-compose run tensorflow /code/project_prepare.py
 sudo docker-compose run tensorflow /code/dwca_reader.py
 sudo docker-compose run tensorflow /code/image_downloader.py
 sudo docker-compose run tensorflow /code/model_trainer.py

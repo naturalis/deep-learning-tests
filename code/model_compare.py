@@ -1,4 +1,4 @@
-import os, sys, json, textwrap, math
+import os, sys, json, textwrap, math, argparse
 from lib import baseclass
 
 class ModelCompare(baseclass.BaseClass):
@@ -202,6 +202,13 @@ class ModelCompare(baseclass.BaseClass):
 
 
 if __name__ == "__main__":
+
+    parser = argparse.ArgumentParser() 
+    parser.add_argument("--clean-up",type=str)
+    args = parser.parse_args() 
+
+    print(args)
+
 
     compare = ModelCompare()
 
