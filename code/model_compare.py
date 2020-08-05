@@ -204,10 +204,10 @@ class ModelCompare(baseclass.BaseClass):
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser() 
-    parser.add_argument("--clean-up",type=str)
+    parser.add_argument("--clean-up", action='store_const', const=True)
     args = parser.parse_args() 
 
-    print(args)
+    print(args.clean_up)
 
 
     compare = ModelCompare()
