@@ -28,6 +28,7 @@ class ModelCompare(baseclass.BaseClass):
     weighted_f1_max = 0
     broken_models = []
     cleanup = False
+    delete = None
 
     def __init__(self):
         super().__init__()
@@ -38,8 +39,6 @@ class ModelCompare(baseclass.BaseClass):
 
     def set_delete(self,models):
         self.delete = models.split(",")
-        print(self.delete)
-        print(type(self.delete))
 
     def print_data(self):
 
@@ -113,11 +112,14 @@ class ModelCompare(baseclass.BaseClass):
             print("")
             print("")
 
-    def handle_broken(self):
+    def clean_up(self):
         if self.cleanup:
             self.delete_broken()
         else:
             self.print_broken()
+
+        if self.delete:
+            self.delete_models()
 
     def delete_broken(self):
         if len(self.broken_models)==0:
@@ -131,6 +133,22 @@ class ModelCompare(baseclass.BaseClass):
             else:
                 print("skipped \"{}\"".format(item))
             
+    def delete_models(self):
+        if len(self.delete)==0:
+            return
+
+        print("deleting models:")
+        for item in self.delete:
+            if not os.path.exists(os.path.join(self.models_folder, item)):
+                print("model doesn't exist: \"{}\"".format(item))
+                continue
+
+            if input("{}: ".format("delete \"{}\" (y/n)?".format(item))).lower()=="y":
+                shutil.rmtree(os.path.join(self.models_folder, item))
+                print("deleted \"{}\"".format(item))
+            else:
+                print("skipped \"{}\"".format(item))
+
     def print_broken(self):
         if len(self.broken_models)==0:
             return
@@ -245,4 +263,4 @@ if __name__ == "__main__":
     compare.set_delete(args.delete)
     compare.collect_data()
     compare.print_data()
-    compare.handle_broken()
+    compare.clean_up()
