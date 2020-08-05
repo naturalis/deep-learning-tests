@@ -26,10 +26,14 @@ class ModelCompare(baseclass.BaseClass):
     weighted_recall_max = 0
     weighted_f1_max = 0
     broken_models = []
-
+    cleanup = False
 
     def __init__(self):
         super().__init__()
+
+    def set_cleanup(self,state):
+        if isinstance(state,bool):
+            self.cleanup = state
 
     def print_data(self):
 
@@ -102,6 +106,21 @@ class ModelCompare(baseclass.BaseClass):
 
             print("")
             print("")
+
+    def handle_broken(self):
+        if self.cleanup:
+            self.delete_broken()
+        else:
+            self.print_broken()
+
+    def delete_broken(self):
+        if len(self.broken_models)==0:
+            return
+
+        print("deleting broken models (models w/o dataset.json):")
+        for item in self.broken_models:
+            delete = input("{}: ".format("delete {}?".format(item)))
+            print(delete)
 
     def print_broken(self):
         if len(self.broken_models)==0:
@@ -207,13 +226,12 @@ if __name__ == "__main__":
     parser.add_argument("--cleanup", action='store_true')
     args = parser.parse_args() 
 
-    print(args.cleanup)
-
 
     compare = ModelCompare()
 
     compare.set_debug(os.environ["DEBUG"]=="1" if "DEBUG" in os.environ else False)
     compare.set_project(os.environ)
+    compare.set_cleanup(args.cleanup)
     compare.collect_data()
     compare.print_data()
-    compare.print_broken()
+    compare.handle_broken()
