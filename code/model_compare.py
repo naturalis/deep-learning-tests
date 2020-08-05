@@ -36,6 +36,10 @@ class ModelCompare(baseclass.BaseClass):
         if isinstance(state,bool):
             self.cleanup = state
 
+    def set_delete(self,models):
+        self.delete = models.split(",")
+        print(models)
+
     def print_data(self):
 
         print("")
@@ -228,6 +232,7 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser() 
     parser.add_argument("--cleanup", action='store_true')
+    parser.add_argument("--delete", type=str)
     args = parser.parse_args() 
 
 
@@ -236,6 +241,7 @@ if __name__ == "__main__":
     compare.set_debug(os.environ["DEBUG"]=="1" if "DEBUG" in os.environ else False)
     compare.set_project(os.environ)
     compare.set_cleanup(args.cleanup)
+    compare.set_delete(args.delete)
     compare.collect_data()
     compare.print_data()
     compare.handle_broken()
