@@ -259,8 +259,13 @@ if __name__ == "__main__":
 
     compare.set_debug(os.environ["DEBUG"]=="1" if "DEBUG" in os.environ else False)
     compare.set_project(os.environ)
-    compare.set_cleanup(args.cleanup)
-    compare.set_delete(args.delete)
+
+    if args.cleanup:
+        compare.set_cleanup(args.cleanup)
+
+    if args.delete:
+        compare.set_delete(args.delete)
+
     compare.collect_data()
     compare.print_data()
     compare.clean_up()
