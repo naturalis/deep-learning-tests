@@ -119,7 +119,7 @@ class ModelCompare(baseclass.BaseClass):
 
         print("deleting broken models (models w/o dataset.json):")
         for item in self.broken_models:
-            delete = input("{}: ".format("delete {}?".format(item)))
+            delete = lower(input("{}: ".format("delete \"{}\" (y/n)?".format(item))))=="y"
             print(delete)
 
     def print_broken(self):
