@@ -55,6 +55,9 @@ class BaseClass():
         if pr is None:
             raise ValueError("need a project root (PROJECT_ROOT missing from .env)") 
 
+        if not os.path.exists(pr):
+            os.mkdir(path)
+
         logfile = os.path.join(pr, "log", "general.log")
 
         if not os.path.exists(logfile):
