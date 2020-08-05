@@ -100,7 +100,6 @@ class BaseClass():
 
         self.logger.info("model name: {}".format(self.model_name))
 
-
     def set_project(self,os_environ):
         if 'PROJECT_NAME' in os_environ:
             self.set_project_name(os_environ.get("PROJECT_NAME"))
@@ -112,9 +111,9 @@ class BaseClass():
         else:
             raise ValueError("need a project root (PROJECT_ROOT missing from .env)")
 
-
     def set_project_name(self, project_name):
         self.project_name = project_name
+        self.logger.info("project name: {}".format(self.project_name))
 
 
     def set_project_folders(self, project_root, image_path=None):
