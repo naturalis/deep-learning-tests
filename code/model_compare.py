@@ -1,4 +1,5 @@
 import os, sys, json, textwrap, math, argparse
+import shutil
 from lib import baseclass
 
 class ModelCompare(baseclass.BaseClass):
@@ -120,11 +121,11 @@ class ModelCompare(baseclass.BaseClass):
         print("deleting broken models (models w/o dataset.json):")
         for item in self.broken_models:
             if input("{}: ".format("delete \"{}\" (y/n)?".format(item))).lower()=="y":
-                print(os.path.join(self.models_folder, item))
+                shutil.rmtree(os.path.join(self.models_folder, item))
+                print("deleted \"{}\"".format(item))
             else:
                 print("skipped \"{}\"".format(item))
             
-
     def print_broken(self):
         if len(self.broken_models)==0:
             return
