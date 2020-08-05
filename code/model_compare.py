@@ -127,11 +127,11 @@ class ModelCompare(baseclass.BaseClass):
 
         print("deleting broken models (models w/o dataset.json):")
         for item in self.broken_models:
-            if input("{}: ".format("delete \"{}\" (y/n)?".format(item))).lower()=="y":
+            if input("{}: ".format("delete {} (y/n)?".format(item))).lower()=="y":
                 shutil.rmtree(os.path.join(self.models_folder, item))
-                print("deleted \"{}\"".format(item))
+                print("deleted {}".format(item))
             else:
-                print("skipped \"{}\"".format(item))
+                print("skipped {}".format(item))
             
     def delete_models(self):
         if len(self.delete)==0:
@@ -140,14 +140,14 @@ class ModelCompare(baseclass.BaseClass):
         print("deleting models:")
         for item in self.delete:
             if not os.path.exists(os.path.join(self.models_folder, item)):
-                print("model doesn't exist: \"{}\"".format(item))
+                print("model doesn't exist: {}".format(item))
                 continue
 
             if input("{}: ".format("delete \"{}\" (y/n)?".format(item))).lower()=="y":
                 shutil.rmtree(os.path.join(self.models_folder, item))
-                print("deleted \"{}\"".format(item))
+                print("deleted {}".format(item))
             else:
-                print("skipped \"{}\"".format(item))
+                print("skipped {}".format(item))
 
     def print_broken(self):
         if len(self.broken_models)==0:
@@ -266,6 +266,6 @@ if __name__ == "__main__":
     if args.delete:
         compare.set_delete(args.delete)
 
-    compare.collect_data()
+        compare.collect_data()
     compare.print_data()
     compare.clean_up()
