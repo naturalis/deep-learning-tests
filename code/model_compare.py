@@ -38,8 +38,8 @@ class ModelCompare(baseclass.BaseClass):
 
     def set_delete(self,models):
         self.delete = models.split(",")
-        print(models)
-        print(type(models))
+        print(self.delete)
+        print(type(self.delete))
 
     def print_data(self):
 
