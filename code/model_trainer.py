@@ -318,7 +318,8 @@ if __name__ == "__main__":
 
     trainer.set_model_settings({
         "validation_split": trainer.get_preset("validation_split"),
-        "base_model": tf.keras.applications.InceptionV3(weights="imagenet", include_top=False),
+        # "base_model": tf.keras.applications.InceptionV3(weights="imagenet", include_top=False),
+        "base_model": tf.keras.applications.Xception(weights="imagenet", include_top=False),
         "loss": tf.keras.losses.CategoricalCrossentropy(),
         "optimizer": trainer.configure_optimizers(),
         "batch_size": trainer.get_preset("batch_size"),
