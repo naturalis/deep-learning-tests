@@ -39,6 +39,7 @@ class ModelCompare(baseclass.BaseClass):
     def set_delete(self,models):
         self.delete = models.split(",")
         print(models)
+        print(type(models))
 
     def print_data(self):
 
