@@ -198,7 +198,7 @@ class ModelCompare(baseclass.BaseClass):
                             tmp["class_count"],
                             "?" if not "class_count_before_maximum" in tmp else tmp["class_count_before_maximum"] ,
                             tmp["class_image_minimum"],
-                            "∞" if tmp["class_image_maximum"]==0 else tmp["class_image_maximum"]
+                            tmp["class_image_maximum"]
                        )
                     )
 
