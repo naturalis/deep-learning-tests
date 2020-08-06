@@ -143,7 +143,7 @@ class ModelCompare(baseclass.BaseClass):
                 print("model doesn't exist: {}".format(item))
                 continue
 
-            if input("{}: ".format("delete \"{}\" (y/n)?".format(item))).lower()=="y":
+            if input("{}: ".format("delete {} (y/n)?".format(item))).lower()=="y":
                 shutil.rmtree(os.path.join(self.models_folder, item))
                 print("deleted {}".format(item))
             else:

@@ -7,7 +7,7 @@ class LogClass:
         self.logger = logging.getLogger(name)
         self.logger.setLevel(logging.INFO)
 
-        logfile = os.path.join(os.environ['PROJECT_ROOT'], 'log', 'general.log')
+        # logfile = os.path.join(os.environ['PROJECT_ROOT'], 'log', 'general.log')
 
         # if not os.path.exists(logfile):
         #     logfile = 'general.log'
