@@ -58,6 +58,7 @@ class DataSet(baseclass.BaseClass):
         self.data_set["class_image_minimum"] =self.model_trainer.class_image_minimum
         self.data_set["class_image_maximum"] =self.model_trainer.class_image_maximum
         self.data_set["class_count"] = len(self.model_trainer.class_list)
+        self.data_set["class_count_before_maximum"] = len(self.model_trainer.original_class_list)
         self.data_set["class_list_hash"] = md5(str(self.model_trainer.class_list).encode('utf-8')).hexdigest()
 
         self.data_set["training_settings"] = { 
@@ -98,13 +99,15 @@ class DataSet(baseclass.BaseClass):
             "callbacks" : calls
         }
 
+        # to be saved
+
         # self.model_summary,
         # image_table = self.model_trainer.traindf.sort_values(by=[self.model_trainer.COL_CLASS,self.model_trainer.COL_IMAGE]).values.tolist()
         # image_table = list(map(lambda x: [x[0], os.path.basename(x[1]) ], image_table))
         # print(image_table)
 
-        # self.data_set["classes"] = self.model_trainer.class_list
-        # print(self.model_trainer.class_list)
+        # self.model_trainer.class_list
+        # self.model_trainer.original_class_list
 
 
     def save_dataset(self):
