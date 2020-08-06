@@ -58,7 +58,7 @@ class DataSet(baseclass.BaseClass):
         self.data_set["class_image_minimum"] =self.model_trainer.class_image_minimum
         self.data_set["class_image_maximum"] =self.model_trainer.class_image_maximum
         self.data_set["class_count"] = len(self.model_trainer.class_list)
-        self.data_set["class_count_before_maximum"] = len(self.model_trainer.original_class_list)
+        self.data_set["class_count_before_maximum"] = len(self.model_trainer.complete_class_list)
         self.data_set["class_list_hash"] = md5(str(self.model_trainer.class_list).encode('utf-8')).hexdigest()
 
         self.data_set["training_settings"] = { 

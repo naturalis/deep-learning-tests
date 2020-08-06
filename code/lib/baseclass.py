@@ -42,7 +42,7 @@ class BaseClass():
     architecture_path = None
     analysis_path = None
     traindf = None
-    original_class_list = []
+    complete_class_list = []
     class_list = []
     model_settings = None
     COL_CLASS = "class"
@@ -173,6 +173,7 @@ class BaseClass():
             c = csv.reader(file)
             for row in c:
                 tot_classes += 1
+                self.complete_class_list.append(row)
                 if int(row[1])>=self.class_image_minimum:
                     self.class_list.append(row)
 
@@ -230,7 +231,6 @@ class BaseClass():
         self.logger.info("read {} images in {} classes".format(self.traindf[self.COL_IMAGE].nunique(),self.traindf[self.COL_CLASS].nunique()))
 
     def image_list_apply_class_list(self):
-        self.original_class_list = self.traindf[self.COL_CLASS].nunique()
         before = len(self.traindf)
         self.traindf = self.traindf[self.traindf[self.COL_CLASS].isin([i[0] for i in self.class_list if True])]
         after = len(self.traindf)
