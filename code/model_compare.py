@@ -194,7 +194,7 @@ class ModelCompare(baseclass.BaseClass):
                     else:
                         self.notes.append(tmp["model_note"])
 
-                    self.classes.append("{} ({}) [{}<{}]".format(
+                    self.classes.append("{} ({}) [{}...{}]".format(
                             tmp["class_count"],
                             "?" if not "class_count_before_maximum" in tmp else tmp["class_count_before_maximum"] ,
                             tmp["class_image_minimum"],
