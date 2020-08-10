@@ -180,6 +180,8 @@ class BaseClass():
         self.logger.info("retained {} classes (dropped {} due to image minimum of {})".format(
             len(self.class_list), str(tot_classes - len(self.class_list)), self.class_image_minimum))
 
+        exit(0)
+
     def get_class_list(self):
         return self.class_list
 
