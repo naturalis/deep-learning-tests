@@ -180,8 +180,6 @@ class BaseClass():
         self.logger.info("retained {} classes (dropped {} due to image minimum of {})".format(
             len(self.class_list), str(tot_classes - len(self.class_list)), self.class_image_minimum))
 
-        exit(0)
-
     def get_class_list(self):
         return self.class_list
 
@@ -219,8 +217,31 @@ class BaseClass():
 
         self.logger.info("reading images from: {}".format(self.downloaded_images_file_model))
 
+
+
+        file1 = open(self.downloaded_images_file_model, 'r') 
+        lines = file1.readlines() 
+        fuck=[]
+        for line in lines:
+            fuck.append(line)
+
+        original_df = pd.DataFrame(fuck)
+        original_df2 = pd.DataFrame(lines)
+
+
+
         df = _csv_to_dataframe(filepath=self.downloaded_images_file_model,
                                usecols=[self.image_list_class_col, self.image_list_image_col])
+        
+
+        print(df)
+        print(original_df)
+        print(original_df2)
+
+
+        exit(0)
+
+
         # if Test split
         #   df = df.sample(frac=1)
         #   msk = np.random.rand(len(df)) < 0.8
