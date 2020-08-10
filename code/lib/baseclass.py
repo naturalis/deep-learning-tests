@@ -245,7 +245,7 @@ class BaseClass():
 
             df = pd.DataFrame(this_list)
 
-            df[1] = self.image_path.rstrip("/") + "/" + df[2].astype(str)
+            df[1] = self.image_path.rstrip("/") + "/" + df[1].astype(str)
 
             self.logger.info("skipped {} images due to image maximum".format(skipped_images))
 
