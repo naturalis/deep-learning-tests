@@ -245,7 +245,7 @@ class BaseClass():
 
             df = pd.DataFrame(this_list)
 
-            df.rename(columns={0:0, 1:2}, axis='columns')
+            df.rename(columns={0:0, 1:2})
 
             self.logger.info("skipped {} images due to image maximum".format(skipped_images))
 
