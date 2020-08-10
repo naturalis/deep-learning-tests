@@ -234,7 +234,7 @@ class BaseClass():
                     skipped_images += 1
                     continue
                 
-                limited_list.append(line[self.image_list_class_col],line[self.image_list_image_col])
+                limited_list.append([line[self.image_list_class_col],line[self.image_list_image_col]])
 
                 if this_class in counter:
                     counter[this_class] += 1
