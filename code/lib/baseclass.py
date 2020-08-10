@@ -223,12 +223,9 @@ class BaseClass():
         lines = file1.readlines() 
         fuck=[]
         for line in lines:
-            fuck.append(line)
+            fuck.append(line.split(","))
 
         original_df = pd.DataFrame(fuck)
-        original_df2 = pd.DataFrame(lines)
-
-
 
         df = _csv_to_dataframe(filepath=self.downloaded_images_file_model,
                                usecols=[self.image_list_class_col, self.image_list_image_col])
@@ -236,8 +233,6 @@ class BaseClass():
 
         print(df)
         print(original_df)
-        print(original_df2)
-
 
         exit(0)
 
