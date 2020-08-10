@@ -218,12 +218,14 @@ class BaseClass():
         self.logger.info("reading images from: {}".format(self.downloaded_images_file_model))
 
 
+        skipped_images = 0
+
         if self.class_image_maximum > 0:
 
             file1 = open(self.downloaded_images_file_model, 'r') 
             limited_list=[]
             counter={}
-            skipped_images = 0
+            
             for line in file1.readlines():
                 line = line.split(",")
                 this_class = line[self.image_list_class_col]
