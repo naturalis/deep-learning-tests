@@ -245,12 +245,16 @@ class BaseClass():
 
             df = pd.DataFrame(this_list)
 
+            df[1] = self.image_path.rstrip("/") + "/" + df[2].astype(str)
+
             self.logger.info("skipped {} images due to image maximum".format(skipped_images))
 
         else:
 
             df = _csv_to_dataframe(filepath=self.downloaded_images_file_model,
                                    usecols=[self.image_list_class_col, self.image_list_image_col])
+
+            df[2] = self.image_path.rstrip("/") + "/" + df[2].astype(str)
 
         # if Test split
         #   df = df.sample(frac=1)
@@ -259,13 +263,7 @@ class BaseClass():
         #   self.testdf = df[~msk]
         # # print(len(df), len(self.traindf), len(self.testdf))
 
-
-        print(_csv_to_dataframe(filepath=self.downloaded_images_file_model,
-                                       usecols=[self.image_list_class_col, self.image_list_image_col]))
-        print(df)
-
-
-        df[2] = self.image_path.rstrip("/") + "/" + df[2].astype(str)
+        
         df.columns = [self.COL_CLASS, self.COL_IMAGE]
         self.traindf = df
         self.logger.info("read {} images in {} classes".format(self.traindf[self.COL_IMAGE].nunique(),self.traindf[self.COL_CLASS].nunique()))
