@@ -218,21 +218,41 @@ class BaseClass():
         self.logger.info("reading images from: {}".format(self.downloaded_images_file_model))
 
 
+        if self.class_image_maximum > 0:
 
-        file1 = open(self.downloaded_images_file_model, 'r') 
-        lines = file1.readlines() 
-        fuck=[]
-        for line in lines:
-            fuck.append(line.split(","))
+            file1 = open(self.downloaded_images_file_model, 'r') 
+            limited_list=[]
+            counter={}
+            skipped_images = 0
+            for line in file1.readlines():
+                line = line.split(",")
+                this_class = line[self.image_list_class_col]
 
-        original_df = pd.DataFrame(fuck)
+                if this_class in counter and counter[this_class] >= self.class_image_maximum:
+                    skipped_images += 1
+                    continue
+                
+                limited_list.append(line[self.image_list_class_col],line[self.image_list_image_col])
 
-        df = _csv_to_dataframe(filepath=self.downloaded_images_file_model,
-                               usecols=[self.image_list_class_col, self.image_list_image_col])
+                if this_class in counter:
+                    counter[this_class] += 1
+                else:
+                    counter[this_class] = 1
+
+            df = pd.DataFrame(limited_list)
+
+        else:
+
+            df = _csv_to_dataframe(filepath=self.downloaded_images_file_model,
+                                   usecols=[self.image_list_class_col, self.image_list_image_col])
         
 
+        original_df = _csv_to_dataframe(filepath=self.downloaded_images_file_model,
+                               usecols=[self.image_list_class_col, self.image_list_image_col])
+    
         print(df)
         print(original_df)
+        print(skipped_images)
 
         exit(0)
 
