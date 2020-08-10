@@ -217,47 +217,40 @@ class BaseClass():
 
         self.logger.info("reading images from: {}".format(self.downloaded_images_file_model))
 
-
         skipped_images = 0
 
         if self.class_image_maximum > 0:
 
+            self.logger.info("applying image max {}".format(self.class_image_maximum))
+
+            this_list=[]
+            image_counter={}
+
             file1 = open(self.downloaded_images_file_model, 'r') 
-            limited_list=[]
-            counter={}
             
             for line in file1.readlines():
                 line = line.split(",")
                 this_class = line[self.image_list_class_col]
 
-                if this_class in counter and counter[this_class] >= self.class_image_maximum:
+                if this_class in image_counter and image_counter[this_class] >= self.class_image_maximum:
                     skipped_images += 1
                     continue
                 
-                limited_list.append([line[self.image_list_class_col],line[self.image_list_image_col]])
+                this_list.append([line[self.image_list_class_col],line[self.image_list_image_col]])
 
-                if this_class in counter:
-                    counter[this_class] += 1
+                if this_class in image_counter:
+                    image_counter[this_class] += 1
                 else:
-                    counter[this_class] = 1
+                    image_counter[this_class] = 1
 
-            df = pd.DataFrame(limited_list)
+            df = pd.DataFrame(this_list)
+
+            self.logger.info("skipped {} images due to image maximum".format(skipped_images))
 
         else:
 
             df = _csv_to_dataframe(filepath=self.downloaded_images_file_model,
                                    usecols=[self.image_list_class_col, self.image_list_image_col])
-        
-
-        original_df = _csv_to_dataframe(filepath=self.downloaded_images_file_model,
-                               usecols=[self.image_list_class_col, self.image_list_image_col])
-    
-        print(df)
-        print(original_df)
-        print(skipped_images)
-
-        exit(0)
-
 
         # if Test split
         #   df = df.sample(frac=1)
@@ -265,6 +258,7 @@ class BaseClass():
         #   self.traindf = df[msk]
         #   self.testdf = df[~msk]
         # # print(len(df), len(self.traindf), len(self.testdf))
+
         df[2] = self.image_path.rstrip("/") + "/" + df[2].astype(str)
         df.columns = [self.COL_CLASS, self.COL_IMAGE]
         self.traindf = df
