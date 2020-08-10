@@ -259,6 +259,12 @@ class BaseClass():
         #   self.testdf = df[~msk]
         # # print(len(df), len(self.traindf), len(self.testdf))
 
+
+        print(_csv_to_dataframe(filepath=self.downloaded_images_file_model,
+                                       usecols=[self.image_list_class_col, self.image_list_image_col]))
+        print(df)
+
+
         df[2] = self.image_path.rstrip("/") + "/" + df[2].astype(str)
         df.columns = [self.COL_CLASS, self.COL_IMAGE]
         self.traindf = df
