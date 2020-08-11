@@ -244,7 +244,6 @@ class BaseClass():
                     image_counter[this_class] = 1
 
             df = pd.DataFrame(this_list)
-            df.rename(columns={"0":"0", "1":"2"})
 
             self.logger.info("skipped {} images due to image maximum".format(skipped_images))
 
@@ -253,13 +252,8 @@ class BaseClass():
             df = _csv_to_dataframe(filepath=self.downloaded_images_file_model,
                                    usecols=[self.image_list_class_col, self.image_list_image_col])
 
-        df2 = _csv_to_dataframe(filepath=self.downloaded_images_file_model,
-                               usecols=[self.image_list_class_col, self.image_list_image_col])
-
         print(df)
-        print(df2)
         df.info(verbose=True)
-        df2.info(verbose=True)
 
 
         # if Test split
@@ -269,8 +263,8 @@ class BaseClass():
         #   self.testdf = df[~msk]
         # # print(len(df), len(self.traindf), len(self.testdf))
 
-        df[2] = self.image_path.rstrip("/") + "/" + df[2].astype(str)
         df.columns = [self.COL_CLASS, self.COL_IMAGE]
+        df[self.COL_IMAGE] = self.image_path.rstrip("/") + "/" + df[self.COL_IMAGE].astype(str)
         self.traindf = df
         self.logger.info("read {} images in {} classes".format(self.traindf[self.COL_IMAGE].nunique(),self.traindf[self.COL_CLASS].nunique()))
 
