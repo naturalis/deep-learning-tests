@@ -1,7 +1,7 @@
 FROM python:3.6.4
 
-COPY . /app
+COPY ../code/* /app
 WORKDIR /app
 RUN pip install -r requirements-api.txt
 ENTRYPOINT ["python"]
-CMD ["code/api.py"]
+CMD ["/app/api.py"]
