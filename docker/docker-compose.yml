@@ -36,3 +36,4 @@ services:
     volumes:
       - /data/maarten.schermer/keras:/root/.keras
       - /data/maarten.schermer/data:/data
+      - /data/maarten.schermer/deep-learning-tests/code:/code
