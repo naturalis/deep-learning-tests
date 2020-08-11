@@ -86,6 +86,7 @@ def initialize_users():
 def load_model():
     global model, model_path, classes, model_classes_path
     print(model)
+    print("fuck")
     model = tf.keras.models.load_model(model_path,compile=False)
     with open(model_classes_path) as f:
         classes = json.load(f)
