@@ -236,7 +236,7 @@ class BaseClass():
                     skipped_images += 1
                     continue
                 
-                this_list.append([line[self.image_list_class_col],line[self.image_list_image_col]])
+                this_list.append([line[self.image_list_class_col].trim(),line[self.image_list_image_col].trim()])
 
                 if this_class in image_counter:
                     image_counter[this_class] += 1
@@ -244,11 +244,7 @@ class BaseClass():
                     image_counter[this_class] = 1
 
             df = pd.DataFrame(this_list)
-
-            print(df)
-            df.info(verbose=True)
-
-            df.rename(columns={0:0, 1:2})
+            df.rename(columns={"0":"0", "1":"2"})
 
             self.logger.info("skipped {} images due to image maximum".format(skipped_images))
 
