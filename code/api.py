@@ -203,7 +203,7 @@ if __name__ == '__main__':
 
     initialize(app)
 
-    app.run(debug=(os.getenv('FLASK_DEBUG')=="1"),host='0.0.0.0')
+    app.run(debug=(os.getenv('FLASK_DEBUG')=="1"),host='0.0.0.0',port=34567)
 
     # TODO: logging, tokens, users, gunicorn
     # curl -s  -XPOST  -F "image=@RMNH.AVES.1125_1.jpg"  http://0.0.0.0:5000/identify
