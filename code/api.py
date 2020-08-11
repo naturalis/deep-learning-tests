@@ -102,6 +102,9 @@ def root():
 @app.route("/identify",methods=["POST"])
 def identify_image():
     global model, classes, logger
+
+    logger.info("using model {} / {}".format(request.method,model))
+
     if request.method == 'POST':
 
         uploaded_files = request.files.getlist("image")
@@ -121,8 +124,6 @@ def identify_image():
             x = np.expand_dims(x, axis=0)
 
             predictions = model.predict(x)
-
-            logger.info(predictions)
 
             predictions = predictions[0].tolist()
             classes = {k: v for k, v in sorted(classes.items(), key=lambda item: item[1])}
