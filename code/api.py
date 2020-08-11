@@ -103,8 +103,6 @@ def root():
 def identify_image():
     global model, classes, logger
 
-    logger.info("using model {} / {}".format(request.method,model))
-
     if request.method == 'POST':
 
         uploaded_files = request.files.getlist("image")
@@ -114,16 +112,24 @@ def identify_image():
         else:
             file = uploaded_files[0]
 
+        logger.info(file)
+
         if file and allowed_file(file.filename):
             unique_filename = str(uuid.uuid4())
             unique_filename = os.path.join(app.config['UPLOAD_FOLDER'], unique_filename)
             file.save(unique_filename)
 
+            logger.info(unique_filename)
+
             x = tf.keras.preprocessing.image.load_img(unique_filename, target_size=(299,299))        
             x = tf.keras.preprocessing.image.img_to_array(x)
             x = np.expand_dims(x, axis=0)
 
+            logger.info(x)
+
             predictions = model.predict(x)
+
+            logger.info(predictions)
 
             predictions = predictions[0].tolist()
             classes = {k: v for k, v in sorted(classes.items(), key=lambda item: item[1])}
