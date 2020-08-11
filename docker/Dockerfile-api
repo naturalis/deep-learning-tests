@@ -4,4 +4,4 @@ COPY . /app
 WORKDIR /app
 RUN pip install -r requirements-api.txt
 ENTRYPOINT ["python"]
-CMD ["/code/api.py"]
+CMD ["code/api.py"]
