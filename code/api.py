@@ -87,6 +87,7 @@ def load_model():
     global model, model_path, classes, model_classes_path, logger
     model = tf.keras.models.load_model(model_path,compile=False)
     logger.info("loaded model {} ({})".format(model,model_path))
+
     with open(model_classes_path) as f:
         classes = json.load(f)
     logger.info("loaded {} classes ({})".format(len(classes),model_classes_path))
@@ -95,11 +96,9 @@ def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-
 @app.route("/",methods=["GET","POST"])
 def root():
     return { "naturalis identify species by image api" : "v0.1" }
-
 
 # @jwt_required()
 @app.route("/identify",methods=["POST"])
