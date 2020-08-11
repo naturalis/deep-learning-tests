@@ -2,4 +2,4 @@
 flask==1.1.2
 flask_restful==0.3.7
 flask_jwt==0.3.2
-Pillow==2.2.2
+Pillow==2.3.1

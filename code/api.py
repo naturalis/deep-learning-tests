@@ -17,11 +17,9 @@ from datetime import datetime
 import logging, os, json, sys, uuid
 import numpy as np
 
-
 USERS = []
 UPLOAD_FOLDER = '/tmp'
 ALLOWED_EXTENSIONS = {'jpg'}
-
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv('JWT_KEY')
@@ -191,14 +189,8 @@ def page_not_found(e):
 
 if __name__ == '__main__':
 
-    if len(sys.argv)>2:
-        model_name = sys.argv[2]
-    else:
-        model_name = os.environ['API_MODEL_NAME']
-
+    model_name = os.environ['API_MODEL_NAME']
     model_path = os.path.join(os.environ['PROJECT_ROOT'],"models",model_name)
-
-    print(model_path)
 
     m = os.path.join(model_path,"model.hdf5")
     c = os.path.join(model_path,"classes.json")
@@ -211,13 +203,13 @@ if __name__ == '__main__':
     app.run(debug=(os.getenv('API_FLASK_DEBUG')=="1"),host='0.0.0.0')
 
     # TODO: logging, tokens, users, gunicorn
-    # curl -s  -XPOST  -F "image=@RMNH.AVES.1125_1.jpg"  http://0.0.0.0:5000/identify
+    # curl -XPOST  -F "image=@ZMA.INS.1279115_1.jpg" http://0.0.0.0:8090/identify
 
     # .env
     # API_MODEL_NAME=20200804-142255
     # API_LOGFILE_PATH=/log/general.log
     # API_DEBUG=1
-    # API_FLASK_DEBUG=0
+    # API_FLASK_DEBUG=0 (avoid)
 
 
 
