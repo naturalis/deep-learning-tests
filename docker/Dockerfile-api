@@ -1,6 +1,9 @@
 FROM tensorflow/tensorflow:2.0.1-gpu-py3-jupyter
 #FROM python:3.6.4
 
+
+RUN apt-get update && apt-get install -y vim
+
 COPY . /app
 WORKDIR /app
 RUN pip install -r requirements-api.txt
