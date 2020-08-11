@@ -245,6 +245,9 @@ class BaseClass():
 
             df = pd.DataFrame(this_list)
 
+            print(df)
+            df.info(true)
+
             df.rename(columns={0:0, 1:2})
 
             self.logger.info("skipped {} images due to image maximum".format(skipped_images))
@@ -253,6 +256,15 @@ class BaseClass():
 
             df = _csv_to_dataframe(filepath=self.downloaded_images_file_model,
                                    usecols=[self.image_list_class_col, self.image_list_image_col])
+
+        df2 = _csv_to_dataframe(filepath=self.downloaded_images_file_model,
+                               usecols=[self.image_list_class_col, self.image_list_image_col])
+
+        print(df)
+        print(df2)
+        df.info(true)
+        df2.info(true)
+
 
         # if Test split
         #   df = df.sample(frac=1)
