@@ -101,7 +101,7 @@ def root():
 # @jwt_required()
 @app.route("/identify",methods=["POST"])
 def identify_image():
-    global model, classes
+    global model, classes, logger
     if request.method == 'POST':
 
         uploaded_files = request.files.getlist("image")
@@ -122,7 +122,7 @@ def identify_image():
 
             predictions = model.predict(x)
 
-            print(predictions)
+            logger.info(predictions)
 
             predictions = predictions[0].tolist()
             classes = {k: v for k, v in sorted(classes.items(), key=lambda item: item[1])}
