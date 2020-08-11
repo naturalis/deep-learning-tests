@@ -190,11 +190,7 @@ def page_not_found(e):
 
 if __name__ == '__main__':
 
-    if len(sys.argv)>2:
-        model_name = sys.argv[2]
-    else:
-        model_name = os.environ['MODEL_NAME']
-
+    model_name = os.environ['API_MODEL_NAME']
     model_path = os.path.join(os.environ['PROJECT_ROOT'],"models",model_name)
 
     print(model_path)
@@ -209,5 +205,5 @@ if __name__ == '__main__':
 
     app.run(debug=(os.getenv('FLASK_DEBUG')=="1"),host='0.0.0.0')
 
-    # TODO: logging, tokens, users
+    # TODO: logging, tokens, users, gunicorn
     # curl -s  -XPOST  -F "image=@RMNH.AVES.1125_1.jpg"  http://0.0.0.0:5000/identify
