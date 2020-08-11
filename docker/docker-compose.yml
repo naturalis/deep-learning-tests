@@ -27,6 +27,8 @@ services:
     image: mds-api:latest
     runtime: nvidia
     mem_limit: 12g
+    ports:
+      - "8090:8090"
     environment:
       - NVIDIA_VISIBLE_DEVICES=3
       # - KERAS_HOME=/keras
