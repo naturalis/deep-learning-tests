@@ -1,6 +1,6 @@
 FROM python:3.6.4
 
-COPY ../code/* /app
+COPY ../code/ /app
 WORKDIR /app
 RUN pip install -r requirements-api.txt
 ENTRYPOINT ["python"]
