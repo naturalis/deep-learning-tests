@@ -209,7 +209,17 @@ if __name__ == '__main__':
 
     initialize(app)
 
-    app.run(debug=(os.getenv('API_FLASK_DEBUG')=="1"),host='0.0.0.0')
+    app.run(debug=(os.getenv('API_FLASK_DEBUG')=="1"),host='0.0.0.0',port='23457')
 
     # TODO: logging, tokens, users, gunicorn
     # curl -s  -XPOST  -F "image=@RMNH.AVES.1125_1.jpg"  http://0.0.0.0:5000/identify
+
+    # .env
+    # API_MODEL_NAME=20200804-142255
+    # API_LOGFILE_PATH=/log/general.log
+    # API_DEBUG=1
+    # API_FLASK_DEBUG=0
+
+
+
+
