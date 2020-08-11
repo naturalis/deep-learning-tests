@@ -37,3 +37,4 @@ services:
       - /data/maarten.schermer/keras:/root/.keras
       - /data/maarten.schermer/data:/data
       - /data/maarten.schermer/deep-learning-tests/code:/code
+      - /data/maarten.schermer/api-log/:/log
