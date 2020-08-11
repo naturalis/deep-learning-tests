@@ -221,7 +221,7 @@ class BaseClass():
 
         if self.class_image_maximum > 0:
 
-            self.logger.info("applying image max {}".format(self.class_image_maximum))
+            self.logger.info("applying image maximum per class: {}".format(self.class_image_maximum))
 
             this_list=[]
             image_counter={}
@@ -251,11 +251,6 @@ class BaseClass():
 
             df = _csv_to_dataframe(filepath=self.downloaded_images_file_model,
                                    usecols=[self.image_list_class_col, self.image_list_image_col])
-
-        print(df)
-        df.info(verbose=True)
-
-
         # if Test split
         #   df = df.sample(frac=1)
         #   msk = np.random.rand(len(df)) < 0.8
