@@ -121,6 +121,9 @@ def identify_image():
             x = np.expand_dims(x, axis=0)
 
             predictions = model.predict(x)
+
+            print(predictions)
+
             predictions = predictions[0].tolist()
             classes = {k: v for k, v in sorted(classes.items(), key=lambda item: item[1])}
             predictions = dict(zip(classes.keys(), predictions))
