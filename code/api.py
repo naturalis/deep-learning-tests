@@ -43,26 +43,26 @@ def set_classes_path(path):
     model_classes_path = path
 
 def initialize(app):
-    # initialize_logger()
+    initialize_logger()
     # initialize_users()
     load_model()
 
 def initialize_logger(log_level=logging.INFO):
     global logger
 
-    if os.getenv('DEBUGGING')=="1":
+    if os.getenv('API_DEBUG')=="1":
         log_level=logging.DEBUG
 
     logger=logging.getLogger("API")
     logger.setLevel(log_level)
     formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
-    fh = logging.FileHandler(os.getenv('LOGFILE_PATH'))
+    fh = logging.FileHandler(os.getenv('API_LOGFILE_PATH'))
     fh.setLevel(log_level)
     fh.setFormatter(formatter)
     logger.addHandler(fh)
     
-    if os.getenv('DEBUGGING')=="1":
+    if os.getenv('API_DEBUG')=="1":
         ch = logging.StreamHandler()
         ch.setLevel(log_level)
         ch.setFormatter(formatter)
@@ -84,12 +84,12 @@ def initialize_users():
         })
 
 def load_model():
-    global model, model_path, classes, model_classes_path
-    print(model)
-    print("fuck")
+    global model, model_path, classes, model_classes_path, logger
     model = tf.keras.models.load_model(model_path,compile=False)
+    logger.info("loaded model {} ({})".format(model,model_path))
     with open(model_classes_path) as f:
         classes = json.load(f)
+    logger.info("loaded {} classes ({})".format(len(classes),model_classes_path))
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -209,7 +209,7 @@ if __name__ == '__main__':
 
     initialize(app)
 
-    app.run(debug=(os.getenv('FLASK_DEBUG')=="1"),host='0.0.0.0')
+    app.run(debug=(os.getenv('API_FLASK_DEBUG')=="1"),host='0.0.0.0')
 
     # TODO: logging, tokens, users, gunicorn
     # curl -s  -XPOST  -F "image=@RMNH.AVES.1125_1.jpg"  http://0.0.0.0:5000/identify
