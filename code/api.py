@@ -123,7 +123,7 @@ def identify_image():
 
             x = tf.keras.preprocessing.image.load_img(unique_filename, target_size=(299,299))        
             x = tf.keras.preprocessing.image.img_to_array(x)
-            # x = np.expand_dims(x, axis=0)
+            x = np.expand_dims(x, axis=0)
 
             logger.info(x)
 
