@@ -246,7 +246,7 @@ class BaseClass():
             df = pd.DataFrame(this_list)
 
             print(df)
-            df.info(verbose=true)
+            df.info(verbose=True)
 
             df.rename(columns={0:0, 1:2})
 
@@ -262,8 +262,8 @@ class BaseClass():
 
         print(df)
         print(df2)
-        df.info(verbose=true)
-        df2.info(verbose=true)
+        df.info(verbose=True)
+        df2.info(verbose=True)
 
 
         # if Test split
