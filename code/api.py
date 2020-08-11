@@ -85,6 +85,7 @@ def initialize_users():
 
 def load_model():
     global model, model_path, classes, model_classes_path
+    print(model)
     model = tf.keras.models.load_model(model_path,compile=False)
     with open(model_classes_path) as f:
         classes = json.load(f)
@@ -190,7 +191,11 @@ def page_not_found(e):
 
 if __name__ == '__main__':
 
-    model_name = os.environ['API_MODEL_NAME']
+    if len(sys.argv)>2:
+        model_name = sys.argv[2]
+    else:
+        model_name = os.environ['API_MODEL_NAME']
+
     model_path = os.path.join(os.environ['PROJECT_ROOT'],"models",model_name)
 
     print(model_path)
@@ -203,7 +208,7 @@ if __name__ == '__main__':
 
     initialize(app)
 
-    app.run(debug=(os.getenv('FLASK_DEBUG')=="1"),host='0.0.0.0',port=34567)
+    app.run(debug=(os.getenv('FLASK_DEBUG')=="1"),host='0.0.0.0')
 
     # TODO: logging, tokens, users, gunicorn
     # curl -s  -XPOST  -F "image=@RMNH.AVES.1125_1.jpg"  http://0.0.0.0:5000/identify
