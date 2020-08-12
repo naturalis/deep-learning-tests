@@ -112,7 +112,7 @@ def identify_image():
         else:
             file = uploaded_files[0]
 
-        logger.info(file)
+        logger.info("file: {}".format(file))
 
         if file and allowed_file(file.filename):
             unique_filename = str(uuid.uuid4())
