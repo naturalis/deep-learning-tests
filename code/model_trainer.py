@@ -83,6 +83,7 @@ class ModelTrainer(baseclass.BaseClass):
         # print(x)
         img = Image.fromarray(np.uint8(x))
         w,h = img.size
+        print(h,w)
         return x[0:h, 0:math.ceil(w/2)]
 
 
