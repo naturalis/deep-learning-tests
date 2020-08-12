@@ -219,7 +219,8 @@ class BaseClass():
 
         skipped_images = 0
 
-        if self.class_image_maximum > 0:
+        # if self.class_image_maximum > 0:
+        if True:
 
             self.logger.info("applying image maximum per class: {}".format(self.class_image_maximum))
 
@@ -232,7 +233,8 @@ class BaseClass():
                 line = line.split(",")
                 this_class = line[self.image_list_class_col]
 
-                if this_class in image_counter and image_counter[this_class] >= self.class_image_maximum:
+                if this_class in image_counter and self.class_image_maximum > 0 \
+                and image_counter[this_class] >= self.class_image_maximum:
                     skipped_images += 1
                     continue
                 
