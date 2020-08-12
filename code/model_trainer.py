@@ -81,7 +81,7 @@ class ModelTrainer(baseclass.BaseClass):
 
     def cropping_function(self,x):
         # print(x)
-        img = Image.fromarray(x)
+        img = Image.fromarray(np.uint8(x))
         w,h = img.size
         return ImageOps.fit(img,(math.ceil(w/2),h),centering=(0,0))
 
