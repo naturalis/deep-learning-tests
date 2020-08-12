@@ -57,6 +57,7 @@ if __name__ == '__main__':
     predict.set_debug(os.environ["DEBUG"]=="1" if "DEBUG" in os.environ else False)
     predict.set_project(os.environ)
 
+
     parser = argparse.ArgumentParser() 
     parser.add_argument("--image", type=str)
     parser.add_argument("--images", type=str)
@@ -69,6 +70,7 @@ if __name__ == '__main__':
     else:
         predict.set_model_name(os.environ['API_MODEL_NAME'])
 
+    predict.set_model_folder()
     predict.load_model()
 
     if args.image:
