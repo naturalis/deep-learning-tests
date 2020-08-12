@@ -10,23 +10,23 @@ class ImageIdentify(baseclass.BaseClass):
 
     def set_image(self,image_path):
         self.images.append(image_path)
-        print(self.images)
+        # print(self.images)
 
     def set_images(self,image_paths):
         for item in image_paths.split(","):
             self.images.append(item)
-        print(self.images)
+        # print(self.images)
 
     def set_image_list(self,list_path):
         file1 = open(list_path,"r+")  
         self.images.append(file1.readlines)
-        print(self.images)
+        # print(self.images)
 
     def predict_images(self):
         self.results = []
         for image in self.images:
             predictions = self.predict_image(image)
-            self.results.append({ "image" : image, "predictions" : predictions })
+            self.results.append({ "image" : image, "prediction" : predictions })
         return json.dumps({ "project" : self.project_name, "model" : self.model_name, "predictions" : self.results })
 
     def predict_image(self,image,json_encode=False):
