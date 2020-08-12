@@ -75,6 +75,16 @@ class ModelTrainer(baseclass.BaseClass):
 
         # return callbacks
 
+    def cropping_function(self,x):
+        from  PIL import Image
+        from  PIL import ImageOps
+        import math
+        # img = PIL.Image.open('slechtvalken.jpg')
+        w,h = x.size
+        x2 = ImageOps.fit(x,(math.ceil(w/2),h),centering=(0,0))
+        return x2
+
+
     def configure_generators(self):
         if "image_augmentation" in self.model_settings and not self.model_settings["image_augmentation"] is None:
             a = self.model_settings["image_augmentation"]
@@ -90,7 +100,8 @@ class ModelTrainer(baseclass.BaseClass):
             width_shift_range=a["width_shift_range"] if "width_shift_range" in a else 0.0,
             height_shift_range=a["height_shift_range"] if "height_shift_range" in a else 0.0,
             horizontal_flip=a["horizontal_flip"] if "horizontal_flip" in a else False,
-            vertical_flip=a["vertical_flip"] if "vertical_flip" in a else False
+            vertical_flip=a["vertical_flip"] if "vertical_flip" in a else False,
+            preprocessing_function=cropping_function
         )
 
         self.train_generator = datagen.flow_from_dataframe(
@@ -108,6 +119,7 @@ class ModelTrainer(baseclass.BaseClass):
         datagen = tf.keras.preprocessing.image.ImageDataGenerator(
             rescale=1./255,
             validation_split=self.model_settings["validation_split"],
+            preprocessing_function=cropping_function
         )
 
         self.validation_generator = datagen.flow_from_dataframe(
