@@ -12,7 +12,7 @@ class ImageIdentify(baseclass.BaseClass):
         self.images.append(image_path)
         print(self.images)
 
-    def set_image(self,image_paths):
+    def set_images(self,image_paths):
         for item in image_paths.split(","):
             self.images.append(item)
         print(self.images)
