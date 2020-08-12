@@ -131,7 +131,7 @@ def identify_image():
                 # x = x[..., :3]  # remove alpha channel if present
                 # if x.shape[3] == 1:
                 #     x = np.repeat(x, axis=3, repeats=3)
-                x = 1./255
+                # x = 1./255
                 # x = (x - 0.5) * 2.0
 
                 predictions = model.predict(x)
