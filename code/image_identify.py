@@ -67,7 +67,7 @@ if __name__ == '__main__':
     if args.model:
         predict.set_model_name(args.model)
     else:
-        predict.set_model_name(os.environ['MODEL_NAME'])
+        predict.set_model_name(os.environ['API_MODEL_NAME'])
 
     predict.load_model()
 
