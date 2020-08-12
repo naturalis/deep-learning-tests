@@ -79,11 +79,11 @@ if __name__ == '__main__':
 
     if args.images:
         predict.set_images(args.images)
-        x = predict.predict_images(image)
+        x = predict.predict_images()
 
     if args.list:
         predict.set_image_list(args.list)
-        x = predict.predict_images(image)
+        x = predict.predict_images()
 
     print(x)
 
