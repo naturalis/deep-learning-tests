@@ -95,6 +95,23 @@ def allowed_file(filename):
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
+
+
+# def preprocess_image(self,img, squaring_method="bilinear"):
+#     img = square_pil_image(img, (299, 299), squaring_method)
+#     x = keras.preprocessing.image.img_to_array(img)
+#     x = np.expand_dims(x, axis=0)
+#     x = x[..., :3]  # remove alpha channel if present
+#     if x.shape[3] == 1:
+#         x = np.repeat(x, axis=3, repeats=3)
+#     x /= 255.0
+#     x = (x - 0.5) * 2.0
+#     return x
+ 
+
+
+
+
 @app.route("/",methods=["GET","POST"])
 def root():
     return { "naturalis identify species by image api" : "v0.1" }
@@ -120,27 +137,22 @@ def identify_image():
             unique_filename = os.path.join(app.config['UPLOAD_FOLDER'], unique_filename)
             file.save(unique_filename)
 
-            x = tf.keras.preprocessing.image.load_img(
-                unique_filename, 
-                target_size=(299,299),
-                interpolation="nearest")
+            logger.info(unique_filename)
+
+            x = tf.keras.preprocessing.image.load_img(unique_filename, target_size=(299,299))        
             x = tf.keras.preprocessing.image.img_to_array(x)
             x = np.expand_dims(x, axis=0)
 
-            # x = x[..., :3]  # remove alpha channel if present
-            # if x.shape[3] == 1:
-            #     x = np.repeat(x, axis=3, repeats=3)
-            # x = 1./255
-            # x = (x - 0.5) * 2.0 # what's this?
+            logger.info(x)
 
             predictions = model.predict(x)
+
+            logger.info(predictions)
 
             predictions = predictions[0].tolist()
             classes = {k: v for k, v in sorted(classes.items(), key=lambda item: item[1])}
             predictions = dict(zip(classes.keys(), predictions))
             predictions = {k: v for k, v in sorted(predictions.items(), key=lambda item: item[1], reverse=True)}
-
-            logger.info(predictions)
 
             os.remove(unique_filename)
 
