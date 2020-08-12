@@ -75,7 +75,7 @@ if __name__ == '__main__':
 
     if args.image:
         # predict.set_image(args.image)
-        x = predict.predict_image(image)
+        x = predict.predict_image(args.image)
 
     if args.images:
         predict.set_images(args.images)
