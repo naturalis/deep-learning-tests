@@ -80,6 +80,7 @@ class ModelTrainer(baseclass.BaseClass):
         # return callbacks
 
     def cropping_function(self,x):
+        return x
         # print(x)
         img = Image.fromarray(np.uint8(x))
         w,h = img.size
@@ -111,7 +112,7 @@ class ModelTrainer(baseclass.BaseClass):
             x_col=self.COL_IMAGE,
             y_col=self.COL_CLASS,
             class_mode="categorical",
-            # target_size=(299, 299),
+            target_size=(299, 299),
             batch_size=self.model_settings["batch_size"],
             interpolation="nearest",
             subset="training",
@@ -129,7 +130,7 @@ class ModelTrainer(baseclass.BaseClass):
             x_col=self.COL_IMAGE,
             y_col=self.COL_CLASS,
             class_mode="categorical",
-            # target_size=(299, 299),
+            target_size=(299, 299),
             batch_size=self.model_settings["batch_size"],
             interpolation="nearest",
             subset="validation",
