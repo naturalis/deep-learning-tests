@@ -7,6 +7,7 @@ class ImageIdentify(baseclass.BaseClass):
 
     images = []
     results = []
+    top = 0
 
     def set_image(self,image_path):
         self.images.append(image_path)
@@ -22,6 +23,10 @@ class ImageIdentify(baseclass.BaseClass):
             self.images = f.read().splitlines() 
         # print(self.images)
 
+    def set_top(self,top):
+        self.top = top
+
+
     def predict_images(self):
         self.results = []
         for image in self.images:
@@ -32,7 +37,7 @@ class ImageIdentify(baseclass.BaseClass):
                 print("image doesn't exist: {}".format(image));
         return json.dumps({ "project" : self.project_name, "model" : self.model_name, "predictions" : self.results })
 
-    def predict_image(self,image,json_encode=False):
+    def predict_image(self,image):
         x = tf.keras.preprocessing.image.load_img(
             image, 
             target_size=(299,299),
@@ -52,9 +57,19 @@ class ImageIdentify(baseclass.BaseClass):
         predictions = dict(zip(classes.keys(), predictions))
         predictions = {k: v for k, v in sorted(predictions.items(), key=lambda item: item[1], reverse=True)}
 
-        print(type(predictions))
+        if self.top > 0:
+            count = 0
+            topped = {}
+            for k, v in predictions.items():
+                topped[k]=v
+                count += 1
+                if count >= self.top:
+                    break
+            return topped
+        else:
+            return predictions
 
-        return json.dumps(predictions) if json_encode else predictions
+        
 
 if __name__ == '__main__':
 
@@ -79,10 +94,11 @@ if __name__ == '__main__':
 
     predict.set_model_folder()
     predict.load_model()
+    predict.set_top(3)
 
     if args.image:
         # predict.set_image(args.image)
-        x = predict.predict_image(args.image)
+        x = json.dumps(predict.predict_image(args.image))
 
     if args.images:
         predict.set_images(args.images)
