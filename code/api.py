@@ -94,24 +94,6 @@ def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-
-
-
-# def preprocess_image(self,img, squaring_method="bilinear"):
-#     img = square_pil_image(img, (299, 299), squaring_method)
-#     x = keras.preprocessing.image.img_to_array(img)
-#     x = np.expand_dims(x, axis=0)
-#     x = x[..., :3]  # remove alpha channel if present
-#     if x.shape[3] == 1:
-#         x = np.repeat(x, axis=3, repeats=3)
-#     x /= 255.0
-#     x = (x - 0.5) * 2.0
-#     return x
- 
-
-
-
-
 @app.route("/",methods=["GET","POST"])
 def root():
     return { "naturalis identify species by image api" : "v0.1" }
