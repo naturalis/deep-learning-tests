@@ -18,8 +18,8 @@ class ImageIdentify(baseclass.BaseClass):
         # print(self.images)
 
     def set_image_list(self,list_path):
-        file1 = open(list_path,"r+")  
-        self.images += file1.readlines()
+        with open(list_path) as f:
+            self.images = f.read().splitlines() 
         # print(self.images)
 
     def predict_images(self):
