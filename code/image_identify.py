@@ -25,8 +25,11 @@ class ImageIdentify(baseclass.BaseClass):
     def predict_images(self):
         self.results = []
         for image in self.images:
-            predictions = self.predict_image(image)
-            self.results.append({ "image" : image, "prediction" : predictions })
+            if os.path.exists(image):
+                predictions = self.predict_image(image)
+                self.results.append({ "image" : image, "prediction" : predictions })
+            else:
+                print("image doesn't exist: {}".format(image));
         return json.dumps({ "project" : self.project_name, "model" : self.model_name, "predictions" : self.results })
 
     def predict_image(self,image,json_encode=False):
