@@ -6,6 +6,10 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from lib import baseclass, dataset, utils
 
+from  PIL import Image
+from  PIL import ImageOps
+import math
+
 
 class ModelTrainer(baseclass.BaseClass):
     timestamp = None
@@ -76,11 +80,8 @@ class ModelTrainer(baseclass.BaseClass):
         # return callbacks
 
     def cropping_function(self,x):
-        from  PIL import Image
-        from  PIL import ImageOps
-        import math
         print(x)
-        img = PIL.Image.open(x)
+        img = Image.open(x)
         w,h = img.size
         return ImageOps.fit(img,(math.ceil(w/2),h),centering=(0,0))
 
