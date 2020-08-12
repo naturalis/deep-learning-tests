@@ -143,7 +143,7 @@ def identify_image():
 
             os.remove(unique_filename)
 
-            logger.info(predictions[0])
+            print(predictions)
 
             return json.dumps(predictions)
 
