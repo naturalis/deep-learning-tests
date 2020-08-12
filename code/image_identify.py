@@ -1,7 +1,7 @@
 import os, sys, json, argparse
 import tensorflow as tf
 import numpy as np
-from lib import baseclass
+from lib import baseclass, utils
 
 class ImageIdentify(baseclass.BaseClass):
 
@@ -27,7 +27,7 @@ class ImageIdentify(baseclass.BaseClass):
         for image in self.images:
             if os.path.exists(image):
                 predictions = self.predict_image(image)
-                self.results.append({ "image" : image, "first" : predictions[0], "prediction" : predictions })
+                self.results.append({ "image" : image, "prediction" : predictions })
             else:
                 print("image doesn't exist: {}".format(image));
         return json.dumps({ "project" : self.project_name, "model" : self.model_name, "predictions" : self.results })
@@ -60,6 +60,8 @@ if __name__ == '__main__':
     predict.set_debug(os.environ["DEBUG"]=="1" if "DEBUG" in os.environ else False)
     predict.set_project(os.environ)
 
+    timer = utils.Timer()
+    timer.get_time_passed()
 
     parser = argparse.ArgumentParser() 
     parser.add_argument("--image", type=str)
@@ -88,6 +90,7 @@ if __name__ == '__main__':
         predict.set_image_list(args.list)
         x = predict.predict_images()
 
+    print(timer.get_time_passed(pretty=True))
     print(x)
 
     # export PROJECT_ROOT=/data/ai/corvidae/
