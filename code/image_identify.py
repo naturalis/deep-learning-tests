@@ -27,7 +27,7 @@ class ImageIdentify(baseclass.BaseClass):
         for image in self.images:
             if os.path.exists(image):
                 predictions = self.predict_image(image)
-                self.results.append({ "image" : image, "prediction" : predictions })
+                self.results.append({ "image" : image, "first" : predictions[0], "prediction" : predictions })
             else:
                 print("image doesn't exist: {}".format(image));
         return json.dumps({ "project" : self.project_name, "model" : self.model_name, "predictions" : self.results })
