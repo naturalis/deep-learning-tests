@@ -52,6 +52,8 @@ class ImageIdentify(baseclass.BaseClass):
         predictions = dict(zip(classes.keys(), predictions))
         predictions = {k: v for k, v in sorted(predictions.items(), key=lambda item: item[1], reverse=True)}
 
+        print(type(predictions))
+
         return json.dumps(predictions) if json_encode else predictions
 
 if __name__ == '__main__':
@@ -90,7 +92,7 @@ if __name__ == '__main__':
         predict.set_image_list(args.list)
         x = predict.predict_images()
 
-    print(timer.get_time_passed(pretty=True))
+    print(timer.get_time_passed(format="pretty"))
     print(x)
 
     # export PROJECT_ROOT=/data/ai/corvidae/
