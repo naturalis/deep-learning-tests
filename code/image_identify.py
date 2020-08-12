@@ -66,7 +66,7 @@ if __name__ == '__main__':
 
     if args.model:
         predict.set_model_name(args.model)
-    else
+    else:
         predict.set_model_name(os.environ['MODEL_NAME'])
 
     predict.load_model()
@@ -88,3 +88,4 @@ if __name__ == '__main__':
     # export PROJECT_ROOT=/data/ai/corvidae/
     # python image_identify.py /data/ai/corvidae/images/eccbc87e4b/RMNH.AVES.47171_1.jpg v1.0
     # sudo docker-compose run tensorflow /code/image_identify.py /data/corvidae/images/eccbc87e4b/RMNH.AVES.47171_1.jpg v1.0
+    # sudo docker-compose run tensorflow /code/image_identify.py --image=/data/corvidae/images/eccbc87e4b/RMNH.AVES.47171_1.jpg v1.0
