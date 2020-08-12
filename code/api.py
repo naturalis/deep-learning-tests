@@ -105,51 +105,51 @@ def identify_image():
 
     if request.method == 'POST':
 
-        try:
+        # try:
 
-            uploaded_files = request.files.getlist("image")
+        uploaded_files = request.files.getlist("image")
 
-            if len(uploaded_files)<1:
-                return { "error" : "no file" }
-            else:
-                file = uploaded_files[0]
+        if len(uploaded_files)<1:
+            return { "error" : "no file" }
+        else:
+            file = uploaded_files[0]
 
-            logger.info("file: {}".format(file))
+        logger.info("file: {}".format(file))
 
-            if file and allowed_file(file.filename):
-                unique_filename = str(uuid.uuid4())
-                unique_filename = os.path.join(app.config['UPLOAD_FOLDER'], unique_filename)
-                file.save(unique_filename)
+        if file and allowed_file(file.filename):
+            unique_filename = str(uuid.uuid4())
+            unique_filename = os.path.join(app.config['UPLOAD_FOLDER'], unique_filename)
+            file.save(unique_filename)
 
-                x = tf.keras.preprocessing.image.load_img(
-                    unique_filename, 
-                    target_size=(299,299),
-                    interpolation="nearest")
-                x = tf.keras.preprocessing.image.img_to_array(x)
-                x = np.expand_dims(x, axis=0)
+            x = tf.keras.preprocessing.image.load_img(
+                unique_filename, 
+                target_size=(299,299),
+                interpolation="nearest")
+            x = tf.keras.preprocessing.image.img_to_array(x)
+            x = np.expand_dims(x, axis=0)
 
-                # x = x[..., :3]  # remove alpha channel if present
-                # if x.shape[3] == 1:
-                #     x = np.repeat(x, axis=3, repeats=3)
-                # x = 1./255
-                # x = (x - 0.5) * 2.0
+            # x = x[..., :3]  # remove alpha channel if present
+            # if x.shape[3] == 1:
+            #     x = np.repeat(x, axis=3, repeats=3)
+            # x = 1./255
+            # x = (x - 0.5) * 2.0
 
-                predictions = model.predict(x)
+            predictions = model.predict(x)
 
-                predictions = predictions[0].tolist()
-                classes = {k: v for k, v in sorted(classes.items(), key=lambda item: item[1])}
-                predictions = dict(zip(classes.keys(), predictions))
-                predictions = {k: v for k, v in sorted(predictions.items(), key=lambda item: item[1], reverse=True)}
+            predictions = predictions[0].tolist()
+            classes = {k: v for k, v in sorted(classes.items(), key=lambda item: item[1])}
+            predictions = dict(zip(classes.keys(), predictions))
+            predictions = {k: v for k, v in sorted(predictions.items(), key=lambda item: item[1], reverse=True)}
 
-                os.remove(unique_filename)
+            os.remove(unique_filename)
 
-                logger.info(predictions[0])
+            logger.info(predictions[0])
 
-                return json.dumps(predictions)
+            return json.dumps(predictions)
 
-        except Exception as e:
+        # except Exception as e:
 
-            return { "error" : str(e) }
+        #     return { "error" : str(e) }
 
     else:
         return { "error" : "method not allowed" }
