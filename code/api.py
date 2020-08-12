@@ -126,11 +126,12 @@ def identify_image():
                 interpolation="bilinear") #"nearest", 
             x = tf.keras.preprocessing.image.img_to_array(x)
             x = np.expand_dims(x, axis=0)
-            x = x[..., :3]  # remove alpha channel if present
-            if x.shape[3] == 1:
-                x = np.repeat(x, axis=3, repeats=3)
-            x = 1./255
-            x = (x - 0.5) * 2.0 # what's this?
+
+            # x = x[..., :3]  # remove alpha channel if present
+            # if x.shape[3] == 1:
+            #     x = np.repeat(x, axis=3, repeats=3)
+            # x = 1./255
+            # x = (x - 0.5) * 2.0 # what's this?
 
             predictions = model.predict(x)
 
