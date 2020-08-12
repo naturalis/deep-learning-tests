@@ -83,8 +83,7 @@ class ModelTrainer(baseclass.BaseClass):
         # print(x)
         img = Image.fromarray(np.uint8(x))
         w,h = img.size
-        img2 = np.asarray(ImageOps.fit(img,(math.ceil(w/2),h),centering=(0,0)))
-        return img2
+        return x[0:h, 0:math.ceil(w/2)]
 
 
     def configure_generators(self):
