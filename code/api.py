@@ -132,7 +132,7 @@ def identify_image():
             if x.shape[3] == 1:
                 x = np.repeat(x, axis=3, repeats=3)
             x /= 255.0
-            x = (x - 0.5) * 2.0
+            # x = (x - 0.5) * 2.0 # why this, laurens?
 
             predictions = model.predict(x)
 
