@@ -101,7 +101,7 @@ class ModelTrainer(baseclass.BaseClass):
             height_shift_range=a["height_shift_range"] if "height_shift_range" in a else 0.0,
             horizontal_flip=a["horizontal_flip"] if "horizontal_flip" in a else False,
             vertical_flip=a["vertical_flip"] if "vertical_flip" in a else False,
-            preprocessing_function=cropping_function
+            preprocessing_function=self.cropping_function
         )
 
         self.train_generator = datagen.flow_from_dataframe(
@@ -119,7 +119,7 @@ class ModelTrainer(baseclass.BaseClass):
         datagen = tf.keras.preprocessing.image.ImageDataGenerator(
             rescale=1./255,
             validation_split=self.model_settings["validation_split"],
-            preprocessing_function=cropping_function
+            preprocessing_function=self.cropping_function
         )
 
         self.validation_generator = datagen.flow_from_dataframe(
