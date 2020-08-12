@@ -79,10 +79,10 @@ class ModelTrainer(baseclass.BaseClass):
         from  PIL import Image
         from  PIL import ImageOps
         import math
-        # img = PIL.Image.open('slechtvalken.jpg')
-        w,h = x.size
-        x2 = ImageOps.fit(x,(math.ceil(w/2),h),centering=(0,0))
-        return x2
+        print(x)
+        img = PIL.Image.open(x)
+        w,h = img.size
+        return ImageOps.fit(img,(math.ceil(w/2),h),centering=(0,0))
 
 
     def configure_generators(self):
