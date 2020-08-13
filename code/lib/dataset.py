@@ -9,6 +9,7 @@ class DataSet(baseclass.BaseClass):
     model_trainer = None
     model_summary = None
     model_note = None
+    model_state = "constructing"
     model_retrain_note = None
     data_set = {}
     data_set_file = None
@@ -20,6 +21,9 @@ class DataSet(baseclass.BaseClass):
         self.model_trainer = model_trainer
         self.data_set_file = os.path.join(self.model_trainer.model_folder, "dataset.json")
         self._set_model_summary()
+
+    def set_model_state(self,model_state):
+        self.model_state = model_state
 
     def set_note(self,note):
         if not note is None:
@@ -49,6 +53,7 @@ class DataSet(baseclass.BaseClass):
         self.data_set["project_root"] = self.model_trainer.project_root
         self.data_set["model_name"] = self.model_trainer.model_name
         self.data_set["created"] = str(self.model_trainer.timestamp)
+        self.data_set["state"] = self.model_state
         self.data_set["training_time"] = "n/a"
         self.data_set["model_note"] = self.model_note
 

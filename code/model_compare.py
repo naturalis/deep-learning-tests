@@ -57,6 +57,7 @@ class ModelCompare(baseclass.BaseClass):
             batch_dates= self.dates[a:b]
             batch_model_sizes= self.model_sizes[a:b]
             batch_notes= self.notes[a:b]
+            batch_states = self.states[a:b]
             batch_classes= self.classes[a:b]
             batch_macro_support= self.macro_support[a:b]
             batch_epochs= self.epochs[a:b]
@@ -78,6 +79,7 @@ class ModelCompare(baseclass.BaseClass):
 
             print(index.format("name: ") + general.format(*batch_names))
             print(index.format("date: ") + general.format(*batch_dates))
+            print(index.format("state: ") + general.format(*batch_states))
 
             notes = []
             max_l = 0
@@ -164,6 +166,7 @@ class ModelCompare(baseclass.BaseClass):
         self.names = []
         self.dates = []
         self.notes = []
+        self.states = []
         self.classes = []
         self.epochs = []
         self.layers = []
@@ -188,6 +191,7 @@ class ModelCompare(baseclass.BaseClass):
                     tmp = json.load(json_file)
                     self.names.append(tmp["model_name"])
                     self.dates.append(tmp["created"])
+                    self.states.append("?" if noty "state" in tmp else tmp["state"])
 
                     if "model_retrain_note" in tmp:
                         self.notes.append("{} / {}".format(tmp["model_note"],tmp["model_retrain_note"]))
