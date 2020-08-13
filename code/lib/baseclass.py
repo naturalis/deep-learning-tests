@@ -268,7 +268,7 @@ class BaseClass():
 
 
         for key, row in self.traindf.iterrows():
-            print(key,row[self.COL_CLASS],row[self.COL_IMAGE])
+            print(key,row[self.COL_CLASS])
 
         # self.traindf = self.traindf[self.traindf[self.COL_CLASS].isin([i[0] for i in self.class_list if True])]
 
