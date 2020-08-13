@@ -191,7 +191,7 @@ class ModelCompare(baseclass.BaseClass):
                     tmp = json.load(json_file)
                     self.names.append(tmp["model_name"])
                     self.dates.append(tmp["created"])
-                    self.states.append("?" if noty "state" in tmp else tmp["state"])
+                    self.states.append("?" if not "state" in tmp else tmp["state"])
 
                     if "model_retrain_note" in tmp:
                         self.notes.append("{} / {}".format(tmp["model_note"],tmp["model_retrain_note"]))
