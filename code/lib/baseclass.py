@@ -231,6 +231,7 @@ class BaseClass():
             image_counter={}
 
             sep = _determine_csv_separator(self.downloaded_images_file_model,"utf-8-sig")
+            input(sep)
 
             file1 = open(self.downloaded_images_file_model, 'r') 
             
