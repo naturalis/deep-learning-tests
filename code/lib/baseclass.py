@@ -8,16 +8,20 @@ from shutil import copyfile
 from datetime import datetime
 from lib import logclass
 
-
-def _csv_to_dataframe(filepath, usecols, encoding="utf-8-sig"):
+def _determine_csv_separator(filepath,encoding):
     f = open(filepath, "r", encoding=encoding)
     line = f.readline()
     if line.count('\t') > 0:
         sep = '\t'
     else:
         sep = ','
-    return pd.read_csv(filepath, encoding=encoding, sep=sep, dtype="str", usecols=usecols, header=None)
+    return sep
 
+def _csv_to_dataframe(filepath, usecols, encoding="utf-8-sig"):
+    return pd.read_csv(filepath, 
+        encoding=encoding, 
+        sep=_determine_csv_separator(filepath=filepath,encoding=encoding), 
+        dtype="str", usecols=usecols, header=None)
 
 class BaseClass():
     logger = None
@@ -226,10 +230,12 @@ class BaseClass():
             this_list=[]
             image_counter={}
 
+            sep = _determine_csv_separator(self.downloaded_images_file_model,"utf-8-sig")
+
             file1 = open(self.downloaded_images_file_model, 'r') 
             
             for line in file1.readlines():
-                line = line.split(",")
+                line = line.split(sep)
                 this_class = line[self.image_list_class_col]
 
                 if this_class in image_counter and image_counter[this_class] >= self.class_image_maximum:
@@ -244,10 +250,7 @@ class BaseClass():
                 else:
                     image_counter[this_class] = 1
 
-            print(this_list)
             df = pd.DataFrame(this_list)
-            print(df)
-            input("fuck")
 
             self.logger.info("skipped {} images due to image maximum".format(skipped_images))
 
