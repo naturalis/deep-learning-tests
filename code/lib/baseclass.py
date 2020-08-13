@@ -264,6 +264,7 @@ class BaseClass():
         self.logger.info("read {} images in {} classes".format(self.traindf[self.COL_IMAGE].nunique(),self.traindf[self.COL_CLASS].nunique()))
 
     def image_list_apply_class_list(self):
+        print(self.class_list)
         before = len(self.traindf)
         self.traindf = self.traindf[self.traindf[self.COL_CLASS].isin([i[0] for i in self.class_list if True])]
         after = len(self.traindf)
