@@ -267,7 +267,7 @@ class BaseClass():
         before = len(self.traindf)
 
         for k, v in self.traindf.items():
-            print(v)
+            print(k,v)
 
 
         # self.traindf = self.traindf[self.traindf[self.COL_CLASS].isin([i[0] for i in self.class_list if True])]
