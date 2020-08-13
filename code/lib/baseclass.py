@@ -266,9 +266,9 @@ class BaseClass():
     def image_list_apply_class_list(self):
         before = len(self.traindf)
 
-        for k, v in self.traindf.items():
-            print(k,v)
 
+        for index, row in self.traindf.iterrows():
+            print(key,row)
 
         # self.traindf = self.traindf[self.traindf[self.COL_CLASS].isin([i[0] for i in self.class_list if True])]
 
