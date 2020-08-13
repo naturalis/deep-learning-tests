@@ -299,8 +299,6 @@ if __name__ == "__main__":
     args = parser.parse_args() 
 
     trainer = ModelTrainer()
-    timer = utils.Timer()
-    dataset = dataset.DataSet()
 
     trainer.set_debug(os.environ["DEBUG"]=="1" if "DEBUG" in os.environ else False)    
     trainer.set_project(os.environ)
@@ -308,28 +306,9 @@ if __name__ == "__main__":
     trainer.set_class_image_minimum(trainer.get_preset("class_image_minimum"))
     trainer.set_class_image_maximum(trainer.get_preset("class_image_maximum"))
 
-    if args.load_model: 
-        trainer.set_model_name(args.load_model)
-    else:
-        trainer.set_model_name(trainer.make_model_name())
+    trainer.set_model_name(trainer.make_model_name())
 
     trainer.set_model_folder()
-
-    trainer.set_model_settings({
-        "validation_split": trainer.get_preset("validation_split"),
-        "base_model": tf.keras.applications.InceptionV3(weights="imagenet", include_top=False),
-        "loss": tf.keras.losses.CategoricalCrossentropy(),
-        "optimizer": trainer.configure_optimizers(),
-        "batch_size": trainer.get_preset("batch_size"),
-        "epochs": trainer.get_preset("epochs"), 
-        "freeze_layers": trainer.get_preset("freeze_layers"), 
-        "callbacks" : trainer.configure_callbacks(),
-        "metrics" : trainer.get_preset("metrics"),
-        "image_augmentation" : trainer.get_preset("image_augmentation")
-    })
-
-    if args.dataset_note: 
-        dataset.set_note(args.dataset_note)
 
     trainer.copy_image_list_file()
     trainer.copy_class_list_file()
