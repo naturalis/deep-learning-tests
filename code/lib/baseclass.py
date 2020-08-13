@@ -119,7 +119,6 @@ class BaseClass():
         self.project_name = project_name
         self.logger.info("project name: {}".format(self.project_name))
 
-
     def set_project_folders(self, project_root, image_path=None):
         self.project_root = project_root
 
@@ -151,6 +150,26 @@ class BaseClass():
 
         self.class_list_file = os.path.join(self.project_root, "lists", "classes.csv")
         self.downloaded_images_file = os.path.join(self.project_root, "lists", "downloaded_images.csv")
+
+    def set_model_folder(self):
+        self.model_folder = os.path.join(self.project_root, "models", self.model_name)
+        if not os.path.exists(self.model_folder):
+            os.mkdir(self.model_folder)
+            self.logger.info("created model folder {}".format(self.model_folder))
+
+        self.class_list_file_model = os.path.join(self.model_folder, "classes.csv")
+        self.downloaded_images_file_model = os.path.join(self.model_folder, "downloaded_images.csv")
+
+    def set_model_settings(self, model_settings):
+        self.model_settings = model_settings
+        for setting in self.model_settings:
+            self.logger.info("setting - {}: {}".format(setting, str(self.model_settings[setting])))
+
+        if "epochs" in self.model_settings:
+            if isinstance(self.model_settings["epochs"], int):
+                self.epochs = [self.model_settings["epochs"]]
+            else:
+                self.epochs = self.model_settings["epochs"]
 
     def set_class_image_minimum(self, class_image_minimum):
         class_image_minimum = int(class_image_minimum)
@@ -186,32 +205,13 @@ class BaseClass():
     def copy_class_list_file(self):
         copyfile(self.class_list_file,self.class_list_file_model)
 
-    def set_model_folder(self):
-        self.model_folder = os.path.join(self.project_root, "models", self.model_name)
-        if not os.path.exists(self.model_folder):
-            os.mkdir(self.model_folder)
-            self.logger.info("created model folder {}".format(self.model_folder))
-
-        self.class_list_file_model = os.path.join(self.model_folder, "classes.csv")
-        self.downloaded_images_file_model = os.path.join(self.model_folder, "downloaded_images.csv")
-
-    def set_model_settings(self, model_settings):
-        self.model_settings = model_settings
-        for setting in self.model_settings:
-            self.logger.info("setting - {}: {}".format(setting, str(self.model_settings[setting])))
-
-        if "epochs" in self.model_settings:
-            if isinstance(self.model_settings["epochs"], int):
-                self.epochs = [self.model_settings["epochs"]]
-            else:
-                self.epochs = self.model_settings["epochs"]
-
-    # TODO: implement Test split
-    def read_image_list_file(self, class_col=0, image_col=1):
+    def copy_image_list_file(self):
         if not os.path.exists(self.downloaded_images_file_model):
             copyfile(self.downloaded_images_file, self.downloaded_images_file_model)
             self.logger.info("copied downloaded images file {}".format(self.downloaded_images_file_model))
 
+    # TODO: implement Test split
+    def read_image_list_file(self, class_col=0, image_col=1):
         self.image_list_class_col = class_col
         self.image_list_image_col = image_col
 

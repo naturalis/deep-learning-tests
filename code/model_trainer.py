@@ -346,9 +346,12 @@ if __name__ == "__main__":
 
     else:
 
+        trainer.copy_image_list_file()
         trainer.copy_class_list_file()
-        trainer.read_class_list()
+
         trainer.read_image_list_file(image_col=2)
+        trainer.read_class_list()
+
         trainer.image_list_apply_class_list()
         trainer.assemble_model()
         trainer.save_model_architecture()
