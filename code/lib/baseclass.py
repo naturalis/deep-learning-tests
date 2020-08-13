@@ -230,26 +230,22 @@ class BaseClass():
             this_list=[]
             image_counter={}
 
-            sep = _determine_csv_separator(self.downloaded_images_file_model,"utf-8-sig")
-            input(sep)
+            with open(self.downloaded_images_file_model) as csv_file:
+                csv_reader = csv.reader(csv_file, delimiter=_determine_csv_separator(self.downloaded_images_file_model,"utf-8-sig"))
+                for row in csv_reader:
 
-            file1 = open(self.downloaded_images_file_model, 'r') 
-            
-            for line in file1.readlines():
-                line = line.split(sep)
-                this_class = line[self.image_list_class_col]
+                    this_class = row[self.image_list_class_col]
 
-                if this_class in image_counter and image_counter[this_class] >= self.class_image_maximum:
-                    skipped_images += 1
-                    continue
-                
-                # this_list.append([line[self.image_list_class_col].strip(),line[self.image_list_image_col].strip()])
-                this_list.append([line[self.image_list_class_col].strip(),line[self.image_list_image_col].strip()])
+                    if this_class in image_counter and image_counter[this_class] >= self.class_image_maximum:
+                        skipped_images += 1
+                        continue
 
-                if this_class in image_counter:
-                    image_counter[this_class] += 1
-                else:
-                    image_counter[this_class] = 1
+                    this_list.append([row[self.image_list_class_col].strip(),row[self.image_list_image_col].strip()])
+
+                    if this_class in image_counter:
+                        image_counter[this_class] += 1
+                    else:
+                        image_counter[this_class] = 1
 
             df = pd.DataFrame(this_list)
 
