@@ -244,9 +244,9 @@ class BaseClass():
                 else:
                     image_counter[this_class] = 1
 
-            prtint(this_list)
+            print(this_list)
             df = pd.DataFrame(this_list)
-            prtint(df)
+            print(df)
             input("fuck")
 
             self.logger.info("skipped {} images due to image maximum".format(skipped_images))
