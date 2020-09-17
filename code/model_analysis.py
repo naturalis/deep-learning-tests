@@ -54,12 +54,12 @@ class ModelAnalysis(baseclass.BaseClass):
         #  top k percentage
         for n in [1,3,5,10]:
             top_k = tf.math.in_top_k(self.test_generator.classes, Y_pred, n, "top_" + str(n))
-            all_count = int(tf.size(top_k))
 
-            true_elements = tf.equal(top_k, True)
-            true_count = int(tf.size(true_elements))
+            true_count = top_k.numpy()[np.where(top_k.numpy()==True)].size
+            all_count = top_k.numpy().size
 
-            self.top_k.append({"top" : n, "pct" : (true_count / all_count) * 100 })
+            self.top_k.append({"top" : n, "pct" : round((true_count / all_count) * 100,4) })
+
 
     def print_analysis(self):
         print("== confusion matrix ==")
