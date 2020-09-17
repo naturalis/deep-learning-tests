@@ -22,8 +22,9 @@ class DataSet(baseclass.BaseClass):
         self.data_set_file = os.path.join(self.model_trainer.model_folder, "dataset.json")
         self._set_model_summary()
 
-    def set_model_state(self,model_state):
+    def update_model_state(self,model_state):
         self.model_state = model_state
+        self.data_set["state"] = self.model_state
 
     def set_note(self,note):
         if not note is None:

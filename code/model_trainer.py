@@ -359,15 +359,14 @@ if __name__ == "__main__":
         dataset.set_model_trainer(trainer)
         dataset.make_dataset()
 
-    dataset.set_model_state("training")
+    dataset.update_model_state("training")
     dataset.save_dataset()
-
 
     trainer.configure_generators()
     trainer.train_model()
 
     dataset.set_training_time(timer.get_time_passed())
-    dataset.set_model_state("configured")
+    dataset.update_model_state("configured")
     dataset.save_dataset()
 
     trainer.save_model()

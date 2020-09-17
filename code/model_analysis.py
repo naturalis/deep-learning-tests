@@ -11,6 +11,7 @@ class ModelAnalysis(baseclass.BaseClass):
     cp = None
     cm_exportable = []
     cp_exportable = None
+    top_k = []
 
     def __init__(self):
         super().__init__()
@@ -36,11 +37,8 @@ class ModelAnalysis(baseclass.BaseClass):
         Y_pred = self.model.predict(self.test_generator)
         y_pred = np.argmax(Y_pred, axis=1)
 
+        #  confusion matrix
         self.cm = tf.math.confusion_matrix(self.test_generator.classes, y_pred)
-
-        iets = tf.math.in_top_k(self.test_generator.classes, Y_pred, 3, "whatever")
-        print(iets)
-
         self.cm_exportable = []
         i = 0
         for row in self.cm:
@@ -49,8 +47,18 @@ class ModelAnalysis(baseclass.BaseClass):
                 self.cm_exportable[i].append(str(cell.numpy()))
             i += 1
 
+        # classification report
         self.cr = classification_report(self.test_generator.classes, y_pred)
         self.cr_exportable = classification_report(self.test_generator.classes, y_pred,output_dict=True)
+
+        #  top k percentage
+        for n in [3,5]:
+            top_k = tf.math.in_top_k(self.test_generator.classes, Y_pred, n, "top_" + str(n))
+            all_count = int(tf.size(top_k))
+            true_elements = tf.equal(top_k, True)
+            as_ints = tf.cast(true_elements, tf.int32) 
+            true_count = tf.reduce_sum(as_ints)
+            self.top_k.push({"top" : n, "pct" : (true_count / all_count) * 100 })
 
     def print_analysis(self):
         print("== confusion matrix ==")
@@ -65,6 +73,9 @@ class ModelAnalysis(baseclass.BaseClass):
         print("== classification report ==")
         print(self.cr)
 
+        print("== top k analysis ==")
+        print(self.top_k)
+
     def backup_previous_analysis(self):
         if os.path.exists(self.get_analysis_path()):
             now = datetime.now()
@@ -75,7 +86,11 @@ class ModelAnalysis(baseclass.BaseClass):
 
     def save_analysis(self):
         f = open(self.get_analysis_path(), "w")
-        f.write(json.dumps({"confusion_matrix" : self.cm_exportable, "classification_report" : self.cr_exportable}))
+        f.write(json.dumps({
+            "confusion_matrix" : self.cm_exportable,
+            "classification_report" : self.cr_exportable,
+            "top_k" : self.top_k
+            }))
         f.close()
 
 

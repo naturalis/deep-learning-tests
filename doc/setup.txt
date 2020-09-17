@@ -93,5 +93,5 @@ sudo docker-compose run tensorflow /code/project_prepare.py
 sudo docker-compose run tensorflow /code/dwca_reader.py
 sudo docker-compose run tensorflow /code/image_downloader.py
 sudo docker-compose run tensorflow /code/model_trainer.py
-sudo docker-compose run tensorflow /code/model_analysis.py v1.x
-sudo docker-compose run tensorflow /code/model_compare.py
+sudo docker-compose run tensorflow /code/model_analysis.py <model name>
+sudo docker-compose run tensorflow /code/model_compare.py [--cleanup --delete]
