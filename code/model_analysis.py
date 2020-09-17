@@ -58,7 +58,7 @@ class ModelAnalysis(baseclass.BaseClass):
             true_elements = tf.equal(top_k, True)
             as_ints = tf.cast(true_elements, tf.int32) 
             true_count = tf.reduce_sum(as_ints)
-            self.top_k.push({"top" : n, "pct" : (true_count / all_count) * 100 })
+            self.top_k.append({"top" : n, "pct" : (true_count / all_count) * 100 })
 
     def print_analysis(self):
         print("== confusion matrix ==")
