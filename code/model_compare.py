@@ -19,6 +19,8 @@ class ModelCompare(baseclass.BaseClass):
     weighted_recall = []
     weighted_f1 = []
     weighted_support = []
+    top_3 = []
+    top_5 = []
     accuracy_max = 0
     macro_precision_max = 0
     macro_recall_max = 0
