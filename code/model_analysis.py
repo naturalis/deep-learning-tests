@@ -54,7 +54,8 @@ class ModelAnalysis(baseclass.BaseClass):
         #  top k percentage
         for n in [3,5]:
             top_k = tf.math.in_top_k(self.test_generator.classes, Y_pred, n, "top_" + str(n))
-            all_count = int(tf.size(top_k))
+            # all_count = int(tf.size(top_k))
+            all_count = tf.cast(int(tf.size(top_k)), tf.int32) 
             true_elements = tf.equal(top_k, True)
             as_ints = tf.cast(true_elements, tf.int32) 
             true_count = tf.reduce_sum(as_ints)
