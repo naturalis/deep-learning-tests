@@ -52,13 +52,13 @@ class ModelAnalysis(baseclass.BaseClass):
         self.cr_exportable = classification_report(self.test_generator.classes, y_pred,output_dict=True)
 
         #  top k percentage
-        for n in [3,5]:
+        for n in [1,3,5,10]:
             top_k = tf.math.in_top_k(self.test_generator.classes, Y_pred, n, "top_" + str(n))
-            # all_count = int(tf.size(top_k))
-            all_count = tf.cast(int(tf.size(top_k)), tf.int32) 
+            all_count = int(tf.size(top_k))
+
             true_elements = tf.equal(top_k, True)
-            as_ints = tf.cast(true_elements, tf.int32) 
-            true_count = tf.reduce_sum(as_ints)
+            true_count = int(tf.size(true_elements))
+
             self.top_k.append({"top" : n, "pct" : (true_count / all_count) * 100 })
 
     def print_analysis(self):
