@@ -114,8 +114,8 @@ class ModelCompare(baseclass.BaseClass):
             print(index.format("") + general.format(*self._mark_max_val(self.weighted_recall_max,batch_weighted_recall)))
             print(index.format("f1: ") + general.format(*self._mark_max_val(self.macro_f1_max,batch_macro_f1)))
             print(index.format("") + general.format(*self._mark_max_val(self.weighted_f1_max,batch_weighted_f1)))
-            print(index.format("top 3: ") + general.format(*batch_top_3 + "%"))
-            print(index.format("top 5: ") + general.format(*batch_top_5 + "%"))
+            print(index.format("top 3: ") + general.format(*map(lambda x : x + "%",batch_top_3)))
+            print(index.format("top 5: ") + general.format(*map(lambda x : x + "%",batch_top_5)))
 
             print("")
             print("")
