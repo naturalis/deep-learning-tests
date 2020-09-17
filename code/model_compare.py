@@ -69,6 +69,8 @@ class ModelCompare(baseclass.BaseClass):
             batch_weighted_recall = self.weighted_recall[a:b]
             batch_macro_f1 = self.macro_f1[a:b]
             batch_weighted_f1 = self.weighted_f1[a:b]
+            batch_top_3 = self.top_3[a:b]
+            batch_top_5 = self.top_5[a:b]
 
             general = ""
 
@@ -110,6 +112,8 @@ class ModelCompare(baseclass.BaseClass):
             print(index.format("") + general.format(*self._mark_max_val(self.weighted_recall_max,batch_weighted_recall)))
             print(index.format("f1: ") + general.format(*self._mark_max_val(self.macro_f1_max,batch_macro_f1)))
             print(index.format("") + general.format(*self._mark_max_val(self.weighted_f1_max,batch_weighted_f1)))
+            print(index.format("top 3: ") + general.format(*batch_top_3 + "%"))
+            print(index.format("top 5: ") + general.format(*batch_top_5 + "%"))
 
             print("")
             print("")
@@ -222,6 +226,18 @@ class ModelCompare(baseclass.BaseClass):
                     self.weighted_f1.append(tmp["classification_report"]["weighted avg"]["f1-score"])
                     self.weighted_support.append(tmp["classification_report"]["weighted avg"]["support"])
 
+                    if "top_k" in tmp:
+                        for item in tmp["top_k"]:
+                            if item["top"]==3:
+                                self.top_3.append(item["pct"])
+                            if item["top"]==5:
+                                self.top_5.append(item["pct"])
+                    else:
+                        self.top_3.append("?")
+                        self.top_5.append("?")
+
+
+
                     self.accuracy_max = tmp["classification_report"]["accuracy"] \
                         if tmp["classification_report"]["accuracy"] > self.accuracy_max else self.accuracy_max
                     self.macro_precision_max = tmp["classification_report"]["macro avg"]["precision"] \
@@ -236,6 +252,7 @@ class ModelCompare(baseclass.BaseClass):
                         if tmp["classification_report"]["weighted avg"]["recall"] > self.weighted_recall_max else self.weighted_recall_max
                     self.weighted_f1_max = tmp["classification_report"]["weighted avg"]["f1-score"] \
                         if tmp["classification_report"]["weighted avg"]["f1-score"] > self.weighted_f1_max else self.weighted_f1_max
+
             else:
                 self.accuracy.append("")
                 self.macro_precision.append("")
@@ -246,6 +263,8 @@ class ModelCompare(baseclass.BaseClass):
                 self.weighted_recall.append("")
                 self.weighted_f1.append("")
                 self.weighted_support.append("")
+                self.top_3.append("?")
+                self.top_5.append("?")
 
             if os.path.exists(model):
                 self.model_sizes.append(os.path.getsize(model))
