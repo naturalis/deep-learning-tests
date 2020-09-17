@@ -19,6 +19,7 @@ class ModelCompare(baseclass.BaseClass):
     weighted_recall = []
     weighted_f1 = []
     weighted_support = []
+    top_1 = []
     top_3 = []
     top_5 = []
     accuracy_max = 0
@@ -71,6 +72,7 @@ class ModelCompare(baseclass.BaseClass):
             batch_weighted_recall = self.weighted_recall[a:b]
             batch_macro_f1 = self.macro_f1[a:b]
             batch_weighted_f1 = self.weighted_f1[a:b]
+            batch_top_1 = self.top_1[a:b]
             batch_top_3 = self.top_3[a:b]
             batch_top_5 = self.top_5[a:b]
 
@@ -108,7 +110,8 @@ class ModelCompare(baseclass.BaseClass):
             print(index.format("epochs: ") + general.format(*batch_epochs))
             print(index.format("frozen: ") + general.format(*batch_layers))
             print(index.format("accuracy: ") + general.format(*self._mark_max_val(self.accuracy_max,batch_accuracy)))
-            print(index.format(" ├ top 3: ") + general.format(*map(lambda x : str(round(x,2)) + "%",batch_top_3)))
+            print(index.format(" ├ top 1: ") + general.format(*map(lambda x : str(round(x,2)) + "%",batch_top_1)))
+            print(index.format(" ├ top 3: ") + general.format(*map(lambda x : str(round(x,2)) + "%",batch_top_3)))            
             print(index.format(" └ top 5: ") + general.format(*map(lambda x : str(round(x,2)) + "%",batch_top_5)))
             print(index.format("precision: ") + general.format(*self._mark_max_val(self.macro_precision_max,batch_macro_precision)))
             print(index.format("") + general.format(*self._mark_max_val(self.weighted_precision_max,batch_weighted_precision)))
@@ -230,11 +233,14 @@ class ModelCompare(baseclass.BaseClass):
 
                     if "top_k" in tmp:
                         for item in tmp["top_k"]:
+                            if item["top"]==1:
+                                self.top_1.append(item["pct"])
                             if item["top"]==3:
                                 self.top_3.append(item["pct"])
                             if item["top"]==5:
                                 self.top_5.append(item["pct"])
                     else:
+                        self.top_1.append("?")
                         self.top_3.append("?")
                         self.top_5.append("?")
 
