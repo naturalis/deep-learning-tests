@@ -244,8 +244,6 @@ class ModelCompare(baseclass.BaseClass):
                         self.top_3.append("?")
                         self.top_5.append("?")
 
-
-
                     self.accuracy_max = tmp["classification_report"]["accuracy"] \
                         if tmp["classification_report"]["accuracy"] > self.accuracy_max else self.accuracy_max
                     self.macro_precision_max = tmp["classification_report"]["macro avg"]["precision"] \
@@ -271,6 +269,7 @@ class ModelCompare(baseclass.BaseClass):
                 self.weighted_recall.append("")
                 self.weighted_f1.append("")
                 self.weighted_support.append("")
+                self.top_1.append("?")
                 self.top_3.append("?")
                 self.top_5.append("?")
 
