@@ -54,6 +54,9 @@ class BaseClass():
     model = None
     presets = {}
 
+    default_reduce_lr_params = { 'reduce_lr_params' : [ { "monitor" : "val_loss", "factor" : 0.1, "patience" : 4, "min_lr" : 1e-8, "verbose" : 1 } ] }
+
+
     def __init__(self):
         pr = os.environ.get("PROJECT_ROOT")
 
@@ -302,39 +305,49 @@ class BaseClass():
 
         self.logger.info("loaded {} classes from {}".format(len(self.classes),self.get_classes_path()))
 
-    def set_presets(self,os_environ):
-        if 'IMAGE_AUGMENTATION' in os_environ:
-            self.presets.update( {'image_augmentation' : json.loads(os_environ.get("IMAGE_AUGMENTATION")) } )    
-        else:
-            self.presets.update( {'image_augmentation' : None } )
+    def set_presets(self,**kwargs):
+        
+        if 'os_environ' in kwargs:
 
-            # self.presets.update( {'image_augmentation' : {
-            #     "rotation_range": 90,
-            #     "shear_range": 0.2,
-            #     "zoom_range": 0.2,
-            #     "horizontal_flip": True,
-            #     "width_shift_range": 0.2,
-            #     "height_shift_range": 0.2, 
-            #     "vertical_flip": False
-            # } } )
+            os_environ = kwargs['os_environ']
 
-        if 'REDUCE_LR_PARAMS' in os_environ:
-            self.presets.update( {'reduce_lr_params' : json.loads(os_environ.get("REDUCE_LR_PARAMS")) } )
-        else:
-            self.presets.update( {'reduce_lr_params' : [ { "monitor" : "val_loss", "factor" : 0.1, "patience" : 4, "min_lr" : 1e-8, "verbose" : 1 } ] } )
+            if 'IMAGE_AUGMENTATION' in os_environ:
+                image_augmentation = json.loads(os_environ.get("IMAGE_AUGMENTATION"))
+            else:
+                image_augmentation = None
 
-        self.presets.update( { "validation_split" : float(os_environ.get("VALIDATION_SPLIT")) if "VALIDATION_SPLIT" in os_environ else 0.2 } )
-        self.presets.update( { "learning_rate" : json.loads(os_environ.get("LEARNING_RATE")) if "LEARNING_RATE" in os_environ else [ 1e-4 ] } )
-        self.presets.update( { "batch_size" : int(os_environ.get("BATCH_SIZE")) if "BATCH_SIZE" in os_environ else 64 } )
-        self.presets.update( { "epochs" : json.loads(os_environ.get("EPOCHS")) if "EPOCHS" in os_environ else [ 200 ]   } )
-        self.presets.update( { "freeze_layers" : json.loads(os_environ.get("FREEZE_LAYERS")) if "FREEZE_LAYERS" in os_environ else [ "none" ] } )
-        self.presets.update( { "metrics" : json.loads(os_environ.get("METRICS")) if "METRICS" in os_environ else [ "acc" ] } )
-        self.presets.update( { "checkpoint_monitor" : os_environ.get("CHECKPOINT_MONITOR") if "CHECKPOINT_MONITOR" in os_environ else "val_acc" } )
-        self.presets.update( { "early_stopping_monitor" : json.loads(os_environ.get("EARLY_STOPPING_MONITOR")) if "EARLY_STOPPING_MONITOR" in os_environ else [ "val_loss" ] } )
-        self.presets.update( { "class_image_minimum" : int(os_environ.get("CLASS_IMAGE_MINIMUM")) if "CLASS_IMAGE_MINIMUM" in os_environ else 2 } )
-        self.presets.update( { "class_image_maximum" : int(os_environ.get("CLASS_IMAGE_MAXIMUM")) if "CLASS_IMAGE_MAXIMUM" in os_environ else 0 } )
-        # epochs [ 10, 200 ]
-        # freeze_layers [ "base_model", "none" ] # 249
+            if 'REDUCE_LR_PARAMS' in os_environ:
+                reduce_lr_params = json.loads(os_environ.get("REDUCE_LR_PARAMS"))
+            else:
+                reduce_lr_params = self.default_reduce_lr_params
+
+            validation_split = float(os_environ.get("VALIDATION_SPLIT")) if "VALIDATION_SPLIT" in os_environ else 0.2
+            learning_rate = json.loads(os_environ.get("LEARNING_RATE")) if "LEARNING_RATE" in os_environ else [ 1e-4 ]
+            batch_size = int(os_environ.get("BATCH_SIZE")) if "BATCH_SIZE" in os_environ else 64
+            epochs = json.loads(os_environ.get("EPOCHS")) if "EPOCHS" in os_environ else [ 200 ]  
+            freeze_layers = json.loads(os_environ.get("FREEZE_LAYERS")) if "FREEZE_LAYERS" in os_environ else [ "none" ]
+            metrics = json.loads(os_environ.get("METRICS")) if "METRICS" in os_environ else [ "acc" ]
+            checkpoint_monitor = os_environ.get("CHECKPOINT_MONITOR") if "CHECKPOINT_MONITOR" in os_environ else "val_acc"
+            early_stopping_monitor = json.loads(os_environ.get("EARLY_STOPPING_MONITOR")) if "EARLY_STOPPING_MONITOR" in os_environ else [ "val_loss" ]
+            class_image_minimum = int(os_environ.get("CLASS_IMAGE_MINIMUM")) if "CLASS_IMAGE_MINIMUM" in os_environ else 2
+            class_image_maximum = int(os_environ.get("CLASS_IMAGE_MAXIMUM")) if "CLASS_IMAGE_MAXIMUM" in os_environ else 0
+
+            print("?")
+
+
+        self.presets.update( { "image_augmentation" : image_augmentation } )
+        self.presets.update( { "reduce_lr_params" :  reduce_lr_params } )
+        self.presets.update( { "validation_split" : validation_split } )
+        self.presets.update( { "learning_rate" : learning_rate } )
+        self.presets.update( { "batch_size" : batch_size } )
+        self.presets.update( { "epochs" : epochs } )
+        self.presets.update( { "freeze_layers" : freeze_layers } )
+        self.presets.update( { "metrics" : metrics } )
+        self.presets.update( { "checkpoint_monitor" : checkpoint_monitor } )
+        self.presets.update( { "early_stopping_monitor" : early_stopping_monitor } )
+        self.presets.update( { "class_image_minimum" : class_image_minimum } )
+        self.presets.update( { "class_image_maximum" : class_image_maximum } )
+
 
     def get_preset(self, preset):
         if preset in self.presets:

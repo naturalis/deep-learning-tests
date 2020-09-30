@@ -120,13 +120,13 @@ if __name__ == "__main__":
     print(type(dataset.get_dataset()))
 
 
-
+    analysis.set_presets(os_environ=os.environ)
 
 
     exit(0)
 
 
-    analysis.set_presets(os.environ)
+    # analysis.set_presets(os_environ=os.environ)
 
 
     analysis.load_model()
