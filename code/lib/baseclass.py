@@ -1,7 +1,7 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 import os, json, csv
-import tensorflow as tf
+# import tensorflow as tf
 import pandas as pd
 import numpy as np
 from shutil import copyfile

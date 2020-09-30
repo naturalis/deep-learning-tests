@@ -1,9 +1,9 @@
 import os, sys, json, argparse
-import tensorflow as tf
+# import tensorflow as tf
 import numpy as np
 from datetime import datetime
 from sklearn.metrics import classification_report
-from lib import baseclass
+from lib import baseclass, dataset
 
 class ModelAnalysis(baseclass.BaseClass):
     test_generator = None
@@ -99,13 +99,11 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser() 
     parser.add_argument("--load_model",type=str)
-    args = parser.parse_args() 
+    args = parser.parse_args()
 
     analysis = ModelAnalysis()
 
     analysis.set_debug(os.environ["DEBUG"]=="1" if "DEBUG" in os.environ else False)
-    analysis.set_project(os.environ)
-    analysis.set_presets(os.environ)
 
     if args.load_model: 
         analysis.set_model_name(args.load_model)
@@ -113,6 +111,22 @@ if __name__ == "__main__":
         raise ValueError("need a model name (--load_model=<model name>)")
 
     analysis.set_model_folder()
+
+    dataset = dataset.DataSet()
+    dataset.set_model_path(analysis.get_model_path())
+    dataset.open_dataset()
+
+
+
+
+
+    exit(0)
+
+
+    analysis.set_project(os.environ)
+    analysis.set_presets(os.environ)
+
+
     analysis.load_model()
 
     analysis.set_class_image_minimum(analysis.get_preset("class_image_minimum"))
