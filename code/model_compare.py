@@ -240,9 +240,9 @@ class ModelCompare(baseclass.BaseClass):
                             if item["top"]==5:
                                 self.top_5.append(float(item["pct"]))
                     else:
-                        self.top_1.append("?")
-                        self.top_3.append("?")
-                        self.top_5.append("?")
+                        self.top_1.append(0)
+                        self.top_3.append(0)
+                        self.top_5.append(0)
 
                     self.accuracy_max = tmp["classification_report"]["accuracy"] \
                         if tmp["classification_report"]["accuracy"] > self.accuracy_max else self.accuracy_max
