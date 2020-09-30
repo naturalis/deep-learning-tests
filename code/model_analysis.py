@@ -116,18 +116,11 @@ if __name__ == "__main__":
     dataset = dataset.DataSet()
     dataset.set_dataset_path(analysis.get_model_folder())
     dataset.open_dataset()
-
-
-    analysis.set_presets(os_environ=os.environ)
-    # analysis.set_presets(dataset=dataset.get_dataset())
-
-    # analysis.set_presets(os_environ=os.environ)
-
+    dataset.get_dataset_value()
 
     analysis.load_model()
-
-    analysis.set_class_image_minimum(analysis.get_preset("class_image_minimum"))
-    analysis.set_class_image_maximum(analysis.get_preset("class_image_maximum"))
+    analysis.set_class_image_minimum(dataset.get_dataset_value("class_image_minimum"))
+    analysis.set_class_image_maximum(dataset.get_dataset_value("class_image_maximum"))
 
     analysis.read_class_list()
     analysis.read_image_list_file(image_col=2)

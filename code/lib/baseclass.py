@@ -331,38 +331,9 @@ class BaseClass():
             class_image_minimum = int(os_environ.get("CLASS_IMAGE_MINIMUM")) if "CLASS_IMAGE_MINIMUM" in os_environ else 2
             class_image_maximum = int(os_environ.get("CLASS_IMAGE_MAXIMUM")) if "CLASS_IMAGE_MAXIMUM" in os_environ else 0
 
+        # TODO
         if 'dataset' in kwargs:
             dataset = kwargs['dataset']
-
-            image_augmentation = dataset["training_settings"]["image_augmentation"]
-            reduce_lr_params = json.loads(os_environ.get("REDUCE_LR_PARAMS"))
-
-
-            # if 'IMAGE_AUGMENTATION' in os_environ:
-            #     image_augmentation = json.loads(os_environ.get("IMAGE_AUGMENTATION"))
-            # else:
-            #     image_augmentation = None
-
-            # if 'REDUCE_LR_PARAMS' in os_environ:
-            #     reduce_lr_params = json.loads(os_environ.get("REDUCE_LR_PARAMS"))
-            # else:
-            #     reduce_lr_params = self.default_reduce_lr_params
-
-            # validation_split = float(os_environ.get("VALIDATION_SPLIT")) if "VALIDATION_SPLIT" in os_environ else 0.2
-            # learning_rate = json.loads(os_environ.get("LEARNING_RATE")) if "LEARNING_RATE" in os_environ else [ 1e-4 ]
-            # batch_size = int(os_environ.get("BATCH_SIZE")) if "BATCH_SIZE" in os_environ else 64
-            # epochs = json.loads(os_environ.get("EPOCHS")) if "EPOCHS" in os_environ else [ 200 ]  
-            # freeze_layers = json.loads(os_environ.get("FREEZE_LAYERS")) if "FREEZE_LAYERS" in os_environ else [ "none" ]
-            # metrics = json.loads(os_environ.get("METRICS")) if "METRICS" in os_environ else [ "acc" ]
-            # checkpoint_monitor = os_environ.get("CHECKPOINT_MONITOR") if "CHECKPOINT_MONITOR" in os_environ else "val_acc"
-            # early_stopping_monitor = json.loads(os_environ.get("EARLY_STOPPING_MONITOR")) if "EARLY_STOPPING_MONITOR" in os_environ else [ "val_loss" ]
-            # class_image_minimum = int(os_environ.get("CLASS_IMAGE_MINIMUM")) if "CLASS_IMAGE_MINIMUM" in os_environ else 2
-            # class_image_maximum = int(os_environ.get("CLASS_IMAGE_MAXIMUM")) if "CLASS_IMAGE_MAXIMUM" in os_environ else 0
-
-
-
-
-
 
 
         self.presets.update( { "image_augmentation" : image_augmentation } )

@@ -38,7 +38,7 @@ class DataSet(baseclass.BaseClass):
             'CLASS_IMAGE_MAXIMUM'
         ]:
             if item in os_environ:
-                self.env_vars.append({ item :  os_environ.get(item) })
+                self.env_vars.append({ item : os_environ.get(item) })
 
     def update_model_state(self,model_state):
         self.model_state = model_state
@@ -65,6 +65,12 @@ class DataSet(baseclass.BaseClass):
 
     def get_dataset(self):
         return self.data_set
+
+    def get_dataset_value(self,key):
+        if key in self.data_set:
+            return self.data_set[key]
+        else
+            raise ValueError("unknown key: {}".format(key)) 
 
     def _make_dataset(self):
         self.data_set["project_name"] = self.model_trainer.project_name
