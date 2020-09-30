@@ -114,7 +114,7 @@ if __name__ == "__main__":
     analysis.set_model_folder()
 
     dataset = dataset.DataSet()
-    dataset.set_dataset_path(analysis.get_model_path())
+    dataset.set_dataset_path(analysis.get_model_folder())
     dataset.open_dataset()
 
 
