@@ -18,7 +18,7 @@ class ModelAnalysis(baseclass.BaseClass):
 
     def configure_generator(self):
         datagen = tf.keras.preprocessing.image.ImageDataGenerator(
-            # rescale=1./255,
+            rescale=1./255,
         )
 
         self.test_generator = datagen.flow_from_dataframe(
@@ -118,7 +118,7 @@ if __name__ == "__main__":
     dataset.open_dataset()
 
 
-    # analysis.set_presets(os_environ=os.environ)
+    analysis.set_presets(os_environ=os.environ)
     # analysis.set_presets(dataset=dataset.get_dataset())
 
     # analysis.set_presets(os_environ=os.environ)
