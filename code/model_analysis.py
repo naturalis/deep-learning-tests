@@ -104,6 +104,7 @@ if __name__ == "__main__":
     analysis = ModelAnalysis()
 
     analysis.set_debug(os.environ["DEBUG"]=="1" if "DEBUG" in os.environ else False)
+    analysis.set_project(os.environ)
 
     if args.load_model: 
         analysis.set_model_name(args.load_model)
@@ -123,7 +124,6 @@ if __name__ == "__main__":
     exit(0)
 
 
-    analysis.set_project(os.environ)
     analysis.set_presets(os.environ)
 
 
