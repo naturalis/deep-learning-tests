@@ -76,7 +76,7 @@ class BaseClass():
             os.chmod(logfile,0o777)
 
         self.logger = logclass.LogClass(self.__class__.__name__,logfile)
-        self.logger.info("TensorFlow v{}".format(tf.__version__))
+        # self.logger.info("TensorFlow v{}".format(tf.__version__))
         self.set_timestamp()
         # if self.debug:
         #     tf.get_logger().setLevel("DEBUG")
