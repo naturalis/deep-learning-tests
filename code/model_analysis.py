@@ -119,11 +119,7 @@ if __name__ == "__main__":
 
 
     analysis.set_presets(os_environ=os.environ)
-    analysis.set_presets(dataset=dataset.get_dataset())
-
-
-    exit(0)
-
+    # analysis.set_presets(dataset=dataset.get_dataset())
 
     # analysis.set_presets(os_environ=os.environ)
 
