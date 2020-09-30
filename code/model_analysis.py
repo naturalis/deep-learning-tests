@@ -117,6 +117,8 @@ if __name__ == "__main__":
     dataset.set_dataset_path(analysis.get_model_folder())
     dataset.open_dataset()
 
+    print(type(dataset.get_dataset()))
+
 
 
 
