@@ -182,11 +182,13 @@ class BaseClass():
         class_image_minimum = int(class_image_minimum)
         if class_image_minimum >= 2:
             self.class_image_minimum = class_image_minimum
+            self.logger.debug("class minimum set to {}".format(self.class_image_minimum))
         else:
             raise ValueError("class minimum must be equal to or greater than 2 ({})".format(class_image_minimum))
 
     def set_class_image_maximum(self,class_image_maximum):
         self.class_image_maximum = int(class_image_maximum)
+        self.logger.debug("class maximum set to {}".format(self.class_image_maximum))
 
     def read_class_list(self):
         if not os.path.isfile(self.class_list_file_model):
