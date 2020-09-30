@@ -118,7 +118,7 @@ if __name__ == "__main__":
     dataset.open_dataset()
 
 
-    analysis.set_presets(os_environ=os.environ)
+    # analysis.set_presets(os_environ=os.environ)
     # analysis.set_presets(dataset=dataset.get_dataset())
 
     # analysis.set_presets(os_environ=os.environ)
