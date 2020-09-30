@@ -1,5 +1,5 @@
 import os, sys, json, argparse
-# import tensorflow as tf
+import tensorflow as tf
 import numpy as np
 from datetime import datetime
 from sklearn.metrics import classification_report
