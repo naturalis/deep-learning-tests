@@ -69,7 +69,7 @@ class DataSet(baseclass.BaseClass):
     def get_dataset_value(self,key):
         if key in self.data_set:
             return self.data_set[key]
-        else
+        else:
             raise ValueError("unknown key: {}".format(key)) 
 
     def _make_dataset(self):
