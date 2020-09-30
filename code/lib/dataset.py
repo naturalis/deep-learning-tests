@@ -1,6 +1,6 @@
 import os, re, json
 from hashlib import md5
-# import tensorflow as tf
+import tensorflow as tf
 from lib import logclass
 from lib import baseclass
 
