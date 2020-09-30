@@ -274,6 +274,9 @@ class BaseClass():
         self.logger.info("dropped {} out of {} images due to image minimum of {}".format(before - after, before, self.class_image_minimum))
         self.logger.info("retained {} images in {} classes".format(self.traindf[self.COL_IMAGE].nunique(),self.traindf[self.COL_CLASS].nunique()))
 
+    def get_model_folder(self):
+        return self.model_folder
+
     def get_model_path(self):
         self.model_path = os.path.join(self.model_folder, "model.hdf5")
         return self.model_path

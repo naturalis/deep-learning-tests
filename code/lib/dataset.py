@@ -19,10 +19,10 @@ class DataSet(baseclass.BaseClass):
 
     def set_model_trainer(self,model_trainer):
         self.model_trainer = model_trainer
-        self.set_model_path(self.model_trainer.model_folder)
+        self.set_dataset_path(self.model_trainer.model_folder)
         self._set_model_summary()
 
-    def set_model_path(self,model_path):
+    def set_dataset_path(self,model_path):
         self.data_set_file = os.path.join(model_path, "dataset.json")
 
     def update_model_state(self,model_state):
