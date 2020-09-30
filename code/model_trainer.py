@@ -305,7 +305,7 @@ if __name__ == "__main__":
 
     trainer.set_debug(os.environ["DEBUG"]=="1" if "DEBUG" in os.environ else False)    
     trainer.set_project(os.environ)
-    trainer.set_presets(os.environ)
+    trainer.set_presets(os_environ=os.environ)
     trainer.set_class_image_minimum(trainer.get_preset("class_image_minimum"))
     trainer.set_class_image_maximum(trainer.get_preset("class_image_maximum"))
 

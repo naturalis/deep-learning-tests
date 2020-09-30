@@ -117,10 +117,9 @@ if __name__ == "__main__":
     dataset.set_dataset_path(analysis.get_model_folder())
     dataset.open_dataset()
 
-    print(type(dataset.get_dataset()))
-
 
     analysis.set_presets(os_environ=os.environ)
+    analysis.set_presets(dataset=dataset.get_dataset())
 
 
     exit(0)
