@@ -13,6 +13,7 @@ class DataSet(baseclass.BaseClass):
     model_retrain_note = None
     data_set = {}
     data_set_file = None
+    env_vars = []
 
     def __init__(self):
         super().__init__()
@@ -25,13 +26,23 @@ class DataSet(baseclass.BaseClass):
     def set_dataset_path(self,model_path):
         self.data_set_file = os.path.join(model_path, "dataset.json")
 
-    def update_model_state(self,model_state):
-        self.model_state = model_state
-        self.data_set["state"] = self.model_state
-
     def set_note(self,note):
         if not note is None:
             self.model_note = note
+
+    def set_environ(self,os_environ):
+        for item in [
+            'IMAGE_AUGMENTATION','REDUCE_LR_PARAMS','VALIDATION_SPLIT', \
+            'LEARNING_RATE','BATCH_SIZE','EPOCHS','FREEZE_LAYERS','METRICS', \
+            'CHECKPOINT_MONITOR', 'EARLY_STOPPING_MONITOR','CLASS_IMAGE_MINIMUM', \
+            'CLASS_IMAGE_MAXIMUM'
+        ]:
+            if item in os_environ:
+                self.env_vars.append({ item :  os_environ.get(item) })
+
+    def update_model_state(self,model_state):
+        self.model_state = model_state
+        self.data_set["state"] = self.model_state
 
     def ask_note(self,message="enter model note"):
         while not self.model_note:
@@ -110,6 +121,9 @@ class DataSet(baseclass.BaseClass):
             "optimizer" : opt,
             "callbacks" : calls
         }
+
+        self.data_set["env_vars"] = self.env_vars
+
 
         # to be saved
 

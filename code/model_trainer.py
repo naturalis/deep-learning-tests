@@ -303,6 +303,7 @@ if __name__ == "__main__":
     timer = utils.Timer()
     dataset = dataset.DataSet()
 
+    dataset.set_environ(os.environ)
     trainer.set_debug(os.environ["DEBUG"]=="1" if "DEBUG" in os.environ else False)    
     trainer.set_project(os.environ)
     trainer.set_presets(os_environ=os.environ)

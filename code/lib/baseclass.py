@@ -335,11 +335,7 @@ class BaseClass():
             dataset = kwargs['dataset']
 
             image_augmentation = dataset["training_settings"]["image_augmentation"]
-
-
-
-        print(image_augmentation)
-        return
+            reduce_lr_params = json.loads(os_environ.get("REDUCE_LR_PARAMS"))
 
 
             # if 'IMAGE_AUGMENTATION' in os_environ:
