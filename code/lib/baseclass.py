@@ -339,6 +339,7 @@ class BaseClass():
 
 
         print(image_augmentation)
+        return
 
 
             # if 'IMAGE_AUGMENTATION' in os_environ:
