@@ -116,7 +116,6 @@ if __name__ == "__main__":
     dataset = dataset.DataSet()
     dataset.set_dataset_path(analysis.get_model_folder())
     dataset.open_dataset()
-    dataset.get_dataset_value()
 
     analysis.load_model()
     analysis.set_class_image_minimum(dataset.get_dataset_value("class_image_minimum"))
