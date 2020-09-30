@@ -234,11 +234,11 @@ class ModelCompare(baseclass.BaseClass):
                     if "top_k" in tmp:
                         for item in tmp["top_k"]:
                             if item["top"]==1:
-                                self.top_1.append(item["pct"])
+                                self.top_1.append(float(item["pct"]))
                             if item["top"]==3:
-                                self.top_3.append(item["pct"])
+                                self.top_3.append(float(item["pct"]))
                             if item["top"]==5:
-                                self.top_5.append(item["pct"])
+                                self.top_5.append(float(item["pct"]))
                     else:
                         self.top_1.append("?")
                         self.top_3.append("?")
@@ -269,9 +269,9 @@ class ModelCompare(baseclass.BaseClass):
                 self.weighted_recall.append("")
                 self.weighted_f1.append("")
                 self.weighted_support.append("")
-                self.top_1.append("?")
-                self.top_3.append("?")
-                self.top_5.append("?")
+                self.top_1.append(0)
+                self.top_3.append(0)
+                self.top_5.append(0)
 
             if os.path.exists(model):
                 self.model_sizes.append(os.path.getsize(model))
