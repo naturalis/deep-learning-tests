@@ -1,5 +1,6 @@
 import json, csv
 import numpy as np
+from lib import baseclass
 
 # import os, sys, json, argparse
 # import tensorflow as tf
