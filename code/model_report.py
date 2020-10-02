@@ -1,4 +1,4 @@
-import json, csv, argparse
+import os, json, csv, argparse
 import numpy as np
 from lib import baseclass
 
