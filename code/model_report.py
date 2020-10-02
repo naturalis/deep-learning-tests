@@ -64,7 +64,7 @@ class ModelReport(baseclass.BaseClass):
             l = len(item["class"]) if len(item["class"]) > l else l
 
         s1 = "{: <"+str(l+2)+"}"
-        s2 = "{: >7}"
+        s2 = "{: >7}" 
         s3 = "{: >10}"
         s4 = "{: >10}"
         round_at = 5
@@ -81,7 +81,7 @@ class ModelReport(baseclass.BaseClass):
             s4.format("top 5"),
         )
 
-        print("-" * 82)
+        print("-" * (l+40))
 
         for item in self.classes:
             # print(item["class"],item["f1-score"],item["support"])
