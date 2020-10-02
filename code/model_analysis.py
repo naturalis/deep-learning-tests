@@ -117,12 +117,20 @@ class ModelAnalysis(baseclass.BaseClass):
 
     def save_analysis(self):
 
+        for this_class in self.class_tops:
+            this_class.update({
+                "class" : this_class["class"].astype(np.int32)
+                "top_1" : this_class["top_1"].astype(np.int32)
+                "top_3" : this_class["top_3"].astype(np.int32)
+                "top_5" : this_class["top_5"].astype(np.int32)
+            })
+
         f = open(self.get_analysis_path(), "w")
         f.write(json.dumps({
             "confusion_matrix" : self.cm_exportable,
             "classification_report" : self.cr_exportable,
             "top_k" : self.top_k,
-            # "top_k_per_class" : self.class_tops
+            "top_k_per_class" : self.class_tops
             }))
         f.close()
 
