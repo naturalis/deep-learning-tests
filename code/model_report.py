@@ -52,9 +52,9 @@ class ModelReport(baseclass.BaseClass):
                 for d in self.classes:
                     if int(val["class"])==d["key"]:
                         d.update({
-                            "top_1" : (val["top_1"] / d["support"]) * 100,
-                            "top_3" : (val["top_3"] / d["support"]) * 100,
-                            "top_5" : (val["top_5"] / d["support"]) * 100
+                            "top_1" : (val["top_1"] / d["support"]),
+                            "top_3" : (val["top_3"] / d["support"]),
+                            "top_5" : (val["top_5"] / d["support"])
                         })
                 
 
@@ -66,19 +66,19 @@ class ModelReport(baseclass.BaseClass):
         s1 = "{: <"+str(l+2)+"}"
         s2 = "{: >7}"
         s3 = "{: >10}"
-        s4 = "{: >7}%"
+        s4 = "{: >10}"
         round_at = 5
         round_at_pct = 1
 
         print(
             s1.format("class"),
             s2.format("support"),
-            s3.format("precision"),
-            s3.format("recall"),
             s3.format("f1-score"),
+            s3.format("precision"),
+            s3.format("recall / top 1"),
             # s4.format("top_1"),
-            s4.format("top_3"),
-            s4.format("top_5"),
+            s4.format("top 3"),
+            s4.format("top 5"),
         )
 
         print("-" * 82)
@@ -89,9 +89,9 @@ class ModelReport(baseclass.BaseClass):
                 s1.format(item["class"]),
                 # s2.format(item["input"]),
                 s2.format(item["support"]),
+                s3.format(round(item["f1-score"],round_at)),
                 s3.format(round(item["precision"],round_at)),
                 s3.format(round(item["recall"],round_at)),
-                s3.format(round(item["f1-score"],round_at)),
                 # s4.format(round(item["top_1"],round_at_pct)), # top1 is the same as recall
                 s4.format(round(item["top_3"],round_at_pct)),
                 s4.format(round(item["top_5"],round_at_pct)),
