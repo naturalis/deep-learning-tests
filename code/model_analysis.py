@@ -116,12 +116,17 @@ class ModelAnalysis(baseclass.BaseClass):
             self.logger.info("moved existing analysis file {} to {}".format(a,b))
 
     def save_analysis(self):
+
+        fir 
+        .astype(np.int32)
+
+
         f = open(self.get_analysis_path(), "w")
         f.write(json.dumps({
             "confusion_matrix" : self.cm_exportable,
             "classification_report" : self.cr_exportable,
             "top_k" : self.top_k,
-            "top_k_per_class" : self.class_tops
+            # "top_k_per_class" : self.class_tops
             }))
         f.close()
 
