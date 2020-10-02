@@ -65,22 +65,22 @@ class ModelAnalysis(baseclass.BaseClass):
               
         #  top k count per class
         for class_key in np.unique(self.test_generator.classes):
-            self.class_tops.append({"class" : class_key, "top_1" : 0, "top_3" : 0, "top_5" : 0 })
+            self.class_tops.append({"class" : int(class_key), "top_1" : 0, "top_3" : 0, "top_5" : 0 })
 
         for key, prediction in enumerate(Y_pred):
             this_class = [class_top for class_top in self.class_tops if class_top["class"] == self.test_generator.classes[key]]
             this_class = this_class[0]
 
-            top1 = np.argmax(prediction).astype(np.int32)
+            top1 = int(np.argmax(prediction))
 
             if self.test_generator.classes[key]==top1:
-                this_class.update({"class" : self.test_generator.classes[key], "top_1" : (this_class["top_1"] + 1)})
+                this_class.update({"class" : self.test_generator.classes[key], "top_1" : (this_class["top_1"]+1)})
 
             if self.test_generator.classes[key] in prediction.argsort()[-3:][::-1]:
-                this_class.update({"class" : self.test_generator.classes[key], "top_3" : (this_class["top_3"] + 1)})
+                this_class.update({"class" : self.test_generator.classes[key], "top_3" : (this_class["top_3"]+1)})
 
             if self.test_generator.classes[key] in prediction.argsort()[-5:][::-1]:
-                this_class.update({"class" : self.test_generator.classes[key], "top_5" : (this_class["top_5"] + 1)})
+                this_class.update({"class" : self.test_generator.classes[key], "top_5" : (this_class["top_5"]+1)})
 
 
     def print_analysis(self):
