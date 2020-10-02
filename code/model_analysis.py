@@ -117,10 +117,6 @@ class ModelAnalysis(baseclass.BaseClass):
 
     def save_analysis(self):
 
-        fir 
-        .astype(np.int32)
-
-
         f = open(self.get_analysis_path(), "w")
         f.write(json.dumps({
             "confusion_matrix" : self.cm_exportable,
