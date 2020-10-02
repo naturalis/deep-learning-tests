@@ -17,13 +17,13 @@ class ModelReport(baseclass.BaseClass):
         super().__init__()
 
     def read_classes(self):
-        with open("classes.json") as json_file:
+        with open(self.get_classes_path()) as json_file:
             data = json.load(json_file)
             for key,val in data.items():
                 # print(key,val)
                 self.classes.append({"key" : val, "class" : key})
 
-        with open("classes.csv") as csvfile:
+        with open(self.get_class_list_path()) as csvfile:
             spamreader = csv.reader(csvfile)
             for row in spamreader:
                 # print(row[0],row[1])
@@ -33,7 +33,7 @@ class ModelReport(baseclass.BaseClass):
 
 
     def read_analysis(self):
-        with open("analysis.json") as json_file:
+        with open(self.get_analysis_path()) as json_file:
             data = json.load(json_file)
             for key,val in data["classification_report"].items():
                 if (key.isnumeric()):
