@@ -76,10 +76,10 @@ class ModelAnalysis(baseclass.BaseClass):
             if self.test_generator.classes[key]==top1:
                 this_class.update({"class" : self.test_generator.classes[key], "top_1" : (this_class["top_1"] + 1)})
 
-            if self.test_generator.classes[key] in arr.argsort()[-3:][::-1]:
+            if self.test_generator.classes[key] in prediction.argsort()[-3:][::-1]:
                 this_class.update({"class" : self.test_generator.classes[key], "top_3" : (this_class["top_3"] + 1)})
 
-            if self.test_generator.classes[key] in arr.argsort()[-5:][::-1]:
+            if self.test_generator.classes[key] in prediction.argsort()[-5:][::-1]:
                 this_class.update({"class" : self.test_generator.classes[key], "top_5" : (this_class["top_5"] + 1)})
 
 
