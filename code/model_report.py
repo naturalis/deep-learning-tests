@@ -81,7 +81,7 @@ class ModelReport(baseclass.BaseClass):
             s4.format("top 5"),
         )
 
-        print("-" * (l+40))
+        print("-" * (l+58))
 
         for item in self.classes:
             # print(item["class"],item["f1-score"],item["support"])
