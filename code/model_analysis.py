@@ -92,15 +92,19 @@ class ModelAnalysis(baseclass.BaseClass):
             for cell in row:
                 print("{:>6d}".format(cell),end='')
             print(" ]")
+        print("")
 
         print("== classification report ==")
         print(self.cr)
+        print("")
 
         print("== top k analysis ==")
         print(self.top_k)
+        print("")
 
         print("== top k count per class  ==")
         print(self.class_tops)
+        print("")
 
 
     def backup_previous_analysis(self):
