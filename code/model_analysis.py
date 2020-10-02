@@ -71,7 +71,7 @@ class ModelAnalysis(baseclass.BaseClass):
             this_class = [class_top for class_top in self.class_tops if class_top["class"] == self.test_generator.classes[key]]
             this_class = this_class[0]
 
-            top1 = np.argmax(prediction)
+            top1 = np.argmax(prediction).astype(np.int32)
 
             if self.test_generator.classes[key]==top1:
                 this_class.update({"class" : self.test_generator.classes[key], "top_1" : (this_class["top_1"] + 1)})
@@ -117,13 +117,13 @@ class ModelAnalysis(baseclass.BaseClass):
 
     def save_analysis(self):
 
-        for this_class in self.class_tops:
-            this_class.update({
-                "class" : this_class["class"].astype(np.int32),
-                "top_1" : this_class["top_1"],
-                "top_3" : this_class["top_3"],
-                "top_5" : this_class["top_5"],
-            })
+        # for this_class in self.class_tops:
+        #     this_class.update({
+        #         "class" : this_class["class"].astype(np.int32)
+        #         "top_1" : this_class["top_1"].astype(np.int32)
+        #         "top_3" : this_class["top_3"].astype(np.int32)
+        #         "top_5" : this_class["top_5"].astype(np.int32)
+        #     })
 
         f = open(self.get_analysis_path(), "w")
         f.write(json.dumps({
