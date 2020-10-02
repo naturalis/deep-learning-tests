@@ -61,8 +61,8 @@ class ModelAnalysis(baseclass.BaseClass):
             self.top_k.append({"top" : n, "pct" : round((true_count / all_count) * 100,4) })
 
 
-        print(self.test_generator.classes)
-        print(Y_pred)
+        print(self.test_generator.classes[0])
+        print(Y_pred[0])
 
 
     def print_analysis(self):
