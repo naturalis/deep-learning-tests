@@ -61,6 +61,10 @@ class ModelAnalysis(baseclass.BaseClass):
             self.top_k.append({"top" : n, "pct" : round((true_count / all_count) * 100,4) })
 
 
+        print(self.test_generator.classes)
+        print(Y_pred)
+
+
     def print_analysis(self):
         print("== confusion matrix ==")
 
