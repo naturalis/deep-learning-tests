@@ -75,7 +75,7 @@ class ModelReport(baseclass.BaseClass):
             s2.format("support"),
             s3.format("f1-score"),
             s3.format("precision"),
-            s3.format("recall / top 1"),
+            s3.format("recall"),
             # s4.format("top_1"),
             s4.format("top 3"),
             s4.format("top 5"),
