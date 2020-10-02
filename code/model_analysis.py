@@ -119,10 +119,10 @@ class ModelAnalysis(baseclass.BaseClass):
 
         for this_class in self.class_tops:
             this_class.update({
-                "class" : this_class["class"].astype(np.int32)
-                "top_1" : this_class["top_1"].astype(np.int32)
-                "top_3" : this_class["top_3"].astype(np.int32)
-                "top_5" : this_class["top_5"].astype(np.int32)
+                "class" : this_class["class"].astype(np.int32),
+                "top_1" : this_class["top_1"].astype(np.int32),
+                "top_3" : this_class["top_3"].astype(np.int32),
+                "top_5" : this_class["top_5"].astype(np.int32),
             })
 
         f = open(self.get_analysis_path(), "w")
