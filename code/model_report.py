@@ -63,7 +63,7 @@ class ModelReport(baseclass.BaseClass):
         for item in self.classes:
             l = len(item["class"]) if len(item["class"]) > l else l
 
-        s1 = "{: <"+str(l+2)+"}"
+        s1 = "{: <"+str(l)+"}"
         s2 = "{: >7}" 
         s3 = "{: >10}"
         s4 = "{: >10}"
