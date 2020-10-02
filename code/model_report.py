@@ -93,8 +93,8 @@ class ModelReport(baseclass.BaseClass):
                 s3.format(round(item["precision"],round_at)),
                 s3.format(round(item["recall"],round_at)),
                 # s4.format(round(item["top_1"],round_at_pct)), # top1 is the same as recall
-                s4.format(round(item["top_3"],round_at_pct)),
-                s4.format(round(item["top_5"],round_at_pct)),
+                s4.format(round(item["top_3"],round_at)),
+                s4.format(round(item["top_5"],round_at)),
             )
 
 
