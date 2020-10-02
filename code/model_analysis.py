@@ -12,6 +12,7 @@ class ModelAnalysis(baseclass.BaseClass):
     cm_exportable = []
     cp_exportable = None
     top_k = []
+    class_tops=[]
 
     def __init__(self):
         super().__init__()
@@ -51,8 +52,9 @@ class ModelAnalysis(baseclass.BaseClass):
         self.cr = classification_report(self.test_generator.classes, y_pred)
         self.cr_exportable = classification_report(self.test_generator.classes, y_pred,output_dict=True)
 
-        #  top k percentage
-        for n in [1,3,5,10]:
+
+        #  top k percentage overall
+        for n in [1,3,5]:
             top_k = tf.math.in_top_k(self.test_generator.classes, Y_pred, n, "top_" + str(n))
 
             true_count = top_k.numpy()[np.where(top_k.numpy()==True)].size
@@ -60,9 +62,25 @@ class ModelAnalysis(baseclass.BaseClass):
 
             self.top_k.append({"top" : n, "pct" : round((true_count / all_count) * 100,4) })
 
+              
+        #  top k count per class
+        for class_key in np.unique(self.test_generator.classes):
+            self.class_tops.append({"class" : class_key, "top_1" : 0, "top_3" : 0, "top_5" : 0 })
 
-        print(self.test_generator.classes[0])
-        print(Y_pred[0])
+        for key, prediction in enumerate(Y_pred):
+            this_class = [class_top for class_top in self.class_tops if class_top["class"] == self.test_generator.classes[key]]
+            this_class = this_class[0]
+
+            top1 = np.argmax(prediction)
+
+            if self.test_generator.classes[key]==top1:
+                this_class.update({"class" : self.test_generator.classes[key], "top_1" : (this_class["top_1"] + 1)})
+
+            if self.test_generator.classes[key] in arr.argsort()[-3:][::-1]:
+                this_class.update({"class" : self.test_generator.classes[key], "top_3" : (this_class["top_3"] + 1)})
+
+            if self.test_generator.classes[key] in arr.argsort()[-5:][::-1]:
+                this_class.update({"class" : self.test_generator.classes[key], "top_5" : (this_class["top_5"] + 1)})
 
 
     def print_analysis(self):
@@ -81,6 +99,10 @@ class ModelAnalysis(baseclass.BaseClass):
         print("== top k analysis ==")
         print(self.top_k)
 
+        print("== top k count per class  ==")
+        print(self.class_tops)
+
+
     def backup_previous_analysis(self):
         if os.path.exists(self.get_analysis_path()):
             now = datetime.now()
@@ -94,7 +116,8 @@ class ModelAnalysis(baseclass.BaseClass):
         f.write(json.dumps({
             "confusion_matrix" : self.cm_exportable,
             "classification_report" : self.cr_exportable,
-            "top_k" : self.top_k
+            "top_k" : self.top_k,
+            "top_k_per_class" : self.class_tops
             }))
         f.close()
 
