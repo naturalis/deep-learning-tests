@@ -13,6 +13,7 @@
         private $datasetFile = "dataset.json";
         private $analysisFile = "analysis.json";
         private $classesFile = "classes.json";
+        private $classesListFile = "classes.csv";
         private $modelFile = "model.hdf5";
 
         public function __init()
@@ -72,6 +73,15 @@
 
         public function getClasses()
         {
+            if (($handle = fopen(implode("/",[$this->getProjectRoot(),"models",$this->model,$this->classesListFile]), "r")) !== FALSE)
+            {
+                while (($data = fgetcsv($handle, 1000, ",")) !== FALSE)
+                {
+                    print_r($data);
+                }
+                fclose($handle);
+            }
+
             return json_decode(file_get_contents(implode("/",[$this->getProjectRoot(),"models",$this->model,$this->classesFile])),true);
         }
 
