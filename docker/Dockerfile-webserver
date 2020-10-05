@@ -1,0 +1,6 @@
+FROM php:7.2.1-apache
+MAINTAINER maarten.schermer@naturalis.nl
+
+RUN mkdir -p /app
+COPY ./webserver /app
+WORKDIR /app

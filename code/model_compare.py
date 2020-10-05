@@ -84,13 +84,14 @@ class ModelCompare(baseclass.BaseClass):
             folders.append(entry.name)
 
         for folder in sorted(folders):
+
             self.set_model_name(folder)
             self.set_model_folder()
 
-            analysis = self.get_analysis_path() # os.path.join(self.models_folder, folder, "analysis.json")
-            classes = self.get_classes_path()   # os.path.join(self.models_folder, folder, "classes.json")
-            dataset = self.get_dataset_path() # os.path.join(self.models_folder, folder, "dataset.json")
-            model = self.get_model_path() # os.path.join(self.models_folder, folder, "model.hdf5")
+            analysis = self.get_analysis_path()
+            classes = self.get_classes_path()
+            dataset = self.get_dataset_path()
+            model = self.get_model_path()
 
             if not os.path.exists(dataset):
                 self.broken_models.append(folder)
