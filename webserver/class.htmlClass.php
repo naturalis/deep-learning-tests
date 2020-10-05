@@ -42,7 +42,7 @@ EOT;
 
         function table($t,$id=null)
         {
-            $b[] = "<table id=$id>";
+            $b[] = "<table id='$id'>";
             foreach ($t as $row)
             {
                 $b[] = "<tr>";

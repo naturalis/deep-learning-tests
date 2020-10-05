@@ -32,4 +32,4 @@
         }  
     }
 
-    echo $html->table($t);
+    echo $html->table($t,"confusion_matrix");
