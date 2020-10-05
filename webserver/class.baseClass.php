@@ -88,7 +88,7 @@
                 $this->models,
                 function($a,$b) use ($sort)
                 {
-                    return $a[$sort] > $b[$sort];
+                    return $a[$sort] < $b[$sort];
                 });
             return $this->models;
         }
