@@ -26,7 +26,7 @@
 
     $t=[];
 
-    $t["a"][] = "";
+    $t["h"][] = "";
     foreach ($m as $cKey => $col)
     {
         $key = array_search($cKey, array_column($classes, "key"));
