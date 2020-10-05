@@ -40,3 +40,13 @@ services:
       - /data/maarten.schermer/data:/data
       - /data/maarten.schermer/deep-learning-tests/code:/code
       - /data/maarten.schermer/api-log/:/log
+
+  webserver:
+    image: mds-webserver:latest
+    ports:
+      - "8091:80"
+    env_file:
+      - .env
+    logging: *default-logging
+    volumes:
+      - /data/maarten.schermer/data:/data
