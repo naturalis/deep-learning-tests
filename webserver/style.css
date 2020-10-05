@@ -3,7 +3,13 @@
     width: 30px;
 }
 
-#confusion_matrix tr:first-child td, #confusion_matrix tr td:first-child {
+#confusion_matrix tr:first-child td {
     font-size: 0.8em;
     vertical-align: bottom;
+}
+
+#confusion_matrix tr td:first-child {
+    font-size: 0.8em;
+    width: 150px;
+    text-align: right;
 }
