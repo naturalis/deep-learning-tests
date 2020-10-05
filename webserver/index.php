@@ -22,7 +22,7 @@
     foreach ($base->getModels("accuracy","desc") as $model)
     {
         $l[]=
-            vsprintf("<a href=\"model.php?id=%s\">%s</a>; acc: %s; %s classes (of %s; %s...%s images p/class); (%s) [%s]",
+            vsprintf("<a href=\"model.php?id=%s\">%s</a>; acc: %s; %c classes (of %c; %c...%c images p/class); (%s)",
                 [
                     $model["model"],
                     $model["model"],
