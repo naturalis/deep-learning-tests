@@ -22,17 +22,17 @@
     foreach ($base->getModels() as $model)
     {
         $l[]=
-            vsprintf("%s %s %s %s %s %s %s %s",
+            vsprintf("%s (%s); %s classes (of %s; %s...%s images p/class); accuracy: %s; (%s)",
                 [
-                    $model["model"],
                     // $model["dataset"]["state"]
+                    $model["model"],
                     $model["dataset"]["created"],
-                    $model["dataset"]["model_note"],
                     $model["dataset"]["class_count"],
                     $model["dataset"]["class_count_before_maximum"],
                     $model["dataset"]["class_image_minimum"],
                     $model["dataset"]["class_image_maximum"],
                     $model["analysis"]["classification_report"]["accuracy"],
+                    $model["dataset"]["model_note"],
                 ]
             );
 
