@@ -93,7 +93,7 @@ class ModelCompare(baseclass.BaseClass):
                 self.broken_models.append(folder)
                 continue
 
-            this_model = []
+            this_model = {}
 
             with open(dataset) as json_file:
                 tmp = json.load(json_file)
