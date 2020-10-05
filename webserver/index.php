@@ -23,7 +23,7 @@
     {
         $l[]=
             vsprintf("%s",
-                $model["model"],
+                $model["model"]
                 // $model["dataset"]["created"],
                 // $model["dataset"]["model_note"],
                 // $model["dataset"]["class_count"],
