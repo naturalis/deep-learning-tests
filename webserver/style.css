@@ -5,6 +5,7 @@
 
 #confusion_matrix tr:first-child td {
     font-size: 0.8em;
+    vertical-align: bottom;
 }
 
  
