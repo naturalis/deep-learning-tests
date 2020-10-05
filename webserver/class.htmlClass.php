@@ -23,5 +23,16 @@ EOT;
             return "<h2>$c</h2>";
         }
 
+        function list($l)
+        {
+            $b[] = "<ul>";
+            foreach ($l as $val)
+            {
+                $b[] = "<li>$val</li>";
+            }
+            $b[] = "</ul>";
+
+            return implode("\n", $b);
+        }
 
     }

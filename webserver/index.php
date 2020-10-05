@@ -13,6 +13,7 @@
     echo $html->header();
 
     echo $html->h1($base->getProjectName());
-    echo $html->h2($base->getProjectRoot() . "(" . $base->getImagesRoot() . ")" );
+    echo $html->h2("project root: " . $base->getProjectRoot());
+    echo $html->h2("image root: " . $base->getImagesRoot());
 
-    print_r($base->getModels());
+    echo $html->list($base->getModels());
