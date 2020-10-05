@@ -10,6 +10,7 @@ class ModelCompare(baseclass.BaseClass):
     models = []
     broken_models = []
 
+    name_length_max = 0
     accuracy_max = 0
     macro_precision_max = 0
     macro_recall_max = 0
@@ -100,6 +101,8 @@ class ModelCompare(baseclass.BaseClass):
                 this_model["name"] = tmp["model_name"]
                 this_model["date"] = tmp["created"]
                 this_model["state"] = "?" if not "state" in tmp else tmp["state"]
+
+                self.name_length_max = len(tmp["model_name"]) if len(tmp["model_name"]) > self.name_length_max else self.name_length_max
 
                 if "model_retrain_note" in tmp:
                     this_model["note"] = "{} / {}".format(tmp["model_note"],tmp["model_retrain_note"])
@@ -193,7 +196,7 @@ class ModelCompare(baseclass.BaseClass):
         
         per_line = 5
 
-        lines = math.ceil(len(self.names) / per_line)
+        lines = self.name_length_max / per_line
 
         for i in range(lines):
 
