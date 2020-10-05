@@ -61,7 +61,7 @@ $( document ).ready(function()
         var a = $('td[data-col="'+c+'"][data-row="h"]').html();
         var b = $('td[data-row="'+r+'"][data-col="h"]').html();
 
-        $(this).title(a + "\\" + b);
+        $(this).attr("title",a + "\\" + b);
         console.log(a + "\\" + b);
 
     });
