@@ -56,10 +56,17 @@ $( document ).ready(function()
 {
     $("#confusion_matrix tr td").mouseover(function()
     {
+
         var r = $(this).attr('data-row');
         var c = $(this).attr('data-col');
         var a = $('td[data-col="'+c+'"][data-row="h"]').html();
         var b = $('td[data-row="'+r+'"][data-col="h"]').html();
+
+        $('td[data-col="'+c+'"]').each(function()
+        {
+            console.log($(this).html());
+        })
+
 
         $(this).attr("title",a + "\n" + b + "\n" + $(this).html());
         // console.log(a + "\\" + b);
