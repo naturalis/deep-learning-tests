@@ -9,6 +9,7 @@
         private $modelList;
         private $models;
         private $model;
+        private $classes;
 
         private $datasetFile = "dataset.json";
         private $analysisFile = "analysis.json";
@@ -73,19 +74,23 @@
 
         public function getClasses()
         {
-            $c = [];
-
             if (($handle = fopen(implode("/",[$this->getProjectRoot(),"models",$this->model,$this->classesListFile]), "r")) !== FALSE)
             {
                 while (($row = fgetcsv($handle, 1000, ",")) !== FALSE)
                 {
-                    // $this->classes[] = [ "name" => $row[0], "key" => $row[1] ];
-                    $this->classes[] = { "name" : $row[0], "key" : $row[1] };
+                     $this->classes[] = [ "support" => $row[1], "name" => $row[0] ];
                 }
                 fclose($handle);
             }
 
-            return json_decode(file_get_contents(implode("/",[$this->getProjectRoot(),"models",$this->model,$this->classesFile])),true);
+            $c = json_decode(file_get_contents(implode("/",[$this->getProjectRoot(),"models",$this->model,$this->classesFile])),true);
+print_r($c);
+            foreach ($c as $val)
+            {
+
+            }
+
+            return $this->classes
 
         }
 
