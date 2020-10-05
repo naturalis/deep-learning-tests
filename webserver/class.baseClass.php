@@ -94,7 +94,7 @@
                             0 :
                             ($order=="asc" ?
                                 ($a[$sort] > $b[$sort]))
-                            : ($a[$sort] < $b[$sort])));
+                            : ($a[$sort] < $b[$sort]));
                 });
 
             return $this->models;
