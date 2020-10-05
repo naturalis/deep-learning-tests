@@ -86,10 +86,10 @@
         {
             usort(
                 $this->models,
-                function($a,$b) use ($sort)
+                function($a,$b) use ($sort,$order)
                 {
                     return
-                        $a[$sort] == $b[$sort] ? 0 : ($a[$sort] > $b[$sort]);
+                        $a[$sort] == ($b[$sort] ? 0 : ($a[$sort] > $b[$sort])) * ($order=="asc" ? 1 : -1);
 
 
                 });
