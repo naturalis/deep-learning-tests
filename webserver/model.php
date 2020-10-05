@@ -17,6 +17,6 @@
     echo $html->h2("project root: " . $base->getProjectRoot());
     echo $html->h2("model: " . $base->getModel());
 
-    print_r($this->getModelSize());
-    print_r($this->getDataset());
-    print_r($this->getAnalysis());
+    print_r($base->getModelSize());
+    print_r($base->getDataset());
+    print_r($base->getAnalysis());
