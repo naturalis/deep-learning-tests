@@ -88,9 +88,9 @@ class ModelCompare(baseclass.BaseClass):
             self.set_model_folder()
 
             analysis = self.get_analysis_path() # os.path.join(self.models_folder, folder, "analysis.json")
-            classes = os.path.join(self.models_folder, folder, "classes.json")
-            dataset = os.path.join(self.models_folder, folder, "dataset.json")
-            model = os.path.join(self.models_folder, folder, "model.hdf5")
+            classes = self.get_classes_path()   # os.path.join(self.models_folder, folder, "classes.json")
+            dataset = self.get_dataset_path() # os.path.join(self.models_folder, folder, "dataset.json")
+            model = self.get_model_path() # os.path.join(self.models_folder, folder, "model.hdf5")
 
             if not os.path.exists(dataset):
                 self.broken_models.append(folder)

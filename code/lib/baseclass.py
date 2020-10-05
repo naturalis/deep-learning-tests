@@ -302,6 +302,10 @@ class BaseClass():
         self.class_list_file_csv = os.path.join(self.project_root, "lists", "classes.csv")
         return self.class_list_file_csv
 
+    def get_dataset_path(self):
+        self.dataset_path = os.path.join(self.model_folder, "dataset.json")
+        return self.dataset_path
+
     def load_model(self):
         self.model = tf.keras.models.load_model(self.get_model_path(),compile=False)
         self.logger.info("loaded model {}".format(self.get_model_path()))
