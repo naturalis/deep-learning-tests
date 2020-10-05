@@ -28,6 +28,7 @@
     foreach ($m as $cKey => $col)
     {
         $key = array_search($cKey, array_column($classes, "key"));
+        $t[$cKey][-1] = $classes[$key]["name"];
 
         foreach ($col as $rKey => $row)
         {
