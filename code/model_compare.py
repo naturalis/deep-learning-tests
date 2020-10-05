@@ -233,10 +233,6 @@ class ModelCompare(baseclass.BaseClass):
                         pass
                 print(index.format("" if x > 0 else "note: ") + s)
 
-            continue
-
-
-
             print(index.format("size: ") + \
                 general.format(*map(lambda x : x if x =="-" else str(math.ceil(x/1e6)) + "MB",[x["size"] for x in batch_models])))
             print(index.format("classes: ") + general.format(*[x["classes"] for x in batch_models]))
