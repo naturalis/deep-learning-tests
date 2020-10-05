@@ -7,6 +7,7 @@
     $base->setProjectRoot(getenv('PROJECT_ROOT'));
     $base->setProjectName(getenv('PROJECT_NAME'));
     $base->setImagesRoot(getenv('IMAGES_ROOT'));
+    $base->setModels();
 
     $html = new HtmlClass;
 
