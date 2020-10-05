@@ -12,9 +12,7 @@
 
     echo $html->header();
 
-
-    echo $base->getProjectName() . "<br />";
-    echo $base->getProjectRoot() . "<br />";
-    echo $base->getImagesRoot() . "<br />";
+    echo $html->h1($base->getProjectName());
+    echo $html->h2($base->getProjectRoot() . "(" . $base->getImagesRoot() . ")" );
 
     print_r($base->getModels());
