@@ -42,7 +42,7 @@ EOT;
 
         function table($t,$id=null)
         {
-            $b[] = "<table id='$id'>";
+            $b[] = "<table id='$id'>\n";
             foreach ($t as $row)
             {
                 $b[] = "<tr>";
@@ -51,9 +51,9 @@ EOT;
                 {
                     $b[] = "<td>$cell</td>";
                 }
-                $b[] = "</tr>";
+                $b[] = "</tr>\n";
             }
-            $b[] = "</table>";
+            $b[] = "</table>\n";
 
             return implode("\n", $b) . "\n";
         }

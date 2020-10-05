@@ -84,7 +84,7 @@
             }
 
             $c = json_decode(file_get_contents(implode("/",[$this->getProjectRoot(),"models",$this->model,$this->classesFile])),true);
-print_r($c);
+
             foreach ($c as $class => $val)
             {
                 $key = array_search($class, array_column($this->classes, "name"));
