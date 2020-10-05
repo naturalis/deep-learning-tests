@@ -42,7 +42,7 @@
 
         public function getModels()
         {
-            return scandir(implode("/",[$this->getProjectRoot(),"models"]));
+            return array_filter(scandir(implode("/",[$this->getProjectRoot(),"models"])),function($a){ return !in_array($a,[".",".."]);});
         }
 
 
