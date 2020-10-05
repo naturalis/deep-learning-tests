@@ -62,13 +62,14 @@ $( document ).ready(function()
         var a = $('td[data-col="'+c+'"][data-row="h"]').html();
         var b = $('td[data-row="'+r+'"][data-col="h"]').html();
 
+        var sum = 0;
         $('td[data-col="'+c+'"]').each(function()
         {
-            console.log($(this).html());
+            sum += $(this).html();
         })
 
 
-        $(this).attr("title",a + "\n" + b + "\n" + $(this).html());
+        $(this).attr("title",a + "\n" + b + "\n" + $(this).html() + " ("+ sum +")");
         // console.log(a + "\\" + b);
 
         $('#confusion_matrix tr td').removeClass("highlight");
