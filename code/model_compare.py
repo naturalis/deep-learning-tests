@@ -193,7 +193,7 @@ class ModelCompare(baseclass.BaseClass):
         
         per_line = 5
 
-        lines = math.ceil(self.models / per_line)
+        lines = math.ceil(len(self.models) / per_line)
 
         for i in range(lines):
 
