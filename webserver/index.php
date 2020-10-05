@@ -18,3 +18,6 @@
     echo $html->h2("image root: " . $base->getImagesRoot());
     echo $html->p("available models:");
     echo $html->list($base->getModels());
+
+
+    print_r($base->getModels());
