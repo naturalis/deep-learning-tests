@@ -89,8 +89,10 @@
                 $this->models,
                 function($a,$b) use ($sort,$order)
                 {
+
+
                     return
-                        $a[$sort] == ($b[$sort] ? 0 : ($a[$sort] > $b[$sort])) * ($order=="asc" ? 1 : -1);
+                        $a[$sort] == ($b[$sort] ? 0 : ($a[$sort] > $b[$sort]));
 
 
                 });
