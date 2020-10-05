@@ -10,6 +10,6 @@
 
 #confusion_matrix tr td:first-child {
     font-size: 0.8em;
-    width: 150px;
     text-align: right;
+    white-space: nowrap;
 }
