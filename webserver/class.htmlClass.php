@@ -43,7 +43,7 @@ EOT;
         function table($t)
         {
             $b[] = "<table>";
-            foreach ($l as $row)
+            foreach ($t as $row)
             {
                 $b[] = "<tr>";
 
