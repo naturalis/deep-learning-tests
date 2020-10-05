@@ -73,16 +73,20 @@
 
         public function getClasses()
         {
+            $c = [];
+
             if (($handle = fopen(implode("/",[$this->getProjectRoot(),"models",$this->model,$this->classesListFile]), "r")) !== FALSE)
             {
-                while (($data = fgetcsv($handle, 1000, ",")) !== FALSE)
+                while (($row = fgetcsv($handle, 1000, ",")) !== FALSE)
                 {
-                    print_r($data);
+                    // $this->classes[] = [ "name" => $row[0], "key" => $row[1] ];
+                    $this->classes[] = { "name" : $row[0], "key" : $row[1] };
                 }
                 fclose($handle);
             }
 
             return json_decode(file_get_contents(implode("/",[$this->getProjectRoot(),"models",$this->model,$this->classesFile])),true);
+
         }
 
         public function getModelSize()
