@@ -23,6 +23,11 @@ EOT;
             return "<h2>$c</h2>";
         }
 
+        function p($c)
+        {
+            return "<p>$c</p>";
+        }
+
         function list($l)
         {
             $b[] = "<ul>";

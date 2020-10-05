@@ -15,5 +15,5 @@
     echo $html->h1($base->getProjectName());
     echo $html->h2("project root: " . $base->getProjectRoot());
     echo $html->h2("image root: " . $base->getImagesRoot());
-
+    echo $html->p("available models:");
     echo $html->list($base->getModels());
