@@ -78,6 +78,7 @@
                     "size" => $this->getModelSize(),
                     "dataset" => $this->getDataset(),
                     "analysis" => $this->getAnalysis(),
+                    "accuracy" => $this->getAnalysis()["classification_report"]["accuracy"]
                 ];
             }
         }
