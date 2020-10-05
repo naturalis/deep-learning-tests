@@ -45,13 +45,13 @@ EOT;
         function table($t,$id=null)
         {
             $b[] = "<table id='$id'>";
-            foreach ($t as $row)
+            foreach ($t as $rKey => $row)
             {
                 $b[] = "<tr>";
 
-                foreach ($row as $cell)
+                foreach ($row as $cKey => $cell)
                 {
-                    $b[] = "<td>$cell</td>";
+                    $b[] = "<td data-row='$rKey' data-col='$cKey'>$cell</td>";
                 }
                 $b[] = "</tr>";
             }

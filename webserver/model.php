@@ -56,7 +56,7 @@ $( document ).ready(function()
 {
     $("#confusion_matrix tr td").mouseover(function()
     {
-        console.log($(this).html());
+        // console.log($(this).html());
     });
 });
 </script>
