@@ -7,8 +7,10 @@
         {
             return <<< EOT
 <html>
-<link rel="stylesheet" type="text/css" href="style.css" >
 <head>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script type="text/javascript" src="jquery-3.5.1.min.js"></script>
+</head>
 <body>
 EOT;
         }
