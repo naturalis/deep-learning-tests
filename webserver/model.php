@@ -21,8 +21,20 @@
     $dataset = $base->getDataset();
     $analysis = $base->getAnalysis();
 
-
     $m = $analysis["confusion_matrix"];
+
+    $t=[];
+    foreach ($m as $cKey => $col)
+    {
+        foreach ($col as $rKey => $row)
+        {
+            $t[$cKey][$rKey] = $m[$rKey][$cKey];
+        }  
+    }
+
+    echo $html->table($t);
+
+
 
     echo "<pre>";
     foreach ($m as $cKey => $col)

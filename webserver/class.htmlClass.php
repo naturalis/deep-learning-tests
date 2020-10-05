@@ -40,4 +40,22 @@ EOT;
             return implode("\n", $b) . "\n";
         }
 
+        function table($t)
+        {
+            $b[] = "<table>";
+            foreach ($l as $row)
+            {
+                $b[] = "<tr>";
+
+                foreach ($row as $cell)
+                {
+                    $b[] = "<td>$cell</td>";
+                }
+                $b[] = "</tr>";
+            }
+            $b[] = "</table>";
+
+            return implode("\n", $b) . "\n";
+        }
+
     }
