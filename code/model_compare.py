@@ -216,11 +216,9 @@ class ModelCompare(baseclass.BaseClass):
             print(index.format("date: ")  + general.format(*[x["date"][0:19] for x in batch_models]))
             print(index.format("state: ") + general.format(*[x["state"] for x in batch_models]))
 
-            continue
-
             notes = []
             max_l = 0
-            for k,v in enumerate(batch_models["note"]):
+            for k,v in enumerate([x["name"] for x in batch_models]):
                 t = textwrap.wrap(v.strip(),28,subsequent_indent="")
                 notes.append(t)
                 max_l = len(t) if len(t) > max_l else max_l
@@ -234,6 +232,8 @@ class ModelCompare(baseclass.BaseClass):
                         s += "{:<30}".format("")
                         pass
                 print(index.format("" if x > 0 else "note: ") + s)
+
+            continue
 
             print(index.format("size: ") + general.format(*map(lambda x : x if x =="-" else str(math.ceil(x/1e6)) + "MB",batch_models["size"])))
             print(index.format("classes: ") + general.format(*batch_models["classes"]))
