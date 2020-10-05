@@ -12,6 +12,7 @@
 
         private $datasetFile = "dataset.json";
         private $analysisFile = "analysis.json";
+        private $classesFile = "classes.json";
         private $modelFile = "model.hdf5";
 
         public function __init()
@@ -63,9 +64,15 @@
             return json_decode(file_get_contents(implode("/",[$this->getProjectRoot(),"models",$this->model,$this->datasetFile])),true);
             
         }
+
         public function getAnalysis()
         {
             return json_decode(file_get_contents(implode("/",[$this->getProjectRoot(),"models",$this->model,$this->analysisFile])),true);
+        }
+
+        public function getClasses()
+        {
+            return json_decode(file_get_contents(implode("/",[$this->getProjectRoot(),"models",$this->model,$this->classesFile])),true);
         }
 
         public function getModelSize()

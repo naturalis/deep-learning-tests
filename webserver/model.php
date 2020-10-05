@@ -20,6 +20,7 @@
     $size = $base->getModelSize();
     $dataset = $base->getDataset();
     $analysis = $base->getAnalysis();
+    $classes = $base->getClasses();
 
     $m = $analysis["confusion_matrix"];
 
@@ -33,3 +34,6 @@
     }
 
     echo $html->table($t,"confusion_matrix");
+
+    echo "<pre>";
+    print_r($classes);
