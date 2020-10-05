@@ -50,4 +50,4 @@ services:
     logging: *default-logging
     volumes:
       - /data/maarten.schermer/data:/data
-      - ../webserver:/webserver
+      - ../webserver:/var/www/html
