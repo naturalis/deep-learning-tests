@@ -207,7 +207,7 @@ class ModelCompare(baseclass.BaseClass):
 
             general = ""
 
-            for x in range(len(batch_models["name"])):
+            for x in range(len(batch_models)):
                 general += "{:<30}"
 
             index = "{:>12}"
