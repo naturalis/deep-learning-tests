@@ -48,4 +48,4 @@
 
 
     $base = new BaseClass;
-    echo $base->getProjectName();
+    echo $base->getProjectName() . "?";
