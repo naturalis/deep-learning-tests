@@ -49,3 +49,4 @@
 
     $base = new BaseClass;
     echo $base->getProjectName() . "?";
+echo getenv('PROJECT_NAME');
