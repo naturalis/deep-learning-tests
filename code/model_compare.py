@@ -84,7 +84,10 @@ class ModelCompare(baseclass.BaseClass):
             folders.append(entry.name)
 
         for folder in sorted(folders):
-            analysis = os.path.join(self.models_folder, folder, "analysis.json")
+            self.set_model_name(folder)
+            self.set_model_folder()
+
+            analysis = self.get_analysis_path() # os.path.join(self.models_folder, folder, "analysis.json")
             classes = os.path.join(self.models_folder, folder, "classes.json")
             dataset = os.path.join(self.models_folder, folder, "dataset.json")
             model = os.path.join(self.models_folder, folder, "model.hdf5")
@@ -250,7 +253,6 @@ class ModelCompare(baseclass.BaseClass):
 
             print("")
             print("")
-
 
 
 if __name__ == "__main__":
