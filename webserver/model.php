@@ -25,11 +25,15 @@
     $m = $analysis["confusion_matrix"];
 
     $t=[];
+
     foreach ($m as $cKey => $col)
     {
         $key = array_search($cKey, array_column($classes, "key"));
-        $t[$cKey][-1] = $classes[$key]["name"];
+        $t["a"][] = $classes[$key]["name"];
+    }
 
+    foreach ($m as $cKey => $col)
+    {
         foreach ($col as $rKey => $row)
         {
             $t[$cKey][$rKey] = $m[$rKey][$cKey];
