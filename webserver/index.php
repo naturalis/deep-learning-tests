@@ -40,6 +40,12 @@
             return $this->ImagesRoot;
         }
 
+        public function getModels()
+        {
+
+        }
+
+
     }
 
 
@@ -49,4 +55,6 @@
     $base->setProjectName(getenv('PROJECT_NAME'));
     $base->setImagesRoot(getenv('IMAGES_ROOT'));
 
-    echo $base->getProjectName() . "?";
+    echo $base->getProjectName() . "<br />";
+    echo $base->getProjectRoot() . "<br />";
+    echo $base->getImagesRoot() . "<br />";
