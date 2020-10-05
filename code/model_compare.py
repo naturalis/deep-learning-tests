@@ -271,5 +271,5 @@ if __name__ == "__main__":
         compare.set_delete(args.delete)
 
     compare.collect_data()
-    # compare.print_data()
-    # compare.clean_up()
+    compare.print_data()
+    compare.clean_up()
