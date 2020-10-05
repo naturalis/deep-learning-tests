@@ -49,3 +49,15 @@
     print_r($classes);
     // print_r($analysis);
     // print_r($dataset);
+
+?>
+<script type="text/javascript">
+<script>
+$( document ).ready(function()
+{
+    $("#confusion_matrix tr td").on("mousever",function()
+    {
+        console.log($(this).html());
+    });
+});
+</script>
