@@ -25,7 +25,7 @@ EOT;
 
         function p($c)
         {
-            return "<p>$c</p>"\n;
+            return "<p>$c</p>\n";
         }
 
         function list($l)

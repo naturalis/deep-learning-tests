@@ -24,6 +24,7 @@
         $l[]=
             vsprintf("%s %s %s %s %s %s %s %s",
                 $model["model"],
+                // $model["dataset"]["state"]
                 $model["dataset"]["created"],
                 $model["dataset"]["model_note"],
                 $model["dataset"]["class_count"],
