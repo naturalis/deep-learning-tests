@@ -12,7 +12,7 @@
 
         public function setProjectRoot($var)
         {
-            $this->projectRoot = $var;
+            $this->projectRoot = rtrim($var,"/");
         }
 
         public function setProjectName($var)
@@ -42,7 +42,7 @@
 
         public function getModels()
         {
-
+            return scandir(implode("/",$this->getProjectRoot(),"models"));
         }
 
 
@@ -58,3 +58,5 @@
     echo $base->getProjectName() . "<br />";
     echo $base->getProjectRoot() . "<br />";
     echo $base->getImagesRoot() . "<br />";
+
+    print_r($base->getModels());
