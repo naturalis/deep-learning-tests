@@ -31,7 +31,7 @@
                 $model["dataset"]["class_count_before_maximum"],
                 $model["dataset"]["class_image_minimum"],
                 $model["dataset"]["class_image_maximum"],
-                $model["analysis"]["classification_report"]["accuracy"],
+                $model["analysis"]["classification_report"]["accuracy"]
             );
 
     }
