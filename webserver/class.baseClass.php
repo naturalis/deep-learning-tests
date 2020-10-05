@@ -92,7 +92,7 @@
 
                     echo $sort,$order;
                     return
-                        $a[$sort] == ($b[$sort] ? 0 : ($a[$sort] > $b[$sort]));
+                        ($a[$sort] == $b[$sort]) ? 0 : ($a[$sort] > $b[$sort]);
 
 
                 });
