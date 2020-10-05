@@ -26,6 +26,7 @@
 
     $t=[];
 
+    $t["a"][] = "";
     foreach ($m as $cKey => $col)
     {
         $key = array_search($cKey, array_column($classes, "key"));
@@ -34,9 +35,10 @@
 
     foreach ($m as $cKey => $col)
     {
+        $t[$cKey][] = "b";
         foreach ($col as $rKey => $row)
         {
-            $t[$cKey][$rKey] = $m[$rKey][$cKey];
+            $t[$cKey][] = $m[$rKey][$cKey];
         }  
     }
 
