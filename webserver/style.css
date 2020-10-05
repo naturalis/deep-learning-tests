@@ -2,3 +2,13 @@
     text-align: right;
     width: 30px;
 }
+
+#confusion_matrix tr:first-child td {
+    writing-mode: vertical-rl; 
+    font-size: 0.9em;
+}
+
+ 
+
+/*    transform-origin: 0 0;
+    transform: rotate(270deg);*/
