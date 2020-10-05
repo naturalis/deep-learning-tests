@@ -48,6 +48,16 @@
             return $this->imagesRoot;
         }
 
+        public function setModel($model)
+        {
+            $this->model = $model;
+        }
+
+        public function getModel()
+        {
+            return $this->model;
+        }
+
         public function getDataset()
         {
             return json_decode(file_get_contents(implode("/",[$this->getProjectRoot(),"models",$this->model,$this->datasetFile])),true);
