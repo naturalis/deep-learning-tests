@@ -22,4 +22,5 @@
     $analysis = $base->getAnalysis();
 
 
-    print_r($analysis);
+    echo "<pre>";
+    print_r($analysis["confusion_matrix"]);
