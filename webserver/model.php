@@ -52,7 +52,6 @@
 
 ?>
 <script type="text/javascript">
-<script>
 $( document ).ready(function()
 {
     $("#confusion_matrix tr td").on("mousever",function()
