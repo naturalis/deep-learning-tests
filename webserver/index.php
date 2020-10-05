@@ -22,9 +22,9 @@
     foreach ($base->getModels() as $model)
     {
         $l[]=
-            vsprintf("%s",
+            vsprintf("%s (%s)",
                 $model["model"]
-                // $model["dataset"]["created"],
+                $model["dataset"]["created"],
                 // $model["dataset"]["model_note"],
                 // $model["dataset"]["class_count"],
                 // $model["dataset"]["class_count_before_maximum"],
