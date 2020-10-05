@@ -8,9 +8,6 @@
 
         public function __init()
         {
-            $this->setProjectRoot(getenv('PROJECT_ROOT'));
-            $this->setProjectName(getenv('PROJECT_NAME'));
-            $this->setImagesRoot(getenv('IMAGES_ROOT'));
         }
 
         public function setProjectRoot($var)
@@ -48,5 +45,8 @@
 
 
     $base = new BaseClass;
+    $base->setProjectRoot(getenv('PROJECT_ROOT'));
+    $base->setProjectName(getenv('PROJECT_NAME'));
+    $base->setImagesRoot(getenv('IMAGES_ROOT'));
+
     echo $base->getProjectName() . "?";
-echo getenv('PROJECT_NAME');
