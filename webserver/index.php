@@ -17,7 +17,23 @@
     echo $html->h2("project root: " . $base->getProjectRoot());
     echo $html->h2("image root: " . $base->getImagesRoot());
     echo $html->p("available models:");
-    echo $html->list($base->getModels());
 
+    $l=[];
+    foreach ($base->getModels() as $model)
+    {
+        $l[]=
+            vsprintf("%s %s %s %s %s %s %s %s",
+                $model["model"],
+                // $model["dataset"]["state"]
+                $model["dataset"]["created"],
+                $model["dataset"]["model_note"],
+                $model["dataset"]["class_count"],
+                $model["dataset"]["class_count_before_maximum"],
+                $model["dataset"]["class_image_minimum"],
+                $model["dataset"]["class_image_maximum"],
+                $model["analysis"]["classification_report"]["accuracy"],
+            );
 
-    print_r($base->getModels());
+    }
+
+    echo $html->list($l);

@@ -15,17 +15,17 @@ EOT;
 
         function h1($c)
         {
-            return "<h1>$c</h1>";
+            return "<h1>$c</h1>\n";
         }
 
         function h2($c)
         {
-            return "<h2>$c</h2>";
+            return "<h2>$c</h2>\n";
         }
 
         function p($c)
         {
-            return "<p>$c</p>";
+            return "<p>$c</p>"\n;
         }
 
         function list($l)
@@ -37,7 +37,7 @@ EOT;
             }
             $b[] = "</ul>";
 
-            return implode("\n", $b);
+            return implode("\n", $b) . "\n";
         }
 
     }
