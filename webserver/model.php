@@ -62,7 +62,11 @@ $( document ).ready(function()
         var b = $('td[data-row="'+r+'"][data-col="h"]').html();
 
         $(this).attr("title",a + "\\" + b);
-        console.log(a + "\\" + b);
+        // console.log(a + "\\" + b);
+
+        $('#confusion_matrix tr td').removeClass("highlight");
+        $('#confusion_matrix tr td[data-col="'+c+'"]').addClass("highlight");
+        $('#confusion_matrix tr td[data-row="'+r+'"]').addClass("highlight");
 
     });
 });

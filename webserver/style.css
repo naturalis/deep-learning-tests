@@ -13,3 +13,7 @@
     text-align: right;
     white-space: nowrap;
 }
+
+.highlight {
+    background-color: #eee;
+}
