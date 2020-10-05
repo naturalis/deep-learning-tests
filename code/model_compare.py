@@ -218,7 +218,7 @@ class ModelCompare(baseclass.BaseClass):
 
             notes = []
             max_l = 0
-            for k,v in enumerate([x["name"] for x in batch_models]):
+            for k,v in enumerate([x["note"] for x in batch_models]):
                 t = textwrap.wrap(v.strip(),28,subsequent_indent="")
                 notes.append(t)
                 max_l = len(t) if len(t) > max_l else max_l
