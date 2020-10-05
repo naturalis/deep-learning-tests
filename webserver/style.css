@@ -4,11 +4,8 @@
 }
 
 #confusion_matrix tr:first-child td {
-    writing-mode: vertical-rl; 
-    font-size: 0.9em;
+    font-size: 0.8em;
 }
 
  
 
-/*    transform-origin: 0 0;
-    transform: rotate(270deg);*/
