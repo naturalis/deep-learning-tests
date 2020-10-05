@@ -10,8 +10,7 @@
 
     $html = new HtmlClass;
 
-    echo $html->header()
-
+    echo $html->header();
 
 
     echo $base->getProjectName() . "<br />";
