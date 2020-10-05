@@ -90,7 +90,7 @@ print_r($c);
 
             }
 
-            return $this->classes
+            return $this->classes;
 
         }
 
