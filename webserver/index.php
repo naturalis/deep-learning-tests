@@ -22,10 +22,11 @@
     foreach ($base->getModels("accuracy","desc") as $model)
     {
         $l[]=
-            vsprintf("%s (%s); accuracy: %s; %s classes (of %s; %s...%s images p/class); (%s) [%s]",
+            vsprintf("<a href=\"model.php?id=%s\">%s</a>; acc: %s; %s classes (of %s; %s...%s images p/class); (%s) [%s]",
                 [
                     $model["model"],
-                    substr($model["dataset"]["created"],0,19),
+                    $model["model"],
+                    // substr($model["dataset"]["created"],0,15),
                     $model["accuracy"],
                     $model["dataset"]["class_count"],
                     $model["dataset"]["class_count_before_maximum"],
