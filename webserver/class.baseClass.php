@@ -82,9 +82,14 @@
             }
         }
 
-        public function getModels()
+        public function getModels($sort="model")
         {
-            return $this->models;
+            return usort(
+                $this->models,
+                function($a,$b) use ($sort)
+                {
+                    return $a[$sort] > $b[$sort];
+                });
         }
 
     }
