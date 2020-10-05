@@ -90,12 +90,14 @@
                 function($a,$b) use ($sort,$order)
                 {
 
-
+                    echo $sort,$order;
                     return
                         $a[$sort] == ($b[$sort] ? 0 : ($a[$sort] > $b[$sort]));
 
 
                 });
+
+
             return $this->models;
         }
 
