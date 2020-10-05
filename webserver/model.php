@@ -33,15 +33,3 @@
     }
 
     echo $html->table($t);
-
-
-
-    echo "<pre>";
-    foreach ($m as $cKey => $col)
-    {
-        foreach ($col as $rKey => $row )
-        {
-            echo $m[$rKey][$cKey] . "  ";
-        }  
-        echo "\n";
-    }

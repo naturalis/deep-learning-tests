@@ -28,9 +28,9 @@ EOT;
             return "<p>$c</p>\n";
         }
 
-        function list($l)
+        function list($l,$id=null)
         {
-            $b[] = "<ul>";
+            $b[] = "<ul id='$id'>";
             foreach ($l as $val)
             {
                 $b[] = "<li>$val</li>";
@@ -40,9 +40,9 @@ EOT;
             return implode("\n", $b) . "\n";
         }
 
-        function table($t)
+        function table($t,$id=null)
         {
-            $b[] = "<table>";
+            $b[] = "<table id='$id'>";
             foreach ($t as $row)
             {
                 $b[] = "<tr>";
