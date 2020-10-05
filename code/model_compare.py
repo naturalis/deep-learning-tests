@@ -196,7 +196,7 @@ class ModelCompare(baseclass.BaseClass):
         
         per_line = 5
 
-        lines = self.name_length_max / per_line
+        lines = math.ceil(self.name_length_max / per_line)
 
         for i in range(lines):
 
