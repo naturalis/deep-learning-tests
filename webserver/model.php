@@ -27,7 +27,8 @@
     $t=[];
     foreach ($m as $cKey => $col)
     {
-        $t[$cKey][-1] = "a";
+        $key = array_search($cKey, array_column($classes, "key"));
+        $t[$cKey][-1] = $classes[$key]["name"];
 
         foreach ($col as $rKey => $row)
         {
@@ -37,6 +38,6 @@
 
     echo $html->table($t,"confusion_matrix");
 
-    // print_r($classes);
+    print_r($classes);
     // print_r($analysis);
     // print_r($dataset);
