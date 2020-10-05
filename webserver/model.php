@@ -38,7 +38,7 @@
 
     echo $html->table($t,"confusion_matrix");
 
-    echo "<pre>"
+    echo "<pre>";
     print_r($classes);
     // print_r($analysis);
     // print_r($dataset);
