@@ -80,6 +80,7 @@
                 {
                      $this->classes[] = [ "support" => $row[1], "name" => $row[0] ];
                 }
+
                 fclose($handle);
             }
 
@@ -92,7 +93,6 @@
             }
 
             return $this->classes;
-
         }
 
         public function getModelSize()
