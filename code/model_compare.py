@@ -213,7 +213,7 @@ class ModelCompare(baseclass.BaseClass):
             index = "{:>12}"
 
             print(index.format("name: ")  + general.format(*[x["name"] for x in batch_models]))
-            print(index.format("date: ")  + general.format(*[x["date"] for x in batch_models]))
+            print(index.format("date: ")  + general.format(*[x["date"][0:19] for x in batch_models]))
             print(index.format("state: ") + general.format(*[x["state"] for x in batch_models]))
 
             continue

@@ -1,6 +1,6 @@
-a = [{'name':'a'},{'name':'b'}]
+import time
 
-b = [x['name'] for x in a]
 
-print(type(b))
-print(b)
+a = time.strptime("2020-09-30 12:19:12.899501","")
+
+print(a)
