@@ -22,5 +22,14 @@
     $analysis = $base->getAnalysis();
 
 
+    $m = $analysis["confusion_matrix"];
+
     echo "<pre>";
-    print_r($analysis["confusion_matrix"]);
+    foreach ($m as $cKey => $col)
+    {
+        foreach ($col as $rKey => $row )
+        {
+            echo $m[$rKey][$cKey] . "  ";
+        }  
+        echo "\n";
+    }
