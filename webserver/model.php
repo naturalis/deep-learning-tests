@@ -65,7 +65,7 @@ $( document ).ready(function()
         var sum = 0;
         $('td[data-col="'+c+'"]').each(function()
         {
-            sum += $(this).html();
+            sum += parseInt($(this).html());
         })
 
 
