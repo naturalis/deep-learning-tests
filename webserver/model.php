@@ -37,7 +37,7 @@
 
         $c[$key][] = [ "html" => $class["name"] ];
         $c[$key][] = [ "html" => $class["support"] ];
-        $c[$key][] = [ "html" => $analysis["classification_report"][$key]["support"] ];
+        $c[$key][] = [ "html" => $analysis["classification_report"][$class["key"]]["support"] ];
         // $c[$key][] = [ "html" => $analysis["classification_report"][$cKey]["f1-score"] ];
         // $c[$key][] = [ "html" => $analysis["classification_report"][$cKey]["precision"] ];
         // $c[$key][] = [ "html" => $analysis["classification_report"][$cKey]["recall"] ];
