@@ -41,9 +41,9 @@
         $c[$key][] = [ "html" => $analysis["classification_report"][$cKey]["f1-score"] ];
         $c[$key][] = [ "html" => $analysis["classification_report"][$cKey]["precision"] ];
         $c[$key][] = [ "html" => $analysis["classification_report"][$cKey]["recall"] ];
-        $c[$key][] = [ "html" => $analysis["top_k_per_class"][$key]["top_1"] ];
-        $c[$key][] = [ "html" => $analysis["top_k_per_class"][$key]["top_3"] ];
-        $c[$key][] = [ "html" => $analysis["top_k_per_class"][$key]["top_5"] ];
+        $c[$key][] = [ "html" => $analysis["top_k_per_class"][$cKey]["top_1"] ];
+        $c[$key][] = [ "html" => $analysis["top_k_per_class"][$cKey]["top_3"] ];
+        $c[$key][] = [ "html" => $analysis["top_k_per_class"][$cKey]["top_5"] ];
     }
 
 
