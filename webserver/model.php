@@ -26,7 +26,7 @@
 
     $t=[];
 
-    $t["h"]["h"] = ["html" => ""];
+    $t["h"]["h"] = [ "html" => "" ];
     foreach ($m as $cKey => $col)
     {
         $key = array_search($cKey, array_column($classes, "key"));
@@ -39,10 +39,14 @@
     foreach ($m as $cKey => $col)
     {
         $key = array_search($cKey, array_column($classes, "key"));
-        $t[$cKey]["h"] = ["html" => $classes[$key]["key"] . ". " . $classes[$key]["name"]];
+        $t[$cKey]["h"] = [
+            "html" => $classes[$key]["key"] . ". " . $classes[$key]["name"],
+            "title" => $classes[$key]["name"]
+        ];
+
         foreach ($col as $rKey => $row)
         {
-            $t[$cKey][] = ["html" => $m[$rKey][$cKey]];
+            $t[$cKey][] = [ "html" => $m[$rKey][$cKey] ];
         }  
     }
 
