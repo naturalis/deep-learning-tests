@@ -30,7 +30,7 @@
     foreach ($m as $cKey => $col)
     {
         $key = array_search($cKey, array_column($classes, "key"));
-        $t["h"][] = $classes[$key]["key"];
+        $t["h"][] = $classes[$key]["key"] .". " . substr($classes[$key]["key"], 0, 5) . "&ellipsis";
     }
 
     foreach ($m as $cKey => $col)
