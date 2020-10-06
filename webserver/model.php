@@ -23,6 +23,8 @@
     $classes = $base->getClasses();
 
 
+print_r($analysis["classification_report"]);
+
     $r=[];
 
     $r[][]=$analysis["classification_report"]["accuracy"];
