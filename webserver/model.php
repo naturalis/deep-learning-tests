@@ -243,11 +243,12 @@ $( document ).ready(function()
         $('td[data-col="'+c+'"][data-row!="h"]').each(function()
         {
             sum += parseInt($(this).html());
+            console.log(sum,parseInt($(this).html()),$(this).html());
         })
 
         if (r!="h" && c!="h")
         {
-            $(this).attr("title",$(this).html() + " (of "+ sum +")\n" + a + "\nidentified as\n" + b);
+            $(this).attr("title",$(this).html() + " (of " + sum +")\n" + a + "\nidentified as\n" + b);
             // console.log(a + "\\" + b);
         }
 
