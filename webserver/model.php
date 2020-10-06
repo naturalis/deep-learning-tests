@@ -26,21 +26,28 @@
     // classes
 
     $c=[];
-    foreach ($classes as $key => $class)
+    foreach ($classes as $cKey => $class)
     {
         if (!$class["key"])
         {
             continue;
         }
 
+        $key = array_search($cKey, array_column($analysis["top_k_per_class"], "class"));
+
         $c[$key][] = [ "html" => $class["name"] ];
         $c[$key][] = [ "html" => $class["support"] ];
+        $c[$key][] = [ "html" => $analysis["classification_report"][$cKey]["support"] ];
+        $c[$key][] = [ "html" => $analysis["classification_report"][$cKey]["f1-score"] ];
+        $c[$key][] = [ "html" => $analysis["classification_report"][$cKey]["precision"] ];
+        $c[$key][] = [ "html" => $analysis["classification_report"][$cKey]["recall"] ];
+        $c[$key][] = [ "html" => $analysis["top_k_per_class"][$key]["top_1"] ];
+        $c[$key][] = [ "html" => $analysis["top_k_per_class"][$key]["top_3"] ];
+        $c[$key][] = [ "html" => $analysis["top_k_per_class"][$key]["top_5"] ];
     }
 
 
     echo $html->table($c,"classes");
-
-
 
 
 
