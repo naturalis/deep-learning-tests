@@ -38,7 +38,7 @@
     }
 
 
-    echo $html->table($t,"classes");
+    echo $html->table($c,"classes");
 
 
 
