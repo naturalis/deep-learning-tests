@@ -222,7 +222,7 @@ function bootstrap()
         })
     });
 
-    $("#classes tr td").mouseover(function()
+    $("tr td").mouseover(function()
     {
         var h = $(this).attr('data-hash');
         $('td').removeClass('highlight-class');
@@ -240,7 +240,7 @@ $( document ).ready(function()
         var b = $('td[data-row="'+r+'"][data-col="h"]').attr("title");
 
         var sum = 0;
-        $('td[data-col="'+c+'"][data-row!="h"]').each(function()
+        $('#confusion_matrix tr td[data-col="'+c+'"][data-row!="h"]').each(function()
         {
             sum += parseInt($(this).html().trim());
             console.log(sum,parseInt($(this).html()),$(this).html());
