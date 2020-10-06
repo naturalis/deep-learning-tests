@@ -22,6 +22,36 @@
     $analysis = $base->getAnalysis();
     $classes = $base->getClasses();
 
+
+    // classes
+
+    $c=[];
+    foreach ($classes as $key => $class)
+    {
+        if (!$class["key"])
+        {
+            continue;
+        }
+
+        $c[$key][] = $class["name"];
+        $c[$key][] = $class["support"];
+    }
+
+
+    echo $html->table($t,"classes");
+
+
+
+
+
+
+
+
+
+
+
+    // confusion matrix
+
     $m = $analysis["confusion_matrix"];
 
     $t=[];
