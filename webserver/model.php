@@ -62,8 +62,8 @@ $( document ).ready(function()
 
         var r = $(this).attr('data-row');
         var c = $(this).attr('data-col');
-        var a = $('td[data-col="'+c+'"][data-row="h"]').html();
-        var b = $('td[data-row="'+r+'"][data-col="h"]').html();
+        var a = $('td[data-col="'+c+'"][data-row="h"]').attr("title");
+        var b = $('td[data-row="'+r+'"][data-col="h"]').attr("title");
 
         var sum = 0;
         $('td[data-col="'+c+'"][data-row!="h"]').each(function()
@@ -73,7 +73,7 @@ $( document ).ready(function()
 
         if (r!="h" && c!="h")
         {
-            $(this).attr("title",a + "\n" + b + "\n" + $(this).html() + " ("+ sum +")");
+            $(this).attr("title",a + "\n" + b + "\n" + $(this).attr("title") + " ("+ sum +")");
             // console.log(a + "\\" + b);
         }
 

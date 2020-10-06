@@ -51,7 +51,7 @@ EOT;
 
                 foreach ($row as $cKey => $cell)
                 {
-                    $b[] = "<td data-row='$rKey' data-col='$cKey' title='" . $cell["title"] . "'>" . $cell["html"] . "</td>";
+                    $b[] = "<td data-row='$rKey' data-col='$cKey' title='" . $cell["title"] ?? $cell["html"] . "'>" . $cell["html"] . "</td>";
                 }
                 $b[] = "</tr>";
             }
