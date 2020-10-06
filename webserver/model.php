@@ -26,20 +26,20 @@
 
     $t=[];
 
-    $t["h"]["h"] = "";
+    $t["h"]["h"] = ["html" => ""];
     foreach ($m as $cKey => $col)
     {
         $key = array_search($cKey, array_column($classes, "key"));
-        $t["h"][] = $classes[$key]["key"] .". " . substr($classes[$key]["name"], 0, 5) . "&hellip;";
+        $t["h"][] = ["html" => $classes[$key]["key"] .". " . substr($classes[$key]["name"], 0, 5) . "&hellip;"];
     }
 
     foreach ($m as $cKey => $col)
     {
         $key = array_search($cKey, array_column($classes, "key"));
-        $t[$cKey]["h"] = $classes[$key]["key"] . ". " . $classes[$key]["name"];
+        $t[$cKey]["h"] = ["html" => $classes[$key]["key"] . ". " . $classes[$key]["name"]];
         foreach ($col as $rKey => $row)
         {
-            $t[$cKey][] = $m[$rKey][$cKey];
+            $t[$cKey][] = ["html" => $m[$rKey][$cKey]];
         }  
     }
 
