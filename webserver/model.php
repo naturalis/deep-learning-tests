@@ -35,7 +35,7 @@
     $r[][]=$analysis["classification_report"]["weighted avg"]["f1-score"];
     $r[][]=$analysis["classification_report"]["weighted avg"]["support"];
 
-    echo $html->p($html->table($c,"analysis"));
+    echo $html->p($html->table($r,"analysis"));
 
 
 
