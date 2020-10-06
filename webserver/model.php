@@ -56,7 +56,7 @@
     }
 
 
-    echo $html->table($c,"classes");
+    echo $html->p($html->table($c,"classes"));
 
 
 
@@ -96,7 +96,7 @@
         }  
     }
 
-    echo $html->table($t,"confusion_matrix");
+    echo $html->p($html->table($t,"confusion_matrix"));
 
     echo "<pre>";
     print_r($classes);
