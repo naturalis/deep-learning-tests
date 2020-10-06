@@ -27,17 +27,17 @@
 
     $r=[];
 
-    $r[][] = [ [ "html" => "accuracy:" ], [ "html" => $analysis["classification_report"]["accuracy"] ] ];
-    $r[][] = [ [ "html" => "support:" ], [ "html" => $analysis["classification_report"]["macro avg"]["support"] ] ];
-    $r[][] = [ [ "html" => "macro", "class" => "subheader" ], [ "html" => "" ] ];
-    $r[][] = [ [ "html" => "precision:" ], [ "html" => $analysis["classification_report"]["macro avg"]["precision"] ] ];
-    $r[][] = [ [ "html" => "recall:" ], [ "html" => $analysis["classification_report"]["macro avg"]["recall"] ] ];
-    $r[][] = [ [ "html" => "f1-score:" ], [ "html" => $analysis["classification_report"]["macro avg"]["f1-score"] ] ];
-    $r[][] = [ [ "html" =>  "weighted", "class" => "subheader" ], [ "html" => "" ] ];
-    $r[][] = [ [ "html" =>  "precision:" ], [ "html" => $analysis["classification_report"]["weighted avg"]["precision"] ] ];
-    $r[][] = [ [ "html" => "recall:" ], [ "html" => $analysis["classification_report"]["weighted avg"]["recall"] ] ];
-    $r[][] = [ [ "html" => "f1-score:" ], [ "html" => $analysis["classification_report"]["weighted avg"]["f1-score"] ] ];
-    $r[][] = [ [ "html" => "support:" ], [ "html" => $analysis["classification_report"]["weighted avg"]["support"] ] ];
+    $r[] = [ [ "html" => "accuracy:" ], [ "html" => $analysis["classification_report"]["accuracy"] ] ];
+    $r[] = [ [ "html" => "support:" ], [ "html" => $analysis["classification_report"]["macro avg"]["support"] ] ];
+    $r[] = [ [ "html" => "macro", "class" => "subheader" ], [ "html" => "" ] ];
+    $r[] = [ [ "html" => "precision:" ], [ "html" => $analysis["classification_report"]["macro avg"]["precision"] ] ];
+    $r[] = [ [ "html" => "recall:" ], [ "html" => $analysis["classification_report"]["macro avg"]["recall"] ] ];
+    $r[] = [ [ "html" => "f1-score:" ], [ "html" => $analysis["classification_report"]["macro avg"]["f1-score"] ] ];
+    $r[] = [ [ "html" =>  "weighted", "class" => "subheader" ], [ "html" => "" ] ];
+    $r[] = [ [ "html" =>  "precision:" ], [ "html" => $analysis["classification_report"]["weighted avg"]["precision"] ] ];
+    $r[] = [ [ "html" => "recall:" ], [ "html" => $analysis["classification_report"]["weighted avg"]["recall"] ] ];
+    $r[] = [ [ "html" => "f1-score:" ], [ "html" => $analysis["classification_report"]["weighted avg"]["f1-score"] ] ];
+    $r[] = [ [ "html" => "support:" ], [ "html" => $analysis["classification_report"]["weighted avg"]["support"] ] ];
 
     echo $html->p($html->table($r,"analysis"));
 
