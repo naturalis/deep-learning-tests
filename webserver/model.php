@@ -27,7 +27,7 @@
 
     $r=[];
 
-    $r[][] = [ [ "html" => "accuracy:" ], [ "html" => $analysis["classification_report"]["accuracy"] ];
+    $r[][] = [ [ "html" => "accuracy:" ], [ "html" => $analysis["classification_report"]["accuracy"] ] ];
     $r[][] = [ [ "html" => "support:" ], [ "html" => $analysis["classification_report"]["macro avg"]["support"] ] ];
     $r[][] = [ [ "html" => "macro", "class" => "subheader" ], [ "html" => "" ] ];
     $r[][] = [ [ "html" => "precision:" ], [ "html" => $analysis["classification_report"]["macro avg"]["precision"] ] ];
