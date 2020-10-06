@@ -33,8 +33,8 @@
             continue;
         }
 
-        $c[$key][] = $class["name"];
-        $c[$key][] = $class["support"];
+        $c[$key][] = [ "html" => $class["name"] ];
+        $c[$key][] = [ "html" => $class["support"] ];
     }
 
 
