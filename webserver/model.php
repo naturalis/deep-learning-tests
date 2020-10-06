@@ -23,8 +23,47 @@
     $classes = $base->getClasses();
 
 
-    // classes
+    $r=[];
 
+    $r[][]=$analysis["classification_report"]["accuracy"];
+    $r[][]=$analysis["classification_report"]["macro avg"]["precision"];
+    $r[][]=$analysis["classification_report"]["macro avg"]["recall"];
+    $r[][]=$analysis["classification_report"]["macro avg"]["f1-score"];
+    $r[][]=$analysis["classification_report"]["macro avg"]["support"];
+    $r[][]=$analysis["classification_report"]["weighted avg"]["precision"];
+    $r[][]=$analysis["classification_report"]["weighted avg"]["recall"];
+    $r[][]=$analysis["classification_report"]["weighted avg"]["f1-score"];
+    $r[][]=$analysis["classification_report"]["weighted avg"]["support"];
+
+    echo $html->p($html->table($c,"analysis"));
+
+
+
+// $analysis["classification_report"][top_k]
+//         (
+//             [0] => Array
+//                 (
+//                     [top] => 1
+//                     [pct] => 94.4883
+//                 )
+
+//             [1] => Array
+//                 (
+//                     [top] => 3
+//                     [pct] => 97.8097
+//                 )
+
+//             [2] => Array
+//                 (
+//                     [top] => 5
+//                     [pct] => 98.6535
+//                 )
+
+//         )
+
+
+
+    // classes
     $c=[];
 
     $c[$key][] = [ "html" => "class" ];
