@@ -30,7 +30,10 @@
     foreach ($m as $cKey => $col)
     {
         $key = array_search($cKey, array_column($classes, "key"));
-        $t["h"][] = ["html" => $classes[$key]["key"] .". " . substr($classes[$key]["name"], 0, 5) . "&hellip;"];
+        $t["h"][] = [ 
+            "html" => $classes[$key]["key"] .".",
+            "title" => $classes[$key]["name"] 
+        ];
     }
 
     foreach ($m as $cKey => $col)
