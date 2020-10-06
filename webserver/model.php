@@ -30,13 +30,13 @@
     foreach ($m as $cKey => $col)
     {
         $key = array_search($cKey, array_column($classes, "key"));
-        $t["h"][] = $classes[$key]["name"];
+        $t["h"][] = $classes[$key]["key"];
     }
 
     foreach ($m as $cKey => $col)
     {
         $key = array_search($cKey, array_column($classes, "key"));
-        $t[$cKey]["h"] = $classes[$key]["name"];
+        $t[$cKey]["h"] = $classes[$key]["key"] . ". " . $classes[$key]["name"];
         foreach ($col as $rKey => $row)
         {
             $t[$cKey][] = $m[$rKey][$cKey];
