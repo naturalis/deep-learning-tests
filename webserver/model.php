@@ -242,7 +242,7 @@ $( document ).ready(function()
         var sum = 0;
         $('td[data-col="'+c+'"][data-row!="h"]').each(function()
         {
-            sum += parseInt($(this).html());
+            sum += parseInt($(this).html().trim());
             console.log(sum,parseInt($(this).html()),$(this).html());
         })
 
