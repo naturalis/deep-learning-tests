@@ -1,6 +1,7 @@
 #confusion_matrix tr td {
     text-align: right;
     width: 30px;
+    cursor: default;
 }
 
 #confusion_matrix tr:first-child td {
@@ -14,6 +15,7 @@
     font-size: 0.8em;
     text-align: right;
     white-space: nowrap;
+    border-right: 1px solid #eee;
 }
 
 .highlight {
