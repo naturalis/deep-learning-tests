@@ -23,19 +23,17 @@
     $classes = $base->getClasses();
 
 
-print_r($analysis["classification_report"]);
-
     $r=[];
 
-    $r[][]=$analysis["classification_report"]["accuracy"];
-    $r[][]=$analysis["classification_report"]["macro avg"]["precision"];
-    $r[][]=$analysis["classification_report"]["macro avg"]["recall"];
-    $r[][]=$analysis["classification_report"]["macro avg"]["f1-score"];
-    $r[][]=$analysis["classification_report"]["macro avg"]["support"];
-    $r[][]=$analysis["classification_report"]["weighted avg"]["precision"];
-    $r[][]=$analysis["classification_report"]["weighted avg"]["recall"];
-    $r[][]=$analysis["classification_report"]["weighted avg"]["f1-score"];
-    $r[][]=$analysis["classification_report"]["weighted avg"]["support"];
+    $r[][] = $analysis["classification_report"]["accuracy"];
+    $r[][] = $analysis["classification_report"]["macro avg"]["precision"];
+    $r[][] = $analysis["classification_report"]["macro avg"]["recall"];
+    $r[][] = $analysis["classification_report"]["macro avg"]["f1-score"];
+    $r[][] = $analysis["classification_report"]["macro avg"]["support"];
+    $r[][] = $analysis["classification_report"]["weighted avg"]["precision"];
+    $r[][] = $analysis["classification_report"]["weighted avg"]["recall"];
+    $r[][] = $analysis["classification_report"]["weighted avg"]["f1-score"];
+    $r[][] = $analysis["classification_report"]["weighted avg"]["support"];
 
     echo $html->p($html->table($r,"analysis"));
 
