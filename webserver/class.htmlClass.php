@@ -25,6 +25,11 @@ EOT;
             return "<h2>$c</h2>\n";
         }
 
+        function h3($c)
+        {
+            return "<h3>$c</h3>\n";
+        }
+
         function p($c)
         {
             return "<p>$c</p>\n";
