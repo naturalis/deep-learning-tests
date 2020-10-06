@@ -1,3 +1,7 @@
+#analysis tr td.subheader{
+    font-weight: bold;
+}
+
 #confusion_matrix tr td {
     text-align: right;
     width: 30px;
