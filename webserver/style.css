@@ -18,6 +18,21 @@
     border-right: 1px solid #eee;
 }
 
-.highlight {
+#classes tr td {
+    text-align: right;
+    width: 30px;
+    cursor: default;
+}
+
+#classes tr:first-child td {
+    border-bottom: 1px solid #eee;
+}
+
+#classes tr td:first-child {
+    text-align: left;
+    width: auto;
+}
+
+.highlight, #classes tr:hover {
     background-color: #eee;
 }
