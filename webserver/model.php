@@ -26,6 +26,15 @@
     // classes
 
     $c=[];
+
+    $c[$key][] = [ "html" => "class" ];
+    $c[$key][] = [ "html" => "support" ];
+    $c[$key][] = [ "html" => "f1-score" ];
+    $c[$key][] = [ "html" => "precision" ];
+    $c[$key][] = [ "html" => "recall" ];
+    $c[$key][] = [ "html" => "top_3" ];
+    $c[$key][] = [ "html" => "top_5" ];
+
     foreach ($classes as $cKey => $class)
     {
         if (!$class["key"])
