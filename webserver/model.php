@@ -31,7 +31,7 @@
     {
         $key = array_search($cKey, array_column($classes, "key"));
         $t["h"][] = [ 
-            "html" => $classes[$key]["key"] .".",
+            "html" => $classes[$key]["key"],
             "title" => $classes[$key]["name"] 
         ];
     }
@@ -71,9 +71,11 @@ $( document ).ready(function()
             sum += parseInt($(this).html());
         })
 
-
-        $(this).attr("title",a + "\n" + b + "\n" + $(this).html() + " ("+ sum +")");
-        // console.log(a + "\\" + b);
+        if (r!="h" && c!="h")
+        {
+            $(this).attr("title",a + "\n" + b + "\n" + $(this).html() + " ("+ sum +")");
+            // console.log(a + "\\" + b);
+        }
 
         $('#confusion_matrix tr td').removeClass("highlight");
         $('#confusion_matrix tr td[data-col="'+c+'"]').addClass("highlight");
