@@ -23,27 +23,30 @@
     $classes = $base->getClasses();
 
 
-    // general analysis
+    echo $html->h3("General analysis");
+
     $r=[];
 
-    $r[0][] = [ "html" => "accuracy:" ];
-    $r[0][] = [ "html" => $analysis["classification_report"]["accuracy"] ];
-    $r[1][] = [ "html" => "macro", "class" => "subheader" ];
-    $r[2][] = [ "html" => "precision:" ];
-    $r[2][] = [ "html" => $analysis["classification_report"]["macro avg"]["precision"] ];
-    $r[3][] = [ "html" => "recall:" ];
-    $r[3][] = [ "html" => $analysis["classification_report"]["macro avg"]["recall"] ];
-    $r[4][] = [ "html" => "f1-score:" ];
-    $r[4][] = [ "html" => $analysis["classification_report"]["macro avg"]["f1-score"] ];
-    $r[5][] = [ "html" => "support:" ];
-    $r[5][] = [ "html" => $analysis["classification_report"]["macro avg"]["support"] ];
+    $r[][] = [ [ "html" => "accuracy:" ], [ "html" => $analysis["classification_report"]["accuracy"] ];
+    $r[][] = [ [ "html" => "support:" ], [ "html" => $analysis["classification_report"]["macro avg"]["support"] ] ];
+
+
+    $r[][] = [ [ "html" => "macro", "class" => "subheader" ], [ "html" => "" ] ];
+    $r[][] = [ [ "html" => "precision:" ], [ "html" => $analysis["classification_report"]["macro avg"]["precision"] ] ];
+    $r[][] = [ [ "html" => "recall:" ], [ "html" => $analysis["classification_report"]["macro avg"]["recall"] ] ];
+    $r[][] = [ [ "html" => "f1-score:" ], [ "html" => $analysis["classification_report"]["macro avg"]["f1-score"] ] ];
+
     $r[6][] = [ "html" =>  "weighted", "class" => "subheader" ];
+
     $r[7][] = [ "html" =>  "precision:" ];
     $r[7][] = [ "html" => $analysis["classification_report"]["weighted avg"]["precision"] ];
+
     $r[8][] = [ "html" => "recall:" ];
     $r[8][] = [ "html" => $analysis["classification_report"]["weighted avg"]["recall"] ];
+
     $r[9][] = [ "html" => "f1-score:" ];
     $r[9][] = [ "html" => $analysis["classification_report"]["weighted avg"]["f1-score"] ];
+
     $r[10][] = [ "html" => "support:" ];
     $r[10][] = [ "html" => $analysis["classification_report"]["weighted avg"]["support"] ];
 
@@ -75,7 +78,8 @@
 
 
 
-    // classes
+    echo $html->h3("Classes");
+
     $c=[];
 
     $c[$key][] = [ "html" => "class" ];
@@ -118,6 +122,7 @@
 
 
     // confusion matrix
+    echo $html->h3("Confusion matrix");
 
     $m = $analysis["confusion_matrix"];
 
