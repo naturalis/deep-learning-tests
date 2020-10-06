@@ -37,11 +37,11 @@
 
         $c[$key][] = [ "html" => $class["name"] ];
         $c[$key][] = [ "html" => $class["support"] ];
-        $c[$key][] = [ "html" => $analysis["classification_report"][$class["key"]]["support"] ];
-        $c[$key][] = [ "html" => $analysis["classification_report"][$class["key"]]["f1-score"] ];
-        $c[$key][] = [ "html" => $analysis["classification_report"][$class["key"]]["precision"] ];
-        $c[$key][] = [ "html" => $analysis["classification_report"][$class["key"]]["recall"] ];
-        $c[$key][] = [ "html" => round($analysis["top_k_per_class"][$class["key"]]["top_1"] / $class["support"],2) ];
+        // $c[$key][] = [ "html" => $analysis["classification_report"][$class["key"]]["support"] ];
+        $c[$key][] = [ "html" => round($analysis["classification_report"][$class["key"]]["f1-score"],2) ];
+        $c[$key][] = [ "html" => round($analysis["classification_report"][$class["key"]]["precision"],2) ];
+        $c[$key][] = [ "html" => round($analysis["classification_report"][$class["key"]]["recall"],2) ];
+        // $c[$key][] = [ "html" => round($analysis["top_k_per_class"][$class["key"]]["top_1"] / $class["support"],2) ];
         $c[$key][] = [ "html" => round($analysis["top_k_per_class"][$class["key"]]["top_3"] / $class["support"],2) ];
         $c[$key][] = [ "html" => round($analysis["top_k_per_class"][$class["key"]]["top_5"] / $class["support"],2) ];
     }
