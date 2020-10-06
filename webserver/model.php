@@ -210,7 +210,6 @@ function sortTable(table,index,ele)
 
     $(table).html(rows.join("\n"));
     addClassesOnClick();
-
 }
 
 function addClassesOnClick()
@@ -251,5 +250,12 @@ $( document ).ready(function()
     });
 
     addClassesOnClick();
+
+    $("#classes tr td").mouseover(function()
+    {
+        var h = $(this).attr('data-hash');
+        $('td').removeClass('highlight-class');
+        $('td[data-hash="'+h+'"]').addClass('highlight-class');
+    });
 });
 </script>

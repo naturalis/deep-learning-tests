@@ -40,3 +40,7 @@
 .highlight, #classes tr:hover {
     background-color: #eee;
 }
+
+td.highlight-class {
+    color: red;
+}
