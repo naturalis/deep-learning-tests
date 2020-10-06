@@ -38,10 +38,10 @@
         $c[$key][] = [ "html" => $class["name"] ];
         $c[$key][] = [ "html" => $class["support"] ];
         $c[$key][] = [ "html" => $analysis["classification_report"][$class["key"]]["support"] ];
-        // $c[$key][] = [ "html" => $analysis["classification_report"][$cKey]["f1-score"] ];
-        // $c[$key][] = [ "html" => $analysis["classification_report"][$cKey]["precision"] ];
-        // $c[$key][] = [ "html" => $analysis["classification_report"][$cKey]["recall"] ];
-        // $c[$key][] = [ "html" => $analysis["top_k_per_class"][$cKey]["top_1"] ];
+        $c[$key][] = [ "html" => $analysis["classification_report"][$class["key"]]["f1-score"] ];
+        $c[$key][] = [ "html" => $analysis["classification_report"][$class["key"]]["precision"] ];
+        $c[$key][] = [ "html" => $analysis["classification_report"][$class["key"]]["recall"] ];
+        $c[$key][] = [ "html" => $analysis["top_k_per_class"][$class["key"]]["top_1"] ];
         // $c[$key][] = [ "html" => $analysis["top_k_per_class"][$cKey]["top_3"] ];
         // $c[$key][] = [ "html" => $analysis["top_k_per_class"][$cKey]["top_5"] ];
     }
