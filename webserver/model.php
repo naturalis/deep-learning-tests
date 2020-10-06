@@ -105,11 +105,82 @@
 
 ?>
 <script type="text/javascript">
+var prevSortedIndex = -1;
+var prevSortedAsc = true;
+
+function sortTable(table,index,ele)
+{
+
+    elements=[];
+    header = "";
+
+    $('#classes tr td:nth-child('+(index+1)+')').each(function(a,b)
+    {
+        if (a==0)
+        {
+            header = $(b).parent('tr').html();
+            return;
+        }
+
+        if (isNaN($(this).html()))
+        {
+            elements.push({ "index": a, "value" : $(this).html(), "html" : $(b).parent('tr').html() })
+        }
+        else
+        {
+            elements.push({ "index": a, "value" : parseFloat($(this).html()), "html" : $(b).parent('tr').html() })
+        }       
+    });
+
+    elements.sort(function(a, b)
+    {
+        if (prevSortedIndex==index)
+        {
+            asc = !prevSortedAsc;
+        }
+        else
+        {
+            asc = isNaN(a.value);
+        }
+
+        if (a.value==b.value)
+        {
+            return 0;
+        }
+        else
+        {
+            return (a.value > b.value ? 1 : -1) * (asc ? 1 : -1 );
+        }
+    });    
+
+    // console.dir(elements);
+
+    prevSortedIndex = index;
+    prevSortedAsc = asc;
+
+    var rows = elements.map(function(a){ return "<tr>" + a.html + "</tr>"; });
+    rows.unshift("<tr>" + header + "</tr>")
+
+    $(table).html(rows.join("\n"));
+    addClassesOnClick();
+
+}
+
+function addClassesOnClick()
+{
+    $('#classes tr:first td').each(function(index,ele)
+    {
+        $(this).on('click',function()
+        {
+            sortTable($('#classes'),index,ele);
+        })
+    });
+}
+
 $( document ).ready(function()
 {
     $("#confusion_matrix tr td").mouseover(function()
     {
-
         var r = $(this).attr('data-row');
         var c = $(this).attr('data-col');
         var a = $('td[data-col="'+c+'"][data-row="h"]').attr("title");
@@ -130,7 +201,8 @@ $( document ).ready(function()
         $('#confusion_matrix tr td').removeClass("highlight");
         $('#confusion_matrix tr td[data-col="'+c+'"]').addClass("highlight");
         $('#confusion_matrix tr td[data-row="'+r+'"]').addClass("highlight");
-
     });
+
+    addClassesOnClick();
 });
 </script>
