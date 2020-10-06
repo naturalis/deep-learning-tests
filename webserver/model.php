@@ -209,10 +209,10 @@ function sortTable(table,index,ele)
     rows.unshift("<tr>" + header + "</tr>")
 
     $(table).html(rows.join("\n"));
-    addClassesOnClick();
+    bootstrap();
 }
 
-function addClassesOnClick()
+function bootstrap()
 {
     $('#classes tr:first td').each(function(index,ele)
     {
@@ -221,6 +221,13 @@ function addClassesOnClick()
             sortTable($('#classes'),index,ele);
         })
     });
+
+    $("#classes tr td").mouseover(function()
+    {
+        var h = $(this).attr('data-hash');
+        $('td').removeClass('highlight-class');
+        $('td[data-hash="'+h+'"]').addClass('highlight-class');
+    });    
 }
 
 $( document ).ready(function()
@@ -249,13 +256,6 @@ $( document ).ready(function()
         $('#confusion_matrix tr td[data-row="'+r+'"]').addClass("highlight");
     });
 
-    addClassesOnClick();
-
-    $("#classes tr td").mouseover(function()
-    {
-        var h = $(this).attr('data-hash');
-        $('td').removeClass('highlight-class');
-        $('td[data-hash="'+h+'"]').addClass('highlight-class');
-    });
+    bootstrap();
 });
 </script>
