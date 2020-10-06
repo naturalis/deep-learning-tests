@@ -77,7 +77,7 @@ $( document ).ready(function()
 
         if (r!="h" && c!="h")
         {
-            $(this).attr("title",$(this).attr("title") + " (of "+ sum +")\n" + a + "identified as\n" + b);
+            $(this).attr("title",$(this).attr("title") + " (of "+ sum +")\n" + a + "\nidentified as\n" + b);
             // console.log(a + "\\" + b);
         }
 
