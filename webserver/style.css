@@ -20,7 +20,7 @@
 
 #classes tr td {
     text-align: right;
-    width: 30px;
+    width: 70px;
     cursor: default;
 }
 
@@ -29,7 +29,7 @@
 }
 
 #classes tr td:first-child {
-    text-align: left;
+    /*text-align: left;*/
     width: auto;
 }
 
