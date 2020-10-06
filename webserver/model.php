@@ -37,7 +37,7 @@
 
     foreach ($classes as $cKey => $class)
     {
-        if (!$class["key"])
+        if (!isset($class["key"]))
         {
             continue;
         }
