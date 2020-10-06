@@ -25,15 +25,15 @@
 
     $r=[];
 
-    $r[][] = $analysis["classification_report"]["accuracy"];
-    $r[][] = $analysis["classification_report"]["macro avg"]["precision"];
-    $r[][] = $analysis["classification_report"]["macro avg"]["recall"];
-    $r[][] = $analysis["classification_report"]["macro avg"]["f1-score"];
-    $r[][] = $analysis["classification_report"]["macro avg"]["support"];
-    $r[][] = $analysis["classification_report"]["weighted avg"]["precision"];
-    $r[][] = $analysis["classification_report"]["weighted avg"]["recall"];
-    $r[][] = $analysis["classification_report"]["weighted avg"]["f1-score"];
-    $r[][] = $analysis["classification_report"]["weighted avg"]["support"];
+    $r[][] = [ "html" => $analysis["classification_report"]["accuracy"] ];
+    $r[][] = [ "html" => $analysis["classification_report"]["macro avg"]["precision"] ];
+    $r[][] = [ "html" => $analysis["classification_report"]["macro avg"]["recall"] ];
+    $r[][] = [ "html" => $analysis["classification_report"]["macro avg"]["f1-score"] ];
+    $r[][] = [ "html" => $analysis["classification_report"]["macro avg"]["support"] ];
+    $r[][] = [ "html" => $analysis["classification_report"]["weighted avg"]["precision"] ];
+    $r[][] = [ "html" => $analysis["classification_report"]["weighted avg"]["recall"] ];
+    $r[][] = [ "html" => $analysis["classification_report"]["weighted avg"]["f1-score"] ];
+    $r[][] = [ "html" => $analysis["classification_report"]["weighted avg"]["support"] ];
 
     echo $html->p($html->table($r,"analysis"));
 
