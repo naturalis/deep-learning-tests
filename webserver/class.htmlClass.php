@@ -56,8 +56,23 @@ EOT;
 
                 foreach ($row as $cKey => $cell)
                 {
+                    $datas = "";
+
+                    foreach ($cell as $dKey => $data)
+                    {
+                        if (strpos($data, 'data-')==0)
+                        {
+                            $datas .= $dKey .'="'. $data .'" ';
+                        }
+                    }
+
                     $title = empty($cell["title"]) ? $cell["html"] : $cell["title"];
-                    $b[] = "<td data-row='$rKey' data-col='$cKey' title='" . $title . "' class='" . $cell["class"] ."'>" . $cell["html"] ?? $cell . "</td>";
+                    $b[] = "<td 
+                                data-row='$rKey' 
+                                data-col='$cKey'
+                                $datas
+                                title='" . $title . "'
+                                class='" . $cell["class"] ."'>" . $cell["html"] ?? $cell . "</td>";
                 }
                 $b[] = "</tr>";
             }

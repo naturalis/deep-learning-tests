@@ -88,7 +88,7 @@
 
         $key = array_search($cKey, array_column($analysis["top_k_per_class"], "class"));
 
-        $c[$key][] = [ "html" => $class["name"] ];
+        $c[$key][] = [ "html" => $class["name"], "data-hash" => md5($class["name"]) ];
         $c[$key][] = [ "html" => $class["support"] ];
         // $c[$key][] = [ "html" => $analysis["classification_report"][$class["key"]]["support"] ];
         $c[$key][] = [ "html" => round($analysis["classification_report"][$class["key"]]["f1-score"],2) ];
@@ -123,7 +123,8 @@
         $key = array_search($cKey, array_column($classes, "key"));
         $t["h"][] = [ 
             "html" => $classes[$key]["key"],
-            "title" => $classes[$key]["name"] 
+            "title" => $classes[$key]["name"],
+            "data-hash" => md5($classes[$key]["name"])
         ];
     }
 
@@ -132,7 +133,8 @@
         $key = array_search($cKey, array_column($classes, "key"));
         $t[$cKey]["h"] = [
             "html" => $classes[$key]["key"] . ". " . $classes[$key]["name"],
-            "title" => $classes[$key]["name"]
+            "title" => $classes[$key]["name"],
+            "data-hash" => md5($classes[$key]["name"])
         ];
 
         foreach ($col as $rKey => $row)
