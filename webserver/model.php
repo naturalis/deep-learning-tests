@@ -227,7 +227,7 @@ function bootstrap()
         var h = $(this).attr('data-hash');
         $('td').removeClass('highlight-class');
         $('td[data-hash="'+h+'"]').addClass('highlight-class');
-        $('td[data-hash="'+h+'"]').parent('tr > td').addClass('highlight-class');
+        // $('td[data-hash="'+h+'"]').parent().find('td').addClass('highlight-class');
     });    
 }
 
