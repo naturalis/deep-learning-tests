@@ -135,7 +135,8 @@ class ModelTrainer(baseclass.BaseClass):
             self.base_model = tf.keras.applications.InceptionV3(weights="imagenet", include_top=False)
 
         x = self.base_model.output
-        x = tf.keras.layers.GlobalAveragePooling2D()(x)
+        # x = tf.keras.layers.GlobalAveragePooling2D()(x)
+        x = tf.keras.layers.GlobalMaxPooling2D()(x)
 
         # x = tf.keras.layers.Dropout(.2)(x)
         x = tf.keras.layers.Dense(512, activation='relu')(x)
