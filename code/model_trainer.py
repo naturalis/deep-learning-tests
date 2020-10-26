@@ -138,10 +138,8 @@ class ModelTrainer(baseclass.BaseClass):
         x = tf.keras.layers.GlobalAveragePooling2D()(x)
 
         # x = tf.keras.layers.Dropout(.2)(x)
-        x = tf.keras.layers.Dense(512)(x)
-        x = tf.keras.layers.LeakyReLU()(x)
-        x = tf.keras.layers.Dense(1024)(x)
-        x = tf.keras.layers.LeakyReLU()(x)
+        x = tf.keras.layers.Dense(1024, activation='relu')(x)
+        x = tf.keras.layers.Dense(1024, activation='relu')(x)
 
 
         self.predictions = tf.keras.layers.Dense(len(self.class_list), activation='softmax')(x)
