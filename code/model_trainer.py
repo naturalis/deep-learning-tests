@@ -365,14 +365,14 @@ if __name__ == "__main__":
     dataset.save_dataset()
 
     trainer.configure_generators()
-    trainer.train_model()
+    # trainer.train_model()
 
-    dataset.set_training_time(timer.get_time_passed())
-    dataset.update_model_state("configured")
-    dataset.save_dataset()
+    # dataset.set_training_time(timer.get_time_passed())
+    # dataset.update_model_state("configured")
+    # dataset.save_dataset()
 
-    trainer.save_model()
-    trainer.save_history()
+    # trainer.save_model()
+    # trainer.save_history()
 
 
         # WARNING:tensorflow:Method (on_train_batch_end) is slow compared to the batch update (0.325404). Check your callbacks.
