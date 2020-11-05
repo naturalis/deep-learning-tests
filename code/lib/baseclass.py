@@ -359,8 +359,6 @@ class BaseClass():
         self.presets.update( { "class_image_minimum" : class_image_minimum } )
         self.presets.update( { "class_image_maximum" : class_image_maximum } )
 
-        print(self.presets)
-
 
     def get_preset(self, preset):
         if preset in self.presets:
