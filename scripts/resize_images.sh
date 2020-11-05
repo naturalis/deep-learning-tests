@@ -7,7 +7,7 @@ if [ -z "$INDIR" ]; then
     exit
 fi
 
-for f in $(find ./ -type f -name '*.jpg');
+for f in $(find $INDIR -type f -name '*.jpg');
 do
     convert $f -resize 500x500 $f
     echo $f

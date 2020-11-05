@@ -7,7 +7,7 @@ if [ -z "$INDIR" ]; then
     exit
 fi
 
-for f in $(find ./ -type f -name '*.jpg');
+for f in $(find $INDIR -type f -name '*.jpg');
 do
     HEIGHT=$(convert $f -format "%h" info:)
     convert $f -crop 250x$HEIGHT+0+0 +repage $f
