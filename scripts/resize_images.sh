@@ -9,7 +9,7 @@ fi
 
 for f in $(find $INDIR -type f -name '*.jpg');
 do
-    convert $f -resize 500x500 $f
+    convert $f -resize 500x500^ $f
     echo $f
 done
 
