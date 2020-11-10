@@ -129,10 +129,33 @@ class ModelTrainer(baseclass.BaseClass):
         self.logger.info("saved model classes to {}".format(self.get_classes_path()))
 
     def assemble_model(self):
+        
+        self.base_model = None
+
         if "base_model" in self.model_settings:
-            self.base_model = self.model_settings["base_model"]
-        else:
+
+            if self.model_settings["base_model"] == "MobileNet_V3":
+                self.base_model = tf.keras.applications.MobileNet_V3(weights="imagenet", include_top=False)
+
+            if self.model_settings["base_model"] == "ResNet50":
+                self.base_model = tf.keras.applications.ResNet50(weights="imagenet", include_top=False)
+
+            if self.model_settings["base_model"] == "VGG16":
+                self.base_model = tf.keras.applications.VGG16(weights="imagenet", include_top=False)
+
+            if self.model_settings["base_model"] == "inception_v4":
+                self.base_model = tf.keras.applications.inception_v4(weights="imagenet", include_top=False)
+
+            if self.model_settings["base_model"] == "InceptionV3":
+                self.base_model = tf.keras.applications.InceptionV3(weights="imagenet", include_top=False)
+
+            if self.base_model == None:
+                self.logger.error("unknown base model: {}".format(self.model_settings["base_model"]))
+
+        if self.base_model == None:
             self.base_model = tf.keras.applications.InceptionV3(weights="imagenet", include_top=False)
+
+        self.logger.info("using base model {}".format(self.base_model.name))
 
         x = self.base_model.output
         x = tf.keras.layers.GlobalAveragePooling2D()(x)
@@ -320,7 +343,7 @@ if __name__ == "__main__":
 
     trainer.set_model_settings({
         "validation_split": trainer.get_preset("validation_split"),
-        "base_model": tf.keras.applications.InceptionV3(weights="imagenet", include_top=False),
+        "base_model": trainer.get_preset("base_model"),
         "loss": tf.keras.losses.CategoricalCrossentropy(),
         "optimizer": trainer.configure_optimizers(),
         "batch_size": trainer.get_preset("batch_size"),
@@ -355,14 +378,6 @@ if __name__ == "__main__":
         trainer.read_class_list()
 
         trainer.image_list_apply_class_list()
-
-
-        # trainer.model_settings["base_model"] = tf.keras.applications.InceptionV3(weights="imagenet", include_top=False)
-        # trainer.model_settings["base_model"] = tf.keras.applications.inception_v4(weights="imagenet", include_top=False)
-        # trainer.model_settings["base_model"] = tf.keras.applications.VGG16(weights="imagenet", include_top=False)
-        # trainer.model_settings["base_model"] = tf.keras.applications.ResNet50(weights="imagenet", include_top=False)
-        # trainer.model_settings["base_model"] = tf.keras.applications.MobileNet_V3(weights="imagenet", include_top=False)
-
         trainer.assemble_model()
         trainer.save_model_architecture()
         dataset.ask_note()

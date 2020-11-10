@@ -320,6 +320,8 @@ class BaseClass():
         if 'os_environ' in kwargs:
             os_environ = kwargs['os_environ']
 
+            base_model = os_environ.get("BASE_MODEL") if "BASE_MODEL" in os_environ else "InceptionV3"
+
             if 'IMAGE_AUGMENTATION' in os_environ:
                 image_augmentation = json.loads(os_environ.get("IMAGE_AUGMENTATION"))
             else:
@@ -345,7 +347,7 @@ class BaseClass():
         if 'dataset' in kwargs:
             dataset = kwargs['dataset']
 
-
+        self.presets.update( { "base_model" : base_model } )
         self.presets.update( { "image_augmentation" : image_augmentation } )
         self.presets.update( { "reduce_lr_params" :  reduce_lr_params } )
         self.presets.update( { "validation_split" : validation_split } )
