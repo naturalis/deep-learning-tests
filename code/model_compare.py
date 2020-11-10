@@ -129,7 +129,7 @@ class ModelCompare(baseclass.BaseClass):
                 this_model["epochs"] = "; ".join(map(str,tmp["training_phases"]["epochs"]))
                 this_model["layers"] = "; ".join(map(str,tmp["training_phases"]["freeze_layers"]))
 
-                self.accuracy_max2.push({this_model["class_count"] : 0})
+                self.accuracy_max2.append({this_model["class_count"] : 0})
 
             if os.path.exists(model):
                 this_model["model_size"] = os.path.getsize(model)
