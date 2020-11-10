@@ -252,7 +252,7 @@ class ModelTrainer(baseclass.BaseClass):
             self.model.compile(
                 optimizer=self.current_optimizer,
                 loss=self.model_settings["loss"],
-                metrics=self.model_settings["metrics"] if "metrics" in self.model_settings else [ "acc" ]
+                metrics=self.model_settings["metrics"] if "metrics" in self.model_settings else [ "acc","loss","val_acc","val_loss" ]
             )           
 
             if self.debug:
