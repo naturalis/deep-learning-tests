@@ -141,6 +141,7 @@ class ModelCompare(baseclass.BaseClass):
 
                 this_model["epochs"] = "; ".join(map(str,tmp["training_phases"]["epochs"]))
                 this_model["layers"] = "; ".join(map(str,tmp["training_phases"]["freeze_layers"]))
+                this_model["image_augmentation"] = tmp["training_settings"]["image_augmentation"]!="none"
 
                 if not this_model["class_count"] in self.accuracy_max:
                     self.accuracy_max[this_model["class_count"]] = 0
@@ -305,6 +306,9 @@ class ModelCompare(baseclass.BaseClass):
 
             print(index.format("frozen: ") + \
                 general.format(*[x["layers"] for x in batch_models]))
+
+            print(index.format("img aug: ") + \
+                general.format(*[ "y" if x["image_augmentation"] else "n" for x in batch_models]))
 
             print(index.format("accuracy: ") + \
                 general.format(*self._mark_max_val(self.accuracy_max,[x for x in batch_models],"accuracy")))
