@@ -46,8 +46,13 @@ class ModelTrainer(baseclass.BaseClass):
         callbacks = []
         for key,epoch in enumerate(trainer.get_preset("epochs")):
             phase = []
+
             phase.append(tf.keras.callbacks.ModelCheckpoint(trainer.get_model_path(), 
                 monitor=trainer.get_preset("checkpoint_monitor"), save_best_only=True, save_freq="epoch", verbose=1))
+
+            if not "use_tensorboard" in self.model_settings or self.model_settings["use_tensorboard"]==True:
+                phase.append(tf.keras.callbacks.TensorBoard(self.get_tensorboard_log_path()))
+                self.logger.info("tensor board log path: {}".format(self.get_tensorboard_log_path()))
 
             if key < len(trainer.get_preset("early_stopping_monitor")):
                 item = trainer.get_preset("early_stopping_monitor")[key]

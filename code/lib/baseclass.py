@@ -342,6 +342,7 @@ class BaseClass():
             early_stopping_monitor = json.loads(os_environ.get("EARLY_STOPPING_MONITOR")) if "EARLY_STOPPING_MONITOR" in os_environ else [ "none" ]
             class_image_minimum = int(os_environ.get("CLASS_IMAGE_MINIMUM")) if "CLASS_IMAGE_MINIMUM" in os_environ else 2
             class_image_maximum = int(os_environ.get("CLASS_IMAGE_MAXIMUM")) if "CLASS_IMAGE_MAXIMUM" in os_environ else 0
+            use_tensorboard = (os_environ.get("USE_TENSORBOARD").lower()=="true") if "USE_TENSORBOARD" in os_environ else True
 
         # TODO
         if 'dataset' in kwargs:
@@ -360,7 +361,7 @@ class BaseClass():
         self.presets.update( { "early_stopping_monitor" : early_stopping_monitor } )
         self.presets.update( { "class_image_minimum" : class_image_minimum } )
         self.presets.update( { "class_image_maximum" : class_image_maximum } )
-
+        self.presets.update( { "use_tensorboard" : use_tensorboard } )
 
     def get_preset(self, preset):
         if preset in self.presets:
