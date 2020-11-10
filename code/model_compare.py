@@ -176,9 +176,11 @@ class ModelCompare(baseclass.BaseClass):
                             if tmp["classification_report"]["weighted avg"]["f1-score"] > self.weighted_f1_max else self.weighted_f1_max
 
 
+
                         self.accuracy_max2[this_model["class_count"]] = tmp["classification_report"]["accuracy"] \
-                            if tmp["classification_report"]["accuracy"] > self.accuracy_max2[this_model["class_count"]] 
+                            if tmp["classification_report"]["accuracy"] > self.accuracy_max2[this_model["class_count"]] \
                             else self.accuracy_max2[this_model["class_count"]]
+
 
 
                 except ValueError as e:
