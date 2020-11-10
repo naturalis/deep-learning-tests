@@ -62,7 +62,7 @@ class ModelTrainer(baseclass.BaseClass):
                 if not item == "none":
                     phase.append(tf.keras.callbacks.EarlyStopping(
                         monitor=item, 
-                        patience=10, 
+                        patience=5, 
                         mode="auto", 
                         restore_best_weights=True, 
                         verbose=1))
@@ -70,7 +70,11 @@ class ModelTrainer(baseclass.BaseClass):
             if key < len(self.get_preset("reduce_lr_params")):
                 item = self.get_preset("reduce_lr_params")[key]
                 phase.append(tf.keras.callbacks.ReduceLROnPlateau(
-                    monitor=item["monitor"],factor=item["factor"],patience=item["patience"],min_lr=item["min_lr"],verbose=item["verbose"]))
+                    monitor=item["monitor"],
+                    factor=item["factor"],
+                    patience=item["patience"],
+                    min_lr=item["min_lr"],
+                    verbose=item["verbose"]))
 
             callbacks.append(phase)
 
@@ -403,8 +407,10 @@ if __name__ == "__main__":
     trainer.configure_generators()
     trainer.train_model()
 
+    dataset.set_epochs_trained(trainer.current_epoch)
     dataset.set_training_time(timer.get_time_passed())
     dataset.update_model_state("configured")
+
     dataset.save_dataset()
 
     trainer.save_model()
