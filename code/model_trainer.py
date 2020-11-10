@@ -57,7 +57,12 @@ class ModelTrainer(baseclass.BaseClass):
             if key < len(trainer.get_preset("early_stopping_monitor")):
                 item = trainer.get_preset("early_stopping_monitor")[key]
                 if not item == "none":
-                    phase.append(tf.keras.callbacks.EarlyStopping(monitor=item, patience=5, mode="auto", restore_best_weights=True, verbose=1))
+                    phase.append(tf.keras.callbacks.EarlyStopping(
+                        monitor=item, 
+                        patience=10, 
+                        mode="auto", 
+                        restore_best_weights=True, 
+                        verbose=1))
 
             if key < len(trainer.get_preset("reduce_lr_params")):
                 item = trainer.get_preset("reduce_lr_params")[key]
