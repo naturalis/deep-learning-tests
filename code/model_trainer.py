@@ -49,7 +49,7 @@ class ModelTrainer(baseclass.BaseClass):
         for key,epoch in enumerate(self.get_preset("epochs")):
             phase = []
 
-            phase.append(CustomCallback())
+            phase.append(customcallback.CustomCallback())
 
             phase.append(tf.keras.callbacks.ModelCheckpoint(self.get_model_path(), 
                 monitor=self.get_preset("checkpoint_monitor"), save_best_only=True, save_freq="epoch", verbose=1))
@@ -344,9 +344,6 @@ if __name__ == "__main__":
     trainer = ModelTrainer()
     timer = utils.Timer()
     dataset = dataset.DataSet()
-
-    bla = customcallback.CustomCallback()
-    exit(0)
 
     dataset.set_environ(os.environ)
     trainer.set_debug(os.environ["DEBUG"]=="1" if "DEBUG" in os.environ else False)    
