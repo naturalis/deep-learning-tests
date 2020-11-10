@@ -73,11 +73,11 @@ class ModelCompare(baseclass.BaseClass):
         for item in self.broken_models:
             print("{}".format(item))
 
-    # def superscript(self, n):
-    #     return "".join(["⁰¹²³⁴⁵⁶⁷⁸⁹"[ord(c)-ord('0')] for c in str(n)])
+    def superscript(self, n):
+        return "".join(["⁰¹²³⁴⁵⁶⁷⁸⁹"[ord(c)-ord('0')] for c in str(n)])
 
     def _mark_max_val(self,value_max,value_list,variable):
-        return map(lambda x : "{} *({})".format(str(x[variable]),x["class_count"]) \
+        return map(lambda x : "{} * ({})".format(str(x[variable]),self.superscript(x["class_count"])) \
             if x[variable] == value_max[x["class_count"]] else x[variable], value_list)
 
     def _add_empty_values(self,this_model):
@@ -246,10 +246,10 @@ class ModelCompare(baseclass.BaseClass):
             else value_list[class_count]
 
     def sort_data(self):
-        print(self.models)
+        # print(self.models)
+        self.models = sorted(self.models, key=lambda k: (k['classes'],k['name'])) 
 
     def print_data(self):
-
         print("")
         
         per_line = 5
@@ -293,32 +293,46 @@ class ModelCompare(baseclass.BaseClass):
 
             print(index.format("size: ") + \
                 general.format(*map(lambda x : x if x =="-" else str(math.ceil(x/1e6)) + "MB",[x["model_size"] for x in batch_models])))
+
             print(index.format("classes: ") + \
                 general.format(*[x["classes"] for x in batch_models]))
+
             print(index.format("support: ") + \
                 general.format(*[x["macro_support"] for x in batch_models]))
+
             print(index.format("epochs: ") + \
                 general.format(*[x["epochs"] for x in batch_models]))
+
             print(index.format("frozen: ") + \
                 general.format(*[x["layers"] for x in batch_models]))
+
             print(index.format("accuracy: ") + \
                 general.format(*self._mark_max_val(self.accuracy_max,[x for x in batch_models],"accuracy")))
+
             print(index.format(" ├ top 1: ") + \
                 general.format(*map(lambda x : str(round(x,2)) + "%",[x["top_1"] for x in batch_models])))
+
             print(index.format(" ├ top 3: ") + \
                 general.format(*map(lambda x : str(round(x,2)) + "%",[x["top_3"] for x in batch_models])))            
+
             print(index.format(" └ top 5: ") + \
                 general.format(*map(lambda x : str(round(x,2)) + "%",[x["top_5"] for x in batch_models])))
+
             print(index.format("precision: ") + \
                 general.format(*self._mark_max_val(self.macro_precision_max,[x for x in batch_models],"macro_precision")))
+
             print(index.format("") + \
                 general.format(*self._mark_max_val(self.weighted_precision_max,[x for x in batch_models],"weighted_precision")))
+
             print(index.format("recall: ") + \
                 general.format(*self._mark_max_val(self.macro_recall_max,[x for x in batch_models],"macro_recall")))
+
             print(index.format("") + \
                 general.format(*self._mark_max_val(self.weighted_recall_max,[x for x in batch_models],"weighted_recall")))
+
             print(index.format("f1: ") + \
                 general.format(*self._mark_max_val(self.macro_f1_max,[x for x in batch_models],"macro_f1")))
+
             print(index.format("") + \
                 general.format(*self._mark_max_val(self.weighted_f1_max,[x for x in batch_models],"weighted_f1")))
 
