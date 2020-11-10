@@ -129,16 +129,22 @@ class ModelCompare(baseclass.BaseClass):
 
                 if not this_model["class_count"] in self.accuracy_max:
                     self.accuracy_max[this_model["class_count"]] = 0
+
                 if not this_model["class_count"] in self.macro_precision_max:
                     self.macro_precision_max[this_model["class_count"]] = 0
+
                 if not this_model["class_count"] in self.macro_recall_max:
                     self.macro_recall_max[this_model["class_count"]] = 0
+
                 if not this_model["class_count"] in self.macro_f1_max:
                     self.macro_f1_max[this_model["class_count"]] = 0
+
                 if not this_model["class_count"] in self.weighted_precision_max:
                     self.weighted_precision_max[this_model["class_count"]] = 0
+
                 if not this_model["class_count"] in self.weighted_recall_max:
                     self.weighted_recall_max[this_model["class_count"]] = 0
+
                 if not this_model["class_count"] in self.weighted_f1_max:
                     self.weighted_f1_max[this_model["class_count"]] = 0
 
@@ -192,7 +198,7 @@ class ModelCompare(baseclass.BaseClass):
 
                         self.weighted_precision_max[this_model["class_count"]] = tmp["classification_report"]["weighted avg"]["precision"] \
                             if tmp["classification_report"]["weighted avg"]["precision"] > self.weighted_precision_max[this_model["class_count"]] \
-                            else self.weighted_precision_max
+                            else self.weighted_precision_max[this_model["class_count"]]
 
                         self.weighted_recall_max[this_model["class_count"]] = tmp["classification_report"]["weighted avg"]["recall"] \
                             if tmp["classification_report"]["weighted avg"]["recall"] > self.weighted_recall_max[this_model["class_count"]] \
