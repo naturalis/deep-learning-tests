@@ -284,7 +284,7 @@ class ModelCompare(baseclass.BaseClass):
             print(index.format("support: ") + \
                 general.format(*[x["macro_support"] for x in batch_models]))
             print(index.format("epochs: ") + \
-                eneral.format(*[x["epochs"] for x in batch_models]))
+                general.format(*[x["epochs"] for x in batch_models]))
             print(index.format("frozen: ") + \
                 general.format(*[x["layers"] for x in batch_models]))
             print(index.format("accuracy: ") + \
