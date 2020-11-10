@@ -347,7 +347,7 @@ class BaseClass():
         if 'dataset' in kwargs:
             dataset = kwargs['dataset']
 
-        self.presets.update( { "base_model" : base_model } )
+        self.presets.update( { "base_model" : base_model.lower().replace("_","") } )
         self.presets.update( { "image_augmentation" : image_augmentation } )
         self.presets.update( { "reduce_lr_params" :  reduce_lr_params } )
         self.presets.update( { "validation_split" : validation_split } )

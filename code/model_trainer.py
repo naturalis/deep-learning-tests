@@ -134,19 +134,19 @@ class ModelTrainer(baseclass.BaseClass):
 
         if "base_model" in self.model_settings:
 
-            if self.model_settings["base_model"] == "MobileNet_V3":
+            if self.model_settings["base_model"] == "mobilenetv3":
                 self.base_model = tf.keras.applications.MobileNet_V3(weights="imagenet", include_top=False)
 
-            if self.model_settings["base_model"] == "ResNet50":
+            if self.model_settings["base_model"] == "resnet50":
                 self.base_model = tf.keras.applications.ResNet50(weights="imagenet", include_top=False)
 
-            if self.model_settings["base_model"] == "VGG16":
+            if self.model_settings["base_model"] == "vgg16":
                 self.base_model = tf.keras.applications.VGG16(weights="imagenet", include_top=False)
 
-            if self.model_settings["base_model"] == "inception_v4":
+            if self.model_settings["base_model"] == "inceptionv4":
                 self.base_model = tf.keras.applications.inception_v4(weights="imagenet", include_top=False)
 
-            if self.model_settings["base_model"] == "InceptionV3":
+            if self.model_settings["base_model"] == "inceptionv3":
                 self.base_model = tf.keras.applications.InceptionV3(weights="imagenet", include_top=False)
 
             if self.base_model == None:
