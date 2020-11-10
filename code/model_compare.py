@@ -124,6 +124,7 @@ class ModelCompare(baseclass.BaseClass):
                 this_model["name"] = tmp["model_name"]
                 this_model["date"] = tmp["created"]
                 this_model["state"] = "?" if not "state" in tmp else tmp["state"]
+                this_model["base_model"] = tmp["base_model"]
 
                 if "model_retrain_note" in tmp:
                     this_model["note"] = "{} / {}".format(tmp["model_note"],tmp["model_retrain_note"])
@@ -251,6 +252,7 @@ class ModelCompare(baseclass.BaseClass):
         self.models = sorted(self.models, key=lambda k: (k["class_count"],k["name"])) 
 
     def print_data(self):
+
         print("")
         
         per_line = 5
@@ -274,6 +276,7 @@ class ModelCompare(baseclass.BaseClass):
             print(index.format("name: ")  + general.format(*[x["name"] for x in batch_models]))
             print(index.format("date: ")  + general.format(*[x["date"][0:19] for x in batch_models]))
             print(index.format("state: ") + general.format(*[x["state"] for x in batch_models]))
+            print(index.format("base: ") + general.format(*[x["base_model"] for x in batch_models]))
 
             notes = []
             max_l = 0
