@@ -157,7 +157,7 @@ class DataSet(baseclass.BaseClass):
     def set_training_time(self,time_passed):
         self.data_set["training_time"]=time_passed
 
-    def set_epochs_trained(self,time_passed):
+    def set_epochs_trained(self,epochs):
         self.data_set["epochs"]=epochs
 
 
