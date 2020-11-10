@@ -190,27 +190,31 @@ class ModelCompare(baseclass.BaseClass):
                                 self.macro_precision_max,
                                 this_model["class_count"])
 
+                        self.macro_recall_max[this_model["class_count"]] = \
+                            self.get_new_max(tmp["classification_report"]["macro avg"]["recall"],
+                                self.macro_recall_max,
+                                this_model["class_count"])
 
-                        self.macro_recall_max[this_model["class_count"]] = tmp["classification_report"]["macro avg"]["recall"] \
-                            if tmp["classification_report"]["macro avg"]["recall"] > self.macro_recall_max[this_model["class_count"]] \
-                            else self.macro_recall_max[this_model["class_count"]]
+                        self.macro_f1_max[this_model["class_count"]] = \
+                            self.get_new_max(tmp["classification_report"]["macro avg"]["f1-score"],
+                                self.macro_f1_max,
+                                this_model["class_count"])
 
-                        self.macro_f1_max[this_model["class_count"]] = tmp["classification_report"]["macro avg"]["f1-score"] \
-                            if tmp["classification_report"]["macro avg"]["f1-score"] > self.macro_f1_max[this_model["class_count"]] \
-                            else self.macro_f1_max[this_model["class_count"]]
+                        self.weighted_precision_max[this_model["class_count"]] = \
+                            self.get_new_max(tmp["classification_report"]["weighted avg"]["precision"],
+                                self.weighted_precision_max,
+                                this_model["class_count"])
 
-                        self.weighted_precision_max[this_model["class_count"]] = tmp["classification_report"]["weighted avg"]["precision"] \
-                            if tmp["classification_report"]["weighted avg"]["precision"] > self.weighted_precision_max[this_model["class_count"]] \
-                            else self.weighted_precision_max[this_model["class_count"]]
+                        self.weighted_recall_max[this_model["class_count"]] = \
+                            self.get_new_max(tmp["classification_report"]["weighted avg"]["recall"],
+                                self.weighted_recall_max,
+                                this_model["class_count"])
 
-                        self.weighted_recall_max[this_model["class_count"]] = tmp["classification_report"]["weighted avg"]["recall"] \
-                            if tmp["classification_report"]["weighted avg"]["recall"] > self.weighted_recall_max[this_model["class_count"]] \
-                            else self.weighted_recall_max[this_model["class_count"]]
 
-                        self.weighted_f1_max[this_model["class_count"]] = tmp["classification_report"]["weighted avg"]["f1-score"] \
-                            if tmp["classification_report"]["weighted avg"]["f1-score"] > self.weighted_f1_max[this_model["class_count"]] \
-                            else self.weighted_f1_max[this_model["class_count"]]
-
+                        self.weighted_f1_max[this_model["class_count"]] = \
+                            self.get_new_max(tmp["classification_report"]["weighted avg"]["f1-score"],
+                                self.weighted_f1_max,
+                                this_model["class_count"])
 
                 except ValueError as e:
                     print(e)
