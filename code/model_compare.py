@@ -141,7 +141,7 @@ class ModelCompare(baseclass.BaseClass):
 
                 this_model["epochs"] = "; ".join(map(str,tmp["training_phases"]["epochs"]))
                 this_model["layers"] = "; ".join(map(str,tmp["training_phases"]["freeze_layers"]))
-                this_model["image_augmentation"] = tmp["training_settings"]["image_augmentation"]!="none"
+                this_model["image_augmentation"] = lower(tmp["training_settings"]["image_augmentation"])!="none"
 
                 if not this_model["class_count"] in self.accuracy_max:
                     self.accuracy_max[this_model["class_count"]] = 0
