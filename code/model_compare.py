@@ -77,7 +77,7 @@ class ModelCompare(baseclass.BaseClass):
         return "".join(["⁰¹²³⁴⁵⁶⁷⁸⁹"[ord(c)-ord('0')] for c in str(n)])
 
     def _mark_max_val(self,value_max,value_list,variable):
-        return map(lambda x : "{} * ({})".format(str(x[variable]),self.superscript(x["class_count"])) \
+        return map(lambda x : "{} * ({})".format(str(x[variable]),x["class_count"]) \
             if x[variable] == value_max[x["class_count"]] else x[variable], value_list)
 
     def _add_empty_values(self,this_model):
