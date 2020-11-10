@@ -10,15 +10,13 @@ class ModelCompare(baseclass.BaseClass):
     models = []
     broken_models = []
 
-    accuracy_max = 0
-    macro_precision_max = 0
-    macro_recall_max = 0
-    macro_f1_max = 0
-    weighted_precision_max = 0
-    weighted_recall_max = 0
-    weighted_f1_max = 0
-
-    accuracy_max2 = {}
+    accuracy_max = {}
+    macro_precision_max = {}
+    macro_recall_max = {}
+    macro_f1_max = {}
+    weighted_precision_max = {}
+    weighted_recall_max = {}
+    weighted_f1_max = {}
 
     def __init__(self):
         super().__init__()
@@ -75,12 +73,11 @@ class ModelCompare(baseclass.BaseClass):
         for item in self.broken_models:
             print("{}".format(item))
 
-    def _mark_max_val(self,value_max,value_list):
-        return map(lambda x : str(x) + " *" if x == value_max else x, value_list)
+    def superscript(self, n):
+        return "".join(["⁰¹²³⁴⁵⁶⁷⁸⁹"[ord(c)-ord('0')] for c in str(n)])
 
-
-    def _mark_max_val2(self,value_max,value_list,variable):
-        return map(lambda x : str(x[variable]) + " *" if x[variable] == value_max[x["class_count"]] else x[variable], value_list)
+    def _mark_max_val(self,value_max,value_list,variable):
+        return map(lambda x : superscript(str(x[variable])) + " *" if x[variable] == value_max[x["class_count"]] else x[variable], value_list)
 
 
     def collect_data(self):
@@ -129,7 +126,32 @@ class ModelCompare(baseclass.BaseClass):
                 this_model["epochs"] = "; ".join(map(str,tmp["training_phases"]["epochs"]))
                 this_model["layers"] = "; ".join(map(str,tmp["training_phases"]["freeze_layers"]))
 
-                self.accuracy_max2[this_model["class_count"]] = 0
+
+                if item in [self.accuracy_max, \
+                    self.macro_precision_max, \
+                    self.macro_recall_max, \
+                    self.macro_f1_max, \
+                    self.weighted_precision_max, \
+                    self.weighted_recall_max, \
+                    self.weighted_f1_max ]:
+                    if not this_model["class_count"] in item:
+                        item[this_model["class_count"]] = 0
+
+                # if not this_model["class_count"] in self.accuracy_max:
+                #     self.accuracy_max[this_model["class_count"]] = 0
+                # if not this_model["class_count"] in self.macro_precision_max:
+                #     self.macro_precision_max[this_model["class_count"]] = 0
+                # if not this_model["class_count"] in self.macro_recall_max:
+                #     self.macro_recall_max[this_model["class_count"]] = 0
+                # if not this_model["class_count"] in self.macro_f1_max:
+                #     self.macro_f1_max[this_model["class_count"]] = 0
+                # if not this_model["class_count"] in self.weighted_precision_max:
+                #     self.weighted_precision_max[this_model["class_count"]] = 0
+                # if not this_model["class_count"] in self.weighted_recall_max:
+                #     self.weighted_recall_max[this_model["class_count"]] = 0
+                # if not this_model["class_count"] in self.weighted_f1_max:
+                #     self.weighted_f1_max[this_model["class_count"]] = 0
+
 
             if os.path.exists(model):
                 this_model["model_size"] = os.path.getsize(model)
@@ -162,27 +184,33 @@ class ModelCompare(baseclass.BaseClass):
                             this_model["top_3"] = 0
                             this_model["top_5"] = 0
 
-                        self.accuracy_max = tmp["classification_report"]["accuracy"] \
-                            if tmp["classification_report"]["accuracy"] > self.accuracy_max else self.accuracy_max
-                        self.macro_precision_max = tmp["classification_report"]["macro avg"]["precision"] \
-                            if tmp["classification_report"]["macro avg"]["precision"] > self.macro_precision_max else self.macro_precision_max
-                        self.macro_recall_max = tmp["classification_report"]["macro avg"]["recall"] \
-                            if tmp["classification_report"]["macro avg"]["recall"] > self.macro_recall_max else self.macro_recall_max
-                        self.macro_f1_max = tmp["classification_report"]["macro avg"]["f1-score"] \
-                            if tmp["classification_report"]["macro avg"]["f1-score"] > self.macro_f1_max else self.macro_f1_max
-                        self.weighted_precision_max = tmp["classification_report"]["weighted avg"]["precision"] \
-                            if tmp["classification_report"]["weighted avg"]["precision"] > self.weighted_precision_max else self.weighted_precision_max
-                        self.weighted_recall_max = tmp["classification_report"]["weighted avg"]["recall"] \
-                            if tmp["classification_report"]["weighted avg"]["recall"] > self.weighted_recall_max else self.weighted_recall_max
-                        self.weighted_f1_max = tmp["classification_report"]["weighted avg"]["f1-score"] \
-                            if tmp["classification_report"]["weighted avg"]["f1-score"] > self.weighted_f1_max else self.weighted_f1_max
+                        self.accuracy_max[this_model["class_count"]] = tmp["classification_report"]["accuracy"] \
+                            if tmp["classification_report"]["accuracy"] > self.accuracy_max[this_model["class_count"]] \
+                            else self.accuracy_max[this_model["class_count"]]
 
+                        self.macro_precision_max[this_model["class_count"]] = tmp["classification_report"]["macro avg"]["precision"] \
+                            if tmp["classification_report"]["macro avg"]["precision"] > self.macro_precision_max[this_model["class_count"]] \
+                            else self.macro_precision_max[this_model["class_count"]]
 
+                        self.macro_recall_max[this_model["class_count"]] = tmp["classification_report"]["macro avg"]["recall"] \
+                            if tmp["classification_report"]["macro avg"]["recall"] > self.macro_recall_max[this_model["class_count"]] \
+                            else self.macro_recall_max[this_model["class_count"]]
 
-                        self.accuracy_max2[this_model["class_count"]] = tmp["classification_report"]["accuracy"] \
-                            if tmp["classification_report"]["accuracy"] > self.accuracy_max2[this_model["class_count"]] \
-                            else self.accuracy_max2[this_model["class_count"]]
+                        self.macro_f1_max[this_model["class_count"]] = tmp["classification_report"]["macro avg"]["f1-score"] \
+                            if tmp["classification_report"]["macro avg"]["f1-score"] > self.macro_f1_max[this_model["class_count"]] \
+                            else self.macro_f1_max[this_model["class_count"]]
 
+                        self.weighted_precision_max[this_model["class_count"]] = tmp["classification_report"]["weighted avg"]["precision"] \
+                            if tmp["classification_report"]["weighted avg"]["precision"] > self.weighted_precision_max[this_model["class_count"]] \
+                            else self.weighted_precision_max
+
+                        self.weighted_recall_max[this_model["class_count"]] = tmp["classification_report"]["weighted avg"]["recall"] \
+                            if tmp["classification_report"]["weighted avg"]["recall"] > self.weighted_recall_max[this_model["class_count"]] \
+                            else self.weighted_recall_max[this_model["class_count"]]
+
+                        self.weighted_f1_max[this_model["class_count"]] = tmp["classification_report"]["weighted avg"]["f1-score"] \
+                            if tmp["classification_report"]["weighted avg"]["f1-score"] > self.weighted_f1_max[this_model["class_count"]] \
+                            else self.weighted_f1_max[this_model["class_count"]]
 
 
                 except ValueError as e:
@@ -255,22 +283,34 @@ class ModelCompare(baseclass.BaseClass):
 
             print(index.format("size: ") + \
                 general.format(*map(lambda x : x if x =="-" else str(math.ceil(x/1e6)) + "MB",[x["model_size"] for x in batch_models])))
-            print(index.format("classes: ") + general.format(*[x["classes"] for x in batch_models]))
-            print(index.format("support: ") + general.format(*[x["macro_support"] for x in batch_models]))
-            print(index.format("epochs: ") + general.format(*[x["epochs"] for x in batch_models]))
-            print(index.format("frozen: ") + general.format(*[x["layers"] for x in batch_models]))
+            print(index.format("classes: ") + \
+                general.format(*[x["classes"] for x in batch_models]))
+            print(index.format("support: ") + \
+                general.format(*[x["macro_support"] for x in batch_models]))
+            print(index.format("epochs: ") + \
+                eneral.format(*[x["epochs"] for x in batch_models]))
+            print(index.format("frozen: ") + \
+                general.format(*[x["layers"] for x in batch_models]))
             print(index.format("accuracy: ") + \
-                general.format(*self._mark_max_val2(self.accuracy_max2,[x for x in batch_models],"accuracy")))
-                # general.format(*self._mark_max_val(self.accuracy_max,[x["accuracy"] for x in batch_models])))
-            print(index.format(" ├ top 1: ") + general.format(*map(lambda x : str(round(x,2)) + "%",[x["top_1"] for x in batch_models])))
-            print(index.format(" ├ top 3: ") + general.format(*map(lambda x : str(round(x,2)) + "%",[x["top_3"] for x in batch_models])))            
-            print(index.format(" └ top 5: ") + general.format(*map(lambda x : str(round(x,2)) + "%",[x["top_5"] for x in batch_models])))
-            print(index.format("precision: ") + general.format(*self._mark_max_val(self.macro_precision_max,[x["macro_precision"] for x in batch_models])))
-            print(index.format("") + general.format(*self._mark_max_val(self.weighted_precision_max,[x["weighted_precision"] for x in batch_models])))
-            print(index.format("recall: ") + general.format(*self._mark_max_val(self.macro_recall_max,[x["macro_recall"] for x in batch_models])))
-            print(index.format("") + general.format(*self._mark_max_val(self.weighted_recall_max,[x["weighted_recall"] for x in batch_models])))
-            print(index.format("f1: ") + general.format(*self._mark_max_val(self.macro_f1_max,[x["macro_f1"] for x in batch_models])))
-            print(index.format("") + general.format(*self._mark_max_val(self.weighted_f1_max,[x["weighted_f1"] for x in batch_models])))
+                general.format(*self._mark_max_val(self.accuracy_max,[x for x in batch_models],"accuracy")))
+            print(index.format(" ├ top 1: ") + \
+                general.format(*map(lambda x : str(round(x,2)) + "%",[x["top_1"] for x in batch_models])))
+            print(index.format(" ├ top 3: ") + \
+                general.format(*map(lambda x : str(round(x,2)) + "%",[x["top_3"] for x in batch_models])))            
+            print(index.format(" └ top 5: ") + \
+                general.format(*map(lambda x : str(round(x,2)) + "%",[x["top_5"] for x in batch_models])))
+            print(index.format("precision: ") + \
+                general.format(*self._mark_max_val(self.macro_precision_max,[x for x in batch_models],"macro_precision")))
+            print(index.format("") + \
+                general.format(*self._mark_max_val(self.weighted_precision_max,[x for x in batch_models],"weighted_precision")))
+            print(index.format("recall: ") + \
+                general.format(*self._mark_max_val(self.macro_recall_max,[x for x in batch_models],"macro_recall")))
+            print(index.format("") + \
+                general.format(*self._mark_max_val(self.weighted_recall_max,[x for x in batch_models],"weighted_recall")))
+            print(index.format("f1: ") + \
+                general.format(*self._mark_max_val(self.macro_f1_max,[x for x in batch_models],"macro_f1")))
+            print(index.format("") + \
+                general.format(*self._mark_max_val(self.weighted_f1_max,[x for x in batch_models],"weighted_f1")))
 
             print("")
             print("")
