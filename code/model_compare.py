@@ -80,7 +80,7 @@ class ModelCompare(baseclass.BaseClass):
 
 
     def _mark_max_val2(self,value_max,value_list,variable):
-        return map(lambda x : str(x) + " *" if x[variable] == value_max[x["class_count"]] else x[variable], value_list)
+        return map(lambda x : str(x[variable]) + " *" if x[variable] == value_max[x["class_count"]] else x[variable], value_list)
 
 
     def collect_data(self):
