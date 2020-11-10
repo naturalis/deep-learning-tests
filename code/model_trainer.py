@@ -345,7 +345,7 @@ if __name__ == "__main__":
     timer = utils.Timer()
     dataset = dataset.DataSet()
 
-    bla = CustomCallback()
+    bla = customcallback.CustomCallback()
     exit(0)
 
     dataset.set_environ(os.environ)
