@@ -77,7 +77,7 @@ class ModelCompare(baseclass.BaseClass):
         return "".join(["⁰¹²³⁴⁵⁶⁷⁸⁹"[ord(c)-ord('0')] for c in str(n)])
 
     def _mark_max_val(self,value_max,value_list,variable):
-        return map(lambda x : str(x[variable]) + " *" + superscript(x["class_count"]) \
+        return map(lambda x : str(x[variable]) + " *" + self.superscript(x["class_count"]) \
             if x[variable] == value_max[x["class_count"]] else x[variable], value_list)
 
 
@@ -180,13 +180,16 @@ class ModelCompare(baseclass.BaseClass):
                             this_model["top_3"] = 0
                             this_model["top_5"] = 0
 
-                        self.accuracy_max[this_model["class_count"]] = tmp["classification_report"]["accuracy"] \
-                            if tmp["classification_report"]["accuracy"] > self.accuracy_max[this_model["class_count"]] \
-                            else self.accuracy_max[this_model["class_count"]]
+                        self.accuracy_max[this_model["class_count"]] = \
+                            self.get_new_max(tmp["classification_report"]["accuracy"],
+                                self.accuracy_max,
+                                this_model["class_count"])
 
-                        self.macro_precision_max[this_model["class_count"]] = tmp["classification_report"]["macro avg"]["precision"] \
-                            if tmp["classification_report"]["macro avg"]["precision"] > self.macro_precision_max[this_model["class_count"]] \
-                            else self.macro_precision_max[this_model["class_count"]]
+                        self.macro_precision_max[this_model["class_count"]] = \
+                            self.get_new_max(tmp["classification_report"]["macro avg"]["precision"],
+                                self.macro_precision_max,
+                                this_model["class_count"])
+
 
                         self.macro_recall_max[this_model["class_count"]] = tmp["classification_report"]["macro avg"]["recall"] \
                             if tmp["classification_report"]["macro avg"]["recall"] > self.macro_recall_max[this_model["class_count"]] \
@@ -233,6 +236,11 @@ class ModelCompare(baseclass.BaseClass):
         this_model["top_5"] = 0
 
         return this_model
+
+    def get_new_max(self,new_value,value_list,class_count):
+        return new_value \
+            if new_value > value_list[class_count] \
+            else value_list[class_count]
 
     def print_data(self):
 
