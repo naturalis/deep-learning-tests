@@ -247,7 +247,7 @@ class ModelCompare(baseclass.BaseClass):
 
     def sort_data(self):
         # print(self.models)
-        self.models = sorted(self.models, key=lambda k: (k['classes'],k['name'])) 
+        self.models = sorted(self.models, key=lambda k: (k["class_count"],k["name"])) 
 
     def print_data(self):
         print("")
