@@ -18,7 +18,7 @@ class ModelCompare(baseclass.BaseClass):
     weighted_recall_max = 0
     weighted_f1_max = 0
 
-    accuracy_max2 = []
+    accuracy_max2 = {}
 
     def __init__(self):
         super().__init__()
