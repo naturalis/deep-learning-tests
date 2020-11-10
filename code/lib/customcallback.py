@@ -1,4 +1,4 @@
-class CustomCallback(keras.callbacks.Callback):
+class CustomCallback(tf.keras.callbacks.Callback):
 
     # def on_train_begin(self, logs=None):
     #     keys = list(logs.keys())
