@@ -44,6 +44,7 @@ class ModelTrainer(baseclass.BaseClass):
         return optimizers
 
     def configure_callbacks(self):
+
         callbacks = []
         for key,epoch in enumerate(self.get_preset("epochs")):
             phase = []
@@ -343,6 +344,9 @@ if __name__ == "__main__":
     trainer = ModelTrainer()
     timer = utils.Timer()
     dataset = dataset.DataSet()
+
+    bla = CustomCallback()
+    exit(0)
 
     dataset.set_environ(os.environ)
     trainer.set_debug(os.environ["DEBUG"]=="1" if "DEBUG" in os.environ else False)    
