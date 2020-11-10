@@ -260,7 +260,7 @@ class ModelCompare(baseclass.BaseClass):
             print(index.format("epochs: ") + general.format(*[x["epochs"] for x in batch_models]))
             print(index.format("frozen: ") + general.format(*[x["layers"] for x in batch_models]))
             print(index.format("accuracy: ") + \
-                general.format(*self._mark_max_val(self.accuracy_max2,[x for x in batch_models],"accuracy")))
+                general.format(*self._mark_max_val2(self.accuracy_max2,[x for x in batch_models],"accuracy")))
                 # general.format(*self._mark_max_val(self.accuracy_max,[x["accuracy"] for x in batch_models])))
             print(index.format(" ├ top 1: ") + general.format(*map(lambda x : str(round(x,2)) + "%",[x["top_1"] for x in batch_models])))
             print(index.format(" ├ top 3: ") + general.format(*map(lambda x : str(round(x,2)) + "%",[x["top_3"] for x in batch_models])))            
