@@ -18,6 +18,8 @@ class ModelCompare(baseclass.BaseClass):
     weighted_recall_max = 0
     weighted_f1_max = 0
 
+    accuracy_max2 = []
+
     def __init__(self):
         super().__init__()
 
@@ -76,6 +78,11 @@ class ModelCompare(baseclass.BaseClass):
     def _mark_max_val(self,value_max,value_list):
         return map(lambda x : str(x) + " *" if x == value_max else x, value_list)
 
+
+    def _mark_max_val2(self,value_max,value_list,variable):
+        return map(lambda x : str(x) + " *" if x[variable] == value_max[x["class_count"]] else x[variable], value_list)
+
+
     def collect_data(self):
 
         folders = []
@@ -116,6 +123,8 @@ class ModelCompare(baseclass.BaseClass):
                     tmp["class_image_minimum"],
                     tmp["class_image_maximum"]
                 )
+
+                this_model["class_count"] = tmp["class_count"]
 
                 this_model["epochs"] = "; ".join(map(str,tmp["training_phases"]["epochs"]))
                 this_model["layers"] = "; ".join(map(str,tmp["training_phases"]["freeze_layers"]))
@@ -165,6 +174,12 @@ class ModelCompare(baseclass.BaseClass):
                             if tmp["classification_report"]["weighted avg"]["recall"] > self.weighted_recall_max else self.weighted_recall_max
                         self.weighted_f1_max = tmp["classification_report"]["weighted avg"]["f1-score"] \
                             if tmp["classification_report"]["weighted avg"]["f1-score"] > self.weighted_f1_max else self.weighted_f1_max
+
+
+                        self.accuracy_max2[this_model["class_count"]] = tmp["classification_report"]["accuracy"] \
+                            if tmp["classification_report"]["accuracy"] > self.accuracy_max2[this_model["class_count"]] 
+                            else self.accuracy_max2[this_model["class_count"]]
+
 
                 except ValueError as e:
                     print(e)
@@ -241,7 +256,8 @@ class ModelCompare(baseclass.BaseClass):
             print(index.format("epochs: ") + general.format(*[x["epochs"] for x in batch_models]))
             print(index.format("frozen: ") + general.format(*[x["layers"] for x in batch_models]))
             print(index.format("accuracy: ") + \
-                general.format(*self._mark_max_val(self.accuracy_max,[x["accuracy"] for x in batch_models])))
+                general.format(*self._mark_max_val(self.accuracy_max2,[x for x in batch_models],"accuracy")))
+                # general.format(*self._mark_max_val(self.accuracy_max,[x["accuracy"] for x in batch_models])))
             print(index.format(" ├ top 1: ") + general.format(*map(lambda x : str(round(x,2)) + "%",[x["top_1"] for x in batch_models])))
             print(index.format(" ├ top 3: ") + general.format(*map(lambda x : str(round(x,2)) + "%",[x["top_3"] for x in batch_models])))            
             print(index.format(" └ top 5: ") + general.format(*map(lambda x : str(round(x,2)) + "%",[x["top_5"] for x in batch_models])))
