@@ -77,7 +77,8 @@ class ModelCompare(baseclass.BaseClass):
         return "".join(["⁰¹²³⁴⁵⁶⁷⁸⁹"[ord(c)-ord('0')] for c in str(n)])
 
     def _mark_max_val(self,value_max,value_list,variable):
-        return map(lambda x : superscript(str(x[variable])) + " *" if x[variable] == value_max[x["class_count"]] else x[variable], value_list)
+        return map(lambda x : str(x[variable]) + " *" + superscript(x["class_count"]) \
+            if x[variable] == value_max[x["class_count"]] else x[variable], value_list)
 
 
     def collect_data(self):
