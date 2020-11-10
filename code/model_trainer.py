@@ -37,25 +37,25 @@ class ModelTrainer(baseclass.BaseClass):
 
     def configure_optimizers(self):
         optimizers = []
-        for learning_rate in trainer.get_preset("learning_rate"):
+        for learning_rate in self.get_preset("learning_rate"):
             optimizers.append(tf.keras.optimizers.RMSprop(learning_rate=learning_rate))
 
         return optimizers
 
     def configure_callbacks(self):
         callbacks = []
-        for key,epoch in enumerate(trainer.get_preset("epochs")):
+        for key,epoch in enumerate(self.get_preset("epochs")):
             phase = []
 
-            phase.append(tf.keras.callbacks.ModelCheckpoint(trainer.get_model_path(), 
-                monitor=trainer.get_preset("checkpoint_monitor"), save_best_only=True, save_freq="epoch", verbose=1))
+            phase.append(tf.keras.callbacks.ModelCheckpoint(self.get_model_path(), 
+                monitor=self.get_preset("checkpoint_monitor"), save_best_only=True, save_freq="epoch", verbose=1))
 
-            if self.model_settings["use_tensorboard"]==True:
+            if self.get_preset("use_tensorboard"):
                 phase.append(tf.keras.callbacks.TensorBoard(self.get_tensorboard_log_path()))
                 self.logger.info("tensor board log path: {}".format(self.get_tensorboard_log_path()))
 
-            if key < len(trainer.get_preset("early_stopping_monitor")):
-                item = trainer.get_preset("early_stopping_monitor")[key]
+            if key < len(self.get_preset("early_stopping_monitor")):
+                item = self.get_preset("early_stopping_monitor")[key]
                 if not item == "none":
                     phase.append(tf.keras.callbacks.EarlyStopping(
                         monitor=item, 
@@ -64,8 +64,8 @@ class ModelTrainer(baseclass.BaseClass):
                         restore_best_weights=True, 
                         verbose=1))
 
-            if key < len(trainer.get_preset("reduce_lr_params")):
-                item = trainer.get_preset("reduce_lr_params")[key]
+            if key < len(self.get_preset("reduce_lr_params")):
+                item = self.get_preset("reduce_lr_params")[key]
                 phase.append(tf.keras.callbacks.ReduceLROnPlateau(
                     monitor=item["monitor"],factor=item["factor"],patience=item["patience"],min_lr=item["min_lr"],verbose=item["verbose"]))
 
