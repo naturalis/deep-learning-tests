@@ -127,31 +127,20 @@ class ModelCompare(baseclass.BaseClass):
                 this_model["epochs"] = "; ".join(map(str,tmp["training_phases"]["epochs"]))
                 this_model["layers"] = "; ".join(map(str,tmp["training_phases"]["freeze_layers"]))
 
-
-                if item in [self.accuracy_max, \
-                    self.macro_precision_max, \
-                    self.macro_recall_max, \
-                    self.macro_f1_max, \
-                    self.weighted_precision_max, \
-                    self.weighted_recall_max, \
-                    self.weighted_f1_max ]:
-                    if not this_model["class_count"] in item:
-                        item[this_model["class_count"]] = 0
-
-                # if not this_model["class_count"] in self.accuracy_max:
-                #     self.accuracy_max[this_model["class_count"]] = 0
-                # if not this_model["class_count"] in self.macro_precision_max:
-                #     self.macro_precision_max[this_model["class_count"]] = 0
-                # if not this_model["class_count"] in self.macro_recall_max:
-                #     self.macro_recall_max[this_model["class_count"]] = 0
-                # if not this_model["class_count"] in self.macro_f1_max:
-                #     self.macro_f1_max[this_model["class_count"]] = 0
-                # if not this_model["class_count"] in self.weighted_precision_max:
-                #     self.weighted_precision_max[this_model["class_count"]] = 0
-                # if not this_model["class_count"] in self.weighted_recall_max:
-                #     self.weighted_recall_max[this_model["class_count"]] = 0
-                # if not this_model["class_count"] in self.weighted_f1_max:
-                #     self.weighted_f1_max[this_model["class_count"]] = 0
+                if not this_model["class_count"] in self.accuracy_max:
+                    self.accuracy_max[this_model["class_count"]] = 0
+                if not this_model["class_count"] in self.macro_precision_max:
+                    self.macro_precision_max[this_model["class_count"]] = 0
+                if not this_model["class_count"] in self.macro_recall_max:
+                    self.macro_recall_max[this_model["class_count"]] = 0
+                if not this_model["class_count"] in self.macro_f1_max:
+                    self.macro_f1_max[this_model["class_count"]] = 0
+                if not this_model["class_count"] in self.weighted_precision_max:
+                    self.weighted_precision_max[this_model["class_count"]] = 0
+                if not this_model["class_count"] in self.weighted_recall_max:
+                    self.weighted_recall_max[this_model["class_count"]] = 0
+                if not this_model["class_count"] in self.weighted_f1_max:
+                    self.weighted_f1_max[this_model["class_count"]] = 0
 
 
             if os.path.exists(model):
