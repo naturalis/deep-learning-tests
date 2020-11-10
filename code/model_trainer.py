@@ -358,7 +358,7 @@ if __name__ == "__main__":
 
 
         # trainer.model_settings["base_model"] = tf.keras.applications.InceptionV3(weights="imagenet", include_top=False)
-        trainer.model_settings["base_model"] = tf.keras.applications.inception_v4(weights="imagenet", include_top=False)
+        # trainer.model_settings["base_model"] = tf.keras.applications.inception_v4(weights="imagenet", include_top=False)
         # trainer.model_settings["base_model"] = tf.keras.applications.VGG16(weights="imagenet", include_top=False)
         # trainer.model_settings["base_model"] = tf.keras.applications.ResNet50(weights="imagenet", include_top=False)
         # trainer.model_settings["base_model"] = tf.keras.applications.MobileNet_V3(weights="imagenet", include_top=False)
