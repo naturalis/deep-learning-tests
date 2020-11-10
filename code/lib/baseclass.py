@@ -316,6 +316,8 @@ class BaseClass():
         self.logger.info("loaded {} classes from {}".format(len(self.classes),self.get_classes_path()))
 
     def set_presets(self,**kwargs):
+
+        self.presets.update( { "use_tensorboard" : True } )
         
         if 'os_environ' in kwargs:
             os_environ = kwargs['os_environ']
