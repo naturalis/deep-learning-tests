@@ -73,13 +73,28 @@ class ModelCompare(baseclass.BaseClass):
         for item in self.broken_models:
             print("{}".format(item))
 
-    def superscript(self, n):
-        return "".join(["⁰¹²³⁴⁵⁶⁷⁸⁹"[ord(c)-ord('0')] for c in str(n)])
+    # def superscript(self, n):
+    #     return "".join(["⁰¹²³⁴⁵⁶⁷⁸⁹"[ord(c)-ord('0')] for c in str(n)])
 
     def _mark_max_val(self,value_max,value_list,variable):
-        return map(lambda x : str(x[variable]) + " *" + self.superscript(x["class_count"]) \
+        return map(lambda x : "{} *({})".format(str(x[variable]),x["class_count"]) \
             if x[variable] == value_max[x["class_count"]] else x[variable], value_list)
 
+    def _add_empty_values(self,this_model):
+        this_model["accuracy"] = ""
+        this_model["macro_precision"] = ""
+        this_model["macro_recall"] = ""
+        this_model["macro_f1"] = ""
+        this_model["macro_support"] = ""
+        this_model["weighted_precision"] = ""
+        this_model["weighted_recall"] = ""
+        this_model["weighted_f1"] = ""
+        this_model["weighted_support"] = ""
+        this_model["top_1"] = 0
+        this_model["top_3"] = 0
+        this_model["top_5"] = 0
+
+        return this_model
 
     def collect_data(self):
 
@@ -218,33 +233,20 @@ class ModelCompare(baseclass.BaseClass):
 
                 except ValueError as e:
                     print(e)
-                    this_model = self.add_empty_values(this_model)
+                    this_model = self._add_empty_values(this_model)
             else:
-                this_model = self.add_empty_values(this_model)
+                this_model = self._add_empty_values(this_model)
                 pass
 
             self.models.append(this_model)
-
-    def add_empty_values(self,this_model):
-        this_model["accuracy"] = ""
-        this_model["macro_precision"] = ""
-        this_model["macro_recall"] = ""
-        this_model["macro_f1"] = ""
-        this_model["macro_support"] = ""
-        this_model["weighted_precision"] = ""
-        this_model["weighted_recall"] = ""
-        this_model["weighted_f1"] = ""
-        this_model["weighted_support"] = ""
-        this_model["top_1"] = 0
-        this_model["top_3"] = 0
-        this_model["top_5"] = 0
-
-        return this_model
 
     def get_new_max(self,new_value,value_list,class_count):
         return new_value \
             if new_value > value_list[class_count] \
             else value_list[class_count]
+
+    def sort_data(self):
+        print(self.models)
 
     def print_data(self):
 
@@ -344,5 +346,6 @@ if __name__ == "__main__":
         compare.set_delete(args.delete)
 
     compare.collect_data()
+    compare.sort_data()
     compare.print_data()
     compare.clean_up()
