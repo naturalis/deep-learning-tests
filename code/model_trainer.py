@@ -4,7 +4,7 @@ import numpy as np
 from datetime import datetime
 import matplotlib.pyplot as plt
 import pandas as pd
-from lib import baseclass, dataset, utils
+from lib import baseclass, dataset, utils, customcallback
 
 
 class ModelTrainer(baseclass.BaseClass):
@@ -17,6 +17,7 @@ class ModelTrainer(baseclass.BaseClass):
 
     train_generator = None
     validation_generator = None
+    current_epoch = 0
 
     def __init__(self):
         super().__init__()
@@ -46,6 +47,8 @@ class ModelTrainer(baseclass.BaseClass):
         callbacks = []
         for key,epoch in enumerate(self.get_preset("epochs")):
             phase = []
+
+            phase.append(CustomCallback())
 
             phase.append(tf.keras.callbacks.ModelCheckpoint(self.get_model_path(), 
                 monitor=self.get_preset("checkpoint_monitor"), save_best_only=True, save_freq="epoch", verbose=1))
