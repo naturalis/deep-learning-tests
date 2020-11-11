@@ -277,7 +277,7 @@ class ModelCompare(baseclass.BaseClass):
 
             print(index.format("name: ")  + general.format(*[x["name"] for x in batch_models]))
             print(index.format("date: ")  + general.format(*[x["date"][0:19] for x in batch_models]))
-            print(index.format("state: ") + general.format(*[x["state"] for x in batch_models]))
+            print(index.format("state: ") + general.format(*["{} ({})".format(x["state"],x["epochs_trained"]) for x in batch_models]))
             print(index.format("base: ") + general.format(*[x["base_model"] for x in batch_models]))
 
             notes = []
