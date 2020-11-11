@@ -196,8 +196,8 @@ class ModelTrainer(baseclass.BaseClass):
             if self.model_settings["base_model"] == "vgg16":
                 self.base_model = tf.keras.applications.VGG16(weights="imagenet", include_top=False)
 
-            if self.model_settings["base_model"] == "inceptionv4":
-                self.base_model = tf.keras.applications.InceptionV4(weights="imagenet", include_top=False)
+            if self.model_settings["base_model"] == "inceptionresnetv2":
+                self.base_model = tf.keras.applications.InceptionResNetV2(weights="imagenet", include_top=False)
 
             if self.model_settings["base_model"] == "inceptionv3":
                 self.base_model = tf.keras.applications.InceptionV3(weights="imagenet", include_top=False)
@@ -216,9 +216,10 @@ class ModelTrainer(baseclass.BaseClass):
         x = self.base_model.output
         x = tf.keras.layers.GlobalAveragePooling2D()(x)
 
-        # x = tf.keras.layers.Dropout(.2)(x)
+        # extra layers
         # x = tf.keras.layers.Dense(512, activation='relu')(x)
         x = tf.keras.layers.Dense(1024, activation='relu')(x)
+        x = tf.keras.layers.Dropout(.2)(x)
 
         self.predictions = tf.keras.layers.Dense(len(self.class_list), activation='softmax')(x)
         self.model = tf.keras.models.Model(inputs=self.base_model.input, outputs=self.predictions)
