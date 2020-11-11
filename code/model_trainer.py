@@ -43,17 +43,18 @@ class ModelTrainer(baseclass.BaseClass):
 
         return optimizers
 
-    def set_current_epoch(self,epoch):
-        self.current_epoch = epoch
-        print("start epoch {}".format(self.current_epoch))
-
     def configure_callbacks(self):
+
+        self.customcallback = customcallback.CustomCallback()
+        self.logger.info("fuck: {}".format(self.customcallback.get_current_epoch()))
+        exit(0)
+
 
         callbacks = []
         for key,epoch in enumerate(self.get_preset("epochs")):
             phase = []
 
-            phase.append(customcallback.CustomCallback())
+            phase.append(self.customcallback)
 
             phase.append(tf.keras.callbacks.ModelCheckpoint(self.get_model_path(), 
                 monitor=self.get_preset("checkpoint_monitor"), save_best_only=True, save_freq="epoch", verbose=1))
