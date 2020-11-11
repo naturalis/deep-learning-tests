@@ -19,6 +19,8 @@ class ModelTrainer(baseclass.BaseClass):
     validation_generator = None
     current_epoch = 0
 
+    customcallback = None
+
     def __init__(self):
         super().__init__()
 
@@ -44,11 +46,7 @@ class ModelTrainer(baseclass.BaseClass):
         return optimizers
 
     def configure_callbacks(self):
-
         self.customcallback = customcallback.CustomCallback()
-        self.logger.info("fuck: {}".format(self.customcallback.get_current_epoch()))
-        exit(0)
-
 
         callbacks = []
         for key,epoch in enumerate(self.get_preset("epochs")):
@@ -448,7 +446,7 @@ if __name__ == "__main__":
     trainer.configure_generators()
     trainer.train_model()
 
-    dataset.set_epochs_trained(trainer.current_epoch)
+    dataset.set_epochs_trained(trainer.customcallback.get_current_epoch())
     dataset.set_training_time(timer.get_time_passed())
     dataset.update_model_state("configured")
 

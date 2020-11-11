@@ -2,7 +2,7 @@ import tensorflow as tf
 
 class CustomCallback(tf.keras.callbacks.Callback):
 
-    current_epoch = -666
+    current_epoch = 0
 
     # def on_train_begin(self, logs=None):
     #     keys = list(logs.keys())
@@ -15,11 +15,10 @@ class CustomCallback(tf.keras.callbacks.Callback):
     def on_epoch_begin(self, epoch, logs=None):
         # keys = list(logs.keys())
         self.current_epoch = epoch
-        print("start epoch {}".format(self.current_epoch))
 
     def on_epoch_end(self, epoch, logs=None):
         # keys = list(logs.keys())
-        print("end epoch {}".format(self.current_epoch))
+        pass
 
     def get_current_epoch(self):
         return self.current_epoch
