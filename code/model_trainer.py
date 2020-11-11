@@ -210,13 +210,11 @@ class ModelTrainer(baseclass.BaseClass):
         self.logger.info("using base model {}".format(self.base_model.name))
 
         x = self.base_model.output
-        
-        # x = tf.keras.layers.GlobalAveragePooling2D()(x)
-        x = tf.keras.layers.Flatten()(x)
+        x = tf.keras.layers.GlobalAveragePooling2D()(x)
 
         # x = tf.keras.layers.Dropout(.2)(x)
         # x = tf.keras.layers.Dense(512, activation='relu')(x)
-        # x = tf.keras.layers.Dense(1024, activation='relu')(x)
+        x = tf.keras.layers.Dense(1024, activation='relu')(x)
 
         self.predictions = tf.keras.layers.Dense(len(self.class_list), activation='softmax')(x)
         self.model = tf.keras.models.Model(inputs=self.base_model.input, outputs=self.predictions)
