@@ -30,7 +30,7 @@ class ModelAnalysis(baseclass.BaseClass):
             target_size=(299, 299),
             batch_size=self.model_settings["batch_size"],
             interpolation="nearest",
-            shuffle=False
+            shuffle=True
         )
 
     def do_analysis(self):

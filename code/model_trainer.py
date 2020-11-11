@@ -147,7 +147,14 @@ class ModelTrainer(baseclass.BaseClass):
         self.logger.info("saved model classes to {}".format(self.get_classes_path()))
 
 
-    def assemble_custom_model(self):
+    def assemble_model(self):
+        if "base_model" in self.model_settings and self.model_settings["base_model"]=="custom":
+            self._assemble_custom_model()
+        else:
+            self._assemble_transfer_model()
+
+
+    def _assemble_custom_model(self):
 
         self.logger.info("using custom model")
 
@@ -170,7 +177,7 @@ class ModelTrainer(baseclass.BaseClass):
 
 
 
-    def assemble_model(self):
+    def _assemble_transfer_model(self):
         
         self.base_model = None
 
