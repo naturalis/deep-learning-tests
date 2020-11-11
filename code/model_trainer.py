@@ -146,6 +146,30 @@ class ModelTrainer(baseclass.BaseClass):
 
         self.logger.info("saved model classes to {}".format(self.get_classes_path()))
 
+
+    def assemble_custom_model(self):
+
+        self.logger.info("using custom model")
+
+        input_shape = (299, 299, 3)
+
+        x = tf.keras.layers.Conv2D(16, (3,3), padding='same', input_shape=input_shape, activation='relu')
+        x = tf.keras.layers.MaxPool2D()(x)
+        x = tf.keras.layers.Conv2D(32, (3,3), padding='same', activation='relu')(x)
+        x = tf.keras.layers.MaxPool2D()(x)
+        x = tf.keras.layers.Conv2D(64, (3,3), padding='same', activation='relu')(x)
+        x = tf.keras.layers.Flatten()(x)
+        x = tf.keras.layers.Dense(128, activation='relu')(x)
+        x = tf.keras.layers.Dropout(0.5)(x)
+        self.predictions = tf.keras.layers.Dense(len(self.class_list), activation='softmax')(x)
+
+        self.model = tf.keras.models.Model(inputs=input_shape, outputs=self.predictions)
+
+        self.logger.info("model has {} classes".format(len(self.class_list)))
+        self.logger.info("model has {} layers".format(len(self.model.layers)))
+
+
+
     def assemble_model(self):
         
         self.base_model = None

@@ -78,8 +78,8 @@ class DataSet(baseclass.BaseClass):
         self.data_set["model_name"] = self.model_trainer.model_name
         self.data_set["created"] = str(self.model_trainer.timestamp)
         self.data_set["state"] = self.model_state
-        self.data_set["epochs"] = "n/a"
         self.data_set["training_time"] = "n/a"
+        self.data_set["epochs_trained"] = "n/a"
         self.data_set["model_note"] = self.model_note
 
         self.data_set["base_model"] = str(self.model_trainer.base_model.name)
@@ -158,6 +158,6 @@ class DataSet(baseclass.BaseClass):
         self.data_set["training_time"]=time_passed
 
     def set_epochs_trained(self,epochs):
-        self.data_set["epochs"]=epochs
+        self.data_set["epochs_trained"]=epochs
 
 
