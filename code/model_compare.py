@@ -125,8 +125,8 @@ class ModelCompare(baseclass.BaseClass):
                 this_model["date"] = tmp["created"]
                 this_model["state"] = "?" if not "state" in tmp else tmp["state"]
                 this_model["base_model"] = tmp["base_model"]
-                this_model["training_time"] = tmp["training_time"]
-                this_model["epochs_trained"] = tmp["epochs_trained"]
+                this_model["training_time"] = tmp["training_time"] if "training_time" in tmp else "n/a"
+                this_model["epochs_trained"] = tmp["epochs_trained"] if "epochs_trained" in tmp else "n/a"
 
                 if "model_retrain_note" in tmp:
                     this_model["note"] = "{} / {}".format(tmp["model_note"],tmp["model_retrain_note"])
