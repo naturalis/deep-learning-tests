@@ -12,12 +12,13 @@ class CustomCallback(tf.keras.callbacks.Callback):
 
     def on_epoch_begin(self, epoch, logs=None):
         # keys = list(logs.keys())
-        self.current_epoch = epoch
-        print("start epoch {}".format(self.current_epoch))
+        self.set_current_epoch(epoch)
+        # print("start epoch {}".format(epoch))
 
     def on_epoch_end(self, epoch, logs=None):
         # keys = list(logs.keys())
-        print("end epoch {}".format(self.current_epoch))
+        # print("end epoch {}".format(self.current_epoch))
+        pass
 
     # def on_test_begin(self, logs=None):
     #     keys = list(logs.keys())

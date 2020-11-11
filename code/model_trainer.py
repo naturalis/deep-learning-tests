@@ -43,6 +43,10 @@ class ModelTrainer(baseclass.BaseClass):
 
         return optimizers
 
+    def set_current_epoch(self,epoch):
+        self.current_epoch = epoch
+        print("start epoch {}".format(self.current_epoch))
+
     def configure_callbacks(self):
 
         callbacks = []
