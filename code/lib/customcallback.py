@@ -22,7 +22,7 @@ class CustomCallback(tf.keras.callbacks.Callback):
         print("end epoch {}".format(self.current_epoch))
 
     def get_current_epoch(self):
-        return self.current_epoch = epoch
+        return self.current_epoch
 
     # def on_test_begin(self, logs=None):
     #     keys = list(logs.keys())
