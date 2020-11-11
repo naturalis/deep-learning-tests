@@ -167,6 +167,9 @@ class ModelTrainer(baseclass.BaseClass):
             if self.model_settings["base_model"] == "inceptionv3":
                 self.base_model = tf.keras.applications.InceptionV3(weights="imagenet", include_top=False)
 
+            if self.model_settings["base_model"] == "xception":
+                self.base_model = tf.keras.applications.Xception(weights="imagenet", include_top=False)
+
             if self.base_model == None:
                 self.logger.error("unknown base model: {}".format(self.model_settings["base_model"]))
 
