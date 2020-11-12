@@ -217,7 +217,7 @@ class ModelTrainer(baseclass.BaseClass):
 
         # extra layers
         # x = tf.keras.layers.Dense(512, activation='relu')(x)
-        # x = tf.keras.layers.Dense(1024, activation='relu')(x)
+        x = tf.keras.layers.Dense(1024, activation='relu')(x)
         # x = tf.keras.layers.Dropout(.2)(x)
 
         self.predictions = tf.keras.layers.Dense(len(self.class_list), activation='softmax')(x)
