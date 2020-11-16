@@ -255,16 +255,10 @@ class ModelCompare(baseclass.BaseClass):
 
     def sort_data(self):
         # print(self.models)
-        # if self.sort == "name" 
-        #     self.models = sorted(self.models, key=lambda k: (k["name"]))
-        # else
-
-        self.models = sorted(self.models, key=lambda k: 
-            if self.sort == "date" :
-                (k["date"],k["class_count"],k["accuracy"])
-            else:
-                (k["class_count"],k["date"])
-        )
+        if self.sort == None:
+            self.models = sorted(self.models, key=lambda k: (k["class_count"],k["accuracy"],k["date"]))
+        else:
+            self.models = sorted(self.models, key=lambda k: (k[self.sort],k["accuracy"],k["date"]))
 
 
 # this_model["accuracy"] = tmp["classification_report"]["accuracy"]
