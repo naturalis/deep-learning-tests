@@ -255,8 +255,34 @@ class ModelCompare(baseclass.BaseClass):
 
     def sort_data(self):
         # print(self.models)
-        sort_fields = (k["class_count"],k["name"])
-        self.models = sorted(self.models, key=lambda k: sort_fields)
+        # if self.sort == "name" 
+        #     self.models = sorted(self.models, key=lambda k: (k["name"]))
+        # else
+
+        self.models = sorted(self.models, key=lambda k: 
+            if self.sort == "date" :
+                (k["date"],k["class_count"],k["accuracy"])
+            else:
+                (k["class_count"],k["date"])
+        )
+
+
+# this_model["accuracy"] = tmp["classification_report"]["accuracy"]
+# this_model["macro_precision"] = tmp["classification_report"]["macro avg"]["precision"]
+# this_model["macro_recall"] = tmp["classification_report"]["macro avg"]["recall"]
+# this_model["macro_f1"] = tmp["classification_report"]["macro avg"]["f1-score"]
+# this_model["macro_support"] = tmp["classification_report"]["macro avg"]["support"]
+# this_model["weighted_precision"] = tmp["classification_report"]["weighted avg"]["precision"]
+# this_model["weighted_recall"] = tmp["classification_report"]["weighted avg"]["recall"]
+# this_model["weighted_f1"] = tmp["classification_report"]["weighted avg"]["f1-score"]
+# this_model["weighted_support"] = tmp["classification_report"]["weighted avg"]["support"]
+# this_model["name"] = tmp["model_name"]
+# this_model["date"] = tmp["created"]
+# this_model["state"] = "?" if not "state" in tmp else tmp["state"]
+# this_model["base_model"] = tmp["base_model"]
+# this_model["training_time"] = tmp["training_time"] if "training_time" in tmp else "n/a"
+# this_model["epochs_trained"] = tmp["epochs_trained"] if "epochs_trained" in tmp else "n/a"
+
 
     def print_data(self):
 
