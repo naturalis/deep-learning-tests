@@ -318,6 +318,7 @@ class BaseClass():
     def set_presets(self,**kwargs):
 
         self.presets.update( { "use_tensorboard" : True } )
+        self.presets.update( { "use_imagenet_weights" : True } )
         
         if 'os_environ' in kwargs:
             os_environ = kwargs['os_environ']
@@ -345,6 +346,7 @@ class BaseClass():
             class_image_minimum = int(os_environ.get("CLASS_IMAGE_MINIMUM")) if "CLASS_IMAGE_MINIMUM" in os_environ else 2
             class_image_maximum = int(os_environ.get("CLASS_IMAGE_MAXIMUM")) if "CLASS_IMAGE_MAXIMUM" in os_environ else 0
             use_tensorboard = (os_environ.get("USE_TENSORBOARD").lower()=="true") if "USE_TENSORBOARD" in os_environ else True
+            use_imagenet_weights = (os_environ.get("USE_IMAGENET_WEIGHTS").lower()=="true") if "USE_IMAGENET_WEIGHTS" in os_environ else True
 
         # TODO
         if 'dataset' in kwargs:
@@ -364,6 +366,7 @@ class BaseClass():
         self.presets.update( { "class_image_minimum" : class_image_minimum } )
         self.presets.update( { "class_image_maximum" : class_image_maximum } )
         self.presets.update( { "use_tensorboard" : use_tensorboard } )
+        self.presets.update( { "use_imagenet_weights" : use_imagenet_weights } )
 
     def get_preset(self, preset):
         if preset in self.presets:

@@ -184,34 +184,40 @@ class ModelTrainer(baseclass.BaseClass):
         
         self.base_model = None
 
-        if "base_model" in self.model_settings:
+        if self.get_preset("use_imagenet_weights"):
+            weights = "imagenet"
+        else:
+            weights = None
+
+        if "transfer_imagenet" in self.model_settings:
+
 
             if self.model_settings["base_model"] == "mobilenetv2":
-                self.base_model = tf.keras.applications.MobileNetV2(weights="imagenet", include_top=False)
+                self.base_model = tf.keras.applications.MobileNetV2(weights=weights, include_top=False)
 
             if self.model_settings["base_model"] == "resnet50":
-                self.base_model = tf.keras.applications.ResNet50(weights="imagenet", include_top=False)
+                self.base_model = tf.keras.applications.ResNet50(weights=weights, include_top=False)
 
             if self.model_settings["base_model"] == "vgg16":
-                self.base_model = tf.keras.applications.VGG16(weights="imagenet", include_top=False)
+                self.base_model = tf.keras.applications.VGG16(weights=weights, include_top=False)
 
             if self.model_settings["base_model"] == "inceptionresnetv2":
-                self.base_model = tf.keras.applications.InceptionResNetV2(weights="imagenet", include_top=False)
+                self.base_model = tf.keras.applications.InceptionResNetV2(weights=weights, include_top=False)
 
             if self.model_settings["base_model"] == "inceptionv3":
-                self.base_model = tf.keras.applications.InceptionV3(weights="imagenet", include_top=False)
+                self.base_model = tf.keras.applications.InceptionV3(weights=weights, include_top=False)
 
             if self.model_settings["base_model"] == "xception":
-                # self.base_model = tf.keras.applications.Xception(weights="imagenet", include_top=False)
-                self.base_model = tf.keras.applications.Xception(weights=None, include_top=False)
+                self.base_model = tf.keras.applications.Xception(weights=weights, include_top=False)
 
             if self.base_model == None:
                 self.logger.error("unknown base model: {}".format(self.model_settings["base_model"]))
 
         if self.base_model == None:
-            self.base_model = tf.keras.applications.InceptionV3(weights="imagenet", include_top=False)
+            self.base_model = tf.keras.applications.InceptionV3(weights=weights, include_top=False)
 
-        self.logger.info("using base model {}".format(self.base_model.name))
+        self.logger.info("base model: {}".format(self.base_model.name))
+        self.logger.info("use imagenet weights: {}".format("y" if self.get_preset("use_imagenet_weights") else "n"))
 
         x = self.base_model.output
         x = tf.keras.layers.GlobalAveragePooling2D()(x)

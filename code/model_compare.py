@@ -6,6 +6,7 @@ class ModelCompare(baseclass.BaseClass):
 
     cleanup = False
     delete = None
+    sort = None
 
     models = []
     broken_models = []
@@ -27,6 +28,9 @@ class ModelCompare(baseclass.BaseClass):
 
     def set_delete(self,models):
         self.delete = models.split(",")
+
+    def set_sort(self,sort):
+        self.sort = sort
 
     def clean_up(self):
         if self.cleanup:
@@ -251,7 +255,8 @@ class ModelCompare(baseclass.BaseClass):
 
     def sort_data(self):
         # print(self.models)
-        self.models = sorted(self.models, key=lambda k: (k["class_count"],k["name"])) 
+        sort_fields = (k["class_count"],k["name"])
+        self.models = sorted(self.models, key=lambda k: sort_fields)
 
     def print_data(self):
 
@@ -354,8 +359,8 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser() 
     parser.add_argument("--cleanup", action='store_true')
     parser.add_argument("--delete", type=str)
+    parser.add_argument("--sort", type=str)
     args = parser.parse_args() 
-
 
     compare = ModelCompare()
 
@@ -367,6 +372,9 @@ if __name__ == "__main__":
 
     if args.delete:
         compare.set_delete(args.delete)
+
+    if args.sort:
+        compare.set_sort(args.sort)
 
     compare.collect_data()
     compare.sort_data()
