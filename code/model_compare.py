@@ -258,7 +258,7 @@ class ModelCompare(baseclass.BaseClass):
         if self.sort == None:
             self.models = sorted(self.models, key=lambda k: (k["class_count"],k["accuracy"],k["date"]))
         else:
-            self.models = sorted(self.models, key=lambda k: (k[self.sort],k["accuracy"],k["date"]))
+            self.models = sorted(self.models, key=lambda k: (k[str(self.sort)],k["accuracy"],k["date"]))
 
 
 # this_model["accuracy"] = tmp["classification_report"]["accuracy"]
