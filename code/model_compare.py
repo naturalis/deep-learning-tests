@@ -261,10 +261,8 @@ class ModelCompare(baseclass.BaseClass):
         #     self.models = sorted(self.models, key=lambda k: (str(k[self.sort]),str(k["accuracy"]),str(k["date"])))
 
         def get_age(employee):
-            print(employee.get('name'),employee.get('accuracy'))
             name = int(employee.get('name').replace("-",""))
-            accuracy = int(employee.get('accuracy') * 100)
-            print(name,accuracy)
+            accuracy = int(employee.get('accuracy') * 100) if len(str(employee.get('accuracy')).strip()) > 0 else 0
 
             return (name,accuracy)
 
