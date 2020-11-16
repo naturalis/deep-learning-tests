@@ -126,7 +126,7 @@ class ModelCompare(baseclass.BaseClass):
             with open(dataset) as json_file:
                 tmp = json.load(json_file)
                 this_model["name"] = tmp["model_name"]
-                this_model["name_float"] = float(tmp["model_name"].replace("-","").trim())
+                this_model["name_float"] = float(tmp["model_name"].replace("-","").strip())
                 this_model["date"] = tmp["created"]
                 this_model["state"] = "?" if not "state" in tmp else tmp["state"]
                 this_model["base_model"] = tmp["base_model"]
