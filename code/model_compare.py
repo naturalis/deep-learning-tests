@@ -145,7 +145,7 @@ class ModelCompare(baseclass.BaseClass):
                     tmp["class_image_maximum"]
                 )
 
-                this_model["class_count"] = tmp["class_count"]
+                this_model["class_count"] = int(tmp["class_count"])
 
                 this_model["epochs"] = "; ".join(map(str,tmp["training_phases"]["epochs"]))
                 this_model["layers"] = "; ".join(map(str,tmp["training_phases"]["freeze_layers"]))
@@ -259,7 +259,7 @@ class ModelCompare(baseclass.BaseClass):
             print(fuck["name"],fuck["accuracy"],fuck["class_count"])
 
         if self.sort == None:
-            self.models = sorted(self.models, key=(int(itemgetter('class_count')),23,55))
+            self.models = sorted(self.models, key=(itemgetter('class_count'),23,55))
         else:
             self.models = sorted(self.models, key=itemgetter('accuracy'))
 
