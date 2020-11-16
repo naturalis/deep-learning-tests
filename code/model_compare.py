@@ -362,7 +362,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser() 
     parser.add_argument("--cleanup", action='store_true')
     parser.add_argument("--delete", type=str)
-    parser.add_argument("--sort", type=str)
+    parser.add_argument("--sort", type=str,help='add field to sort on (accuracy, base_model, model_size, date, etc.). default is: class_count > accuracy > name/date')
     args = parser.parse_args() 
 
     compare = ModelCompare()
@@ -383,3 +383,6 @@ if __name__ == "__main__":
     compare.sort_data()
     compare.print_data()
     compare.clean_up()
+
+
+
