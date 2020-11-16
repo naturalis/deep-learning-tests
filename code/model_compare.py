@@ -256,7 +256,7 @@ class ModelCompare(baseclass.BaseClass):
 
     def sort_data(self):
         if self.sort == None:
-            self.models = sorted(self.models, key=(itemgetter('class_count'),itemgetter('name'),itemgetter('name')))
+            self.models = sorted(self.models, key=(itemgetter('class_count'),itemgetter('accuracy'),itemgetter('name')))
         else:
             self.models = sorted(self.models, key=itemgetter('accuracy'))
 
