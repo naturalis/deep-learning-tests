@@ -255,13 +255,17 @@ class ModelCompare(baseclass.BaseClass):
             else value_list[class_count]
 
     def sort_data(self):
-        for fuck in self.models:
-            print(fuck["name"],fuck["accuracy"],fuck["class_count"])
 
-        if self.sort == None:
-            self.models = sorted(self.models, key=(itemgetter('class_count'),23,55))
-        else:
-            self.models = sorted(self.models, key=itemgetter('accuracy'))
+        self.models = sorted(self.models, key=lambda row: (
+                                                row['class_count'],
+                                                row['accuracy'],
+                                                row['name']))
+
+
+        # if self.sort == None:
+        #     self.models = sorted(self.models, key=(itemgetter('class_count'),23,55))
+        # else:
+        #     self.models = sorted(self.models, key=itemgetter('accuracy'))
 
 
 # this_model["accuracy"] = tmp["classification_report"]["accuracy"]
