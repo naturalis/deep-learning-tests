@@ -261,7 +261,7 @@ class ModelCompare(baseclass.BaseClass):
         # else:
         #     self.models = sorted(self.models, key=lambda k: (str(k[self.sort]),str(k["accuracy"]),str(k["date"])))
 
-        self.models = sorted(self.models, key=attrgetter('accuracy'))
+        self.models = sorted(self.models, key=attrgetter('name'))
 
 
 # this_model["accuracy"] = tmp["classification_report"]["accuracy"]
