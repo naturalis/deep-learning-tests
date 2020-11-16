@@ -264,7 +264,7 @@ class ModelCompare(baseclass.BaseClass):
             name = int(employee.get('name').replace("-"))
             accuracy = int(employee.get('accuracy') * 100) if len(employee.get('accuracy')) > 0 else 0
 
-            return (,)
+            return (name,accuracy)
 
         self.models = sorted(self.models, key=get_age)
 
