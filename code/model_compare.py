@@ -256,7 +256,7 @@ class ModelCompare(baseclass.BaseClass):
     def sort_data(self):
         # print(self.models)
         if self.sort == None:
-            self.models = sorted(self.models, key=lambda k: (str(k["class_count"]),str(k["accuracy"]),str(k["date"])))
+            self.models = sorted(self.models, key=lambda k: (float(k["class_count"]),float(k["accuracy"]),float(k["date"])))
         else:
             self.models = sorted(self.models, key=lambda k: (str(k[self.sort]),str(k["accuracy"]),str(k["date"])))
 
