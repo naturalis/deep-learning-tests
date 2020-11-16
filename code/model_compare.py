@@ -86,15 +86,15 @@ class ModelCompare(baseclass.BaseClass):
             if x[variable] == value_max[x["class_count"]] else x[variable], value_list)
 
     def _add_empty_values(self,this_model):
-        this_model["accuracy"] = ""
-        this_model["macro_precision"] = ""
-        this_model["macro_recall"] = ""
-        this_model["macro_f1"] = ""
-        this_model["macro_support"] = ""
-        this_model["weighted_precision"] = ""
-        this_model["weighted_recall"] = ""
-        this_model["weighted_f1"] = ""
-        this_model["weighted_support"] = ""
+        this_model["accuracy"] = 0
+        this_model["macro_precision"] = 0
+        this_model["macro_recall"] = 0
+        this_model["macro_f1"] = 0
+        this_model["macro_support"] = 0
+        this_model["weighted_precision"] = 0
+        this_model["weighted_recall"] = 0
+        this_model["weighted_f1"] = 0
+        this_model["weighted_support"] = 0
         this_model["top_1"] = 0
         this_model["top_3"] = 0
         this_model["top_5"] = 0
