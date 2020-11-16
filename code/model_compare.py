@@ -261,6 +261,7 @@ class ModelCompare(baseclass.BaseClass):
         #     self.models = sorted(self.models, key=lambda k: (str(k[self.sort]),str(k["accuracy"]),str(k["date"])))
 
         def get_age(employee):
+            print("------->",int(employee.get('name').replace("-","")),int(employee.get('accuracy') * 100))
             return (int(employee.get('name').replace("-","")),int(employee.get('accuracy') * 100))
 
         self.models = sorted(self.models, key=get_age)
