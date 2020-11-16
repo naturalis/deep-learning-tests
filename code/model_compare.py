@@ -1,5 +1,6 @@
 import os, sys, json, textwrap, math, argparse
 import shutil
+from operator import itemgetter, attrgetter
 from lib import baseclass
 
 class ModelCompare(baseclass.BaseClass):
@@ -260,13 +261,7 @@ class ModelCompare(baseclass.BaseClass):
         # else:
         #     self.models = sorted(self.models, key=lambda k: (str(k[self.sort]),str(k["accuracy"]),str(k["date"])))
 
-        def get_age(employee):
-            name = int(employee.get('name').replace("-",""))
-            accuracy = int(employee.get('accuracy') * 100) if len(str(employee.get('accuracy')).strip()) > 0 else 0
-
-            return (name,accuracy)
-
-        self.models = sorted(self.models, key=get_age)
+        self.models = sorted(self.models, key=attrgetter('accuracy'))
 
 
 # this_model["accuracy"] = tmp["classification_report"]["accuracy"]
