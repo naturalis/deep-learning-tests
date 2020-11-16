@@ -255,34 +255,10 @@ class ModelCompare(baseclass.BaseClass):
             else value_list[class_count]
 
     def sort_data(self):
-
-        self.models = sorted(self.models, key=lambda row: (
-                                                row['class_count'],
-                                                row['accuracy'],
-                                                row['name']))
-
-
-        # if self.sort == None:
-        #     self.models = sorted(self.models, key=(itemgetter('class_count'),23,55))
-        # else:
-        #     self.models = sorted(self.models, key=itemgetter('accuracy'))
-
-
-# this_model["accuracy"] = tmp["classification_report"]["accuracy"]
-# this_model["macro_precision"] = tmp["classification_report"]["macro avg"]["precision"]
-# this_model["macro_recall"] = tmp["classification_report"]["macro avg"]["recall"]
-# this_model["macro_f1"] = tmp["classification_report"]["macro avg"]["f1-score"]
-# this_model["macro_support"] = tmp["classification_report"]["macro avg"]["support"]
-# this_model["weighted_precision"] = tmp["classification_report"]["weighted avg"]["precision"]
-# this_model["weighted_recall"] = tmp["classification_report"]["weighted avg"]["recall"]
-# this_model["weighted_f1"] = tmp["classification_report"]["weighted avg"]["f1-score"]
-# this_model["weighted_support"] = tmp["classification_report"]["weighted avg"]["support"]
-# this_model["name"] = tmp["model_name"]
-# this_model["date"] = tmp["created"]
-# this_model["state"] = "?" if not "state" in tmp else tmp["state"]
-# this_model["base_model"] = tmp["base_model"]
-# this_model["training_time"] = tmp["training_time"] if "training_time" in tmp else "n/a"
-# this_model["epochs_trained"] = tmp["epochs_trained"] if "epochs_trained" in tmp else "n/a"
+        if not self.sort is None:
+            self.models = sorted(self.models, key=lambda row: (row[self.sort], row['class_count'],row['accuracy'],row['name']))
+        else:  
+            self.models = sorted(self.models, key=lambda row: (row['class_count'],row['accuracy'],row['name']))
 
 
     def print_data(self):
