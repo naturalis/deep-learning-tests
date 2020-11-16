@@ -286,7 +286,7 @@ class ModelCompare(baseclass.BaseClass):
             print(index.format("name: ")  + general.format(*[x["name"] for x in batch_models]))
             print(index.format("date: ")  + general.format(*[x["date"][0:19] for x in batch_models]))
             print(index.format("state: ") + general.format(*["{} ({})".format(x["state"],x["epochs_trained"]) for x in batch_models]))
-            print(index.format("base: ") + general.format(*[x["base_model"] for x in batch_models]))
+            print(index.format("base_model: ") + general.format(*[x["base_model"] for x in batch_models]))
 
             notes = []
             max_l = 0
@@ -305,7 +305,7 @@ class ModelCompare(baseclass.BaseClass):
                         pass
                 print(index.format("" if x > 0 else "note: ") + s)
 
-            print(index.format("size: ") + \
+            print(index.format("model_size: ") + \
                 general.format(*map(lambda x : x if x =="-" else str(math.ceil(x/1e6)) + "MB",[x["model_size"] for x in batch_models])))
 
             print(index.format("classes: ") + \
