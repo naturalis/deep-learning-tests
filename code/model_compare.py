@@ -255,7 +255,8 @@ class ModelCompare(baseclass.BaseClass):
             else value_list[class_count]
 
     def sort_data(self):
-        print(self.models)
+        for model in self.models:
+            print(model["name"])
         # if self.sort == None:
         #     self.models = sorted(self.models, key=lambda k: (float(k["class_count"]),float(k["accuracy"]),k["name_float"]))
         # else:
