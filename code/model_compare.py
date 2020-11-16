@@ -126,7 +126,6 @@ class ModelCompare(baseclass.BaseClass):
             with open(dataset) as json_file:
                 tmp = json.load(json_file)
                 this_model["name"] = tmp["model_name"]
-                this_model["name_float"] = float(tmp["model_name"].replace("-","").strip())
                 this_model["date"] = tmp["created"]
                 this_model["state"] = "?" if not "state" in tmp else tmp["state"]
                 this_model["base_model"] = tmp["base_model"]
@@ -256,10 +255,15 @@ class ModelCompare(baseclass.BaseClass):
 
     def sort_data(self):
         # print(self.models)
-        if self.sort == None:
-            self.models = sorted(self.models, key=lambda k: (float(k["class_count"]),float(k["accuracy"]),k["name_float"]))
-        else:
-            self.models = sorted(self.models, key=lambda k: (str(k[self.sort]),str(k["accuracy"]),str(k["date"])))
+        # if self.sort == None:
+        #     self.models = sorted(self.models, key=lambda k: (float(k["class_count"]),float(k["accuracy"]),k["name_float"]))
+        # else:
+        #     self.models = sorted(self.models, key=lambda k: (str(k[self.sort]),str(k["accuracy"]),str(k["date"])))
+
+        def get_age(employee):
+            return employee.get('name')
+
+        self.models = sorted(self.models, key=get_age)
 
 
 # this_model["accuracy"] = tmp["classification_report"]["accuracy"]
