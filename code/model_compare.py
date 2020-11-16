@@ -259,7 +259,7 @@ class ModelCompare(baseclass.BaseClass):
             print(fuck["name"],fuck["accuracy"],fuck["class_count"])
 
         if self.sort == None:
-            self.models = sorted(self.models, key=(itemgetter('class_count'),itemgetter('accuracy'),itemgetter('name')))
+            self.models = sorted(self.models, key=(itemgetter('class_count'),itemgetter('accuracy')))
         else:
             self.models = sorted(self.models, key=itemgetter('accuracy'))
 
