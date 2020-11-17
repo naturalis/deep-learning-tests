@@ -62,11 +62,12 @@ class ModelTrainer(baseclass.BaseClass):
                 self.logger.info("tensor board log path: {}".format(self.get_tensorboard_log_path()))
 
             if key < len(self.get_preset("early_stopping_monitor")):
-                item = self.get_preset("early_stopping_monitor")[key]
-                if not item == "none":
+                monitor = self.get_preset("early_stopping_monitor")[key]
+                patience = self.get_preset("early_stopping_patience")[key]
+                if not monitor == "none":
                     phase.append(tf.keras.callbacks.EarlyStopping(
-                        monitor=item, 
-                        patience=5, 
+                        monitor=monitor, 
+                        patience=patience,
                         mode="auto", 
                         restore_best_weights=True, 
                         verbose=1))

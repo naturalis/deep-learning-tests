@@ -319,6 +319,8 @@ class BaseClass():
 
         self.presets.update( { "use_tensorboard" : True } )
         self.presets.update( { "use_imagenet_weights" : True } )
+        self.presets.update( { "early_stopping_monitor" : [ "val_loss" ] } )
+        self.presets.update( { "use_imagenet_weights" : [ 10 ] } )
         
         if 'os_environ' in kwargs:
             os_environ = kwargs['os_environ']
@@ -343,6 +345,7 @@ class BaseClass():
             metrics = json.loads(os_environ.get("METRICS")) if "METRICS" in os_environ else [ "acc" ]
             checkpoint_monitor = os_environ.get("CHECKPOINT_MONITOR") if "CHECKPOINT_MONITOR" in os_environ else "val_acc"
             early_stopping_monitor = json.loads(os_environ.get("EARLY_STOPPING_MONITOR")) if "EARLY_STOPPING_MONITOR" in os_environ else [ "none" ]
+            early_stopping_patience = json.loads(os_environ.get("EARLY_STOPPING_PATIENCE")) if "EARLY_STOPPING_PATIENCE" in os_environ else [ 10 ]
             class_image_minimum = int(os_environ.get("CLASS_IMAGE_MINIMUM")) if "CLASS_IMAGE_MINIMUM" in os_environ else 2
             class_image_maximum = int(os_environ.get("CLASS_IMAGE_MAXIMUM")) if "CLASS_IMAGE_MAXIMUM" in os_environ else 0
             use_tensorboard = (os_environ.get("USE_TENSORBOARD").lower()=="true") if "USE_TENSORBOARD" in os_environ else True
@@ -363,6 +366,7 @@ class BaseClass():
         self.presets.update( { "metrics" : metrics } )
         self.presets.update( { "checkpoint_monitor" : checkpoint_monitor } )
         self.presets.update( { "early_stopping_monitor" : early_stopping_monitor } )
+        self.presets.update( { "early_stopping_patience" : early_stopping_patience } )
         self.presets.update( { "class_image_minimum" : class_image_minimum } )
         self.presets.update( { "class_image_maximum" : class_image_maximum } )
         self.presets.update( { "use_tensorboard" : use_tensorboard } )
