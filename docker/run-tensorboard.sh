@@ -33,11 +33,12 @@ if [[ "$CLEAR_LOGS" == "--clear-logs" ]]; then
     PROJECT_ROOT=$(get_env PROJECT_ROOT)
     LOG_DIR=/data/maarten.schermer${PROJECT_ROOT}log/logs_keras/*
 
-    echo "delete ${LOG_DIR} ? [y/N]"
+    echo "delete (old) log files in ${LOG_DIR} ? [y/N]"
     read REPLY
 
     if [[ "$REPLY" == "y" ]]; then
         rm -r $LOG_DIR
+        echo "deleted log fles"
     fi
     echo
 fi
@@ -47,6 +48,8 @@ echo "set up a port forward from your machine:"
 echo "  ssh -L 6006:localhost:6006 <user>@<address of this server>"
 echo "and open:"
 echo "  http://localhost:6006/"
+echo
+echo "if tensorboard stops updating values, restart this script."
 echo
 echo "starting tensorboard"
 
