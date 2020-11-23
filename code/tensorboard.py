@@ -1,4 +1,5 @@
-import tensorflow as tf
+from tensorboard import program
 
-
-tensorboard
+tb = program.TensorBoard()
+tb.configure(argv=[None, '--logdir', tracking_address])
+url = tb.launch()
