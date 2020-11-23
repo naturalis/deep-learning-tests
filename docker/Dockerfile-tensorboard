@@ -1,0 +1,17 @@
+FROM tensorflow/tensorflow:2.0.1-gpu-py3-jupyter
+
+MAINTAINER maarten.schermer@naturalis.nl
+
+COPY . /app
+WORKDIR /app
+
+RUN pip install --upgrade pip
+
+RUN pip install tensorboard
+RUN pip install tensorflow-addons
+RUN pip install tensorflow-datasets
+
+ENTRYPOINT ["tensorboard"]
+#CMD ["bash"]
+
+
