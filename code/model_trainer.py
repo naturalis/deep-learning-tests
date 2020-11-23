@@ -18,6 +18,7 @@ class ModelTrainer(baseclass.BaseClass):
     train_generator = None
     validation_generator = None
     current_epoch = 0
+    class_weight = None
 
     customcallback = None
     skip_training = False
@@ -280,16 +281,14 @@ class ModelTrainer(baseclass.BaseClass):
     def train_model(self):
 
         if "use_class_balancing" in self.model_settings and not self.model_settings["use_class_balancing"] is False:
-            class_weight = class_weight.compute_class_weight(
+            self.class_weight = class_weight.compute_class_weight(
                 'balanced',
                 np.unique(self.train_generator.classes), 
                 self.train_generator.classes)
-
-            print(class_weight)
-
         else:
-            class_weight = None
+            self.class_weight = None
 
+        print(self.class_weight)
 
         self.logger.info("start training \"{}\" ({})".format(self.project_name,self.project_root))
 
@@ -339,7 +338,7 @@ class ModelTrainer(baseclass.BaseClass):
                     validation_data=self.validation_generator,
                     validation_steps=step_size_validate,
                     callbacks=self.current_callbacks,
-                    class_weight=class_weight
+                    class_weight=self.class_weight
                 )
 
                 # If x is a dataset, generator, or keras.utils.Sequence instance, y should not be specified (since targets
