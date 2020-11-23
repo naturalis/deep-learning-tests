@@ -31,5 +31,13 @@ if [[ "$REPLY" == "y" ]]; then
     rm -r $LOG_DIR
 fi
 
+echo
+echo "set up a port forward from your machine:"
+echo "  ssh -L 6006:localhost:6006 <address of this server>"
+echo "and open:"
+echo "  http://localhost:6006/"
+echo
+echo
+echo "starting tensorboard"
 
 sudo docker-compose run  --service-ports  tensorboard
