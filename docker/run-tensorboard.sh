@@ -1,10 +1,6 @@
 #!/bin/bash
 
 CLEAR_LOGS=$1 # --clear-logs
-
-echo "to clear old logs, run: run-tensorboard.sh --clear-logs"
-echo
-
 DOCKER_IMAGE=mds-tensorboard:latest
 
 if [[ "$(docker images -q $DOCKER_IMAGE 2> /dev/null)" == "" ]]; then
@@ -40,6 +36,9 @@ if [[ "$CLEAR_LOGS" == "--clear-logs" ]]; then
         rm -r $LOG_DIR
         echo "deleted log fles"
     fi
+    echo
+else    
+    echo "to clear old logs, run: run-tensorboard.sh --clear-logs"
     echo
 fi
 
