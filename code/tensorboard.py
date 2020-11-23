@@ -1,5 +1,4 @@
-from tensorboard import program
-
-tb = program.TensorBoard()
-tb.configure(argv=[None, '--logdir', tracking_address])
-url = tb.launch()
+import tensorflow as tf
+from tensorboard import main as tb
+tf.flags.FLAGS.logdir = "/path/to/graphs/"
+tb.main()
