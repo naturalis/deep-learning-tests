@@ -11,7 +11,10 @@ RUN pip install tensorboard
 RUN pip install tensorflow-addons
 RUN pip install tensorflow-datasets
 
-ENTRYPOINT ["tensorboard"]
+
+ENTRYPOINT [ "tensorboard", "--logdir=/log/logs_keras" ]
 #CMD ["bash"]
 
 
+
+log/logs_keras

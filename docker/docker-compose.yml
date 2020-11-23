@@ -51,3 +51,15 @@ services:
     volumes:
       - /data/maarten.schermer/data:/data
       - ../webserver:/var/www/html
+
+  tensorboard:
+    image: mds-tensorboard:latest
+    ports:
+      - "6006:6006"
+    env_file:
+      - .env
+    logging: *default-logging
+    volumes:
+      - ${PROJECT_ROOT}/log:/log
+
+
