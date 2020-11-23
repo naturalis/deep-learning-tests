@@ -394,7 +394,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser() 
     parser.add_argument("--dataset_note",type=str)
     parser.add_argument("--load_model",type=str)
-    parser.add_argument("--dont_train",action='store_false')
+    parser.add_argument("--dont_train",action='store_true')
     args = parser.parse_args() 
 
     print(args)
