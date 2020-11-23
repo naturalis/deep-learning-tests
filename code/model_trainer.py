@@ -280,12 +280,12 @@ class ModelTrainer(baseclass.BaseClass):
     def train_model(self):
 
         if "use_class_balancing" in self.model_settings and not self.model_settings["use_class_balancing"] is False:
-            class_weights = class_weight.compute_class_weight(
+            class_weight = class_weight.compute_class_weight(
                 'balanced',
                 np.unique(self.train_generator.classes), 
                 self.train_generator.classes)
 
-            print(class_weights)
+            print(class_weight)
 
         else:
             class_weight = None
