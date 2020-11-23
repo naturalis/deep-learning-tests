@@ -2,6 +2,7 @@
 
 CLEAR_LOGS=$1 # --clear-logs
 
+echo "to clear old logs, run: run-tensorboard.sh --clear-logs"
 
 DOCKER_IMAGE=mds-tensorboard:latest
 
@@ -45,7 +46,6 @@ echo "set up a port forward from your machine:"
 echo "  ssh -L 6006:localhost:6006 <user>@<address of this server>"
 echo "and open:"
 echo "  http://localhost:6006/"
-echo
 echo
 echo "starting tensorboard"
 
