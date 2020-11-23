@@ -3,6 +3,7 @@
 CLEAR_LOGS=$1 # --clear-logs
 
 echo "to clear old logs, run: run-tensorboard.sh --clear-logs"
+echo
 
 DOCKER_IMAGE=mds-tensorboard:latest
 
