@@ -32,10 +32,10 @@ class DataSet(baseclass.BaseClass):
 
     def set_environ(self,os_environ):
         for item in [
-            'IMAGE_AUGMENTATION','REDUCE_LR_PARAMS','VALIDATION_SPLIT', \
+            'BASE_MODEL','IMAGE_AUGMENTATION','REDUCE_LR_PARAMS','VALIDATION_SPLIT', \
             'LEARNING_RATE','BATCH_SIZE','EPOCHS','FREEZE_LAYERS','METRICS', \
-            'CHECKPOINT_MONITOR', 'EARLY_STOPPING_MONITOR','CLASS_IMAGE_MINIMUM', \
-            'CLASS_IMAGE_MAXIMUM'
+            'CHECKPOINT_MONITOR', 'EARLY_STOPPING_MONITOR', 'EARLY_STOPPING_PATIENCE', \
+            'CLASS_IMAGE_MINIMUM','CLASS_IMAGE_MAXIMUM','USE_CLASS_BALANCING'
         ]:
             if item in os_environ:
                 self.env_vars.append({ item : os_environ.get(item) })
@@ -85,8 +85,10 @@ class DataSet(baseclass.BaseClass):
         self.data_set["base_model"] = str(self.model_trainer.base_model.name)
         self.data_set["model_summary_hash"] = md5(self.model_summary.encode('utf-8')).hexdigest()
 
-        self.data_set["class_image_minimum"] =self.model_trainer.class_image_minimum
-        self.data_set["class_image_maximum"] =self.model_trainer.class_image_maximum
+        self.data_set["class_image_minimum"] = self.model_trainer.class_image_minimum
+        self.data_set["class_image_maximum"] = self.model_trainer.class_image_maximum
+        self.data_set["use_class_balancing"] = self.model_trainer.get_preset("use_class_balancing")
+
         self.data_set["class_count"] = len(self.model_trainer.class_list)
         self.data_set["class_count_before_maximum"] = len(self.model_trainer.complete_class_list)
         self.data_set["class_list_hash"] = md5(str(self.model_trainer.class_list).encode('utf-8')).hexdigest()
@@ -132,7 +134,7 @@ class DataSet(baseclass.BaseClass):
         self.data_set["env_vars"] = self.env_vars
 
 
-        # to be saved
+        # TODO
 
         # self.model_summary,
         # image_table = self.model_trainer.traindf.sort_values(by=[self.model_trainer.COL_CLASS,self.model_trainer.COL_IMAGE]).values.tolist()

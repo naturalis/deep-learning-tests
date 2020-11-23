@@ -285,10 +285,14 @@ class ModelTrainer(baseclass.BaseClass):
                 'balanced',
                 np.unique(self.train_generator.classes), 
                 self.train_generator.classes)
+
+            self.logger.info("using class balancing")
+
         else:
             self.class_weight = None
 
-        print(self.class_weight)
+            self.logger.info("using no class balancing")
+
 
         self.logger.info("start training \"{}\" ({})".format(self.project_name,self.project_root))
 
@@ -343,6 +347,9 @@ class ModelTrainer(baseclass.BaseClass):
 
                 # If x is a dataset, generator, or keras.utils.Sequence instance, y should not be specified (since targets
                 # will be obtained from x)
+
+                # fit:
+                # initial_epoch: Integer. Epoch at which to start training (useful for resuming a previous training run).
 
                 self.history.append(history)
 
