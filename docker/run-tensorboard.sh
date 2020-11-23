@@ -1,5 +1,8 @@
 #!/bin/bash
 
+CLEAR_LOGS=$1 # --clear-logs
+
+
 DOCKER_IMAGE=mds-tensorboard:latest
 
 if [[ "$(docker images -q $DOCKER_IMAGE 2> /dev/null)" == "" ]]; then
@@ -9,6 +12,8 @@ if [[ "$(docker images -q $DOCKER_IMAGE 2> /dev/null)" == "" ]]; then
 else
     echo "got container image $DOCKER_IMAGE"
 fi
+
+echo
 
 function get_env {
   IFS=$'\n'
@@ -21,19 +26,23 @@ function get_env {
   done
 }
 
-PROJECT_ROOT=$(get_env PROJECT_ROOT)
-LOG_DIR=/data/maarten.schermer${PROJECT_ROOT}log/logs_keras/*
+if [[ "$CLEAR_LOGS" == "--clear-logs" ]]; then
 
-echo "about to delete ${LOG_DIR} [y/N]"
-read REPLY
+    PROJECT_ROOT=$(get_env PROJECT_ROOT)
+    LOG_DIR=/data/maarten.schermer${PROJECT_ROOT}log/logs_keras/*
 
-if [[ "$REPLY" == "y" ]]; then
-    rm -r $LOG_DIR
+    echo "delete ${LOG_DIR} ? [y/N]"
+    read REPLY
+
+    if [[ "$REPLY" == "y" ]]; then
+        rm -r $LOG_DIR
+    fi
+    echo
 fi
 
-echo
+
 echo "set up a port forward from your machine:"
-echo "  ssh -L 6006:localhost:6006 <address of this server>"
+echo "  ssh -L 6006:localhost:6006 <user>@<address of this server>"
 echo "and open:"
 echo "  http://localhost:6006/"
 echo
