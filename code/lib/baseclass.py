@@ -319,8 +319,9 @@ class BaseClass():
 
         self.presets.update( { "use_tensorboard" : True } )
         self.presets.update( { "use_imagenet_weights" : True } )
+        self.presets.update( { "use_class_balancing" : False } )
         self.presets.update( { "early_stopping_monitor" : [ "val_loss" ] } )
-        self.presets.update( { "use_imagenet_weights" : [ 10 ] } )
+        self.presets.update( { "early_stopping_patience" : [ 10 ] } )
         
         if 'os_environ' in kwargs:
             os_environ = kwargs['os_environ']
@@ -350,6 +351,7 @@ class BaseClass():
             class_image_maximum = int(os_environ.get("CLASS_IMAGE_MAXIMUM")) if "CLASS_IMAGE_MAXIMUM" in os_environ else 0
             use_tensorboard = (os_environ.get("USE_TENSORBOARD").lower()=="true") if "USE_TENSORBOARD" in os_environ else True
             use_imagenet_weights = (os_environ.get("USE_IMAGENET_WEIGHTS").lower()=="true") if "USE_IMAGENET_WEIGHTS" in os_environ else True
+            use_class_balancing = (os_environ.get("USE_CLASS_BALANCING").lower()=="true") if "USE_CLASS_BALANCING" in os_environ else False
 
         # TODO
         if 'dataset' in kwargs:
@@ -371,6 +373,7 @@ class BaseClass():
         self.presets.update( { "class_image_maximum" : class_image_maximum } )
         self.presets.update( { "use_tensorboard" : use_tensorboard } )
         self.presets.update( { "use_imagenet_weights" : use_imagenet_weights } )
+        self.presets.update( { "use_class_balancing" : use_class_balancing } )
 
     def get_preset(self, preset):
         if preset in self.presets:

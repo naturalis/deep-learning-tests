@@ -54,7 +54,7 @@ DwCA reader
     CLASS_IMAGE_MINIMUM [2]
     DwCA-headers * (catalogNumber,scientificName,associatedMedia)
   out:
-    $PROJECT_ROOT/lists/classes.json   (classname, image count)
+    $PROJECT_ROOT/lists/classes.csv   (classname, image count)
     $PROJECT_ROOT/lists/images.csv    (classname, image URL)
 
     (general lists, these get copied to model dirs later)

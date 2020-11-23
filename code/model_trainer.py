@@ -4,8 +4,8 @@ import numpy as np
 from datetime import datetime
 import matplotlib.pyplot as plt
 import pandas as pd
+from sklearn.utils import class_weight
 from lib import baseclass, dataset, utils, customcallback
-
 
 class ModelTrainer(baseclass.BaseClass):
     timestamp = None
@@ -98,6 +98,7 @@ class ModelTrainer(baseclass.BaseClass):
         # return callbacks
 
     def configure_generators(self):
+
         if "image_augmentation" in self.model_settings and not self.model_settings["image_augmentation"] is None:
             a = self.model_settings["image_augmentation"]
         else:
@@ -150,13 +151,11 @@ class ModelTrainer(baseclass.BaseClass):
 
         self.logger.info("saved model classes to {}".format(self.get_classes_path()))
 
-
     def assemble_model(self):
         if "base_model" in self.model_settings and self.model_settings["base_model"]=="custom":
             self._assemble_custom_model()
         else:
             self._assemble_transfer_model()
-
 
     def _assemble_custom_model(self):
 
@@ -179,8 +178,6 @@ class ModelTrainer(baseclass.BaseClass):
         self.logger.info("model has {} classes".format(len(self.class_list)))
         self.logger.info("model has {} layers".format(len(self.model.layers)))
 
-
-
     def _assemble_transfer_model(self):
         
         self.base_model = None
@@ -190,8 +187,7 @@ class ModelTrainer(baseclass.BaseClass):
         else:
             weights = None
 
-        if "transfer_imagenet" in self.model_settings:
-
+        if "base_model" in self.model_settings:
 
             if self.model_settings["base_model"] == "mobilenetv2":
                 self.base_model = tf.keras.applications.MobileNetV2(weights=weights, include_top=False)
@@ -279,6 +275,18 @@ class ModelTrainer(baseclass.BaseClass):
 
     def train_model(self):
 
+        if "use_class_balancing" in self.model_settings and not self.model_settings["use_class_balancing"] is False:
+            class_weights = class_weight.compute_class_weight(
+                'balanced',
+                np.unique(self.train_generator.classes), 
+                self.train_generator.classes)
+
+            print(class_weights)
+
+        else:
+            class_weight = None
+
+
         self.logger.info("start training \"{}\" ({})".format(self.project_name,self.project_root))
 
         self.training_phase = 0
@@ -324,7 +332,8 @@ class ModelTrainer(baseclass.BaseClass):
                 epochs=epoch,
                 validation_data=self.validation_generator,
                 validation_steps=step_size_validate,
-                callbacks=self.current_callbacks
+                callbacks=self.current_callbacks,
+                class_weight=class_weight
             )
 
             # If x is a dataset, generator, or keras.utils.Sequence instance, y should not be specified (since targets
@@ -385,7 +394,11 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser() 
     parser.add_argument("--dataset_note",type=str)
     parser.add_argument("--load_model",type=str)
+    parser.add_argument("--dont_train",action='store_false')
     args = parser.parse_args() 
+
+    print(args)
+    exit(0)
 
     trainer = ModelTrainer()
     timer = utils.Timer()
@@ -415,7 +428,8 @@ if __name__ == "__main__":
         "freeze_layers": trainer.get_preset("freeze_layers"), 
         "callbacks" : trainer.configure_callbacks(),
         "metrics" : trainer.get_preset("metrics"),
-        "image_augmentation" : trainer.get_preset("image_augmentation")
+        "image_augmentation" : trainer.get_preset("image_augmentation"),
+        "use_class_balancing" : trainer.get_preset("use_class_balancing")
     })
 
     if args.dataset_note: 
@@ -448,15 +462,26 @@ if __name__ == "__main__":
         dataset.set_model_trainer(trainer)
         dataset.make_dataset()
 
-    dataset.update_model_state("training")
-    dataset.save_dataset()
+    # dataset.update_model_state("training")
+    # dataset.save_dataset()
 
     trainer.configure_generators()
-    trainer.train_model()
 
-    dataset.set_epochs_trained(trainer.customcallback.get_current_epoch())
-    dataset.set_training_time(timer.get_time_passed())
-    dataset.update_model_state("configured")
+    if not args.dont_train:
+
+        dataset.update_model_state("training")
+        dataset.save_dataset()
+
+        trainer.train_model()
+
+        dataset.set_epochs_trained(trainer.customcallback.get_current_epoch())
+        dataset.set_training_time(timer.get_time_passed())
+        dataset.update_model_state("configured")
+
+    else:
+
+        trainer.logger.info("skipping training (--dont_train)")
+
 
     dataset.save_dataset()
 
