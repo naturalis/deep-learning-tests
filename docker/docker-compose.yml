@@ -60,6 +60,4 @@ services:
       - .env
     logging: *default-logging
     volumes:
-      - ${PROJECT_ROOT}/log:/log
-
-
+      - /data/maarten.schermer${PROJECT_ROOT}log:/log
