@@ -1,3 +1,14 @@
+notes and stuff:
+
+    # WARNING:tensorflow:Method (on_train_batch_end) is slow compared to the batch update (0.325404). Check your callbacks.
+    # maybe something with TensorBoard callback, as the other ones get called at epoch end, not batch end
+
+    # https://www.tensorflow.org/api_docs/python/tf/keras/callbacks/LearningRateScheduler
+
+
+
+
+
 cd ~/Documents/ai/phase02
 virtualenv --system-site-packages -p python ./venv
 source ./venv/bin/activate

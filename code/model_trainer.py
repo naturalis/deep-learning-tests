@@ -20,9 +20,13 @@ class ModelTrainer(baseclass.BaseClass):
     current_epoch = 0
 
     customcallback = None
+    skip_training = False
 
     def __init__(self):
         super().__init__()
+
+    def set_skip_training(self,skip_training):
+        self.skip_training = skip_training
 
     def get_tensorboard_log_path(self):
         self.tensorboard_log_path = os.path.join(self.project_root, "log", "logs_keras")
@@ -326,20 +330,27 @@ class ModelTrainer(baseclass.BaseClass):
 
             self.set_current_callbacks()
 
-            history = self.model.fit(
-                x=self.train_generator,
-                steps_per_epoch=step_size_train,
-                epochs=epoch,
-                validation_data=self.validation_generator,
-                validation_steps=step_size_validate,
-                callbacks=self.current_callbacks,
-                class_weight=class_weight
-            )
+            if not self.skip_training:
 
-            # If x is a dataset, generator, or keras.utils.Sequence instance, y should not be specified (since targets
-            # will be obtained from x)
+                history = self.model.fit(
+                    x=self.train_generator,
+                    steps_per_epoch=step_size_train,
+                    epochs=epoch,
+                    validation_data=self.validation_generator,
+                    validation_steps=step_size_validate,
+                    callbacks=self.current_callbacks,
+                    class_weight=class_weight
+                )
 
-            self.history.append(history)
+                # If x is a dataset, generator, or keras.utils.Sequence instance, y should not be specified (since targets
+                # will be obtained from x)
+
+                self.history.append(history)
+
+            else:
+
+                self.logger.info("skipping training (--no_training)")
+
             self.training_phase += 1
 
     def save_model(self):
@@ -394,11 +405,8 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser() 
     parser.add_argument("--dataset_note",type=str)
     parser.add_argument("--load_model",type=str)
-    parser.add_argument("--dont_train",action='store_true')
+    parser.add_argument("--skip_training",action="store_true")
     args = parser.parse_args() 
-
-    print(args)
-    exit(0)
 
     trainer = ModelTrainer()
     timer = utils.Timer()
@@ -415,6 +423,8 @@ if __name__ == "__main__":
         trainer.set_model_name(args.load_model)
     else:
         trainer.set_model_name(trainer.make_model_name())
+
+    trainer.set_skip_training(args.skip_training)
 
     trainer.set_model_folder()
 
@@ -462,35 +472,18 @@ if __name__ == "__main__":
         dataset.set_model_trainer(trainer)
         dataset.make_dataset()
 
-    # dataset.update_model_state("training")
-    # dataset.save_dataset()
+    dataset.update_model_state("training")
+    dataset.save_dataset()
 
     trainer.configure_generators()
 
-    if not args.dont_train:
+    trainer.train_model()
 
-        dataset.update_model_state("training")
-        dataset.save_dataset()
-
-        trainer.train_model()
-
-        dataset.set_epochs_trained(trainer.customcallback.get_current_epoch())
-        dataset.set_training_time(timer.get_time_passed())
-        dataset.update_model_state("configured")
-
-    else:
-
-        trainer.logger.info("skipping training (--dont_train)")
-
+    dataset.set_epochs_trained(trainer.customcallback.get_current_epoch())
+    dataset.set_training_time(timer.get_time_passed())
+    dataset.update_model_state("skipped_training" if args.skip_training else "configured")
 
     dataset.save_dataset()
 
     trainer.save_model()
     trainer.save_history()
-
-
-        # WARNING:tensorflow:Method (on_train_batch_end) is slow compared to the batch update (0.325404). Check your callbacks.
-        # maybe something with TensorBoard callback, as the other ones get called at epoch end, not batch end
-
-        # https://www.tensorflow.org/api_docs/python/tf/keras/callbacks/LearningRateScheduler
-
