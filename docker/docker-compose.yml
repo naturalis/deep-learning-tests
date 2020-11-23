@@ -55,7 +55,7 @@ services:
   tensorboard:
     image: mds-tensorboard:latest
     ports:
-      - "9876:6006"
+      - "6006:6006"
     env_file:
       - .env
     logging: *default-logging
