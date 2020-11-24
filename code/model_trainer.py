@@ -26,6 +26,10 @@ class ModelTrainer(baseclass.BaseClass):
     def __init__(self):
         super().__init__()
 
+    def __del__(self): 
+        # print('Destructor called, Employee deleted.') 
+        pass
+
     def set_skip_training(self,skip_training):
         self.skip_training = skip_training
 
@@ -387,7 +391,7 @@ class ModelTrainer(baseclass.BaseClass):
 
         epochs_range = range(len(self.history[phase].history["loss"]))
 
-        plt.figure(figsize=(8, 8))
+        plt.figure(figsize=(24, 8)) # WxH
         plt.subplot(1, 2, 1)
         plt.plot(epochs_range, acc, label='Training Accuracy')
         plt.plot(epochs_range, val_acc, label='Validation Accuracy')

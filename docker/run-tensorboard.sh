@@ -37,7 +37,8 @@ if [[ "$CLEAR_LOGS" == "--clear-logs" ]]; then
         echo "deleted log fles"
     fi
     echo
-else    
+else
+    
     echo "to clear old logs, run: run-tensorboard.sh --clear-logs"
     echo
 fi
