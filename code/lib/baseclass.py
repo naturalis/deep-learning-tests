@@ -158,6 +158,17 @@ class BaseClass():
         self.class_list_file = os.path.join(self.project_root, "lists", "classes.csv")
         self.downloaded_images_file = os.path.join(self.project_root, "lists", "downloaded_images.csv")
 
+    def set_alternative_class_list_file(self,filename):
+        alt_class_list_file = os.path.join(self.project_root, "lists", filename)
+        if os.path.exists(alt_class_list_file):
+            self.class_list_file = alt_class_list_file
+        elif os.path.exists(filename):
+            self.class_list_file = filename
+        else:
+            raise ValueError("alternative class list file {} does not exist".format(filename))
+
+        self.logger.info("using alternative class list file {}".format(self.class_list_file))
+
     def set_model_folder(self):
         self.model_folder = os.path.join(self.project_root, "models", self.model_name)
         if not os.path.exists(self.model_folder):

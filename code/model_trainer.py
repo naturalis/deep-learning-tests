@@ -415,6 +415,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser() 
     parser.add_argument("--dataset_note",type=str)
     parser.add_argument("--load_model",type=str)
+    parser.add_argument("--alt_class_list",type=str,help="specify alternative class list")
     parser.add_argument("--skip_training",action="store_true")
     args = parser.parse_args() 
 
@@ -454,6 +455,9 @@ if __name__ == "__main__":
 
     if args.dataset_note: 
         dataset.set_note(args.dataset_note)
+
+    if args.alt_class_list: 
+        trainer.set_alternative_class_list_file(args.alt_class_list)
 
     if args.load_model: 
 
