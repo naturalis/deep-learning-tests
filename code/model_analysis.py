@@ -36,8 +36,12 @@ class ModelAnalysis(baseclass.BaseClass):
             shuffle=False
         )
 
-        print(self.test_generator.class_indices)
-        print(type(self.test_generator.class_indices))
+        b = list(self.test_generator.class_indices.items())
+        classes_1 = [v for k, v in b]
+        classes_2 = [v for k, v in b]
+        print(classes_1)
+        print(classes_2)
+
 
     def do_analysis(self):
         batch_size = self.model_settings["batch_size"]
