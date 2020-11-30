@@ -37,6 +37,7 @@ class ModelAnalysis(baseclass.BaseClass):
         )
 
         print(self.test_generator.class_indices)
+        print(type(self.test_generator.class_indices))
 
     def do_analysis(self):
         batch_size = self.model_settings["batch_size"]
