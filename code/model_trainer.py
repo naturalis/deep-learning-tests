@@ -292,6 +292,8 @@ class ModelTrainer(baseclass.BaseClass):
 
             self.logger.info("using class balancing")
 
+            print(self.class_weight)
+
         else:
             self.class_weight = None
 
