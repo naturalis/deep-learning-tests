@@ -36,13 +36,6 @@ class ModelAnalysis(baseclass.BaseClass):
             shuffle=False
         )
 
-        b = list(self.test_generator.class_indices.items())
-        classes_1 = [v for k, v in b]
-        print(classes_1)
-        classes_1 = [v for k, v in self.class_list]
-        print(classes_1)
-
-
     def do_analysis(self):
         batch_size = self.model_settings["batch_size"]
         Y_pred = self.model.predict(self.test_generator)
@@ -143,7 +136,9 @@ class ModelAnalysis(baseclass.BaseClass):
         f.close()
 
     def plot_confusion_matrix(self):
-        df_cm = pd.DataFrame(self.cm, range(len(self.test_generator.classes)), range(len(self.test_generator.classes)))
+        b = list(self.test_generator.class_indices.items())
+        classes_1 = [v for k, v in b]
+        df_cm = pd.DataFrame(self.cm, range(len(classes_1)), range(len(classes_1)))
         # plt.figure(figsize=(10,7))
         sn.set(font_scale=1.4) # for label size
         sn.heatmap(df_cm, annot=True, annot_kws={"size": 16}) # font size
