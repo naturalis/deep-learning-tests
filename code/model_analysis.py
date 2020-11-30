@@ -138,7 +138,7 @@ class ModelAnalysis(baseclass.BaseClass):
     def plot_confusion_matrix(self):
         cm_p = []
         for row in self.cm_exportable:
-            cm_p.append([math.log(float(x),10) for x in row])
+            cm_p.append([math.log(float(x),10) if float(x) > 0 else 0 for x in row])
 
         b = list(self.test_generator.class_indices.items())
         classes_1 = [v for k, v in b]
