@@ -136,9 +136,13 @@ class ModelAnalysis(baseclass.BaseClass):
         f.close()
 
     def plot_confusion_matrix(self):
+        cm_p = []
+        for row in self.cm_exportable:
+            cm_p.append([float(x) for x in row])
+
         b = list(self.test_generator.class_indices.items())
         classes_1 = [v for k, v in b]
-        df_cm = pd.DataFrame(self.cm_exportable, range(len(classes_1)), range(len(classes_1)))
+        df_cm = pd.DataFrame(cm_p, range(len(classes_1)), range(len(classes_1)))
         # plt.figure(figsize=(10,7))
         sn.set(font_scale=1.4) # for label size
         sn.heatmap(df_cm, annot=True, annot_kws={"size": 16}) # font size
