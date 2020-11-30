@@ -145,7 +145,7 @@ class ModelAnalysis(baseclass.BaseClass):
         df_cm = pd.DataFrame(cm_p, range(len(classes_1)), range(len(classes_1)))
         # plt.figure(figsize=(10,7))
         sn.set(font_scale=1.4) # for label size
-        sn.heatmap(df_cm, annot=True, annot_kws={"size": 16}) # font size
+        sn.heatmap(df_cm, annot=False, square=True)
         # plt.show()
         path = os.path.join(self.model_folder, "confusion_matrix.png")
         plt.savefig(path)
