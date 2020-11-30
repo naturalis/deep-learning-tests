@@ -294,7 +294,7 @@ class ModelTrainer(baseclass.BaseClass):
             self.class_weight = {}
             k=0
             for b in self.class_list:
-                class_weight[k]=(1 / int(b[1]))*(total)/2.0
+                self.class_weight[k]=(1 / int(b[1]))*(total)/2.0
                 k += 1
 
             self.logger.info("using class balancing")
