@@ -2,3 +2,4 @@ __pycache__
 commit.sh
 copy.sh
 docker/.env
+test.py
