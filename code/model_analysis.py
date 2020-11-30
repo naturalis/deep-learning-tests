@@ -38,9 +38,8 @@ class ModelAnalysis(baseclass.BaseClass):
 
         b = list(self.test_generator.class_indices.items())
         classes_1 = [v for k, v in b]
-        classes_2 = [v for k, v in b]
+        print(self.class_list)
         print(classes_1)
-        print(classes_2)
 
 
     def do_analysis(self):
