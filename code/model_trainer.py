@@ -285,13 +285,19 @@ class ModelTrainer(baseclass.BaseClass):
     def train_model(self):
 
         if "use_class_balancing" in self.model_settings and not self.model_settings["use_class_balancing"] is False:
-            self.class_weight = class_weight.compute_class_weight(
-                'balanced',
-                np.unique(self.train_generator.classes), 
-                self.train_generator.classes)
+            # self.class_weight = class_weight.compute_class_weight(
+            #     'balanced',
+            #     np.unique(self.train_generator.classes), 
+            #     self.train_generator.classes)
+
+            total = np.sum([int(b[1]) for b in self.class_list ])
+            self.class_weight = {}
+            k=0
+            for b in self.class_list:
+                class_weight[k]=(1 / int(b[1]))*(total)/2.0
+                k += 1
 
             self.logger.info("using class balancing")
-            
             self.logger.info(self.class_weight)
             self.logger.info(self.class_list)
 
