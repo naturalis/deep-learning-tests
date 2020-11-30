@@ -1,6 +1,9 @@
 import os, sys, json, argparse
 import tensorflow as tf
 import numpy as np
+import seaborn as sn
+import pandas as pd
+import matplotlib.pyplot as plt
 from datetime import datetime
 from sklearn.metrics import classification_report
 from lib import baseclass, dataset
@@ -82,7 +85,6 @@ class ModelAnalysis(baseclass.BaseClass):
             if self.test_generator.classes[key] in prediction.argsort()[-5:][::-1]:
                 this_class.update({"class" : self.test_generator.classes[key], "top_5" : (this_class["top_5"]+1)})
 
-
     def print_analysis(self):
         print("== confusion matrix ==")
 
@@ -105,7 +107,6 @@ class ModelAnalysis(baseclass.BaseClass):
         print("== top k count per class  ==")
         print(self.class_tops)
         print("")
-
 
     def backup_previous_analysis(self):
         if os.path.exists(self.get_analysis_path()):
@@ -133,6 +134,17 @@ class ModelAnalysis(baseclass.BaseClass):
             "top_k_per_class" : self.class_tops
             }))
         f.close()
+
+    def plot_confusion_matrix(self):
+        df_cm = pd.DataFrame(self.cm, range(6), range(6))
+        # plt.figure(figsize=(10,7))
+        sn.set(font_scale=1.4) # for label size
+        sn.heatmap(df_cm, annot=True, annot_kws={"size": 16}) # font size
+        # plt.show()
+        path = os.path.join(self.model_folder, "confusion_matrix.png")
+        plt.savefig(path)
+        self.logger.info("saved confusion matrix plot {}".format(path))
+
 
 
 if __name__ == "__main__":
@@ -174,3 +186,4 @@ if __name__ == "__main__":
     analysis.print_analysis()
     analysis.backup_previous_analysis()
     analysis.save_analysis()
+    analysis.plot_confusion_matrix()
