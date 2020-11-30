@@ -291,8 +291,9 @@ class ModelTrainer(baseclass.BaseClass):
                 self.train_generator.classes)
 
             self.logger.info("using class balancing")
-
-            print(self.class_weight)
+            
+            self.logger.debug(self.class_weight)
+            self.logger.debug(self.class_list)
 
         else:
             self.class_weight = None
