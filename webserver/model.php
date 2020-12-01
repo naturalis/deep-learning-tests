@@ -23,8 +23,8 @@
                     $model["dataset"]["class_count"],
                     $model["dataset"]["model_note"],
                 ]
-            );
-        ]
+            )
+        ];
     }
 
     echo $html->select($l,"models");
