@@ -50,9 +50,6 @@ EOT;
 
         function table($t,$id=null)
         {
-
-var_dump($t);
-
             $b[] = "<table id='$id'>";
             foreach ($t as $rKey => $row)
             {
@@ -60,15 +57,15 @@ var_dump($t);
 
                 foreach ($row as $cKey => $cell)
                 {
-                    // $datas = "";
+                    $datas = "";
 
-                    // foreach ($cell as $dKey => $data)
-                    // {
-                    //     if (strpos($data, 'data-')==0)
-                    //     {
-                    //         $datas .= $dKey .'="'. $data .'" ';
-                    //     }
-                    // }
+                    foreach ($cell as $dKey => $data)
+                    {
+                        if (strpos($data, 'data-')==0)
+                        {
+                            $datas .= $dKey .'="'. $data .'" ';
+                        }
+                    }
 
                     $title = empty($cell["title"]) ? $cell["html"] : $cell["title"];
                     $b[] = "<td 

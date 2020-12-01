@@ -118,14 +118,17 @@
     print_r($m);
 
 
-    foreach ($m as $cKey => $col)
+    foreach ($m as $rKey => $row)
     {
-        $t[$cKey][] =  [ "html" => $col ];
+        foreach ($row as $cKey => $col)
+        {
+            $t[$rKey][$cKey] =  [ "html" => $col ];
+        }
     }
 
 
 
-    $t["h"]["h"] = [ "html" => "" ];
+    // $t["h"]["h"] = [ "html" => "" ];
     foreach ($m as $cKey => $col)
     {
         // $key = array_search($cKey, array_column($classes, "key"));
