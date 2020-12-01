@@ -101,7 +101,7 @@ EOT;
 
         function image($src,$class)
         {
-            return "<img src='$src' class='$class' alt='huh?' />\n";
+            return "<img src='$src' class='$class' alt='not seeing image? have you run webserver-set-symlink.sh?' />\n";
         }
 
     }
