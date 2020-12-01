@@ -24,6 +24,11 @@ function get_env {
   done
 }
 
+PROJECT_ROOT=$(get_env PROJECT_ROOT)
+echo "--${PROJECT_ROOT}--"
+
+exit
+
 if [[ "$CLEAR_LOGS" == "--clear-logs" ]]; then
 
     PROJECT_ROOT=$(get_env PROJECT_ROOT)
