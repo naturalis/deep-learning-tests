@@ -52,11 +52,6 @@ services:
       - /data/maarten.schermer/data:/data
       - ../webserver:/var/www/html
 
-
-/data/museum/naturalis/models/20201130-160111/confusion_matrix.png
-
-/models/20201130-162407/confusion_matrix.png
-
   tensorboard:
     image: mds-tensorboard:latest
     ports:
