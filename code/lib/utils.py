@@ -1,4 +1,7 @@
 import time
+import os
+from PIL import Image
+import  glob
 
 class Timer:
 
@@ -42,3 +45,28 @@ class Timer:
         time %= 60
         seconds = time
         return self.formats[format] % (day, hour, minutes, seconds)
+
+
+def verify_images(rootdir):
+    # bad_files = verify_images("/data")
+    bad_files=[]
+    checked=0
+    for filename in glob.iglob(rootdir + '/**/*.jpg', recursive=True):
+        if os.path.isfile(filename):
+            # print(filename)
+            try:
+                # img = Image.open(filename) # open the image file
+                # img.verify() # verify that it is, in fact an image
+                im = Image.open(filename)
+                im.verify() #I perform also verify, don't know if he sees other types o defects
+                im.close() #reload is necessary in my case
+                im = Image.open(filename) 
+                im.transpose(Image.FLIP_LEFT_RIGHT)
+                im.close()
+            except Exception as e:
+                bad_files.append([filename, str(e)])
+            checked += 1
+            if checked % 1000 == 0:
+                print("{} / {} ".format(len(bad_files),checked))
+
+    return bad_files

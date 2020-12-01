@@ -295,7 +295,6 @@ class ModelTrainer(baseclass.BaseClass):
             self.logger.info(self.class_list)
             print(self.train_generator.class_indices)
 
-
         else:
             self.class_weight = None
 
