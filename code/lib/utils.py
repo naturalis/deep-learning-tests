@@ -54,6 +54,14 @@ def verify_images(rootdir):
     for filename in glob.iglob(rootdir + '/**/*.jpg', recursive=True):
         if os.path.isfile(filename):
             # print(filename)
+
+            im = Image.open(filename)
+            im.verify() #I perform also verify, don't know if he sees other types o defects
+            im.close() #reload is necessary in my case
+            im = Image.open(filename) 
+            im.transpose(Image.FLIP_LEFT_RIGHT)
+            im.close()
+
             try:
                 # img = Image.open(filename) # open the image file
                 # img.verify() # verify that it is, in fact an image
