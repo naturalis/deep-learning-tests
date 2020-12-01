@@ -113,25 +113,30 @@
 
     $t=[];
 
+
+    print_r($m);
+
+
+
     $t["h"]["h"] = [ "html" => "" ];
     foreach ($m as $cKey => $col)
     {
-        $key = array_search($cKey, array_column($classes, "key"));
-        $t["h"][] = [ 
-            "html" => $classes[$key]["key"],
-            "title" => $classes[$key]["name"],
-            "data-hash" => md5($classes[$key]["name"])
-        ];
+        // $key = array_search($cKey, array_column($classes, "key"));
+        // $t["h"][] = [ 
+        //     "html" => $classes[$key]["key"],
+        //     "title" => $classes[$key]["name"],
+        //     "data-hash" => md5($classes[$key]["name"])
+        // ];
     }
 
     foreach ($m as $cKey => $col)
     {
-        $key = array_search($cKey, array_column($classes, "key"));
-        $t[$cKey]["h"] = [
-            "html" => $classes[$key]["key"] . ". " . $classes[$key]["name"],
-            "title" => $classes[$key]["name"],
-            "data-hash" => md5($classes[$key]["name"])
-        ];
+        // $key = array_search($cKey, array_column($classes, "key"));
+        // $t[$cKey]["h"] = [
+        //     "html" => $classes[$key]["key"] . ". " . $classes[$key]["name"],
+        //     "title" => $classes[$key]["name"],
+        //     "data-hash" => md5($classes[$key]["name"])
+        // ];
 
         foreach ($col as $rKey => $row)
         {
@@ -141,10 +146,10 @@
 
     echo $html->p($html->table($t,"confusion_matrix"));
 
-    echo "<pre>";
-    print_r($classes);
-    print_r($analysis);
-    print_r($dataset);
+    // echo "<pre>";
+    // print_r($classes);
+    // print_r($analysis);
+    // print_r($dataset);
 
 ?>
 <script type="text/javascript">
