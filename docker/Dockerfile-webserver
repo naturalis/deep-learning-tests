@@ -2,6 +2,5 @@ FROM php:7.2.1-apache
 MAINTAINER maarten.schermer@naturalis.nl
 
 # COPY ./webserver /var/www/html
-CD /var/www/html
-RUN ln -s ${PROJECT_ROOT} project
 WORKDIR /var/www/html
+RUN ln -s ${PROJECT_ROOT} /var/www/html/project
