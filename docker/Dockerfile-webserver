@@ -1,5 +1,5 @@
 FROM php:7.2.1-apache
 MAINTAINER maarten.schermer@naturalis.nl
 
-COPY ./webserver /var/www/html
+COPY ../webserver /var/www/html
 WORKDIR /var/www/html
