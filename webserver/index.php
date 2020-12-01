@@ -19,7 +19,7 @@
     echo $html->p("available models:");
 
     $l=[];
-    foreach ($base->getModels("accuracy","desc") as $model)
+    foreach ($base->getModels() as $model)
     {
         $l[]=
             vsprintf("<a href=\"model.php?id=%s\">%s</a>; acc: %s; %s classes (of %s; %s...%s images p/class); (%s)",

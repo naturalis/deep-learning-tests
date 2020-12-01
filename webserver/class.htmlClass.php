@@ -81,4 +81,22 @@ EOT;
             return implode("\n", $b) . "\n";
         }
 
+        function select($l,$id=null)
+        {
+            $b[] = "<select id='$id' " . $a . ">";
+            foreach ($l as $val)
+            {
+                $b[] = "<option value='$val[0]'>$val[1]</option>";
+            }
+            $b[] = "</select>";
+
+            return implode("\n", $b) . "\n";
+        }
+
+        function button($value,$onclick=null,$id=null)
+        {
+            return "<input type='button' value='$value' onclick='$onclick' id='$id' />\n";
+        }
+
+
     }
