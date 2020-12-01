@@ -463,13 +463,16 @@ if __name__ == "__main__":
     if args.alt_class_list: 
         trainer.set_alternative_class_list_file(args.alt_class_list)
 
+    class_col=trainer.get_preset("image_list_class_column")
+    image_col=trainer.get_preset("image_list_file_column")
+
     if args.load_model: 
 
         del trainer.model_settings["freeze_layers"]
 
         trainer.load_model()
         trainer.read_class_list()
-        trainer.read_image_list_file(image_col=2)
+        trainer.read_image_list_file(class_col=class_col,image_col=image_col)
         trainer.image_list_apply_class_list()
         dataset.ask_retrain_note()
         dataset.set_model_trainer(trainer)
@@ -480,7 +483,7 @@ if __name__ == "__main__":
         trainer.copy_image_list_file()
         trainer.copy_class_list_file()
 
-        trainer.read_image_list_file(image_col=2)
+        trainer.read_image_list_file(class_col=class_col,image_col=image_col)
         trainer.read_class_list()
 
         trainer.image_list_apply_class_list()

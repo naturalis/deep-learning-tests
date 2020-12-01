@@ -333,6 +333,8 @@ class BaseClass():
         self.presets.update( { "use_class_balancing" : False } )
         self.presets.update( { "early_stopping_monitor" : [ "val_loss" ] } )
         self.presets.update( { "early_stopping_patience" : [ 10 ] } )
+        self.presets.update( { "image_list_class_column" : 0 } )
+        self.presets.update( { "image_list_file_column" : 2 } )
         
         if 'os_environ' in kwargs:
             os_environ = kwargs['os_environ']
@@ -363,6 +365,8 @@ class BaseClass():
             use_tensorboard = (os_environ.get("USE_TENSORBOARD").lower()=="true") if "USE_TENSORBOARD" in os_environ else True
             use_imagenet_weights = (os_environ.get("USE_IMAGENET_WEIGHTS").lower()=="true") if "USE_IMAGENET_WEIGHTS" in os_environ else True
             use_class_balancing = (os_environ.get("USE_CLASS_BALANCING").lower()=="true") if "USE_CLASS_BALANCING" in os_environ else False
+            image_list_class_column = int(os_environ.get("IMAGE_LIST_CLASS_COLUMN")) if "IMAGE_LIST_CLASS_COLUMN" in os_environ else 0
+            image_list_file_column = int(os_environ.get("IMAGE_LIST_FILE_COLUMN")) if "IMAGE_LIST_FILE_COLUMN" in os_environ else 2
 
         # TODO
         if 'dataset' in kwargs:
@@ -385,6 +389,9 @@ class BaseClass():
         self.presets.update( { "use_tensorboard" : use_tensorboard } )
         self.presets.update( { "use_imagenet_weights" : use_imagenet_weights } )
         self.presets.update( { "use_class_balancing" : use_class_balancing } )
+        self.presets.update( { "image_list_class_column" : image_list_class_column } )
+        self.presets.update( { "image_list_file_column" : image_list_file_column } )
+
 
     def get_preset(self, preset):
         if preset in self.presets:
