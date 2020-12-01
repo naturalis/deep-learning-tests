@@ -13,4 +13,4 @@ if __name__ == "__main__":
     bad_files = utils.verify_images(dataset.image_path)
 
     for file in bad_files:
-        dataset.logger.info("found corrupt file: {} ({})".format(file.filename,file.error))
+        dataset.logger.info("found corrupt file: {} ({})".format(file["filename"],file["error"]))
