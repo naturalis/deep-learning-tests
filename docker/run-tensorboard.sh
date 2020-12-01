@@ -27,7 +27,6 @@ function get_env {
 }
 
 PROJECT_ROOT=$(get_env PROJECT_ROOT)
-echo ${PROJECT_ROOT}
 
 if [[ -z "$PROJECT_ROOT" ]]; then
     echo "no PROJECT_ROOT found in .env"
@@ -35,11 +34,10 @@ if [[ -z "$PROJECT_ROOT" ]]; then
     exit
 fi
 
-exit
+echo "project root: ${PROJECT_ROOT}"
 
 if [[ "$CLEAR_LOGS" == "--clear-logs" ]]; then
 
-    PROJECT_ROOT=$(get_env PROJECT_ROOT)
     LOG_DIR=/data/maarten.schermer${PROJECT_ROOT}log/logs_keras/*
 
     echo "delete (old) log files in ${LOG_DIR} ? [y/N]"
