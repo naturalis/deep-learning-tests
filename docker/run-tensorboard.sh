@@ -20,13 +20,14 @@ function get_env {
     echo "--${LINE}--"
     LINE=$(echo $ITEM | grep "^$1=")
     if [[ ! -z "$LINE" ]]; then
-    echo $LINE | sed -s 's/^[^=]*=//'
+        VALUE=$(echo $LINE | sed -s 's/^[^=]*=//')
+        echo "++$VALUE++"
     fi
   done
 }
 
 PROJECT_ROOT=$(get_env PROJECT_ROOT)
-echo $PROJECT_ROOT
+echo "***${PROJECT_ROOT}***"
 
 exit
 
