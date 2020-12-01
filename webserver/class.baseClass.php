@@ -10,7 +10,7 @@
         private $models;
         private $model;
         private $classes;
-        private $projectWebRoot = "/project"
+        private $projectWebRoot = "/project";
 
         private $datasetFile = "dataset.json";
         private $analysisFile = "analysis.json";
