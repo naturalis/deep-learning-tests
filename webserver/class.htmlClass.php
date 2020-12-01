@@ -101,7 +101,7 @@ EOT;
 
         function image($src,$class)
         {
-            return "<img src='$src' class='$class' />\n";
+            return "<img src='$src' class='$class' alt='huh?' />\n";
         }
 
     }

@@ -10,6 +10,7 @@
         private $models;
         private $model;
         private $classes;
+        private $projectWebRoot = "/project"
 
         private $datasetFile = "dataset.json";
         private $analysisFile = "analysis.json";
@@ -39,6 +40,11 @@
         public function getProjectRoot()
         {
             return $this->projectRoot;
+        }
+
+        public function getProjectWebRoot()
+        {
+            return $this->projectWebRoot;
         }
 
         public function getProjectName()
@@ -136,7 +142,5 @@
         {
             return implode("/",[$this->getProjectRoot(),"models",$this->model,$image]);
         }
-
-
 
     }
