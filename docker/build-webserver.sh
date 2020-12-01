@@ -1,7 +1,7 @@
 #!/bin/sh
 
-cp -r ../webserver ./
+# cp -r ../webserver ./
 
 sudo docker build -t mds-webserver:latest -f Dockerfile-webserver .
 
-rm -r ./webserver
+# rm -r ./webserver
