@@ -180,7 +180,10 @@ if __name__ == "__main__":
     analysis.set_class_image_maximum(dataset.get_dataset_value("class_image_maximum"))
 
     analysis.read_class_list()
-    analysis.read_image_list_file(image_col=2)
+    analysis.read_image_list_file(
+        class_col=analysis.get_preset("image_list_class_column"),
+        image_col=analysis.get_preset("image_list_file_column")
+    )
     analysis.image_list_apply_class_list()
 
     analysis.set_model_settings({
