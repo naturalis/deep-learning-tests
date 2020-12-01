@@ -3,3 +3,4 @@ MAINTAINER maarten.schermer@naturalis.nl
 
 # COPY ./webserver /var/www/html
 WORKDIR /var/www/html
+RUN ln -s ${PROJECT_ROOT} project
