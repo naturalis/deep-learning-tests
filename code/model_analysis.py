@@ -176,8 +176,8 @@ if __name__ == "__main__":
     dataset.open_dataset()
 
     analysis.load_model()
-    analysis.set_class_image_minimum(dataset.get_dataset_value("class_image_minimum"))
-    analysis.set_class_image_maximum(dataset.get_dataset_value("class_image_maximum"))
+    analysis.set_class_image_minimum(analysis.get_dataset_value("class_image_minimum"))
+    analysis.set_class_image_maximum(analysis.get_dataset_value("class_image_maximum"))
 
     analysis.read_class_list()
     analysis.read_image_list_file(
