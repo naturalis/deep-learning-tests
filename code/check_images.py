@@ -4,7 +4,7 @@ from lib import baseclass, utils, dataset
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser() 
-    parser.add_argument("--path",type=str)
+    parser.add_argument("--folder",type=str)
     args = parser.parse_args()
 
     dataset = dataset.DataSet()
@@ -14,9 +14,9 @@ if __name__ == "__main__":
 
     dataset.logger.info("checking for corrupt files")
 
-    if args.path:
-        dataset.logger.info("checking for corrupt files in {}".format(args.path))
-        bad_files = utils.verify_images(args.path)
+    if args.folder:
+        dataset.logger.info("checking for corrupt files in {}".format(args.folder))
+        bad_files = utils.verify_images(args.folder)
     else:
         dataset.logger.info("checking for corrupt files in {}".format(dataset.image_path))
         bad_files = utils.verify_images(dataset.image_path)
