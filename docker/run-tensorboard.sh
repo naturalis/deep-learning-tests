@@ -17,6 +17,7 @@ function get_env {
   IFS=$'\n'
   for ITEM in $(cat .env)
   do
+    echo "--${LINE}--"
     LINE=$(echo $ITEM | grep "^$1=")
     if [[ ! -z "$LINE" ]]; then
     echo $LINE | sed -s 's/^[^=]*=//'
