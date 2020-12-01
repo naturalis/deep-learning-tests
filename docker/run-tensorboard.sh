@@ -30,7 +30,8 @@ PROJECT_ROOT=$(get_env PROJECT_ROOT)
 echo ${PROJECT_ROOT}
 
 if [[ -z "$PROJECT_ROOT" ]]; then
-    "no PROJECT_ROOT found"
+    echo "no PROJECT_ROOT found in .env"
+    echo "exiting"
     exit
 fi
 
