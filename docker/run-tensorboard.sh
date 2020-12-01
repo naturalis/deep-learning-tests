@@ -17,7 +17,6 @@ function get_env {
   IFS=$'\n'
   for ITEM in $(cat .env)
   do
-    echo "--${LINE}--"
     LINE=$(echo $ITEM | grep "^$1=")
     if [[ ! -z "$LINE" ]]; then
         VALUE=$(echo $LINE | sed -s 's/^[^=]*=//')
@@ -26,8 +25,19 @@ function get_env {
   done
 }
 
-PROJECT_ROOT=$(get_env PROJECT_ROOT)
-echo "***${PROJECT_ROOT}***"
+
+FUCK=PROJECT_ROOT
+
+  IFS=$'\n'
+  for ITEM in $(cat .env)
+  do
+    LINE=$(echo $ITEM | grep "^$FUCK=")
+    if [[ ! -z "$LINE" ]]; then
+        VALUE=$(echo $LINE | sed -s 's/^[^=]*=//')
+        echo "++$VALUE++"
+    fi
+  done
+
 
 exit
 
