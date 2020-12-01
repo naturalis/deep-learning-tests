@@ -26,7 +26,7 @@ function get_env {
 }
 
 PROJECT_ROOT=$(get_env PROJECT_ROOT)
-echo "--${PROJECT_ROOT}--"
+# echo "--${PROJECT_ROOT}--"
 
 exit
 
