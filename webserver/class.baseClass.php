@@ -132,4 +132,11 @@
             return $this->models;
         }
 
+        public function getModelImagePath($image)
+        {
+            return implode("/",[$this->getProjectRoot(),"models",$this->model,$image]);
+        }
+
+
+
     }

@@ -7,28 +7,27 @@
     $base->setProjectRoot(getenv('PROJECT_ROOT'));
     $base->setProjectName(getenv('PROJECT_NAME'));
     $base->setImagesRoot(getenv('IMAGES_ROOT'));
+    $base->setModels();
     $base->setModel($_GET["id"]);
 
     $l=[];
     foreach ($base->getModels() as $model)
-    {
+    {        
         $l[]=
         [
             $model["model"],
-            vsprintf("%s (acc: %s;  %s classes; %s)",
+            vsprintf("%s (acc: %s;  %s classes; %s)%s",
                 [
-
                     $model["model"],
                     $model["accuracy"],
                     $model["dataset"]["class_count"],
                     $model["dataset"]["model_note"],
+                    ($model["model"]==$_GET["id"] ? " 🡨" : "")
                 ]
-            )
+            ),
+
         ];
     }
-
-    echo $html->select($l,"models");
-    echo $html->button("select","alert(23)");
 
     $html = new HtmlClass;
 
@@ -37,6 +36,9 @@
     echo $html->h1($base->getProjectName());
     echo $html->h2("project root: " . $base->getProjectRoot());
     echo $html->h2("model: " . $base->getModel());
+
+    echo $html->select($l,"models");
+    echo $html->button("select",'openModelPage($("#models").val());');
 
     $size = $base->getModelSize();
     $dataset = $base->getDataset();
@@ -62,42 +64,16 @@
 
 
     echo $html->p($html->table($r,"analysis"));
-
-
-
-// $analysis["classification_report"][top_k]
-//         (
-//             [0] => Array
-//                 (
-//                     [top] => 1
-//                     [pct] => 94.4883
-//                 )
-
-//             [1] => Array
-//                 (
-//                     [top] => 3
-//                     [pct] => 97.8097
-//                 )
-
-//             [2] => Array
-//                 (
-//                     [top] => 5
-//                     [pct] => 98.6535
-//                 )
-
-//         )
-
-
-
     echo $html->h3("Classes");
 
     $c=[];
 
     $c[$key][] = [ "html" => "class" ];
     $c[$key][] = [ "html" => "support" ];
-    $c[$key][] = [ "html" => "f1-score" ];
     $c[$key][] = [ "html" => "precision" ];
     $c[$key][] = [ "html" => "recall" ];
+    $c[$key][] = [ "html" => "f1-score" ];
+    $c[$key][] = [ "html" => "top_1" ];
     $c[$key][] = [ "html" => "top_3" ];
     $c[$key][] = [ "html" => "top_5" ];
 
@@ -116,7 +92,9 @@
         $c[$key][] = [ "html" => round($analysis["classification_report"][$class["key"]]["f1-score"],2) ];
         $c[$key][] = [ "html" => round($analysis["classification_report"][$class["key"]]["precision"],2) ];
         $c[$key][] = [ "html" => round($analysis["classification_report"][$class["key"]]["recall"],2) ];
-        // $c[$key][] = [ "html" => round($analysis["top_k_per_class"][$class["key"]]["top_1"] / $class["support"],2) ];
+        $c[$key][] = [ "html" => round($analysis["classification_report"][$class["key"]]["f1-score"],2) ];
+
+        $c[$key][] = [ "html" => round($analysis["top_k_per_class"][$class["key"]]["top_1"] / $class["support"],2) ];
         $c[$key][] = [ "html" => round($analysis["top_k_per_class"][$class["key"]]["top_3"] / $class["support"],2) ];
         $c[$key][] = [ "html" => round($analysis["top_k_per_class"][$class["key"]]["top_5"] / $class["support"],2) ];
     }
@@ -125,17 +103,10 @@
     echo $html->p($html->table($c,"classes"));
 
 
-
-
-
-
-
-
-
     // confusion matrix
     echo $html->h3("Confusion matrix");
 
-
+    echo $html->image($base->getModelImagePath("confusion_matrix.png"),"confusion-matrix");
 
 
     $m = $analysis["confusion_matrix"];

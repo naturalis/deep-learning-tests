@@ -10,6 +10,7 @@
 <head>
     <link rel="stylesheet" type="text/css" href="style.css">
     <script type="text/javascript" src="jquery-3.5.1.min.js"></script>
+    <script type="text/javascript" src="scripts.js"></script>
 </head>
 <body>
 EOT;
@@ -98,5 +99,9 @@ EOT;
             return "<input type='button' value='$value' onclick='$onclick' id='$id' />\n";
         }
 
+        function image($src,$class)
+        {
+            return "<img src='$src' class='$class' />\n";
+        }
 
     }
