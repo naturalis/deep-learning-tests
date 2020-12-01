@@ -57,10 +57,10 @@ def verify_images(rootdir):
 
             im = Image.open(filename)
             im.verify() #I perform also verify, don't know if he sees other types o defects
-            im.close() #reload is necessary in my case
+            # im.close() #reload is necessary in my case
             im = Image.open(filename) 
             im.transpose(Image.FLIP_LEFT_RIGHT)
-            im.close()
+            # im.close()
 
             try:
                 # img = Image.open(filename) # open the image file
