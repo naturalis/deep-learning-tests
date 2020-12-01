@@ -114,21 +114,21 @@
     $t=[];
 
 
-    $t["h"]["h"] = [ "html" => "" ];
+    // $t["h"]["h"] = [ "html" => "" ];
     foreach ($m as $cKey => $col)
     {
-        $key = array_search($cKey, array_column($classes, "key"));
-        $t["h"][] = [ 
-            "html" => $classes[$key]["key"],
-            "title" => $classes[$key]["name"],
-            "data-hash" => md5($classes[$key]["name"])
-        ];
+        // $key = array_search($cKey, array_column($classes, "key"));
+        // $t["h"][] = [ 
+        //     "html" => $classes[$key]["key"],
+        //     "title" => $classes[$key]["name"],
+        //     "data-hash" => md5($classes[$key]["name"])
+        // ];
     }
 
     foreach ($m as $rKey => $row)
     {
-        $key = array_search($cKey, array_column($classes, "key"));
-        $t[$cKey]["h"] = [
+        $key = array_search($rKey, array_column($classes, "key"));
+        $t[$rKey]["h"] = [
             "html" => $classes[$key]["key"] . ". " . $classes[$key]["name"],
             "title" => $classes[$key]["name"],
             "data-hash" => md5($classes[$key]["name"])
