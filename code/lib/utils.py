@@ -64,7 +64,7 @@ def verify_images(rootdir):
                 im.transpose(Image.FLIP_LEFT_RIGHT)
                 im.close()
             except Exception as e:
-                bad_files.append([filename, str(e)])
+                bad_files.append({ "filename": filename, "error": str(e)})
             checked += 1
             if checked % 1000 == 0:
                 print("{} / {} ".format(len(bad_files),checked))
