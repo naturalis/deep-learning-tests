@@ -118,8 +118,7 @@
     print_r($m);
 
 
-
-    $t["h"]["h"] = [ "html" => "" ];
+    // $t["h"]["h"] = [ "html" => "" ];
     foreach ($m as $cKey => $col)
     {
         // $key = array_search($cKey, array_column($classes, "key"));
@@ -141,9 +140,11 @@
 
         foreach ($col as $rKey => $row)
         {
-            $t[$cKey][] = [ "html" => $m[$rKey][$cKey] ];
+            // $t[$cKey][] = [ "html" => $m[$rKey][$cKey] ];
         }  
     }
+
+    $t = $m;
 
     echo $html->p($html->table($t,"confusion_matrix"));
 
