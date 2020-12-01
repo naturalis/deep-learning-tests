@@ -140,7 +140,7 @@
 
         public function getModelImagePath($image)
         {
-            return implode("/",[$this->getProjectRoot(),"models",$this->model,$image]);
+            return implode("/",[$this->getProjectWebRoot(),"models",$this->model,$image]);
         }
 
     }
