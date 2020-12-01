@@ -50,6 +50,9 @@ EOT;
 
         function table($t,$id=null)
         {
+
+var_dump($t);
+
             $b[] = "<table id='$id'>";
             foreach ($t as $rKey => $row)
             {
