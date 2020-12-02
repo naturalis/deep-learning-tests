@@ -145,7 +145,7 @@ class ModelTrainer(baseclass.BaseClass):
             dataset_other = self.traindf[self.traindf[self.COL_CLASS]!=minority_label]
             dataset_minority_upsampled = resample(dataset_minority,
                                                     replace=True,
-                                                    n_samples=int(numpy.ceil(len(dataset_minority) * factor)),
+                                                    n_samples=int(np.ceil(len(dataset_minority) * factor)),
                                                     random_state=111)
 
             self.traindf = pd.concat([dataset_minority_upsampled, dataset_other])
