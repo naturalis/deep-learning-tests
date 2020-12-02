@@ -545,8 +545,8 @@ if __name__ == "__main__":
     dataset.save_dataset()
 
     # setting this only so they can be accessed in __del__, when someone Ctrl+C's the training
-    trainer.set_dataset(dataset):
-    trainer.set_timer(timer):
+    trainer.set_dataset(dataset)
+    trainer.set_timer(timer)
 
     trainer.configure_generators()
     trainer.train_model()
