@@ -4,7 +4,7 @@ import numpy as np
 from datetime import datetime
 import matplotlib.pyplot as plt
 import pandas as pd
-from sklearn.utils import class_weight
+from sklearn.utils import class_weight, resample
 from lib import baseclass, dataset, utils, customcallback
 
 class ModelTrainer(baseclass.BaseClass):
@@ -126,23 +126,36 @@ class ModelTrainer(baseclass.BaseClass):
 
         # return callbacks
 
+
+    def get_imbalance_ratio(self):
+        counts = self.traindf[self.COL_CLASS].value_counts()
+        return min(counts) / max(counts)
+
+    def upsample(self, target_ratio, factor=1.1):
+
+        while(self.get_imbalance_ratio() < target_ratio):   
+            counts = self.traindf[self.COL_CLASS].value_counts()
+            minority_label = counts.idxmin()
+            dataset_minority = self.traindf[self.traindf[self.COL_CLASS]==minority_label]
+            dataset_other = self.traindf[self.traindf[self.COL_CLASS]!=minority_label]
+            dataset_minority_upsampled = resample(dataset_minority,
+                                                    replace=True,
+                                                    n_samples=int(numpy.ceil(len(dataset_minority) * factor)),
+                                                    random_state=111)
+            self.traindf = pandas.concat([dataset_minority_upsampled, dataset_other])
+
+            print("upsample: dataset num rows : {}".format(len(self.traindf)))
+
+
     def configure_generators(self):
 
         if "image_augmentation" in self.model_settings and not self.model_settings["image_augmentation"] is None:
             a = self.model_settings["image_augmentation"]
         else:
             a = []
-
-x, y = ... # load your data
-datagen = ImageDataGenerator()
-balanced_gen = BalancedDataGenerator(x, y, datagen, batch_size=32)
-steps_per_epoch = balanced_gen.steps_per_epoch
-model = ... # define your model
-model.compile(...) # define your compile parameters
-model.fit_generator(balanced_gen, steps_per_epoch, ...)                                                replace=True,
-
-
-
+        
+        if "upsampling_ratio" in self.model_settings and not self.model_settings["upsampling_ratio"]==-1:
+            self.upsample(self.COL_CLASS, self.model_settings["upsampling_ratio"])
 
         datagen = tf.keras.preprocessing.image.ImageDataGenerator(
             rescale=1./255,
