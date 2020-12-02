@@ -81,7 +81,7 @@
             }
             catch (Exception $e)
             {
-                return [ "error" : $e->getMessage() ];
+                return [ "error" => $e->getMessage() ];
             }
         }
 
