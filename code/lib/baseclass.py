@@ -181,9 +181,6 @@ class BaseClass():
     def set_model_settings(self, model_settings):
         self.model_settings = model_settings
 
-        print(self.model_settings)
-        exit()
-
         for setting in self.model_settings:
             self.logger.info("setting - {}: {}".format(setting, str(self.model_settings[setting])))
 

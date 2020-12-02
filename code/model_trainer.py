@@ -132,7 +132,9 @@ class ModelTrainer(baseclass.BaseClass):
         counts = self.traindf[self.COL_CLASS].value_counts()
         return min(counts) / max(counts)
 
-    def upsample(self, target_ratio, factor=1.1):
+    def upsample(self, factor=1.1):
+
+        target_ratio = self.get_preset("upsampling_ratio")
 
         self.logger.info("upsampling, target ratio: {}".format(target_ratio))
 
@@ -156,8 +158,8 @@ class ModelTrainer(baseclass.BaseClass):
         else:
             a = []
         
-        if not self.get_preset("upsampling_ratio")==-1:
-            self.upsample(self.COL_CLASS, self.get_preset("upsampling_ratio"))
+        if "upsampling_ratio" in self.model_settings and not self.model_settings["upsampling_ratio"] == -1:
+            self.upsample()
 
         datagen = tf.keras.preprocessing.image.ImageDataGenerator(
             rescale=1./255,
