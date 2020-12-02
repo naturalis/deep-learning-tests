@@ -180,6 +180,10 @@ class BaseClass():
 
     def set_model_settings(self, model_settings):
         self.model_settings = model_settings
+
+        print(self.model_settings)
+        exit()
+
         for setting in self.model_settings:
             self.logger.info("setting - {}: {}".format(setting, str(self.model_settings[setting])))
 
@@ -397,9 +401,6 @@ class BaseClass():
         self.presets.update( { "image_list_class_column" : image_list_class_column } )
         self.presets.update( { "image_list_file_column" : image_list_file_column } )
 
-        self.logger.info("presets: {}".format(self.presets))
-        print(self.get_preset("upsampling_ratio"))
-        print(type(self.get_preset("upsampling_ratio")))
 
     def get_preset(self, preset):
         if preset in self.presets:

@@ -504,7 +504,8 @@ if __name__ == "__main__":
         "callbacks" : trainer.configure_callbacks(),
         "metrics" : trainer.get_preset("metrics"),
         "image_augmentation" : trainer.get_preset("image_augmentation"),
-        "use_class_weights" : trainer.get_preset("use_class_weights")
+        "use_class_weights" : trainer.get_preset("use_class_weights"),
+        "upsampling_ratio" : trainer.get_preset("upsampling_ratio")
     })
 
     if args.dataset_note: 
