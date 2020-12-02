@@ -60,11 +60,11 @@
     $html = new HtmlClass;
 
     echo $html->header();
-    echo $html->h2(vsprintf("%s (%s)",$base->getProjectName(),$base->getProjectRoot()));
+    echo $html->h2(vsprintf("%s (%s)",[$base->getProjectName(),$base->getProjectRoot()]));
     echo $html->select($l,"models");
     echo $html->button("select",'openModelPage($("#models").val());');
-    echo $html->h2(vsprintf("%s: %s (%s)",$base->getModel(),$dataset["model_note"],$dataset["created"]));
-    echo $html->p(vsprintf("%s (%s)",$dataset["epochs_trained"],$dataset["training_time"]);
+    echo $html->h2(vsprintf("%s: %s (%s)",[$base->getModel(),$dataset["model_note"],$dataset["created"]]));
+    echo $html->p(vsprintf("%s (%s)",[$dataset["epochs_trained"],$dataset["training_time"]]);
 
 
 
