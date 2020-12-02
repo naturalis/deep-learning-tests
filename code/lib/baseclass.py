@@ -367,7 +367,7 @@ class BaseClass():
             use_imagenet_weights = (os_environ.get("USE_IMAGENET_WEIGHTS").lower()=="true") if "USE_IMAGENET_WEIGHTS" in os_environ else True
 
             use_class_weights = (os_environ.get("USE_CLASS_WEIGHTS").lower()=="true") if "USE_CLASS_WEIGHTS" in os_environ else False
-            upsampling_ratio = float(os_environ.get("UPSAMPLING_RATIO=0.1")) if "UPSAMPLING_RATIO" in os_environ else -1
+            upsampling_ratio = float(os_environ.get("UPSAMPLING_RATIO")) if "UPSAMPLING_RATIO" in os_environ else -1
 
             image_list_class_column = int(os_environ.get("IMAGE_LIST_CLASS_COLUMN")) if "IMAGE_LIST_CLASS_COLUMN" in os_environ else 0
             image_list_file_column = int(os_environ.get("IMAGE_LIST_FILE_COLUMN")) if "IMAGE_LIST_FILE_COLUMN" in os_environ else 2
