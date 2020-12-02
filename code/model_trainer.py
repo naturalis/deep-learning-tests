@@ -133,6 +133,8 @@ class ModelTrainer(baseclass.BaseClass):
 
     def upsample(self, target_ratio, factor=1.1):
 
+        self.logger.info("upsampling, target ratio: {}".format(target_ratio))
+
         while(self.get_imbalance_ratio() < target_ratio):   
             counts = self.traindf[self.COL_CLASS].value_counts()
             minority_label = counts.idxmin()
@@ -142,10 +144,9 @@ class ModelTrainer(baseclass.BaseClass):
                                                     replace=True,
                                                     n_samples=int(numpy.ceil(len(dataset_minority) * factor)),
                                                     random_state=111)
-            self.traindf = pandas.concat([dataset_minority_upsampled, dataset_other])
 
-            print("upsample: dataset num rows : {}".format(len(self.traindf)))
-
+            self.traindf = pd.concat([dataset_minority_upsampled, dataset_other])
+            self.logger.info("upsampling, dataset num rows: {}".format(len(self.traindf)))
 
     def configure_generators(self):
 
