@@ -34,19 +34,38 @@
     $analysis = $base->getAnalysis();
     $classes = $base->getClasses();
 
-    var_dump($dataset);
+    // $dataset["base_model"]
+    // $dataset["class_image_minimum"]
+    // $dataset["class_image_maximum"]
+    // $dataset["use_class_balancing"]
+    // $dataset["class_count"]
+    // $dataset["class_count_before_maximum"]
+
+    // $dataset["training_settings"]["validation_split"]
+    // $dataset["training_settings"]["image_augmentation"]
+    // $dataset["training_settings"]["batch_size"]
+
+    // foreach ($dataset["training_phases"] as $key => $phase)
+    // {
+
+    // }
+
+    // $phase["epochs"]
+    // $phase["freeze_layers"]
+    // $phase["optimizer"]
+    // implode("; ",$phase["callbacks"])
+
+
 
     $html = new HtmlClass;
 
     echo $html->header();
-
-    echo $html->h1($base->getProjectName());
-    echo $html->h2("project root: " . $base->getProjectRoot());
-    echo $html->h2("model: " . $base->getModel());
-    echo $html->h2("model: " . $base->getModel());
-
+    echo $html->h2(vsprintf("%s (%s)",$base->getProjectName(),$base->getProjectRoot()));
     echo $html->select($l,"models");
     echo $html->button("select",'openModelPage($("#models").val());');
+    echo $html->h2(vsprintf("%s: %s (%s)",$base->getModel(),$dataset["model_note"],$dataset["created"]));
+    echo $html->p(vsprintf("%s (%s)",$dataset["epochs_trained"],$dataset["training_time"]);
+
 
 
     echo $html->h3("General analysis");

@@ -35,7 +35,7 @@ class DataSet(baseclass.BaseClass):
             'BASE_MODEL','IMAGE_AUGMENTATION','REDUCE_LR_PARAMS','VALIDATION_SPLIT', \
             'LEARNING_RATE','BATCH_SIZE','EPOCHS','FREEZE_LAYERS','METRICS', \
             'CHECKPOINT_MONITOR', 'EARLY_STOPPING_MONITOR', 'EARLY_STOPPING_PATIENCE', \
-            'CLASS_IMAGE_MINIMUM','CLASS_IMAGE_MAXIMUM','USE_CLASS_BALANCING'
+            'CLASS_IMAGE_MINIMUM','CLASS_IMAGE_MAXIMUM','USE_CLASS_WEIGHTS'
         ]:
             if item in os_environ:
                 self.env_vars.append({ item : os_environ.get(item) })
@@ -87,7 +87,7 @@ class DataSet(baseclass.BaseClass):
 
         self.data_set["class_image_minimum"] = self.model_trainer.class_image_minimum
         self.data_set["class_image_maximum"] = self.model_trainer.class_image_maximum
-        self.data_set["use_class_balancing"] = self.model_trainer.get_preset("use_class_balancing")
+        self.data_set["use_class_weights"] = self.model_trainer.get_preset("use_class_weights")
 
         self.data_set["class_count"] = len(self.model_trainer.class_list)
         self.data_set["class_count_before_maximum"] = len(self.model_trainer.complete_class_list)

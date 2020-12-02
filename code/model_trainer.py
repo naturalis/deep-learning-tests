@@ -284,13 +284,13 @@ class ModelTrainer(baseclass.BaseClass):
 
     def train_model(self):
 
-        if "use_class_balancing" in self.model_settings and not self.model_settings["use_class_balancing"] is False:
+        if "use_class_weights" in self.model_settings and not self.model_settings["use_class_weights"] is False:
             total = np.sum([int(b[1]) for b in self.class_list ])
             self.class_weight = {}
             for k,item in enumerate(self.class_list):
                 self.class_weight[k]=(1 / int(item[1]))*(total)/2.0
 
-            self.logger.info("using class balancing")
+            self.logger.info("using class weights")
             self.logger.info(self.class_weight)
             self.logger.info(self.class_list)
             print(self.train_generator.class_indices)
@@ -298,7 +298,7 @@ class ModelTrainer(baseclass.BaseClass):
         else:
             self.class_weight = None
 
-            self.logger.info("using no class balancing")
+            self.logger.info("using no class weights")
 
 
         self.logger.info("start training \"{}\" ({})".format(self.project_name,self.project_root))
@@ -453,7 +453,7 @@ if __name__ == "__main__":
         "callbacks" : trainer.configure_callbacks(),
         "metrics" : trainer.get_preset("metrics"),
         "image_augmentation" : trainer.get_preset("image_augmentation"),
-        "use_class_balancing" : trainer.get_preset("use_class_balancing")
+        "use_class_weights" : trainer.get_preset("use_class_weights")
     })
 
     if args.dataset_note: 

@@ -143,11 +143,12 @@ class ModelCompare(baseclass.BaseClass):
                     "?" if not "class_count_before_maximum" in tmp else tmp["class_count_before_maximum"],
                     tmp["class_image_minimum"],
                     tmp["class_image_maximum"],
-                    "?" if not "use_class_balancing" in tmp else ("🗠" if tmp["use_class_balancing"] else "")
+                    "?" if not "use_class_weights" in tmp else ("𐄷" if tmp["use_class_weights"] else "")
+                    # "🗠"
                 )
 
                 this_model["class_count"] = int(tmp["class_count"])
-                # this_model["use_class_balancing"] = tmp["use_class_balancing"]
+                # this_model["use_class_weights"] = tmp["use_class_weights"]
 
                 this_model["epochs"] = "; ".join(map(str,tmp["training_phases"]["epochs"]))
                 this_model["layers"] = "; ".join(map(str,tmp["training_phases"]["freeze_layers"]))
