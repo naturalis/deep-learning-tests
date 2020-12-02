@@ -83,7 +83,7 @@
             }
             else
             {
-                return [ "error" => $e->getMessage() ];
+                return [ "error" => "file $file does not exist" ];
             }
         }
 
