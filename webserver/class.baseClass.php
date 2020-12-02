@@ -75,7 +75,11 @@
 
         public function getAnalysis()
         {
-            return json_decode(file_get_contents(implode("/",[$this->getProjectRoot(),"models",$this->model,$this->analysisFile])),true);
+            $file = implode("/",[$this->getProjectRoot(),"models",$this->model,$this->analysisFile]);
+            if (file_exists($file))
+            {
+                return json_decode(file_get_contents($file),true);
+            }
         }
 
         public function getClasses()
@@ -115,13 +119,18 @@
 
             foreach ($this->modelList as $key => $model)
             {
+
                 $this->model = $model;
+
+                $dataset = $this->getDataset();
+                $analysis = $this->getAnalysis();
+                
                 $this->models[] = [
                     "model" => $model,
                     "size" => $this->getModelSize(),
-                    "dataset" => $this->getDataset(),
-                    "analysis" => $this->getAnalysis(),
-                    "accuracy" => $this->getAnalysis()["classification_report"]["accuracy"]
+                    "dataset" => $dataset,
+                    "analysis" => $analysis,
+                    "accuracy" => $analysis ? $analysis["classification_report"]["accuracy"] : null
                 ];
             }
         }
