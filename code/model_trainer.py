@@ -31,7 +31,6 @@ class ModelTrainer(baseclass.BaseClass):
         super().__init__()
 
     def __del__(self): 
-        print("-------------> interrupted_training")
         # script interrupted during training
         if self.am_training==True:
             self.logger.info("training interrupted")
@@ -127,17 +126,13 @@ class ModelTrainer(baseclass.BaseClass):
 
         # return callbacks
 
-
     def get_imbalance_ratio(self):
         counts = self.traindf[self.COL_CLASS].value_counts()
         return min(counts) / max(counts)
 
     def upsample(self, factor=1.1):
-
         target_ratio = self.get_preset("upsampling_ratio")
-
         self.logger.info("upsampling, target ratio: {}".format(target_ratio))
-
         while(self.get_imbalance_ratio() < target_ratio):   
             counts = self.traindf[self.COL_CLASS].value_counts()
             minority_label = counts.idxmin()
@@ -149,7 +144,23 @@ class ModelTrainer(baseclass.BaseClass):
                                                     random_state=111)
 
             self.traindf = pd.concat([dataset_minority_upsampled, dataset_other])
-            self.logger.info("upsampling, dataset num rows: {}".format(len(self.traindf)))
+            self.logger.debug("upsampling, dataset num rows: {}".format(len(self.traindf)))
+
+    def downsample(self, factor=0.9):
+        target_ratio = self.get_preset("downsampling_ratio")
+        self.logger.info("downsampling, target ratio: {}".format(target_ratio))
+        while(self.get_imbalance_ratio() < target_ratio):
+            counts = self.traindf[self.COL_CLASS].value_counts()
+            majority_label = counts.idxmax()
+            dataset_majority = self.traindf[self.traindf[self.COL_CLASS]==majority_label]
+            dataset_other = self.traindf[self.traindf[self.COL_CLASS]!=majority_label]
+            dataset_majority_downsampled = resample(dataset_majority,
+                                                    replace=False,
+                                                    n_samples=int(np.ceil(len(dataset_majority) * factor)),
+                                                    random_state=111)
+
+            self.traindf = pd.concat([dataset_majority_downsampled, dataset_other])
+            self.logger.debug("downsampling, dataset num rows : {}".format(len(self.traindf)))
 
     def configure_generators(self):
 
@@ -160,6 +171,8 @@ class ModelTrainer(baseclass.BaseClass):
         
         if "upsampling_ratio" in self.model_settings and not self.model_settings["upsampling_ratio"] == -1:
             self.upsample()
+        elif "downsampling_ratio" in self.model_settings and not self.model_settings["downsampling_ratio"] == -1:
+            self.downsample()
 
         datagen = tf.keras.preprocessing.image.ImageDataGenerator(
             rescale=1./255,
@@ -507,7 +520,8 @@ if __name__ == "__main__":
         "metrics" : trainer.get_preset("metrics"),
         "image_augmentation" : trainer.get_preset("image_augmentation"),
         "use_class_weights" : trainer.get_preset("use_class_weights"),
-        "upsampling_ratio" : trainer.get_preset("upsampling_ratio")
+        "upsampling_ratio" : trainer.get_preset("upsampling_ratio"),
+        "downsampling_ratio" : trainer.get_preset("downsampling_ratio")
     })
 
     if args.dataset_note: 
