@@ -397,6 +397,9 @@ class BaseClass():
         self.presets.update( { "image_list_class_column" : image_list_class_column } )
         self.presets.update( { "image_list_file_column" : image_list_file_column } )
 
+        print(self.presets)
+        exit()
+
 
     def get_preset(self, preset):
         if preset in self.presets:
