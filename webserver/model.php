@@ -59,14 +59,13 @@
 
     $html = new HtmlClass;
 
-    echo $html->header();
+    echo $html->header(["title" => vsprintf("%s: %s [%s]",[$base->getProjectName(),$base->getModel(),$dataset["model_note"]])]);
     echo $html->h2(vsprintf("%s (%s)",[$base->getProjectName(),$base->getProjectRoot()]));
     echo $html->select($l,"models");
     echo $html->button("select",'openModelPage($("#models").val());');
+    echo $html->span("<a href='index.php'>index</a>");
     echo $html->h2(vsprintf("%s: %s (%s)",[$base->getModel(),$dataset["model_note"],$dataset["created"]]));
     echo $html->p(vsprintf("%s (%s)",[$dataset["epochs_trained"],$dataset["training_time"]]));
-
-
 
     echo $html->h3("General analysis");
 
@@ -125,12 +124,9 @@
 
     echo $html->p($html->table($c,"classes"));
 
-
     // confusion matrix
     echo $html->h3("Confusion matrix");
-
     echo $html->image($base->getModelImagePath("confusion_matrix.png"),"confusion-matrix");
-
 
     $m = $analysis["confusion_matrix"];
 

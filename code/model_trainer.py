@@ -133,6 +133,17 @@ class ModelTrainer(baseclass.BaseClass):
         else:
             a = []
 
+x, y = ... # load your data
+datagen = ImageDataGenerator()
+balanced_gen = BalancedDataGenerator(x, y, datagen, batch_size=32)
+steps_per_epoch = balanced_gen.steps_per_epoch
+model = ... # define your model
+model.compile(...) # define your compile parameters
+model.fit_generator(balanced_gen, steps_per_epoch, ...)                                                replace=True,
+
+
+
+
         datagen = tf.keras.preprocessing.image.ImageDataGenerator(
             rescale=1./255,
             validation_split=self.model_settings["validation_split"],
@@ -389,6 +400,7 @@ class ModelTrainer(baseclass.BaseClass):
             self.training_phase += 1
 
         self.am_training = False
+
 
     def save_model(self):
         self.model.save(self.get_model_path())

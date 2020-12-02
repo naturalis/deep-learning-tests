@@ -40,3 +40,6 @@
     }
 
     echo $html->list($l);
+
+
+// ssh -L 8091:localhost:8091 gpu2

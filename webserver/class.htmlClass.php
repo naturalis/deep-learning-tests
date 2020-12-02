@@ -3,37 +3,42 @@
 
     class HtmlClass
     {
-        function header()
+        function header($fields=null)
         {
-            return <<< EOT
-<html>
+            return '<html>
 <head>
+'.(isset($fields["title"]) ? '<title>'.$fields["title"].'</title>' : '').'
     <link rel="stylesheet" type="text/css" href="style.css">
     <script type="text/javascript" src="jquery-3.5.1.min.js"></script>
     <script type="text/javascript" src="scripts.js"></script>
 </head>
 <body>
-EOT;
+';
         }
 
-        function h1($c)
+        function h1($c,$id=null)
         {
-            return "<h1>$c</h1>\n";
+            return "<h1".($id ? ' id="$id"' : "" ).">$c</h1>\n";
         }
 
-        function h2($c)
+        function h2($c,$id=null)
         {
-            return "<h2>$c</h2>\n";
+            return "<h2".($id ? ' id="$id"' : "" ).">$c</h2>\n";
         }
 
-        function h3($c)
+        function h3($c,$id=null)
         {
-            return "<h3>$c</h3>\n";
+            return "<h3".($id ? ' id="$id"' : "" ).">$c</h3>\n";
         }
 
         function p($c)
         {
             return "<p>$c</p>\n";
+        }
+
+        function span($c)
+        {
+            return "<span>$c</span>\n";
         }
 
         function list($l,$id=null)
