@@ -23,12 +23,26 @@ class ModelTrainer(baseclass.BaseClass):
     customcallback = None
     skip_training = False
 
+    am_training = None
+    dataset = None
+    timer = None
+
     def __init__(self):
         super().__init__()
 
     def __del__(self): 
-        # print('Destructor called, Employee deleted.') 
-        pass
+        # script interrupted during training
+        if self.am_training==True:
+            self.logger.info("training interrupted")
+            if self.dataset:
+                self.dataset.set_epochs_trained(self.customcallback.get_current_epoch())
+                if self.timer:
+                    self.dataset.set_training_time(self.timer.get_time_passed())
+                self.dataset.update_model_state("interrupted_training")
+                self.dataset.save_dataset()
+
+            self.save_model()
+            self.save_history()
 
     def set_skip_training(self,skip_training):
         self.skip_training = skip_training
@@ -46,6 +60,12 @@ class ModelTrainer(baseclass.BaseClass):
             "trainable" : trainable_count,
             "non_trainable" : non_trainable_count
         }
+
+    def set_dataset(self,dataset):
+        self.dataset = dataset
+
+    def set_timer(self,timer):
+        self.timer = timer
 
     def configure_optimizers(self):
         optimizers = []
@@ -310,6 +330,8 @@ class ModelTrainer(baseclass.BaseClass):
         else:
             self.epochs = self.model_settings["epochs"]
 
+        self.am_training = True
+
         for epoch in self.epochs: 
 
             self.logger.info("=== training phase {}/{} ===".format((self.training_phase+1),len(self.epochs)))
@@ -365,6 +387,8 @@ class ModelTrainer(baseclass.BaseClass):
                 self.logger.info("skipping training (--no_training)")
 
             self.training_phase += 1
+
+        self.am_training = False
 
     def save_model(self):
         self.model.save(self.get_model_path())
@@ -495,8 +519,11 @@ if __name__ == "__main__":
     dataset.update_model_state("training")
     dataset.save_dataset()
 
-    trainer.configure_generators()
+    # setting this only so they can be accessed in __del__, when someone Ctrl+C's the training
+    trainer.set_dataset(dataset):
+    trainer.set_timer(timer):
 
+    trainer.configure_generators()
     trainer.train_model()
 
     dataset.set_epochs_trained(trainer.customcallback.get_current_epoch())
