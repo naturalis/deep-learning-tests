@@ -29,6 +29,13 @@
         ];
     }
 
+    $size = $base->getModelSize();
+    $dataset = $base->getDataset();
+    $analysis = $base->getAnalysis();
+    $classes = $base->getClasses();
+
+    var_dump($dataset);
+
     $html = new HtmlClass;
 
     echo $html->header();
@@ -36,14 +43,11 @@
     echo $html->h1($base->getProjectName());
     echo $html->h2("project root: " . $base->getProjectRoot());
     echo $html->h2("model: " . $base->getModel());
+    echo $html->h2("model: " . $base->getModel());
 
     echo $html->select($l,"models");
     echo $html->button("select",'openModelPage($("#models").val());');
 
-    $size = $base->getModelSize();
-    $dataset = $base->getDataset();
-    $analysis = $base->getAnalysis();
-    $classes = $base->getClasses();
 
     echo $html->h3("General analysis");
 
