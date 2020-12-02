@@ -141,7 +141,8 @@ class ModelTrainer(baseclass.BaseClass):
             dataset_minority_upsampled = resample(dataset_minority,
                                                     replace=True,
                                                     n_samples=int(np.ceil(len(dataset_minority) * factor)),
-                                                    random_state=111, stratify=y)
+                                                    random_state=23,
+                                                    stratify=dataset_minority)
 
             self.traindf = pd.concat([dataset_minority_upsampled, dataset_other])
             self.logger.debug("upsampling, dataset num rows: {}".format(len(self.traindf)))
@@ -157,7 +158,8 @@ class ModelTrainer(baseclass.BaseClass):
             dataset_majority_downsampled = resample(dataset_majority,
                                                     replace=False,
                                                     n_samples=int(np.ceil(len(dataset_majority) * factor)),
-                                                    random_state=111, stratify=y)
+                                                    random_state=23,
+                                                    stratify=dataset_minority)
 
             self.traindf = pd.concat([dataset_majority_downsampled, dataset_other])
             self.logger.debug("downsampling, dataset num rows : {}".format(len(self.traindf)))
