@@ -156,8 +156,8 @@ class ModelTrainer(baseclass.BaseClass):
         else:
             a = []
         
-        if "upsampling_ratio" in self.model_settings and not self.model_settings["upsampling_ratio"]==-1:
-            self.upsample(self.COL_CLASS, self.model_settings["upsampling_ratio"])
+        if not self.get_preset("upsampling_ratio")==-1:
+            self.upsample(self.COL_CLASS, self.get_preset("upsampling_ratio"))
 
         datagen = tf.keras.preprocessing.image.ImageDataGenerator(
             rescale=1./255,
