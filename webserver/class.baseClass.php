@@ -70,16 +70,18 @@
         public function getDataset()
         {
             return json_decode(file_get_contents(implode("/",[$this->getProjectRoot(),"models",$this->model,$this->datasetFile])),true);
-            
         }
 
         public function getAnalysis()
         {
-            try
+
+            $file = implode("/",[$this->getProjectRoot(),"models",$this->model,$this->analysisFile]);
+
+            if (!file_exists($file))
             {
-                return json_decode(file_get_contents(implode("/",[$this->getProjectRoot(),"models",$this->model,$this->analysisFile])),true);
+                return json_decode(file_get_contents($file),true);
             }
-            catch (Exception $e)
+            else
             {
                 return [ "error" => $e->getMessage() ];
             }
