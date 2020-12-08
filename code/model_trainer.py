@@ -206,7 +206,7 @@ class ModelTrainer(baseclass.BaseClass):
         from imblearn.under_sampling import NearMiss
 
         self.train_generator, self.steps_per_epoch = balanced_batch_generator(
-            x=self.traindf,
+            X=self.traindf,
             y=self.traindf[self.COL_CLASS],
             sampler=NearMiss(),
             batch_size=10,
