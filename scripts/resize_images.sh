@@ -10,8 +10,11 @@ fi
 IFS=$'\n'
 for f in $(find $INDIR -type f -name '*.jpg');
 do
-    new_f=$(echo "$f" | sed 's/ /\\ /g')
-    convert $new_f -resize 500x500^ $new_f
+    # new_f=$(echo "$f" | sed 's/ /\\ /g')
+    mv $f ./tmp
+    convert ./tmp -resize 500x500^ ./tmp
+    mv ./tmp $f 
     echo $new_f
+    exit
 done
 
