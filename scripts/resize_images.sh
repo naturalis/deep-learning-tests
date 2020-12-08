@@ -13,9 +13,9 @@ do
     # new_f=$(echo "$f" | sed 's/ /\\ /g')
     mv $f ./tmp
     convert ./tmp -resize 500x500^ ./tmp
+    convert info $f
     mv ./tmp $f 
     echo $f
-    convert info $f
     exit
 done
 
