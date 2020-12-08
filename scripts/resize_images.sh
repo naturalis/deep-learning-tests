@@ -13,7 +13,7 @@ do
     # new_f=$(echo "$f" | sed 's/ /\\ /g')
     mv $f ./tmp
     convert ./tmp -resize 500x500^ ./tmp
-    convert ./tmp -format "%hx%w" info:)
+    convert ./tmp -format "%hx%w" info:
     mv ./tmp $f 
     echo $f
     exit
