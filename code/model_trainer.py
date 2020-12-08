@@ -406,7 +406,8 @@ class ModelTrainer(baseclass.BaseClass):
             if not self.skip_training:
 
                 history = self.model.fit(
-                    x=self.train_generator,
+                    generator=self.train_generator,
+                    # x=self.train_generator,
                     steps_per_epoch=step_size_train,
                     epochs=epoch,
                     validation_data=self.validation_generator,
