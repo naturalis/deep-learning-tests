@@ -14,7 +14,8 @@ do
     mv $f ./tmp
     convert ./tmp -resize 500x500^ ./tmp
     mv ./tmp $f 
-    echo $new_f
+    echo $f
+    convert info $f
     exit
 done
 
