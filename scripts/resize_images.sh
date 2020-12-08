@@ -9,7 +9,9 @@ fi
 
 for f in $(find $INDIR -type f -name '*.jpg');
 do
-    convert "$f" -resize 500x500^ "$f"
-    echo $f
+    new_f=$(awk '{gsub(/ /,"\\ ")}8' $f)
+    convert $f -resize 500x500^ $f
+    echo $new_fi
+    exit
 done
 
