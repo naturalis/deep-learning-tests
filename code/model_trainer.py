@@ -143,10 +143,11 @@ class ModelTrainer(baseclass.BaseClass):
                                                     replace=True,
                                                     n_samples=int(np.ceil(len(dataset_minority) * factor)),
                                                     stratify=dataset_minority,
-                                                    random_state=23)
+                                                    random_state=42)
 
             self.traindf = pd.concat([dataset_minority_upsampled, dataset_other])
             self.logger.debug("upsampling, dataset num rows: {}".format(len(self.traindf)))
+
 
     def downsample(self, factor=0.9):
         target_ratio = self.get_preset("downsampling_ratio")
@@ -160,7 +161,7 @@ class ModelTrainer(baseclass.BaseClass):
                                                     replace=False,
                                                     n_samples=int(np.ceil(len(dataset_majority) * factor)),
                                                     stratify=dataset_majority,
-                                                    random_state=23)
+                                                    random_state=42)
 
             self.traindf = pd.concat([dataset_majority_downsampled, dataset_other])
             self.logger.debug("downsampling, dataset num rows : {}".format(len(self.traindf)))
@@ -200,6 +201,17 @@ class ModelTrainer(baseclass.BaseClass):
             subset="training",
             shuffle=True
         )
+
+        from imblearn.keras import balanced_batch_generator
+        from imblearn.under_sampling import NearMiss
+
+        self.train_generator, self.steps_per_epoch = balanced_batch_generator(
+            x=self.traindf,
+            y=self.traindf[self.COL_CLASS],
+            sampler=NearMiss(),
+            batch_size=10,
+            random_state=42)
+
 
         datagen = tf.keras.preprocessing.image.ImageDataGenerator(
             rescale=1./255,
@@ -403,6 +415,19 @@ class ModelTrainer(baseclass.BaseClass):
 
             step_size_train = self.train_generator.n // self.train_generator.batch_size
             step_size_validate = self.validation_generator.n // self.validation_generator.batch_size
+
+
+
+
+
+
+            step_size_train = self.steps_per_epoch
+
+
+
+
+
+
 
             self.set_current_callbacks()
 
