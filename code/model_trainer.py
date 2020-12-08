@@ -32,6 +32,7 @@ class ModelTrainer(baseclass.BaseClass):
 
     def __del__(self): 
         # script interrupted during training
+        self.logger.info("execution interrupted")
         if self.am_training==True:
             self.logger.info("training interrupted")
             if self.dataset:
