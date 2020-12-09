@@ -500,7 +500,7 @@ if __name__ == "__main__":
     timer = utils.Timer()
     dataset = dataset.DataSet()
 
-    trainer.set_datase(dataset)
+    trainer.set_dataset(dataset)
     trainer.set_timer(timer)
 
     dataset.set_environ(os.environ)
