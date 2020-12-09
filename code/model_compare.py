@@ -382,10 +382,11 @@ if __name__ == "__main__":
     if args.sort:
         compare.set_sort(args.sort)
 
+    compare.clean_up()
+
     compare.collect_data()
     compare.sort_data()
     compare.print_data()
-    compare.clean_up()
 
 
 
