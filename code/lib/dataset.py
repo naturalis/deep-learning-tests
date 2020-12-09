@@ -35,7 +35,8 @@ class DataSet(baseclass.BaseClass):
             'BASE_MODEL','IMAGE_AUGMENTATION','REDUCE_LR_PARAMS','VALIDATION_SPLIT', \
             'LEARNING_RATE','BATCH_SIZE','EPOCHS','FREEZE_LAYERS','METRICS', \
             'CHECKPOINT_MONITOR', 'EARLY_STOPPING_MONITOR', 'EARLY_STOPPING_PATIENCE', \
-            'CLASS_IMAGE_MINIMUM','CLASS_IMAGE_MAXIMUM','USE_CLASS_WEIGHTS'
+            'CLASS_IMAGE_MINIMUM','CLASS_IMAGE_MAXIMUM','USE_CLASS_WEIGHTS', \
+            'UPSAMPLING_RATIO','DOWNSAMPLING_RATIO'
         ]:
             if item in os_environ:
                 self.env_vars.append({ item : os_environ.get(item) })

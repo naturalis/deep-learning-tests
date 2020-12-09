@@ -3,6 +3,21 @@ import tensorflow as tf
 class CustomCallback(tf.keras.callbacks.Callback):
 
     current_epoch = 0
+    dataset = None
+    timer = None
+
+    def set_dataset(self,dataset):
+        self.dataset = dataset
+
+    def set_timer(self,timer):
+        self.timer = timer
+
+    def update_datset(self):
+        if self.dataset:
+            self.dataset.set_epochs_trained(self.get_current_epoch())
+            if self.timer:
+                self.dataset.set_training_time(self.timer.get_time_passed())
+            self.dataset.save_dataset()
 
     # def on_train_begin(self, logs=None):
     #     keys = list(logs.keys())
@@ -14,11 +29,14 @@ class CustomCallback(tf.keras.callbacks.Callback):
 
     def on_epoch_begin(self, epoch, logs=None):
         # keys = list(logs.keys())
-        self.current_epoch = epoch
+        # self.current_epoch = epoch
+        # self.update_datset()
+        pass
 
     def on_epoch_end(self, epoch, logs=None):
         # keys = list(logs.keys())
-        pass
+        self.current_epoch = epoch
+        self.update_datset()
 
     def get_current_epoch(self):
         return self.current_epoch

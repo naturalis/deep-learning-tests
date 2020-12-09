@@ -32,18 +32,19 @@ class ModelTrainer(baseclass.BaseClass):
 
     def __del__(self): 
         # script interrupted during training
-        self.logger.info("execution interrupted")
-        if self.am_training==True:
-            self.logger.info("training interrupted")
-            if self.dataset:
-                self.dataset.set_epochs_trained(self.customcallback.get_current_epoch())
-                if self.timer:
-                    self.dataset.set_training_time(self.timer.get_time_passed())
-                self.dataset.update_model_state("interrupted_training")
-                self.dataset.save_dataset()
+        print("execution interrupted (print version)")
+        # self.logger.info("execution interrupted")
+        # if self.am_training==True:
+        #     self.logger.info("training interrupted")
+        #     if self.dataset:
+        #         self.dataset.set_epochs_trained(self.customcallback.get_current_epoch())
+        #         if self.timer:
+        #             self.dataset.set_training_time(self.timer.get_time_passed())
+        #         self.dataset.update_model_state("interrupted_training")
+        #         self.dataset.save_dataset()
 
-            self.save_model()
-            self.save_history()
+        #     self.save_model()
+        #     self.save_history()
 
     def set_skip_training(self,skip_training):
         self.skip_training = skip_training
@@ -78,7 +79,11 @@ class ModelTrainer(baseclass.BaseClass):
     def configure_callbacks(self):
         self.customcallback = customcallback.CustomCallback()
 
+        self.customcallback.set_dataset(self.dataset)
+        self.customcallback.set_timer(self.timer)
+
         callbacks = []
+
         for key,epoch in enumerate(self.get_preset("epochs")):
             phase = []
 
@@ -495,6 +500,9 @@ if __name__ == "__main__":
     timer = utils.Timer()
     dataset = dataset.DataSet()
 
+    trainer.set_datase(dataset)
+    trainer.set_timer(timer)
+
     dataset.set_environ(os.environ)
     trainer.set_debug(os.environ["DEBUG"]=="1" if "DEBUG" in os.environ else False)    
     trainer.set_project(os.environ)
@@ -565,10 +573,6 @@ if __name__ == "__main__":
 
     dataset.update_model_state("training")
     dataset.save_dataset()
-
-    # setting this only so they can be accessed in __del__, when someone Ctrl+C's the training
-    trainer.set_dataset(dataset)
-    trainer.set_timer(timer)
 
     trainer.configure_generators()
     trainer.train_model()
