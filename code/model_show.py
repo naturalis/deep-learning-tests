@@ -13,9 +13,9 @@ class ModelShow(baseclass.BaseClass):
     def collect_data(self):
         # self.analysis = self.get_analysis_path()
         # self.classes = self.get_classes_path()
-        bla = self.get_dataset_path()
-        print(bla)
-        self.dataset = json.load(bla)
+        dataset = self.get_dataset_path()
+        with open(dataset) as json_file:
+            self.dataset = json.load(json_file)
 
     def print_dataset(self):
         print(self.dataset)
