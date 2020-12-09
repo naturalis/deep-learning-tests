@@ -18,8 +18,7 @@ class ModelShow(baseclass.BaseClass):
             self.dataset = json.load(json_file)
 
     def print_dataset(self):
-        print(self.dataset)
-
+        print(json.dumps(self.dataset, indent=4))
 
 if __name__ == "__main__":
 
