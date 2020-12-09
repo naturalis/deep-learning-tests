@@ -1,4 +1,4 @@
-import json, argparse
+import os, json, argparse
 from lib import baseclass, dataset
 
 class ModelShow(baseclass.BaseClass):
