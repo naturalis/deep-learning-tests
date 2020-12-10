@@ -184,7 +184,7 @@ class ModelTrainer(baseclass.BaseClass):
             self.downsample()
 
         self.actual_dataset_length = len(self.traindf)
-        self.logger.debug("actual data num rows: {}".format(self.actual_dataset_length))
+        self.logger.info("actual data num rows: {}".format(self.actual_dataset_length))
 
 
         datagen = tf.keras.preprocessing.image.ImageDataGenerator(
