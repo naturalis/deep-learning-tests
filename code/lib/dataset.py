@@ -93,6 +93,7 @@ class DataSet(baseclass.BaseClass):
         self.data_set["class_count"] = len(self.model_trainer.class_list)
         self.data_set["class_count_before_maximum"] = len(self.model_trainer.complete_class_list)
         self.data_set["class_list_hash"] = md5(str(self.model_trainer.class_list).encode('utf-8')).hexdigest()
+        self.data_set["actual_dataset_length"] = self.model_trainer.actual_dataset_length
 
         self.data_set["training_settings"] = { 
             "validation_split" : self.model_trainer.get_preset("validation_split"),

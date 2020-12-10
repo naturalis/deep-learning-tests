@@ -132,6 +132,7 @@ class ModelCompare(baseclass.BaseClass):
                 this_model["base_model"] = tmp["base_model"]
                 this_model["training_time"] = tmp["training_time"] if "training_time" in tmp else "n/a"
                 this_model["epochs_trained"] = tmp["epochs_trained"] if "epochs_trained" in tmp else "n/a"
+                this_model["actual_dataset_length"] = tmp["actual_dataset_length"] if "actual_dataset_length" in tmp else "n/a"
 
                 if "model_retrain_note" in tmp:
                     this_model["note"] = "{} / {}".format(tmp["model_note"],tmp["model_retrain_note"])
@@ -315,7 +316,7 @@ class ModelCompare(baseclass.BaseClass):
                 general.format(*[x["classes"] for x in batch_models]))
 
             print(index.format("support: ") + \
-                general.format(*[x["macro_support"] for x in batch_models]))
+                general.format(*[x["actual_dataset_length"] if "actual_dataset_length" in x else x["macro_support"] for x in batch_models]))
 
             print(index.format("epochs: ") + \
                 general.format(*[x["epochs"] for x in batch_models]))
