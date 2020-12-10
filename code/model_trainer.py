@@ -26,7 +26,6 @@ class ModelTrainer(baseclass.BaseClass):
     am_training = None
     dataset = None
     timer = None
-    actual_dataset_length = 0
 
     def __init__(self):
         super().__init__()
@@ -182,10 +181,6 @@ class ModelTrainer(baseclass.BaseClass):
             self.upsample()
         elif "downsampling_ratio" in self.model_settings and not self.model_settings["downsampling_ratio"] == -1:
             self.downsample()
-
-        self.actual_dataset_length = len(self.traindf)
-        self.logger.info("actual data num rows: {}".format(self.actual_dataset_length))
-
 
         datagen = tf.keras.preprocessing.image.ImageDataGenerator(
             rescale=1./255,
