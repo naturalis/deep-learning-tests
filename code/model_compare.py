@@ -316,7 +316,7 @@ class ModelCompare(baseclass.BaseClass):
                 general.format(*[x["classes"] for x in batch_models]))
 
             print(index.format("support: ") + \
-                general.format(*[x["actual_dataset_length"] if "actual_dataset_length" in x else x["macro_support"] for x in batch_models]))
+                general.format(*[x["actual_dataset_length"] if x["actual_dataset_length"]!="n/a" else x["macro_support"] for x in batch_models]))
 
             print(index.format("epochs: ") + \
                 general.format(*[x["epochs"] for x in batch_models]))
