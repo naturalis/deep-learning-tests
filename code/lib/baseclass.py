@@ -291,7 +291,7 @@ class BaseClass():
             if index >= images_to_check:
                 break
             if not os.path.exists(row["image"]):
-                errors.push(row["image"])
+                errors.append(row["image"])
 
         if len(errors) > 0:
             raise ValueError("found non-existing images (example: {})".format(errors[0])) 
