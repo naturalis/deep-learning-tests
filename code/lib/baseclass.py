@@ -284,7 +284,6 @@ class BaseClass():
         self.traindf = df
         self.logger.info("read {} images in {} classes".format(self.traindf[self.COL_IMAGE].nunique(),self.traindf[self.COL_CLASS].nunique()))
 
-
     def test_image_existence(self,images_to_check=10):
         errors = []
         for index, row in self.traindf.iterrows():
@@ -294,8 +293,7 @@ class BaseClass():
                 errors.append(row["image"])
 
         if len(errors) > 0:
-            raise ValueError("found non-existing images (example: {})".format(errors[0])) 
-
+            raise ValueError("found non-existing images (example: {}); is image correct? (current: {})".format(errors[0],self.image_path)) 
 
     def image_list_apply_class_list(self):
         before = len(self.traindf)
