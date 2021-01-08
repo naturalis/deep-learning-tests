@@ -293,7 +293,7 @@ class BaseClass():
                 errors.append(row["image"])
 
         if len(errors) > 0:
-            raise ValueError("found non-existing images (example: {}); is image correct? (current: {})".format(errors[0],self.image_path)) 
+            raise ValueError("found non-existing images (example: {}; is image root '{}' correct?)".format(errors[0],self.image_path)) 
 
     def image_list_apply_class_list(self):
         before = len(self.traindf)
