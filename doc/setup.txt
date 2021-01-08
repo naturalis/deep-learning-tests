@@ -91,6 +91,11 @@ ModelTrainer
   TODO: image max is now in dwca downloader, should be configurable in trainer
 
 
+# scripts/generate_lists.py
+# given a root folder containing subfolders w/ images per class, this script generates 
+# the two csv files required for model_trainer.py, downloaded_images.csv and classes.csv
+
+
 have .env-file:
 PROJECT_ROOT=/data/sylviidae
 CLASS_IMAGE_MINIMUM=100
