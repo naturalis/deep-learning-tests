@@ -285,7 +285,7 @@ class BaseClass():
         self.logger.info("read {} images in {} classes".format(self.traindf[self.COL_IMAGE].nunique(),self.traindf[self.COL_CLASS].nunique()))
 
 
-    def test_image_existence(size=10):
+    def test_image_existence(self,size=10):
         for image in self.traindf:
             print(item[self.COL_IMAGE])
             exit()
