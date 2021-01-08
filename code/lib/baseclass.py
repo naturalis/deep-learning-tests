@@ -287,9 +287,10 @@ class BaseClass():
 
     def test_image_existence(self,size=10):
         for index, row in self.traindf.iterrows():
-            print(index, row)
+            print(index, row["image"],os.path.exists(row["image"]))
             # print(image[self.COL_IMAGE],os.path.exists(image[self.COL_IMAGE]))
-            exit()
+            
+        exit()
 
 
 
