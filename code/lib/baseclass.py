@@ -283,6 +283,7 @@ class BaseClass():
         df[self.COL_IMAGE] = self.image_path.rstrip("/") + "/" + df[self.COL_IMAGE].astype(str)
         self.traindf = df
         self.logger.info("read {} images in {} classes".format(self.traindf[self.COL_IMAGE].nunique(),self.traindf[self.COL_CLASS].nunique()))
+        print(self.traindf)
 
     def image_list_apply_class_list(self):
         before = len(self.traindf)
