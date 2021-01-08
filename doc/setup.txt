@@ -109,8 +109,12 @@ sudo docker-compose run tensorflow /code/project_prepare.py
 sudo docker-compose run tensorflow /code/dwca_reader.py
 sudo docker-compose run tensorflow /code/image_downloader.py
 sudo docker-compose run tensorflow /code/model_trainer.py
-sudo docker-compose run tensorflow /code/model_analysis.py --load_model=xyz
+sudo docker-compose run tensorflow /code/model_analysis.py --load_model xyz
 sudo docker-compose run tensorflow /code/model_compare.py [--cleanup --delete]
-sudo docker-compose run tensorflow /code/model_report.py --load_model=xyz
+sudo docker-compose run tensorflow /code/model_report.py --load_model xyz
 
 sudo docker-compose run tensorflow /code/check_images.py --path
+
+
+
+sudo docker-compose run tensorflow /code/model_trainer.py --alt_class_list classes--continents.csv --alt_image_list downloaded_images--continents.csv
