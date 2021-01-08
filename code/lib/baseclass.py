@@ -285,13 +285,16 @@ class BaseClass():
         self.logger.info("read {} images in {} classes".format(self.traindf[self.COL_IMAGE].nunique(),self.traindf[self.COL_CLASS].nunique()))
 
 
-    def test_image_existence(self,size=10):
+    def test_image_existence(self,images_to_check=10):
+        errors = []
         for index, row in self.traindf.iterrows():
-            print(index, row["image"],os.path.exists(row["image"]))
-            # print(image[self.COL_IMAGE],os.path.exists(image[self.COL_IMAGE]))
-            
-        exit()
+            if index >= images_to_check:
+                break
+            if not os.path.exists(row["image"]):
+                errors.push(row["image"])
 
+        if len(errors) > 0:
+            raise ValueError("found non-existing images (example: {})".format(errors[0])) 
 
 
     def image_list_apply_class_list(self):
