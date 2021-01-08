@@ -287,7 +287,7 @@ class BaseClass():
 
     def test_image_existence(self,size=10):
         for image in self.traindf:
-            print(item[self.COL_IMAGE])
+            print(image[self.COL_IMAGE],os.path.exists(image[self.COL_IMAGE]))
             exit()
 
 
