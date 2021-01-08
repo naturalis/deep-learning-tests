@@ -551,6 +551,7 @@ if __name__ == "__main__":
         trainer.load_model()
         trainer.read_class_list()
         trainer.read_image_list_file(class_col=class_col,image_col=image_col)
+        trainer.test_image_existence()
         trainer.image_list_apply_class_list()
         dataset.ask_retrain_note()
         dataset.set_model_trainer(trainer)
@@ -562,6 +563,7 @@ if __name__ == "__main__":
         trainer.copy_class_list_file()
 
         trainer.read_image_list_file(class_col=class_col,image_col=image_col)
+        trainer.test_image_existence()
         trainer.read_class_list()
 
         trainer.image_list_apply_class_list()
