@@ -24,7 +24,7 @@ classes = []
 for root, dirs, files in os.walk(root_dir):
     path = root.split(os.sep)
     for file in files:
-        classname = root.replace(root_dir,"")
+        classname = root.replace(root_dir,"").replace("/","")
         out.append([classname, os.path.join(classname,file)])
         classes.append(classname)
 

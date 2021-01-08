@@ -497,6 +497,7 @@ if __name__ == "__main__":
     parser.add_argument("--dataset_note",type=str)
     parser.add_argument("--load_model",type=str)
     parser.add_argument("--alt_class_list",type=str,help="specify alternative class list")
+    parser.add_argument("--alt_image_list",type=str,help="specify alternative downloaded image list")
     parser.add_argument("--skip_training",action="store_true")
     args = parser.parse_args() 
 
@@ -544,6 +545,9 @@ if __name__ == "__main__":
 
     if args.alt_class_list: 
         trainer.set_alternative_class_list_file(args.alt_class_list)
+
+    if args.alt_image_list:
+        trainer.set_alt_downloaded_images_file(args.alt_image_list)
 
     class_col=trainer.get_preset("image_list_class_column")
     image_col=trainer.get_preset("image_list_file_column")
