@@ -69,6 +69,10 @@ class ModelTrainer(baseclass.BaseClass):
     def set_timer(self,timer):
         self.timer = timer
 
+    def test_class_number(self):
+        if self.traindf[self.COL_CLASS].nunique() < 2:
+            raise ValueError("number of remaining classes to low to train: {}".format(self.traindf[self.COL_CLASS].nunique()))
+
     def configure_optimizers(self):
         optimizers = []
         for learning_rate in self.get_preset("learning_rate"):
@@ -553,6 +557,7 @@ if __name__ == "__main__":
         trainer.read_image_list_file(class_col=class_col,image_col=image_col)
         trainer.test_image_existence()
         trainer.image_list_apply_class_list()
+        trainer.test_class_number()
         dataset.ask_retrain_note()
         dataset.set_model_trainer(trainer)
         dataset.open_dataset()
@@ -561,12 +566,11 @@ if __name__ == "__main__":
 
         trainer.copy_image_list_file()
         trainer.copy_class_list_file()
-
         trainer.read_image_list_file(class_col=class_col,image_col=image_col)
         trainer.test_image_existence()
         trainer.read_class_list()
-
         trainer.image_list_apply_class_list()
+        trainer.test_class_number()
         trainer.assemble_model()
         trainer.save_model_architecture()
         dataset.ask_note()
