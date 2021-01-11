@@ -225,7 +225,6 @@ class BaseClass():
             for row in c:
                 if not row:
                     continue
-                print(row)
                 tot_classes += 1
                 self.complete_class_list.append(row)
                 if int(row[1])>=self.class_image_minimum:
