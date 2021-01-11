@@ -223,6 +223,8 @@ class BaseClass():
         with open(self.class_list_file_model, 'r', encoding='utf-8-sig') as file:
             c = csv.reader(file)
             for row in c:
+                if not row:
+                    continue
                 print(row)
                 tot_classes += 1
                 self.complete_class_list.append(row)
