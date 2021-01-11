@@ -223,6 +223,7 @@ class BaseClass():
         with open(self.class_list_file_model, 'r', encoding='utf-8-sig') as file:
             c = csv.reader(file)
             for row in c:
+                print(row)
                 tot_classes += 1
                 self.complete_class_list.append(row)
                 if int(row[1])>=self.class_image_minimum:
