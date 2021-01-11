@@ -156,7 +156,7 @@ class ModelTrainer(baseclass.BaseClass):
                                                     random_state=23)
 
             self.traindf = pd.concat([dataset_minority_upsampled, dataset_other])
-        self.logger.debug("upsamped: {} -> {}".format(before,len(self.traindf)))
+        self.logger.info("upsampled: {} -> {}".format(before,len(self.traindf)))
 
     def downsample(self, factor=0.9):
         target_ratio = self.get_preset("downsampling_ratio")
