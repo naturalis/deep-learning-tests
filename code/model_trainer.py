@@ -142,6 +142,7 @@ class ModelTrainer(baseclass.BaseClass):
 
     def upsample(self, factor=1.1):
         target_ratio = self.get_preset("upsampling_ratio")
+        before = len(self.traindf)
         self.logger.info("upsampling, target ratio: {}".format(target_ratio))
         while(self.get_imbalance_ratio() < target_ratio):   
             counts = self.traindf[self.COL_CLASS].value_counts()
@@ -155,7 +156,7 @@ class ModelTrainer(baseclass.BaseClass):
                                                     random_state=23)
 
             self.traindf = pd.concat([dataset_minority_upsampled, dataset_other])
-            # self.logger.debug("upsampling, dataset num rows: {}".format(len(self.traindf)))
+        self.logger.debug("upsamped: {} -> {}".format(before,len(self.traindf)))
 
     def downsample(self, factor=0.9):
         target_ratio = self.get_preset("downsampling_ratio")
