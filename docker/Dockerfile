@@ -1,4 +1,5 @@
-FROM tensorflow/tensorflow:2.2.2-gpu-py3-jupyter
+FROM tensorflow/tensorflow:2.0.4-gpu-py3-jupyter
+#FROM tensorflow/tensorflow:2.2.2-gpu-py3-jupyter
 #FROM tensorflow/tensorflow:2.0.1-gpu-py3-jupyter
 #FROM tensorflow/tensorflow:2.2.0-jupyter
 #FROM nvidia/cuda:10.1-base-ubuntu18.04
