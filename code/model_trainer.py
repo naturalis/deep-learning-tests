@@ -152,8 +152,8 @@ class ModelTrainer(baseclass.BaseClass):
             dataset_minority_upsampled = resample(dataset_minority,
                                                     replace=True,
                                                     n_samples=int(np.ceil(len(dataset_minority) * factor)),
-                                                    stratify=dataset_minority,
-                                                    random_state=23)
+                                                    stratify=dataset_minority)
+                                                    # ,random_state=23)
 
             self.traindf = pd.concat([dataset_minority_upsampled, dataset_other])
         self.logger.info("upsampled: {} -> {}".format(before,len(self.traindf)))
