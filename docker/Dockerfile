@@ -1,4 +1,7 @@
-FROM tensorflow/tensorflow:2.0.4-gpu-py3-jupyter
+#FROM tensorflow/tensorflow:2.2.1-gpu-py3
+FROM tensorflow/tensorflow:2.1.2-gpu-jupyter
+
+#FROM tensorflow/tensorflow:2.0.4-gpu-py3-jupyter
 #FROM tensorflow/tensorflow:2.2.2-gpu-py3-jupyter
 #FROM tensorflow/tensorflow:2.0.1-gpu-py3-jupyter
 #FROM tensorflow/tensorflow:2.2.0-jupyter
