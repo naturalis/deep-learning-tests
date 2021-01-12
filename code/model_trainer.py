@@ -152,8 +152,8 @@ class ModelTrainer(baseclass.BaseClass):
             dataset_minority_upsampled = resample(dataset_minority,
                                                     replace=True,
                                                     n_samples=int(np.ceil(len(dataset_minority) * factor)),
-                                                    stratify=dataset_minority)
-                                                    # ,random_state=23)
+                                                    stratify=dataset_minority,
+                                                    random_state=23)
 
             self.traindf = pd.concat([dataset_minority_upsampled, dataset_other])
         self.logger.info("upsampled: {} -> {}".format(before,len(self.traindf)))
@@ -184,6 +184,7 @@ class ModelTrainer(baseclass.BaseClass):
         
         if "upsampling_ratio" in self.model_settings and not self.model_settings["upsampling_ratio"] == -1:
             self.upsample()
+            self.traindf.sample(frac=1)
         elif "downsampling_ratio" in self.model_settings and not self.model_settings["downsampling_ratio"] == -1:
             self.downsample()
 
