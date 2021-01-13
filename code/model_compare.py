@@ -108,6 +108,8 @@ class ModelCompare(baseclass.BaseClass):
 
     def collect_data(self):
 
+        self.models = []
+
         folders = []
 
         for entry in os.scandir(self.models_folder):
