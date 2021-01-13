@@ -8,6 +8,7 @@ class ModelCompare(baseclass.BaseClass):
     cleanup = False
     delete = None
     sort = None
+    reindex = False
 
     models = []
     broken_models = []
@@ -42,6 +43,9 @@ class ModelCompare(baseclass.BaseClass):
         if self.delete:
             self.delete_models()
 
+        if self.reindex:
+            self.collect_data()
+
     def delete_broken(self):
         if len(self.broken_models)==0:
             return
@@ -67,6 +71,7 @@ class ModelCompare(baseclass.BaseClass):
             if input("{}: ".format("delete {} (y/n)?".format(item))).lower()=="y":
                 shutil.rmtree(os.path.join(self.models_folder, item))
                 print("deleted {}".format(item))
+                self.reindex = True
             else:
                 print("skipped {}".format(item))
 

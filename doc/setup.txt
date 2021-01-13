@@ -112,6 +112,7 @@ sudo docker-compose run tensorflow /code/model_trainer.py
 sudo docker-compose run tensorflow /code/model_analysis.py --load_model xyz
 sudo docker-compose run tensorflow /code/model_compare.py [--cleanup --delete]
 sudo docker-compose run tensorflow /code/model_report.py --load_model xyz
+sudo docker-compose run tensorflow /code/check_show.py --load_model xyz
 
 sudo docker-compose run tensorflow /code/check_images.py --path
 
