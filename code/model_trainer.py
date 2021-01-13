@@ -182,11 +182,11 @@ class ModelTrainer(baseclass.BaseClass):
         else:
             a = []
         
-        print(self.traindf)
+        # print(self.traindf)
         if "upsampling_ratio" in self.model_settings and not self.model_settings["upsampling_ratio"] == -1:
             self.upsample()
-            self.traindf.sample(frac=1)
-            print(self.traindf)
+            # self.traindf.sample(frac=1)
+            # print(self.traindf)
         elif "downsampling_ratio" in self.model_settings and not self.model_settings["downsampling_ratio"] == -1:
             self.downsample()
 
