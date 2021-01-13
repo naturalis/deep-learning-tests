@@ -11,4 +11,4 @@ if [[ ! -z "$2" ]]; then
     SESSION_NAME=$2
 fi
 
-screen -L -Logfile $LOGFILE -DR $SESSION_NAME
+sudo screen -L -Logfile $LOGFILE -DR $SESSION_NAME
