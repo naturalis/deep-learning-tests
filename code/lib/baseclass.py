@@ -24,6 +24,7 @@ def _csv_to_dataframe(filepath, usecols, encoding="utf-8-sig"):
         dtype="str", usecols=usecols, header=None)
 
 class BaseClass():
+    tf_version = "0"
     logger = None
     debug = False
     project_root = None
@@ -79,7 +80,8 @@ class BaseClass():
             os.chmod(logfile,0o777)
 
         self.logger = logclass.LogClass(self.__class__.__name__,logfile)
-        self.logger.info("TensorFlow v{}".format(tf.__version__))
+        self.tf_version = tf.__version__
+        self.logger.info("TensorFlow v{}".format(self.tf_version))
         self.set_timestamp()
         # if self.debug:
         #     tf.get_logger().setLevel("DEBUG")

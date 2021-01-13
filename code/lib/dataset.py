@@ -78,6 +78,7 @@ class DataSet(baseclass.BaseClass):
         self.data_set["project_root"] = self.model_trainer.project_root
         self.data_set["model_name"] = self.model_trainer.model_name
         self.data_set["created"] = str(self.model_trainer.timestamp)
+        self.data_set["tf_version"] = self.model_trainer.tf_version
         self.data_set["state"] = self.model_state
         self.data_set["training_time"] = "n/a"
         self.data_set["epochs_trained"] = "n/a"
