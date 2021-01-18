@@ -421,23 +421,14 @@ class ModelTrainer(baseclass.BaseClass):
 
             if not self.skip_training:
 
-                # history = self.model.fit(
-                #     x=self.train_generator,
-                #     steps_per_epoch=step_size_train,
-                #     epochs=epoch,
-                #     validation_data=self.validation_generator,
-                #     validation_steps=step_size_validate,
-                #     callbacks=self.current_callbacks,
-                #     class_weight=self.class_weight
-                # )
-
                 history = self.model.fit(
                     x=self.train_generator,
                     steps_per_epoch=step_size_train,
                     epochs=epoch,
                     validation_data=self.validation_generator,
                     validation_steps=step_size_validate,
-                    callbacks=self.current_callbacks
+                    callbacks=self.current_callbacks,
+                    class_weight=self.class_weight
                 )
 
                 # If x is a dataset, generator, or keras.utils.Sequence instance, y should not be specified (since targets
