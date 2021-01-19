@@ -50,7 +50,7 @@ class ModelCompare(baseclass.BaseClass):
         if len(self.broken_models)==0:
             return
 
-        print("deleting broken models (models w/o dataset.json):")
+        print("deleting broken models (models w/o dataset.json or model.hdf5):")
         for item in self.broken_models:
             if input("{}: ".format("delete {} (y/n)?".format(item))).lower()=="y":
                 shutil.rmtree(os.path.join(self.models_folder, item))
@@ -125,7 +125,7 @@ class ModelCompare(baseclass.BaseClass):
             dataset = self.get_dataset_path()
             model = self.get_model_path()
 
-            if not os.path.exists(dataset):
+            if not os.path.exists(dataset) or not os.path.exists(model):
                 self.broken_models.append(folder)
                 continue
 
