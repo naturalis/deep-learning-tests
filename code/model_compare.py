@@ -57,7 +57,7 @@ class ModelCompare(baseclass.BaseClass):
                 print("deleted {}".format(item))
             else:
                 print("skipped {}".format(item))
-            
+
     def delete_models(self):
         if len(self.delete)==0:
             return
@@ -267,14 +267,14 @@ class ModelCompare(baseclass.BaseClass):
     def sort_data(self):
         if not self.sort is None:
             self.models = sorted(self.models, key=lambda row: (row[self.sort], row['class_count'],row['accuracy'],row['name']))
-        else:  
+        else:
             self.models = sorted(self.models, key=lambda row: (row['class_count'],row['accuracy'],row['name']))
 
 
     def print_data(self):
 
         print("")
-        
+
         per_line = 5
 
         lines = math.ceil(len(self.models) / per_line)
@@ -291,7 +291,8 @@ class ModelCompare(baseclass.BaseClass):
             for x in range(len(batch_models)):
                 general += "{:<30}"
 
-            index = "{:>12}"
+            # index = "{:>12}"
+            index = "{:>20}"
 
             print(index.format("name: ")  + general.format(*[x["name"] for x in batch_models]))
             print(index.format("date: ")  + general.format(*[x["date"][0:19] for x in batch_models]))
@@ -340,27 +341,27 @@ class ModelCompare(baseclass.BaseClass):
                 general.format(*map(lambda x : str(round(x,2)) + "%",[x["top_1"] for x in batch_models])))
 
             print(index.format(" ├ top 3: ") + \
-                general.format(*map(lambda x : str(round(x,2)) + "%",[x["top_3"] for x in batch_models])))            
+                general.format(*map(lambda x : str(round(x,2)) + "%",[x["top_3"] for x in batch_models])))
 
             print(index.format(" └ top 5: ") + \
                 general.format(*map(lambda x : str(round(x,2)) + "%",[x["top_5"] for x in batch_models])))
 
-            print(index.format("precision: ") + \
+            print(index.format("precision (macro): ") + \
                 general.format(*self._mark_max_val(self.macro_precision_max,[x for x in batch_models],"macro_precision")))
 
-            print(index.format("") + \
+            print(index.format("(weighted)  ") + \
                 general.format(*self._mark_max_val(self.weighted_precision_max,[x for x in batch_models],"weighted_precision")))
 
-            print(index.format("recall: ") + \
+            print(index.format("recall (macro): ") + \
                 general.format(*self._mark_max_val(self.macro_recall_max,[x for x in batch_models],"macro_recall")))
 
-            print(index.format("") + \
+            print(index.format("(weighted)  ") + \
                 general.format(*self._mark_max_val(self.weighted_recall_max,[x for x in batch_models],"weighted_recall")))
 
-            print(index.format("f1: ") + \
+            print(index.format("f1 (macro): ") + \
                 general.format(*self._mark_max_val(self.macro_f1_max,[x for x in batch_models],"macro_f1")))
 
-            print(index.format("") + \
+            print(index.format("(weighted)  ") + \
                 general.format(*self._mark_max_val(self.weighted_f1_max,[x for x in batch_models],"weighted_f1")))
 
             print("")
@@ -369,11 +370,11 @@ class ModelCompare(baseclass.BaseClass):
 
 if __name__ == "__main__":
 
-    parser = argparse.ArgumentParser() 
+    parser = argparse.ArgumentParser()
     parser.add_argument("--cleanup", action='store_true')
     parser.add_argument("--delete", type=str, help='comma separated list of models to be deleted')
     parser.add_argument("--sort", type=str, help='add field to sort on (accuracy, base_model, model_size, date, etc.). default is: class_count,accuracy,name/date')
-    args = parser.parse_args() 
+    args = parser.parse_args()
 
     compare = ModelCompare()
 
