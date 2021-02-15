@@ -133,6 +133,9 @@ class ModelCompare(baseclass.BaseClass):
 
             with open(dataset) as json_file:
                 tmp = json.load(json_file)
+
+                print(tmp)
+
                 this_model["name"] = tmp["model_name"]
                 this_model["date"] = tmp["created"]
                 this_model["state"] = "?" if not "state" in tmp else tmp["state"]
@@ -160,8 +163,8 @@ class ModelCompare(baseclass.BaseClass):
                 this_model["epochs"] = "; ".join(map(str,tmp["training_phases"]["epochs"]))
                 this_model["layers"] = "; ".join(map(str,tmp["training_phases"]["freeze_layers"]))
                 this_model["image_augmentation"] = tmp["training_settings"]["image_augmentation"].lower()!="none"
-                this_model["downloaded_images_file"] = "?" if not "downloaded_images_file" in tmp else tmp["downloaded_images_file"]
-                this_model["class_list_file"] = "?" if not "class_list_file" in tmp else tmp["class_list_file"]
+                this_model["downloaded_images_file"] = tmp["downloaded_images_file"] if "downloaded_images_file" in tmp else "?"
+                this_model["class_list_file"] = tmp["class_list_file"] if "class_list_file" in tmp else "?"
 
                 if not this_model["class_count"] in self.accuracy_max:
                     self.accuracy_max[this_model["class_count"]] = 0
