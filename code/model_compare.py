@@ -282,7 +282,7 @@ class ModelCompare(baseclass.BaseClass):
         print("")
 
         per_line = 5
-        max_col_width = 27
+        max_col_width = 25
 
         lines = math.ceil(len(self.models) / per_line)
 
