@@ -282,6 +282,7 @@ class ModelCompare(baseclass.BaseClass):
         print("")
 
         per_line = 5
+        max_col_width = 27
 
         lines = math.ceil(len(self.models) / per_line)
 
@@ -302,17 +303,19 @@ class ModelCompare(baseclass.BaseClass):
 
             print(index.format("name: ")  + general.format(*[x["name"] for x in batch_models]))
             print(index.format("date: ")  + general.format(*[x["date"][0:19] for x in batch_models]))
-            print(index.format("state: ") + general.format(*["{} ({}/{})".format(x["state"],x["epochs_trained"],x["epochs"]) for x in batch_models]))
+            print(index.format("state: ") +
+                general.format(*[
+                    "{} ({}/{})".format(x["state"],x["epochs_trained"],x["epochs"]) for x in batch_models]))
             print(index.format("base_model: ") + general.format(*[x["base_model"] for x in batch_models]))
             print(index.format("image_list: ") +
                 general.format(*[
-                    "{}…".format(x["downloaded_images_file"][:28])
-                    if len(x["downloaded_images_file"]) > 28
+                    "{}…".format(x["downloaded_images_file"][:max_col_width])
+                    if len(x["downloaded_images_file"]) > max_col_width
                     else x["downloaded_images_file"] for x in batch_models]))
             print(index.format("class_list: ") +
                 general.format(*[
-                    "{}…".format(x["class_list_file"][:28])
-                    if len(x["class_list_file"]) > 28
+                    "{}…".format(x["class_list_file"][:max_col_width])
+                    if len(x["class_list_file"]) > max_col_width
                     else x["class_list_file"] for x in batch_models]))
 
             notes = []
