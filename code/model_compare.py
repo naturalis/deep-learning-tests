@@ -9,9 +9,11 @@ class ModelCompare(baseclass.BaseClass):
     delete = None
     sort = None
     reindex = False
+    list_models_without_analysis = False
 
     models = []
     broken_models = []
+    models_without_analysis = []
 
     accuracy_max = {}
     macro_precision_max = {}
@@ -33,6 +35,9 @@ class ModelCompare(baseclass.BaseClass):
 
     def set_sort(self,sort):
         self.sort = sort
+
+    def set_no_analysis(self,set_no_analysis):
+        self.list_models_without_analysis = set_no_analysis
 
     def clean_up(self):
         if self.cleanup:
@@ -261,6 +266,7 @@ class ModelCompare(baseclass.BaseClass):
                     this_model = self._add_empty_values(this_model)
             else:
                 this_model = self._add_empty_values(this_model)
+                self.models_without_analysis.append(this_model)
                 pass
 
             self.models.append(this_model)
@@ -276,8 +282,19 @@ class ModelCompare(baseclass.BaseClass):
         else:
             self.models = sorted(self.models, key=lambda row: (row['class_count'],row['accuracy'],row['name']))
 
+    def print_models_without_analysis(self):
+        print("")
+        print("models without analysis:")
+        for item in self.models_without_analysis:
+            print(item)
+        print("")
+
 
     def print_data(self):
+
+        if self.list_models_without_analysis:
+            self.print_models_without_analysis()
+            return
 
         print("")
 
@@ -393,6 +410,7 @@ if __name__ == "__main__":
     parser.add_argument("--cleanup", action='store_true')
     parser.add_argument("--delete", type=str, help='comma separated list of models to be deleted')
     parser.add_argument("--sort", type=str, help='add field to sort on (accuracy, base_model, model_size, date, etc.). default is: class_count,accuracy,name/date')
+    parser.add_argument("--no_analysis", action='store_true', help='only list names of the models that lack an analysis')
     args = parser.parse_args()
 
     compare = ModelCompare()
@@ -408,6 +426,9 @@ if __name__ == "__main__":
 
     if args.sort:
         compare.set_sort(args.sort)
+
+    if args.no_analysis:
+        compare.set_no_analysis(args.no_analysis)
 
     compare.collect_data()
     compare.clean_up()
