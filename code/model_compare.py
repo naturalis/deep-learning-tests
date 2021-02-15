@@ -286,7 +286,7 @@ class ModelCompare(baseclass.BaseClass):
         print("")
         print("models without analysis:")
         for item in self.models_without_analysis:
-            print(item.name)
+            print(item["name"])
         print("")
 
 
