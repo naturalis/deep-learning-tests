@@ -13,7 +13,7 @@ services:
     runtime: nvidia
     mem_limit: 12g
     environment:
-      - NVIDIA_VISIBLE_DEVICES=3
+      - NVIDIA_VISIBLE_DEVICES=0
       # - KERAS_HOME=/keras
     env_file:
       - .env
@@ -30,7 +30,7 @@ services:
     ports:
       - "8090:5000"
     environment:
-      - NVIDIA_VISIBLE_DEVICES=3
+      - NVIDIA_VISIBLE_DEVICES=0
       # - KERAS_HOME=/keras
     env_file:
       - .env
