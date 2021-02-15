@@ -310,7 +310,10 @@ class ModelCompare(baseclass.BaseClass):
                     if len(x["downloaded_images_file"]) > 28
                     else x["downloaded_images_file"] for x in batch_models]))
             print(index.format("class_list: ") +
-                general.format(*["{}…".format(x["class_list_file"][:28] if) for x in batch_models]))
+                general.format(*[
+                    "{}…".format(x["class_list_file"][:28])
+                    if len(x["class_list_file"]) > 28
+                    else x["class_list_file"] for x in batch_models]))
 
             notes = []
             max_l = 0
