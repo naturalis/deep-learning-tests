@@ -160,6 +160,8 @@ class ModelCompare(baseclass.BaseClass):
                 this_model["epochs"] = "; ".join(map(str,tmp["training_phases"]["epochs"]))
                 this_model["layers"] = "; ".join(map(str,tmp["training_phases"]["freeze_layers"]))
                 this_model["image_augmentation"] = tmp["training_settings"]["image_augmentation"].lower()!="none"
+                this_model["downloaded_images_file"] = os.path.basename(tmp["downloaded_images_file"]) if "downloaded_images_file" in tmp else "?"
+                this_model["class_list_file"] = os.path.basename(tmp["class_list_file"]) if "class_list_file" in tmp else "?"
 
                 if not this_model["class_count"] in self.accuracy_max:
                     self.accuracy_max[this_model["class_count"]] = 0
@@ -244,7 +246,6 @@ class ModelCompare(baseclass.BaseClass):
                                 self.weighted_recall_max,
                                 this_model["class_count"])
 
-
                         self.weighted_f1_max[this_model["class_count"]] = \
                             self.get_new_max(tmp["classification_report"]["weighted avg"]["f1-score"],
                                 self.weighted_f1_max,
@@ -296,8 +297,10 @@ class ModelCompare(baseclass.BaseClass):
 
             print(index.format("name: ")  + general.format(*[x["name"] for x in batch_models]))
             print(index.format("date: ")  + general.format(*[x["date"][0:19] for x in batch_models]))
-            print(index.format("state: ") + general.format(*["{} ({})".format(x["state"],x["epochs_trained"]) for x in batch_models]))
+            print(index.format("state: ") + general.format(*["{} ({}/{})".format(x["state"],x["epochs_trained"],x["epochs"]) for x in batch_models]))
             print(index.format("base_model: ") + general.format(*[x["base_model"] for x in batch_models]))
+            print(index.format("image_list: ") + general.format(*[x["downloaded_images_file"] for x in batch_models]))
+            print(index.format("class_list: ") + general.format(*[x["class_list_file"] for x in batch_models]))
 
             notes = []
             max_l = 0
@@ -316,8 +319,8 @@ class ModelCompare(baseclass.BaseClass):
                         pass
                 print(index.format("" if x > 0 else "note: ") + s)
 
-            print(index.format("model_size: ") + \
-                general.format(*map(lambda x : x if x =="-" else str(math.ceil(x/1e6)) + "MB",[x["model_size"] for x in batch_models])))
+            # print(index.format("model_size: ") + \
+            #     general.format(*map(lambda x : x if x =="-" else str(math.ceil(x/1e6)) + "MB",[x["model_size"] for x in batch_models])))
 
             print(index.format("classes: ") + \
                 general.format(*[x["classes"] for x in batch_models]))
@@ -325,8 +328,8 @@ class ModelCompare(baseclass.BaseClass):
             print(index.format("support: ") + \
                 general.format(*[x["macro_support"] for x in batch_models]))
 
-            print(index.format("epochs: ") + \
-                general.format(*[x["epochs"] for x in batch_models]))
+            # print(index.format("epochs: ") + \
+            #     general.format(*[x["epochs"] for x in batch_models]))
 
             print(index.format("frozen: ") + \
                 general.format(*[x["layers"] for x in batch_models]))

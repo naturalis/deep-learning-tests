@@ -42,8 +42,8 @@ PROJECT_ROOT/
   │    ├── downloaded_images.csv
   │    └── images.csv
   │
-  ├── log/  
-  │    └── general.log  
+  ├── log/
+  │    └── general.log
   │
   └── images/
        ├── <subdir a>
@@ -58,7 +58,7 @@ PROJECT_ROOT/
 
 
 DwCA reader
-  python dwca_reader.py 
+  python dwca_reader.py
   in:
     PROJECT_ROOT *
     DWCA_FILE_PATH [$PROJECT_ROOT/dwca/Occurrence.txt]
@@ -92,7 +92,7 @@ ModelTrainer
 
 
 # scripts/generate_lists.py
-# given a root folder containing subfolders w/ images per class, this script generates 
+# given a root folder containing subfolders w/ images per class, this script generates
 # the two csv files required for model_trainer.py, downloaded_images.csv and classes.csv
 
 
@@ -119,3 +119,9 @@ sudo docker-compose run tensorflow /code/check_images.py --path
 
 
 sudo docker-compose run tensorflow /code/model_trainer.py --alt_class_list classes--continents.csv --alt_image_list downloaded_images--continents.csv
+
+
+
+
+
+#sudo docker-compose run api

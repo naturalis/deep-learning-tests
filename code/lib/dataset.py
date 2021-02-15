@@ -71,7 +71,7 @@ class DataSet(baseclass.BaseClass):
         if key in self.data_set:
             return self.data_set[key]
         else:
-            raise ValueError("unknown key: {}".format(key)) 
+            raise ValueError("unknown key: {}".format(key))
 
     def _make_dataset(self):
         self.data_set["project_name"] = self.model_trainer.project_name
@@ -95,14 +95,17 @@ class DataSet(baseclass.BaseClass):
         self.data_set["class_count_before_maximum"] = len(self.model_trainer.complete_class_list)
         self.data_set["class_list_hash"] = md5(str(self.model_trainer.class_list).encode('utf-8')).hexdigest()
 
-        self.data_set["training_settings"] = { 
+        self.data_set["downloaded_images_file"] = self.downloaded_images_file
+        self.data_set["class_list_file"] = self.class_list_file
+
+        self.data_set["training_settings"] = {
             "validation_split" : self.model_trainer.get_preset("validation_split"),
             "image_augmentation" : str(self.model_trainer.get_preset("image_augmentation")),
             "batch_size" : self.model_trainer.get_preset("batch_size")
         }
 
         regex = re.compile('(^<|[\s](.*)$)')
-        
+
         calls = []
         for phase, callbacks in enumerate(self.model_trainer.model_settings["callbacks"]):
             call = []
@@ -120,13 +123,13 @@ class DataSet(baseclass.BaseClass):
                 else:
                     call.append(regex.sub('',str(callback)))
             calls.append(call)
-    
+
         opt = []
         for phase, optimizer in enumerate(self.model_trainer.model_settings["optimizer"]):
             lr = self.model_trainer.get_preset("learning_rate")
             opt.append("{} (lr: {})".format(regex.sub('',str(optimizer)), str(lr[phase])))
 
-        self.data_set["training_phases"] = { 
+        self.data_set["training_phases"] = {
             "epochs" : self.model_trainer.get_preset("epochs"),
             "freeze_layers" : self.model_trainer.get_preset("freeze_layers"),
             "optimizer" : opt,
