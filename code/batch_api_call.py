@@ -34,15 +34,17 @@ class BatchApiCall:
     def run_identifications(self):
 
         print("image\tclass\tprediction")
-        with open(self.images[0], "rb") as file:
-            myobj = {'image':  file }
-            response = requests.post(self.api_url, files=myobj)
-            p = json.loads(response.text)
-            print("{}\t{}\t{}".format(
-                self.images[0].replace(self.input_dir,''),
-                p["predictions"][0]["class"],
-                p["predictions"][0]["prediction"])
-            )
+
+        for image in self.images:
+            with open(self.image, "rb") as file:
+                myobj = {'image':  file }
+                response = requests.post(self.api_url, files=myobj)
+                p = json.loads(response.text)
+                print("{}\t{}\t{}".format(
+                    self.image.replace(self.input_dir,''),
+                    p["predictions"][0]["class"],
+                    p["predictions"][0]["prediction"])
+                )
 
 
 if __name__ == "__main__":
