@@ -36,16 +36,8 @@ class BatchApiCall:
         with open(self.images[0], "rb") as file:
             myobj = {'image':  file }
             response = requests.post(self.api_url, files=myobj)
-            fuck = json.loads(response.text)
-            print(fuck["predictions"])
-            print(fuck["predictions"][0]["class"])
-            print(fuck["predictions"][0]["prediction"])
-
-        # # curl -XPOST  -F "image=@ZMA.INS.1279115_1.jpg" http://0.0.0.0:8090/identify
-
-
-        # x = requests.post(self.api_url, data = myobj)
-        # print(x.text)
+            p = json.loads(response.text)
+            print("image: {}; class: {}; prediction: {}".format(self.images[0],p["predictions"][0]["class"],p["predictions"][0]["prediction"]))
 
 
 if __name__ == "__main__":
