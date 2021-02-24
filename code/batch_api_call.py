@@ -36,7 +36,7 @@ class BatchApiCall:
         print("image\tclass\tprediction")
 
         for image in self.images:
-            with open(self.image, "rb") as file:
+            with open(image, "rb") as file:
                 myobj = {'image':  file }
                 response = requests.post(self.api_url, files=myobj)
                 p = json.loads(response.text)
