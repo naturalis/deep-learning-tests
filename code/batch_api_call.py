@@ -35,7 +35,7 @@ class BatchApiCall:
         print(self.images[0])
         with open(self.images[0], "rb") as file:
             myobj = {'image':  file }
-            response = requests.post(self.api_url, data=myobj)
+            response = requests.post(self.api_url, files=myobj)
             print(response.text)
 
         # # curl -XPOST  -F "image=@ZMA.INS.1279115_1.jpg" http://0.0.0.0:8090/identify
