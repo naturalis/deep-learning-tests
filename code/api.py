@@ -59,7 +59,7 @@ def initialize_logger(log_level=logging.INFO):
     fh.setLevel(log_level)
     fh.setFormatter(formatter)
     logger.addHandler(fh)
-    
+
     if os.getenv('API_DEBUG')=="1":
         ch = logging.StreamHandler()
         ch.setLevel(log_level)
@@ -122,7 +122,7 @@ def identify_image():
             file.save(unique_filename)
 
             x = tf.keras.preprocessing.image.load_img(
-                unique_filename, 
+                unique_filename,
                 target_size=(299,299),
                 interpolation="nearest")
             x = tf.keras.preprocessing.image.img_to_array(x)
@@ -144,8 +144,12 @@ def identify_image():
             os.remove(unique_filename)
 
             # logger.info(predictions)
+            results = []
+            for key in predictions:
+                results.append({ 'name' : key, 'prediction': predictions[key] })
 
-            return json.dumps(predictions)
+            # return json.dumps(predictions)
+            return json.dumps(results)
 
         # except Exception as e:
 
