@@ -42,8 +42,8 @@ class BatchApiCall:
                 myobj = {'image':  file }
                 response = requests.post(self.api_url, files=myobj)
                 p = json.loads(response.text)
-                print("{}\t{}\t{}\t{}\t{}".format(
-                    "!" if this_class==p["predictions"][0]["class"] else "-",
+                print("{}\t[{}]\t{}\t[{}]\t{}".format(
+                    "V" if this_class==p["predictions"][0]["class"] else "x",
                     this_class,
                     this_file,
                     p["predictions"][0]["class"],
