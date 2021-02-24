@@ -41,7 +41,7 @@ class BatchApiCall:
                 response = requests.post(self.api_url, files=myobj)
                 p = json.loads(response.text)
                 print("{}\t{}\t{}".format(
-                    self.image.replace(self.input_dir,''),
+                    image.replace(self.input_dir,''),
                     p["predictions"][0]["class"],
                     p["predictions"][0]["prediction"])
                 )
