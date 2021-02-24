@@ -146,10 +146,10 @@ def identify_image():
             # logger.info(predictions)
             results = []
             for key in predictions:
-                results.append({ 'name' : key, 'prediction': predictions[key] })
+                results.append({ 'class' : key, 'prediction': predictions[key] })
 
             # return json.dumps(predictions)
-            return json.dumps(results)
+            return json.dumps({ 'predictions' : results })
 
         # except Exception as e:
 
