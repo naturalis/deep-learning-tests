@@ -36,14 +36,16 @@ class BatchApiCall:
         print("image\tclass\tprediction")
 
         for image in self.images:
-            this_class = image.replace(self.input_dir,'')
+            this_class = os.path.dirname(image.replace(self.input_dir,''))
+            this_file = os.path.basename(image.replace(self.input_dir,''))
             with open(image, "rb") as file:
                 myobj = {'image':  file }
                 response = requests.post(self.api_url, files=myobj)
                 p = json.loads(response.text)
-                print("{}\t{}\t{}\t{}".format(
+                print("{}\t{}\t{}\t{}\t{}".format(
                     "!" if this_class==p["predictions"][0]["class"] else "-",
                     this_class,
+                    this_file,
                     p["predictions"][0]["class"],
                     p["predictions"][0]["prediction"])
                 )
