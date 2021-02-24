@@ -26,7 +26,8 @@ class BatchApiCall:
             for file in files:
                 #print os.path.join(subdir, file)
                 filepath = subdir + os.sep + file
-                if filepath.endswith(".jpg") or filepath.endswith(".png"):
+                # if filepath.endswith(".jpg") or filepath.endswith(".png"):
+                if filepath.endswith(".jpg"):
                     self.images.append(filepath)
 
         print("found {} images".format(len(self.images)))
@@ -36,19 +37,22 @@ class BatchApiCall:
         print("image\tclass\tprediction")
 
         for image in self.images:
-            this_class = os.path.dirname(image.replace(self.input_dir,''))
-            this_file = os.path.basename(image.replace(self.input_dir,''))
-            with open(image, "rb") as file:
-                myobj = {'image':  file }
-                response = requests.post(self.api_url, files=myobj)
-                p = json.loads(response.text)
-                print("{}\t[{}]\t{}\t[{}]\t{}".format(
-                    "V" if this_class==p["predictions"][0]["class"] else "x",
-                    this_class,
-                    this_file,
-                    p["predictions"][0]["class"],
-                    p["predictions"][0]["prediction"])
-                )
+            try:
+                this_class = os.path.dirname(image.replace(self.input_dir,''))
+                this_file = os.path.basename(image.replace(self.input_dir,''))
+                with open(image, "rb") as file:
+                    myobj = {'image':  file }
+                    response = requests.post(self.api_url, files=myobj)
+                    p = json.loads(response.text)
+                    print("{}\t[{}]\t{}\t[{}]\t{}".format(
+                        "V" if this_class==p["predictions"][0]["class"] else "-",
+                        this_class,
+                        this_file,
+                        p["predictions"][0]["class"],
+                        p["predictions"][0]["prediction"])
+                    )
+            except Exception as e:
+                print("{}: {}".format(image, e))
 
 
 if __name__ == "__main__":
