@@ -1,4 +1,4 @@
-import os, argparse
+import os, argparse, requests
 
 class BatchApiCall:
 
