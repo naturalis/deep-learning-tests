@@ -26,8 +26,8 @@ class BatchApiCall:
             for file in files:
                 #print os.path.join(subdir, file)
                 filepath = subdir + os.sep + file
-                # if filepath.endswith(".jpg") or filepath.endswith(".png"):
-                if filepath.endswith(".jpg"):
+                if filepath.endswith(".jpg") or filepath.endswith(".png"):
+                # if filepath.endswith(".jpg"):
                     self.images.append(filepath)
 
         print("found {} images".format(len(self.images)))
