@@ -1,4 +1,4 @@
-import json
+import json, argparse
 import os, csv, re
 from urllib.parse import urlparse
 from hashlib import md5
@@ -15,6 +15,8 @@ class ImageDownloader(baseclass.BaseClass):
     subfolder_max_files = 1000
     _subfolder_index = 0
     _current_subdir = None
+    override_download_folder = None
+    override_output_file = None
 
     def __init__(self):
         super().__init__()
@@ -43,6 +45,15 @@ class ImageDownloader(baseclass.BaseClass):
         else:
             raise ValueError("skip download if exists must be a boolean ({})".format(state))
 
+    def set_override_download_folder(self, folder):
+        if not os.path.exists(folder):
+            raise FileNotFoundError("folder doesn's exist: {}".format(folder))
+
+        self.override_download_folder = folder
+
+    def set_override_output_file(self, override_output_file):
+        self.override_output_file = override_output_file
+
     def read_image_list(self):
         with open(self.image_list_file, 'r', encoding='utf-8-sig') as file:
             c = csv.reader(file)
@@ -50,10 +61,14 @@ class ImageDownloader(baseclass.BaseClass):
                 self.image_list.append(row)
 
     def _get_previously_downloaded_files(self):
-        for subdir, dirs, files in os.walk(self.image_path):
-            for file in files:
-                self.previously_downloaded_files.append( \
-                {"file": file, "path": os.path.join(subdir.replace(self.image_path,""),file).lstrip("/")})
+        if not self.override_download_folder is None:
+            self.previously_downloaded_files = [{"file": file, "path": os.path.join(self.previously_downloaded_files,file)} \
+            for file in listdir(self.override_download_folder) if isfile(join(self.override_download_folder, file))]
+        else:
+            for subdir, dirs, files in os.walk(self.image_path):
+                for file in files:
+                    self.previously_downloaded_files.append( \
+                    {"file": file, "path": os.path.join(subdir.replace(self.image_path,""),file).lstrip("/")})
 
     def download_images(self):
         if self.skip_download_if_exists:
@@ -63,14 +78,20 @@ class ImageDownloader(baseclass.BaseClass):
         failed = 0
         skipped = 0
 
-        with open(self.downloaded_images_file, 'w') as csvfile:
+        if not self.override_output_file is None:
+            outfile = self.override_output_file
+        else:
+            outfile = self.downloaded_images_file
+
+        with open(outfile, 'w') as csvfile:
             c = csv.writer(csvfile, delimiter=',', quotechar='"')
 
             for item in self.image_list:
                 url = item[1]
                 p = urlparse(url)
 
-                self._set_download_subdir()
+                if self.override_download_folder is None:
+                    self._set_download_subdir()
 
                 if self.image_url_to_name is not None:
                     filename = re.sub(self.image_url_to_name['expression'], self.image_url_to_name['replace'], p.path)
@@ -89,7 +110,12 @@ class ImageDownloader(baseclass.BaseClass):
                     self.logger.info("skipped downloading {}".format(url))
                     skipped += 1
                 else:
-                    file_to_save = os.path.join(self.image_path, self._current_subdir,filename)
+
+                    if not self.override_download_folder is None:
+                        file_to_save = os.path.join(self.override_download_folder, filename)
+                    else:
+                        file_to_save = os.path.join(self.image_path, self._current_subdir,filename)
+
                     try:
                         urllib.request.urlretrieve(url, file_to_save)
                         c.writerow([item[0], url, os.path.join(self._current_subdir, filename)])
@@ -129,6 +155,20 @@ if __name__ == "__main__":
         downloader.set_image_list_file(os.environ['IMAGE_LIST_FILE'])
     else:
         downloader.set_image_list_file()
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--override_download_folder",type=str)
+    parser.add_argument("--override_output_file",type=str)
+    parser.add_argument("--override_image_list",type=str)
+
+    if args.override_download_folder:
+        downloader.set_override_download_folder(args.override_download_folder)
+
+    if args.override_output_file:
+        downloader.set_override_output_file(args.override_output_file)
+
+    if args.override_image_list:
+        downloader.set_image_list_file(args.override_image_list)
 
     downloader.read_image_list()
     downloader.download_images()

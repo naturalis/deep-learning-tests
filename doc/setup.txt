@@ -118,10 +118,10 @@ sudo docker-compose run tensorflow /code/check_images.py --path
 
 
 
-sudo docker-compose run tensorflow /code/model_trainer.py --alt_class_list classes--continents.csv --alt_image_list downloaded_images--continents.csv
+sudo docker-compose run tensorflow /code/model_trainer.py --alt_class_list classes-refcoll.csv --alt_image_list downloaded_images-refcoll.csv
 
 
-
+ref coll, UP 0.2, AUG
 
 
 #sudo docker-compose run api

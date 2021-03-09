@@ -18,9 +18,9 @@ def _determine_csv_separator(filepath,encoding):
     return sep
 
 def _csv_to_dataframe(filepath, usecols, encoding="utf-8-sig"):
-    return pd.read_csv(filepath, 
-        encoding=encoding, 
-        sep=_determine_csv_separator(filepath=filepath,encoding=encoding), 
+    return pd.read_csv(filepath,
+        encoding=encoding,
+        sep=_determine_csv_separator(filepath=filepath,encoding=encoding),
         dtype="str", usecols=usecols, header=None)
 
 class BaseClass():
@@ -62,7 +62,7 @@ class BaseClass():
         pr = os.environ.get("PROJECT_ROOT")
 
         if pr is None:
-            raise ValueError("need a project root (PROJECT_ROOT missing from .env)") 
+            raise ValueError("need a project root (PROJECT_ROOT missing from .env)")
 
         if not os.path.exists(pr):
             os.mkdir(pr)
@@ -75,7 +75,7 @@ class BaseClass():
                 os.mkdir(path)
                 os.chmod(path,0o777)
 
-            with open(logfile, 'w') as fp: 
+            with open(logfile, 'w') as fp:
                 pass
             os.chmod(logfile,0o777)
 
@@ -221,7 +221,7 @@ class BaseClass():
 
         # self.class_list_file_class_col = class_col
         # self.class_list = _csv_to_dataframe(self.class_list_file_model, [self.class_list_file_class_col])
-        tot_classes = 0        
+        tot_classes = 0
         with open(self.class_list_file_model, 'r', encoding='utf-8-sig') as file:
             c = csv.reader(file)
             for row in c:
@@ -308,7 +308,7 @@ class BaseClass():
                 errors.append(row["image"])
 
         if len(errors) > 0:
-            raise ValueError("found non-existing images (example: {}; is image root '{}' correct?)".format(errors[0],self.image_path)) 
+            raise ValueError("found non-existing images (example: {}; is image root '{}' correct?)".format(errors[0],self.image_path))
 
     def image_list_apply_class_list(self):
         before = len(self.traindf)
@@ -364,7 +364,7 @@ class BaseClass():
         self.presets.update( { "early_stopping_patience" : [ 10 ] } )
         self.presets.update( { "image_list_class_column" : 0 } )
         self.presets.update( { "image_list_file_column" : 2 } )
-        
+
         if 'os_environ' in kwargs:
             os_environ = kwargs['os_environ']
 
@@ -383,7 +383,7 @@ class BaseClass():
             validation_split = float(os_environ.get("VALIDATION_SPLIT")) if "VALIDATION_SPLIT" in os_environ else 0.2
             learning_rate = json.loads(os_environ.get("LEARNING_RATE")) if "LEARNING_RATE" in os_environ else [ 1e-4 ]
             batch_size = int(os_environ.get("BATCH_SIZE")) if "BATCH_SIZE" in os_environ else 64
-            epochs = json.loads(os_environ.get("EPOCHS")) if "EPOCHS" in os_environ else [ 200 ]  
+            epochs = json.loads(os_environ.get("EPOCHS")) if "EPOCHS" in os_environ else [ 200 ]
             freeze_layers = json.loads(os_environ.get("FREEZE_LAYERS")) if "FREEZE_LAYERS" in os_environ else [ "none" ]
             metrics = json.loads(os_environ.get("METRICS")) if "METRICS" in os_environ else [ "acc" ]
             checkpoint_monitor = os_environ.get("CHECKPOINT_MONITOR") if "CHECKPOINT_MONITOR" in os_environ else "val_acc"
