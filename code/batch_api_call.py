@@ -91,15 +91,15 @@ class BatchApiCall:
                     is_match = this_class==p["predictions"][0]["class"]
                     in_top_3 = this_class in [p["predictions"][0]["class"],p["predictions"][1]["class"],p["predictions"][2]["class"]]
 
-                    in_model = False
-                    for item in p["predictions"]:
+                    in_model = '-'
+                    for i,item in enumerate(p["predictions"]):
                         if item["class"]==this_class:
-                            in_model = True
+                            in_model = i
                             break
 
 
                     print("{},{},{},{},{},{}".format(
-                        'v' if in_model else '-',
+                        in_model,
                         'v' if is_match else '-',
                         'v' if in_top_3 else '-',
                         this_class,
