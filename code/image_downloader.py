@@ -33,6 +33,8 @@ class ImageDownloader(baseclass.BaseClass):
         if not os.path.isfile(self.image_list_file):
             raise FileNotFoundError("image list file  not found: {}".format(self.image_list_file))
 
+        self.logger.info("image list file {}".format(self.image_list_file))
+
     def set_subfolder_max_files(self, max_files):
         if isinstance(max_files, int) and 100 < int < 100000:
             self.subfolder_max_files = max_files
@@ -50,9 +52,11 @@ class ImageDownloader(baseclass.BaseClass):
             raise FileNotFoundError("folder doesn's exist: {}".format(folder))
 
         self.override_download_folder = folder
+        self.logger.info("using manual override image folder {}".format(self.override_download_folder))
 
     def set_override_output_file(self, override_output_file):
         self.override_output_file = override_output_file
+        self.logger.info("using override output file {}".format(self.override_output_file))
 
     def read_image_list(self):
         with open(self.image_list_file, 'r', encoding='utf-8-sig') as file:
@@ -160,6 +164,7 @@ if __name__ == "__main__":
     parser.add_argument("--override_download_folder",type=str)
     parser.add_argument("--override_output_file",type=str)
     parser.add_argument("--override_image_list",type=str)
+    parser.add_argument("--skip_downloading",action="store_true")
     args = parser.parse_args()
 
     if args.override_download_folder:
@@ -172,4 +177,6 @@ if __name__ == "__main__":
         downloader.set_image_list_file(args.override_image_list)
 
     downloader.read_image_list()
-    downloader.download_images()
+
+    if not args.skip_downloading:
+        downloader.download_images()
