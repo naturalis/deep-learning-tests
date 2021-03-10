@@ -94,6 +94,7 @@ class ImageDownloader(baseclass.BaseClass):
             c = csv.writer(csvfile, delimiter=',', quotechar='"')
 
             for item in self.image_list:
+                print(item)
                 url = item[1]
                 p = urlparse(url)
 
@@ -121,9 +122,9 @@ class ImageDownloader(baseclass.BaseClass):
 
                     if not self.override_download_folder is None:
                         file_to_save = os.path.join(self.override_download_folder, filename)
-                        print(self.override_download_folder)
-                        print(filename)
-                        print(file_to_save)
+                        # print(self.override_download_folder)
+                        # print(filename)
+                        # print(file_to_save)
                     else:
                         file_to_save = os.path.join(self.image_path, self._current_subdir,filename)
 
