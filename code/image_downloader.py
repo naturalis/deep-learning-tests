@@ -51,9 +51,9 @@ class ImageDownloader(baseclass.BaseClass):
     def set_skip_download_period(self,state=True):
         if isinstance(state, bool):
             self.skip_download_period = state
-            self.logger.info("set skip download,period: {}".format(self.skip_download_period))
+            self.logger.info("set skip download, period: {}".format(self.skip_download_period))
         else:
-            raise ValueError("skip download, period, must be a boolean ({})".format(state))
+            raise ValueError("skip_download_period must be a boolean ({})".format(state))
 
     def set_override_download_folder(self, folder):
         if not os.path.exists(folder):
@@ -83,7 +83,7 @@ class ImageDownloader(baseclass.BaseClass):
                     {"file": file, "path": os.path.join(subdir.replace(self.image_path,""),file).lstrip("/")})
 
     def download_images(self):
-        if self.skip_download_if_exists:
+        if self.skip_download_if_exists && not self.skip_download_period:
             self._get_previously_downloaded_files()
 
         downloaded = 0
