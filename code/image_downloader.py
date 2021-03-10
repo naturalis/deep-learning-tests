@@ -128,22 +128,17 @@ class ImageDownloader(baseclass.BaseClass):
 
                     if not self.override_download_folder is None:
                         file_to_save = os.path.join(self.override_download_folder, filename)
+                        subdir_to_write = self.override_download_folder
                         # print(self.override_download_folder)
                         # print(filename)
                         # print(file_to_save)
                     else:
                         file_to_save = os.path.join(self.image_path, self._current_subdir,filename)
-
-
-                    urllib.request.urlretrieve(url, file_to_save)
-                    c.writerow([item[0], url, os.path.join(self._current_subdir, filename)])
-                    self.logger.info("downloaded {} to {} ".format(url, file_to_save))
-                    downloaded += 1
-
+                        subdir_to_write = self._current_subdir
 
                     try:
                         urllib.request.urlretrieve(url, file_to_save)
-                        c.writerow([item[0], url, os.path.join(self._current_subdir, filename)])
+                        c.writerow([item[0], url, os.path.join(subdir_to_write, filename)])
                         self.logger.info("downloaded {} to {} ".format(url, file_to_save))
                         downloaded += 1
                     except Exception as e:
