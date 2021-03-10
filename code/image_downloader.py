@@ -48,13 +48,6 @@ class ImageDownloader(baseclass.BaseClass):
         else:
             raise ValueError("skip download if exists must be a boolean ({})".format(state))
 
-    def set_skip_download_period(self,state=True):
-        if isinstance(state, bool):
-            self.skip_download_period = state
-            self.logger.info("set skip download, period: {}".format(self.skip_download_period))
-        else:
-            raise ValueError("skip_download_period must be a boolean ({})".format(state))
-
     def set_override_download_folder(self, folder):
         if not os.path.exists(folder):
             raise FileNotFoundError("folder doesn's exist: {}".format(folder))
@@ -83,7 +76,7 @@ class ImageDownloader(baseclass.BaseClass):
                     {"file": file, "path": os.path.join(subdir.replace(self.image_path,""),file).lstrip("/")})
 
     def download_images(self):
-        if self.skip_download_if_exists and not self.skip_download_period:
+        if self.skip_download_if_exists:
             self._get_previously_downloaded_files()
 
         downloaded = 0
@@ -112,9 +105,7 @@ class ImageDownloader(baseclass.BaseClass):
                     filename = os.path.basename(p.path)
 
 
-                if self.skip_download_period:
-                    skip_download = True
-                elif self.skip_download_if_exists:
+                if self.skip_download_if_exists:
                     existing_images = [x for x in self.previously_downloaded_files if x["file"] == filename]
                     skip_download = len(existing_images) > 0
                 else:
@@ -122,7 +113,7 @@ class ImageDownloader(baseclass.BaseClass):
 
                 if skip_download:
                     c.writerow([item[0], url, existing_images[0]["path"]])
-                    self.logger.info("skipped ({}): {}".format(url,("skip all" if self.skip_download_period else "file exists")))
+                    self.logger.info("skipped (file exists): {}".format(url))
                     skipped += 1
                 else:
 
@@ -175,7 +166,6 @@ if __name__ == "__main__":
     parser.add_argument("--override_download_folder",type=str)
     parser.add_argument("--override_output_file",type=str)
     parser.add_argument("--override_image_list",type=str)
-    parser.add_argument("--skip_downloading",action="store_true")
     args = parser.parse_args()
 
     if args.override_download_folder:
@@ -186,9 +176,6 @@ if __name__ == "__main__":
 
     if args.override_image_list:
         downloader.set_image_list_file(args.override_image_list)
-
-    if args.skip_downloading:
-        downloader.set_skip_download_period()
 
     downloader.read_image_list()
     downloader.download_images()
