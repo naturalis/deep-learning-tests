@@ -94,9 +94,12 @@ class ImageDownloader(baseclass.BaseClass):
             c = csv.writer(csvfile, delimiter=',', quotechar='"')
 
             for item in self.image_list:
-                print(item)
                 url = item[1]
                 p = urlparse(url)
+
+                print(item)
+                print(url)
+                print(p)
 
                 if self.override_download_folder is None:
                     self._set_download_subdir()
