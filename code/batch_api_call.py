@@ -75,7 +75,7 @@ class BatchApiCall:
 
     def run_identifications(self):
 
-        print("match,top_3,class,predicted_class,prediction")
+        print("in_model,match,top_3,class,predicted_class,prediction")
 
         for image in self.images:
             try:
@@ -91,9 +91,17 @@ class BatchApiCall:
                     is_match = this_class==p["predictions"][0]["class"]
                     in_top_3 = this_class in [p["predictions"][0]["class"],p["predictions"][1]["class"],p["predictions"][2]["class"]]
 
-                    print("{},{},{},{},{}".format(
-                        'V' if is_match else '-',
-                        'V' if in_top_3 else '-',
+                    in_model = False
+                    for item in p["predictions"]:
+                        if item["class"]==this_class:
+                            in_model = True
+                            break
+
+
+                    print("{},{},{},{},{},{}".format(
+                        'v' if in_model else '-',
+                        'v' if is_match else '-',
+                        'v' if in_top_3 else '-',
                         this_class,
                         p["predictions"][0]["class"],
                         p["predictions"][0]["prediction"])
