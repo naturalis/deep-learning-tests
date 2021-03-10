@@ -5,7 +5,7 @@ class BatchApiCall:
     input_dir = None
     image_list = None
     api_url = None
-    download_folder = None
+    override_image_root_folder = None
     images = []
 
     def __init__(self):
@@ -22,6 +22,9 @@ class BatchApiCall:
 
     def set_api_url(self,api_url):
         self.api_url = api_url
+
+    def set_override_image_root_folder(self,folder):
+        self.override_image_root_folder = folder
 
     def get_images(self):
         if not self.input_dir is None:
@@ -57,9 +60,15 @@ class BatchApiCall:
                     continue
 
                 if row[1].endswith(".jpg"):
-                    self.images.append({'class':row[0],'file':row[1]})
+                    file = row[1]
                 elif row[2].endswith(".jpg"):
-                    self.images.append({'class':row[0],'file':row[2]})
+                    file = row[2]
+
+                if self.override_image_root_folder:
+                    file = os.path.join(self.override_image_root_folder, os.path.basename(file))
+
+                if row[0] and file:
+                    self.images.append({'class':row[0],'file':file})
 
         print("found {} images".format(len(self.images)))
 
@@ -72,9 +81,6 @@ class BatchApiCall:
             try:
                 this_class = image['class']
                 this_file = image['file']
-                print(this_class)
-                print(this_file)
-                pass
                 with open(image, "rb") as file:
                     myobj = {'image':  file }
                     response = requests.post(self.api_url, files=myobj)
@@ -96,6 +102,7 @@ if __name__ == "__main__":
     parser.add_argument("--image_list",type=str)
     parser.add_argument("--image_folder",type=str)
     parser.add_argument("--api_url",type=str, required=True)
+    parser.add_argument("--override_image_root_folder",type=str)
     args = parser.parse_args()
 
     if not args.image_folder and not args.image_list:
@@ -116,6 +123,9 @@ if __name__ == "__main__":
 
     if args.api_url:
         bac.set_api_url(args.api_url)
+
+    if args.override_image_root_folder:
+        bac.set_override_image_root_folder(args.override_image_root_folder)
 
     bac.get_images()
     bac.run_identifications()
