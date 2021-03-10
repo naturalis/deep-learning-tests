@@ -50,7 +50,10 @@ class ImageDownloader(baseclass.BaseClass):
 
     def set_override_download_folder(self, folder):
         if not os.path.exists(folder):
-            raise FileNotFoundError("folder doesn's exist: {}".format(folder))
+            raise FileNotFoundError("folder doesn't exist: {}".format(folder))
+
+        if not os.access(folder, os.W_OK):
+            raise FileNotFoundError("folder not writeable: {}".format(folder))
 
         self.override_download_folder = folder
         self.logger.info("using manual override image folder: {}".format(self.override_download_folder))
@@ -106,13 +109,10 @@ class ImageDownloader(baseclass.BaseClass):
                 else:
                     filename = os.path.basename(p.path)
 
-
-                print(item)
-                print(url)
-                print(p)
-                print(filename)
-
-
+                # print(item)
+                # print(url)
+                # print(p)
+                # print(filename)
 
                 if self.skip_download_if_exists:
                     existing_images = [x for x in self.previously_downloaded_files if x["file"] == filename]
