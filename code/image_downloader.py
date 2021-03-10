@@ -160,6 +160,7 @@ if __name__ == "__main__":
     parser.add_argument("--override_download_folder",type=str)
     parser.add_argument("--override_output_file",type=str)
     parser.add_argument("--override_image_list",type=str)
+    args = parser.parse_args()
 
     if args.override_download_folder:
         downloader.set_override_download_folder(args.override_download_folder)

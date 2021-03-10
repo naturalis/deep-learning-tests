@@ -1,5 +1,4 @@
 import os, argparse, requests, json, csv
-from urllib.parse import urlparse
 
 class BatchApiCall:
 
@@ -23,9 +22,6 @@ class BatchApiCall:
 
     def set_api_url(self,api_url):
         self.api_url = api_url
-
-    def set_download_folder(self,download_folder):
-        self.download_folder = download_folder
 
     def get_images(self):
         if not self.input_dir is None:
@@ -60,26 +56,11 @@ class BatchApiCall:
                 if not len(row)>=2:
                     continue
 
-                url = urlparse(row[1])
-
-                if url.scheme and url.netloc:
-                    # print("url")
-                    self.images.append({'class':row[0],'url':row[1]})
-                else:
-                    # print("file")
-                    if row[1].endswith(".jpg"):
-                        self.images.append({'class':row[0],'file':row[1]})
+                # print("file")
+                if row[1].endswith(".jpg"):
+                    self.images.append({'class':row[0],'file':row[1]})
 
         print("found {} images".format(len(self.images)))
-
-    def download_images(self):
-        if not self.download_folder:
-            raise ValueError("no download folder (list contains URLs)")
-
-        if not os.path.exists(self.download_folder):
-            raise ValueError("download folder {} doesn't exist".format(self.download_folder))
-
-
 
 
     def run_identifications(self):
@@ -88,8 +69,8 @@ class BatchApiCall:
 
         for image in self.images:
             try:
-                this_class = os.path.dirname(image.replace(self.input_dir,''))
-                this_file = os.path.basename(image.replace(self.input_dir,''))
+                this_class = image['class']
+                this_file = image['file']
                 with open(image, "rb") as file:
                     myobj = {'image':  file }
                     response = requests.post(self.api_url, files=myobj)
@@ -110,7 +91,6 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--image_list",type=str)
     parser.add_argument("--image_folder",type=str)
-    parser.add_argument("--download_folder",type=str)
     parser.add_argument("--api_url",type=str, required=True)
     args = parser.parse_args()
 
@@ -132,9 +112,6 @@ if __name__ == "__main__":
 
     if args.api_url:
         bac.set_api_url(args.api_url)
-
-    if args.download_folder:
-        bac.set_download_folder(args.download_folder)
 
     bac.get_images()
     bac.download_images()
