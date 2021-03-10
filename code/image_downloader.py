@@ -33,7 +33,7 @@ class ImageDownloader(baseclass.BaseClass):
         if not os.path.isfile(self.image_list_file):
             raise FileNotFoundError("image list file not found: {}".format(self.image_list_file))
 
-        self.logger.info("image list file {}".format(self.image_list_file))
+        self.logger.info("image list file: {}".format(self.image_list_file))
 
     def set_subfolder_max_files(self, max_files):
         if isinstance(max_files, int) and 100 < int < 100000:
@@ -41,11 +41,19 @@ class ImageDownloader(baseclass.BaseClass):
         else:
             raise ValueError("max subfolder files must be int between 100 and 100000 ({})".format(max_files))
 
-    def set_skip_download_if_exists(self, state):
+    def set_skip_download_if_exists(self,state):
         if isinstance(state, bool):
             self.skip_download_if_exists = state
+            self.logger.info("set skip download if exists: {}".format(self.skip_download_if_exists))
         else:
             raise ValueError("skip download if exists must be a boolean ({})".format(state))
+
+    def set_skip_download_period(self,state=True):
+        if isinstance(state, bool):
+            self.skip_download_period = state
+            self.logger.info("set skip download,period: {}".format(self.skip_download_period))
+        else:
+            raise ValueError("skip download, period, must be a boolean ({})".format(state))
 
     def set_override_download_folder(self, folder):
         if not os.path.exists(folder):
@@ -103,7 +111,10 @@ class ImageDownloader(baseclass.BaseClass):
                 else:
                     filename = os.path.basename(p.path)
 
-                if self.skip_download_if_exists:
+
+                if self.skip_download_period:
+                    skip_download = True
+                elif self.skip_download_if_exists:
                     existing_images = [x for x in self.previously_downloaded_files if x["file"] == filename]
                     skip_download = len(existing_images) > 0
                 else:
@@ -111,7 +122,7 @@ class ImageDownloader(baseclass.BaseClass):
 
                 if skip_download:
                     c.writerow([item[0], url, existing_images[0]["path"]])
-                    self.logger.info("skipped (file exists): {}".format(url))
+                    self.logger.info("skipped ({}): {}".format(url,(self.skip_download_period ? "skip all" : "file exists")))
                     skipped += 1
                 else:
 
@@ -176,7 +187,8 @@ if __name__ == "__main__":
     if args.override_image_list:
         downloader.set_image_list_file(args.override_image_list)
 
-    downloader.read_image_list()
+    if args.skip_downloading:
+        downloader.set_skip_download_period()
 
-    if not args.skip_downloading:
-        downloader.download_images()
+    downloader.read_image_list()
+    downloader.download_images()
