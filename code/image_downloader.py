@@ -31,7 +31,7 @@ class ImageDownloader(baseclass.BaseClass):
             self.image_list_file = os.path.join(self.project_root, 'lists', 'images.csv')
 
         if not os.path.isfile(self.image_list_file):
-            raise FileNotFoundError("image list file  not found: {}".format(self.image_list_file))
+            raise FileNotFoundError("image list file not found: {}".format(self.image_list_file))
 
         self.logger.info("image list file {}".format(self.image_list_file))
 
@@ -52,11 +52,11 @@ class ImageDownloader(baseclass.BaseClass):
             raise FileNotFoundError("folder doesn's exist: {}".format(folder))
 
         self.override_download_folder = folder
-        self.logger.info("using manual override image folder {}".format(self.override_download_folder))
+        self.logger.info("using manual override image folder: {}".format(self.override_download_folder))
 
     def set_override_output_file(self, override_output_file):
         self.override_output_file = override_output_file
-        self.logger.info("using override output file {}".format(self.override_output_file))
+        self.logger.info("using override output file: {}".format(self.override_output_file))
 
     def read_image_list(self):
         with open(self.image_list_file, 'r', encoding='utf-8-sig') as file:
@@ -111,7 +111,7 @@ class ImageDownloader(baseclass.BaseClass):
 
                 if skip_download:
                     c.writerow([item[0], url, existing_images[0]["path"]])
-                    self.logger.info("skipped downloading {}".format(url))
+                    self.logger.info("skipped (file exists): {}".format(url))
                     skipped += 1
                 else:
 

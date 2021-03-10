@@ -142,19 +142,19 @@ class BaseClass():
 
         if image_path is not None:
             self.image_path = image_path
-            self.logger.info("using override image folder {}".format(self.image_path))
+            self.logger.info("using override image folder: {}".format(self.image_path))
         else:
             self.image_path = os.path.join(self.project_root, "images")
 
         if not os.path.exists(self.image_path):
             os.mkdir(self.image_path)
-            self.logger.info("created image folder {}".format(self.image_path))
+            self.logger.info("created image folder: {}".format(self.image_path))
 
         self.models_folder = os.path.join(self.project_root, "models")
 
         if not os.path.exists(self.models_folder):
             os.mkdir(self.models_folder)
-            self.logger.info("created models folder {}".format(self.models_folder))
+            self.logger.info("created models folder: {}".format(self.models_folder))
 
 
         self.class_list_file = os.path.join(self.project_root, "lists", "classes.csv")
