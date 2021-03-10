@@ -81,7 +81,7 @@ class BatchApiCall:
             try:
                 this_class = image['class']
                 this_file = image['file']
-                with open(image, "rb") as file:
+                with open(image['file'], "rb") as file:
                     myobj = {'image':  file }
                     response = requests.post(self.api_url, files=myobj)
                     p = json.loads(response.text)
