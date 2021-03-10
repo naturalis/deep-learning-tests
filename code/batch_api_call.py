@@ -114,5 +114,4 @@ if __name__ == "__main__":
         bac.set_api_url(args.api_url)
 
     bac.get_images()
-    bac.download_images()
-    # bac.run_identifications()
+    bac.run_identifications()

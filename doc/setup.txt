@@ -121,7 +121,7 @@ sudo docker-compose run tensorflow /code/check_images.py --path
 sudo docker-compose run tensorflow /code/model_trainer.py --alt_class_list classes-refcoll.csv --alt_image_list downloaded_images-refcoll.csv
 
 
-ref coll, UP 0.2, AUG
-
-
-#sudo docker-compose run api
+sudo docker-compose run tensorflow /code/image_downloader.py \
+    --override_image_list       /data/museum/naturalis/lists/sheet7_images.csv \
+    --override_download_folder  /data/museum/naturalis/sheet7_images/ \
+    --override_output_file      /data/museum/naturalis/lists/sheet7_downloaded_images.csv \

@@ -71,7 +71,7 @@ class ImageDownloader(baseclass.BaseClass):
     def _get_previously_downloaded_files(self):
         if not self.override_download_folder is None:
             pass
-            # TODO, maybe
+            # TODO
             # self.previously_downloaded_files = [{"file": file, "path": os.path.join(self.previously_downloaded_files,file)} \
             # for file in os.listdir(self.override_download_folder) if os.path.isfile(os.path.join(self.override_download_folder, file))]
         else:
