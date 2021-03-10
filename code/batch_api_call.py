@@ -75,7 +75,7 @@ class BatchApiCall:
 
     def run_identifications(self):
 
-        print("image\tclass\tprediction")
+        print("match,top_3,class,predicted_class,prediction")
 
         for image in self.images:
             try:
@@ -85,10 +85,16 @@ class BatchApiCall:
                     myobj = {'image':  file }
                     response = requests.post(self.api_url, files=myobj)
                     p = json.loads(response.text)
-                    print("{}\t[{}]\t{}\t[{}]\t{}".format(
-                        "V" if this_class==p["predictions"][0]["class"] else "-",
+
+                    result_class = p["predictions"][0]["class"]
+                    result_prediction = p["predictions"][0]["prediction"]
+                    is_match = this_class==p["predictions"][0]["class"]
+                    in_top_3 = this_class in [p["predictions"][0]["class"],p["predictions"][1]["class"],p["predictions"][2]["class"]]
+
+                    print("{},{},{},{},{}".format(
+                        'V' if is_match else '-',
+                        'V' if in_top_3 else '-',
                         this_class,
-                        this_file,
                         p["predictions"][0]["class"],
                         p["predictions"][0]["prediction"])
                     )
