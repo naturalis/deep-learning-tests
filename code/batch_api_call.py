@@ -56,7 +56,7 @@ class BatchApiCall:
                 if not len(row)>=2:
                     continue
 
-                # print("file")
+                print(row)
                 if row[1].endswith(".jpg"):
                     self.images.append({'class':row[0],'file':row[1]})
 
@@ -96,11 +96,11 @@ if __name__ == "__main__":
 
     if not args.image_folder and not args.image_list:
         parser.print_help()
-        raise ValueError("need image list or image root folder")
+        raise ValueError("image list or image root folder required")
 
     if args.image_folder and args.image_list:
         parser.print_help()
-        raise ValueError("need image list or image root folder")
+        raise ValueError("need either image list or image root folder")
 
     bac = BatchApiCall()
 

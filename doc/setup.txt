@@ -124,4 +124,30 @@ sudo docker-compose run tensorflow /code/model_trainer.py --alt_class_list class
 sudo docker-compose run tensorflow /code/image_downloader.py \
     --override_image_list       /data/museum/naturalis/lists/sheet7_images.csv \
     --override_download_folder  /data/museum/naturalis/sheet7_images/ \
-    --override_output_file      /data/museum/naturalis/lists/sheet7_downloaded_images.csv \
+    --override_output_file      /data/museum/naturalis/lists/sheet7_downloaded_images.csv
+
+
+
+sudo docker-compose run tensorflow /code/image_downloader.py \
+    --override_image_list       /data/museum/naturalis/lists/sheet7_images.csv \
+    --override_download_folder  /data/museum/naturalis/sheet7_images/ \
+    --override_output_file      /data/museum/naturalis/lists/sheet7_downloaded_images.csv
+
+
+
+
+
+# curl -XPOST  -F "image=@ZMA.INS.1279115_1.jpg" http://0.0.0.0:8090/identify
+
+# .env
+# API_MODEL_NAME=20200804-142255
+# API_LOGFILE_PATH=/log/general.log
+# API_DEBUG=1
+# API_FLASK_DEBUG=0 (avoid)
+
+
+
+
+
+python ../code/batch_api_call.py --image_list /data/maarten.schermer/data/museum/naturalis/lists/sheet7_downloaded_images.csv --image_folder /data/maarten.schermer/data/museum/naturalis/sheet7_images/ --api_url http://0.0.0.0:8090/identify
+
