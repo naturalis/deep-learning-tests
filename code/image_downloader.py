@@ -122,7 +122,7 @@ class ImageDownloader(baseclass.BaseClass):
 
                 if skip_download:
                     c.writerow([item[0], url, existing_images[0]["path"]])
-                    self.logger.info("skipped ({}): {}".format(url,(self.skip_download_period ? "skip all" : "file exists")))
+                    self.logger.info("skipped ({}): {}".format(url,("skip all" if self.skip_download_period else "file exists")))
                     skipped += 1
                 else:
 
