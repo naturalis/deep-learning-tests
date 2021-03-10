@@ -83,7 +83,7 @@ class ImageDownloader(baseclass.BaseClass):
                     {"file": file, "path": os.path.join(subdir.replace(self.image_path,""),file).lstrip("/")})
 
     def download_images(self):
-        if self.skip_download_if_exists && not self.skip_download_period:
+        if self.skip_download_if_exists and not self.skip_download_period:
             self._get_previously_downloaded_files()
 
         downloaded = 0
