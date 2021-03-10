@@ -129,3 +129,5 @@ if __name__ == "__main__":
 
     bac.get_images()
     bac.run_identifications()
+
+    #  are they in the model at all

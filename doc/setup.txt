@@ -149,5 +149,6 @@ sudo docker-compose run tensorflow /code/image_downloader.py \
 
 
 
-python ../code/batch_api_call.py --image_list /data/maarten.schermer/data/museum/naturalis/lists/sheet7_downloaded_images.csv --image_folder /data/maarten.schermer/data/museum/naturalis/sheet7_images/ --api_url http://0.0.0.0:8090/identify
 
+
+sudo git pull; python3 ../code/batch_api_call.py --image_list /data/maarten.schermer/data/museum/naturalis/lists/sheet7_downloaded_images.csv --api_url http://0.0.0.0:8090/identify --override_image_root_folder /data/maarten.schermer/data/museum/naturalis/sheet7_images/
