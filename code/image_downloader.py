@@ -97,10 +97,6 @@ class ImageDownloader(baseclass.BaseClass):
                 url = item[1]
                 p = urlparse(url)
 
-                print(item)
-                print(url)
-                print(p)
-
                 if self.override_download_folder is None:
                     self._set_download_subdir()
 
@@ -109,6 +105,13 @@ class ImageDownloader(baseclass.BaseClass):
                     filename += self.image_url_to_name['postfix']
                 else:
                     filename = os.path.basename(p.path)
+
+
+                print(item)
+                print(url)
+                print(p)
+                print(filename)
+
 
 
                 if self.skip_download_if_exists:
