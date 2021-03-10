@@ -134,6 +134,13 @@ class ImageDownloader(baseclass.BaseClass):
                     else:
                         file_to_save = os.path.join(self.image_path, self._current_subdir,filename)
 
+
+                    urllib.request.urlretrieve(url, file_to_save)
+                    c.writerow([item[0], url, os.path.join(self._current_subdir, filename)])
+                    self.logger.info("downloaded {} to {} ".format(url, file_to_save))
+                    downloaded += 1
+
+
                     try:
                         urllib.request.urlretrieve(url, file_to_save)
                         c.writerow([item[0], url, os.path.join(self._current_subdir, filename)])
