@@ -6,6 +6,7 @@ class BatchApiCall:
     image_list = None
     api_url = None
     override_image_root_folder = None
+    prepend_image_root_folder = None
     images = []
 
     def __init__(self):
@@ -25,6 +26,9 @@ class BatchApiCall:
 
     def set_override_image_root_folder(self,folder):
         self.override_image_root_folder = folder
+
+    def set_prepend_image_root_folder(self,folder):
+        self.prepend_image_root_folder = folder
 
     def get_images(self):
         if not self.input_dir is None:
@@ -66,6 +70,9 @@ class BatchApiCall:
 
                 if self.override_image_root_folder:
                     file = os.path.join(self.override_image_root_folder, os.path.basename(file))
+
+                if self.prepend_image_root_folder:
+                    file = os.path.join(self.prepend_image_root_folder, file)
 
                 if row[0] and file:
                     self.images.append({'class':row[0],'file':file})
@@ -117,6 +124,7 @@ if __name__ == "__main__":
     parser.add_argument("--image_folder",type=str)
     parser.add_argument("--api_url",type=str, required=True)
     parser.add_argument("--override_image_root_folder",type=str)
+    parser.add_argument("--prepend_image_root_folder",type=str)
     args = parser.parse_args()
 
     if not args.image_folder and not args.image_list:
@@ -138,8 +146,13 @@ if __name__ == "__main__":
     if args.api_url:
         bac.set_api_url(args.api_url)
 
+    # replaces whatever the folder is in the image list (just keeps basename)
     if args.override_image_root_folder:
         bac.set_override_image_root_folder(args.override_image_root_folder)
+
+    # prepends to whatever is in the image list
+    if args.prepend_image_root_folder:
+        bac.set_prepend_image_root_folder(args.prepend_image_root_folder)
 
     bac.get_images()
     bac.run_identifications()
