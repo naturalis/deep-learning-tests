@@ -56,8 +56,9 @@ class BatchApiCall:
                 if not len(row)>=2:
                     continue
 
-                print(row)
                 if row[1].endswith(".jpg"):
+                    self.images.append({'class':row[0],'file':row[1]})
+                elif row[2].endswith(".jpg"):
                     self.images.append({'class':row[0],'file':row[1]})
 
         print("found {} images".format(len(self.images)))
