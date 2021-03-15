@@ -147,8 +147,8 @@ def identify_image():
 
             batch = generate_augmented_image_batch(x)
             predictions = model.predict_on_batch(batch)
-            print(predictions[0][0])
-            print(len(predictions))
+            logger.info("batch predict 0: {}".format(predictions[0][0]))
+            logger.info("barch predict length: {}".format(len(predictions)))
 
 
 
