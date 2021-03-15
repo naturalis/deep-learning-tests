@@ -187,8 +187,8 @@ def generate_augmented_image_batch(img):
     datagen = tf.keras.preprocessing.image.ImageDataGenerator(
         width_shift_range=[-0.1,-0.1],
         height_shift_range=[-0.1,-0.1],
-        rotation_range=25,
-        zoom_range=0.2,
+        rotation_range=5,
+        zoom_range=0.1,
         rescale=1./255
     )
 
