@@ -1,4 +1,4 @@
-# # -*- coding: utf-8 -*-
+ # # -*- coding: utf-8 -*-
 # """
 # Created on Thu Jul 18 11:02:30 2019
 # @author: Yan
@@ -281,7 +281,7 @@ if __name__ == '__main__':
 
     set_model_path(m)
     set_classes_path(c)
-    if identification_style:
+    if not identification_style is None:
         set_identification_style(identification_style)
 
     initialize(app)
