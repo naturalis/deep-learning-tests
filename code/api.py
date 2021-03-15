@@ -205,7 +205,8 @@ def generate_augmented_image_batch(img):
         # generate batch of images
         next_batch = it.next()
         # convert to unsigned integers for viewing
-        image = batch[0].astype('uint8')
+        # image = next_batch[0].astype('uint8')
+        image = next_batch[0]
         batch.append(image)
         # # plot raw pixel data
         # pyplot.imshow(image)
