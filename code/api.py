@@ -131,7 +131,7 @@ def identify_image():
 
             classes = {k: v for k, v in sorted(classes.items(), key=lambda item: item[1])}
 
-            identification_style = "original_only"
+            identification_style = "batch"
 
             logger.info("identification_style: {}".format(identification_style))
 
@@ -163,10 +163,7 @@ def identify_image():
                 logger.info("batch predict length: {}".format(len(batch_predictions)))
                 logger.info("batch wtf: {}".format(set(batch_predictions[0])==set(batch_predictions[1])))
 
-
-                batch_predictions = np.mean(batch_predictions,axis=0)
-                batch_predictions = dict(zip(classes.keys(), batch_predictions))
-                batch_predictions = {k: v for k, v in sorted(batch_predictions.items(), key=lambda item: item[1], reverse=True)}
+                predictions = np.mean(batch_predictions,axis=0)
 
             else:
                 raise ValueError("invalid identification style: {}".format(identification_style))
