@@ -31,6 +31,7 @@ model_path = None
 model_classes_path = None
 model = None
 classes = None
+identification_style = "fuck"
 
 def set_model_path(path):
     global model_path
@@ -131,7 +132,7 @@ def identify_image():
 
             classes = {k: v for k, v in sorted(classes.items(), key=lambda item: item[1])}
 
-            identification_style = "batch"
+            # identification_style = "batch"
 
             logger.info("identification_style: {}".format(identification_style))
 
