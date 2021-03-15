@@ -137,9 +137,7 @@ def identify_image():
 
             predictions = model.predict_on_batch([x])
 
-            print(predictions)
-
-
+            logger.info("wtf")
 
             # predictions = model.predict(x)
 
@@ -236,7 +234,7 @@ if __name__ == '__main__':
     app.run(debug=(os.getenv('API_FLASK_DEBUG')=="1"),host='0.0.0.0')
 
     # TODO: logging, tokens, users, gunicorn
-    # curl -XPOST  -F "image=@ZMA.INS.1279115_1.jpg" http://0.0.0.0:8090/identify
+    # curl -s -XPOST  -F "image=@ZMA.INS.1279115_1.jpg" http://0.0.0.0:8090/identify
 
     # .env
     # API_MODEL_NAME=20200804-142255
