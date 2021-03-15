@@ -103,7 +103,7 @@ def root():
 def identify_image():
     global model, classes, logger
 
-    print(request.data)
+    logger.info(request.data['fuck'])
 
     if request.method == 'POST':
 
@@ -144,22 +144,22 @@ def identify_image():
             predictions = model.predict(y)
 
 
-            # "Delias belisama Cramer, 1779",
+            # # "Delias belisama Cramer, 1779",
 
 
-            # augmented image batch prediction
-            batch = generate_augmented_image_batch(x)
-            batch_predictions = model.predict_on_batch(batch)
+            # # augmented image batch prediction
+            # batch = generate_augmented_image_batch(x)
+            # batch_predictions = model.predict_on_batch(batch)
 
-            logger.info("batch length: {}".format(len(batch)))
-            logger.info("batch predict: {}".format(batch_predictions))
-            logger.info("batch predict length: {}".format(len(batch_predictions)))
-            logger.info("batch wtf: {}".format(set(batch_predictions[0])==set(batch_predictions[1])))
+            # logger.info("batch length: {}".format(len(batch)))
+            # logger.info("batch predict: {}".format(batch_predictions))
+            # logger.info("batch predict length: {}".format(len(batch_predictions)))
+            # logger.info("batch wtf: {}".format(set(batch_predictions[0])==set(batch_predictions[1])))
 
 
-            batch_predictions = np.mean(batch_predictions,axis=0)
-            batch_predictions = dict(zip(classes.keys(), batch_predictions))
-            batch_predictions = {k: v for k, v in sorted(batch_predictions.items(), key=lambda item: item[1], reverse=True)}
+            # batch_predictions = np.mean(batch_predictions,axis=0)
+            # batch_predictions = dict(zip(classes.keys(), batch_predictions))
+            # batch_predictions = {k: v for k, v in sorted(batch_predictions.items(), key=lambda item: item[1], reverse=True)}
 
 
 
