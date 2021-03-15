@@ -137,6 +137,8 @@ def identify_image():
 
             predictions = model.predict_on_batch([x])
 
+            print(predictions)
+
 
 
             # predictions = model.predict(x)
