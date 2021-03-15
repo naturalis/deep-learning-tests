@@ -178,7 +178,7 @@ def generate_augmented_image_batch(img):
     # convert to numpy array
     data = tf.keras.preprocessing.image.img_to_array(img)
     # expand dimension to one sample
-    samples = expand_dims(data, 0)
+    samples = np.expand_dims(data, 0)
     # create image data augmentation generator
     datagen = tf.keras.preprocessing.image.ImageDataGenerator(
         width_shift_range=[-0.1,-0.1],
