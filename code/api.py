@@ -126,23 +126,29 @@ def identify_image():
                 target_size=(299,299),
                 interpolation="nearest")
 
-            # x = tf.keras.preprocessing.image.img_to_array(x)
-            # x = np.expand_dims(x, axis=0)
+            x = tf.keras.preprocessing.image.img_to_array(x)
+            x = np.expand_dims(x, axis=0)
 
-            # x = x[..., :3]  # remove alpha channel if present
-            # if x.shape[3] == 1:
-            #     x = np.repeat(x, axis=3, repeats=3)
-            # x /= 255.0
-            # # x = (x - 0.5) * 2.0 # why this, laurens?
+            x = x[..., :3]  # remove alpha channel if present
+            if x.shape[3] == 1:
+                x = np.repeat(x, axis=3, repeats=3)
+            x /= 255.0
+            # x = (x - 0.5) * 2.0 # why this, laurens?
 
-            # predictions = model.predict(x)
+            predictions = model.predict(x)
+
+
+
+
+
+
+
 
 
             batch = generate_augmented_image_batch(x)
-
             predictions = model.predict_on_batch(batch)
-
-            print(predictions)
+            print(predictions[0][0])
+            print(len(predictions))
 
 
 
