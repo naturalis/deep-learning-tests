@@ -257,7 +257,7 @@ if __name__ == '__main__':
 
     model_name = os.environ['API_MODEL_NAME']
     model_path = os.path.join(os.environ['PROJECT_ROOT'],"models",model_name)
-    id_style = os.environ['API_IDENTIFICATION_STYLE']
+    id_style = os.getenv('API_IDENTIFICATION_STYLE')
 
     m = os.path.join(model_path,"model.hdf5")
     c = os.path.join(model_path,"classes.json")
