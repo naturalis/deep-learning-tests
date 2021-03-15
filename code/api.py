@@ -32,7 +32,7 @@ model_classes_path = None
 model = None
 classes = None
 identification_style = "original_only"
-batch_size = 16
+identification_batch_size = 16
 
 def set_model_path(path):
     global model_path
@@ -45,6 +45,10 @@ def set_classes_path(path):
 def set_identification_style(style):
     global identification_style
     identification_style = style
+
+def set_identification_batch_size(size):
+    global identification_batch_size
+    identification_batch_size = size
 
 def initialize(app):
     initialize_logger()
@@ -174,9 +178,9 @@ def identify_image():
 
 
 def generate_augmented_image_batch(img):
-    global logger, batch_size
+    global logger, identification_batch_size
 
-    logger.info("batch_size: {}".format(batch_size))
+    logger.info("identification_batch_size: {}".format(batch_size))
 
     data = tf.keras.preprocessing.image.img_to_array(img)
     samples = np.expand_dims(data, 0)
@@ -190,7 +194,7 @@ def generate_augmented_image_batch(img):
 
     batch = []
     it = datagen.flow(samples, batch_size=1)
-    for i in range(batch_size):
+    for i in range(identification_batch_size):
         next_batch = it.next()
         image = next_batch[0]
         batch.append(image)
@@ -257,6 +261,7 @@ if __name__ == '__main__':
     model_name = os.environ['API_MODEL_NAME']
     model_path = os.path.join(os.environ['PROJECT_ROOT'],"models",model_name)
     id_style = os.getenv('API_IDENTIFICATION_STYLE')
+    batch_size = os.getenv('API_BATCH_ID_SIZE')
 
     m = os.path.join(model_path,"model.hdf5")
     c = os.path.join(model_path,"classes.json")
@@ -266,6 +271,9 @@ if __name__ == '__main__':
 
     if not id_style is None:
         set_identification_style(id_style)
+
+    if not batch_size is None:
+        set_identification_batch_size(int(batch_size))
 
     initialize(app)
 
