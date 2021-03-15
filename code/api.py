@@ -148,6 +148,7 @@ def identify_image():
                 # y = (y - 0.5) * 2.0 # why this, laurens?
 
                 predictions = model.predict(y)
+                predictions = predictions[0].tolist()
                 logger.info("{}".format(predictions))
 
 
@@ -169,7 +170,7 @@ def identify_image():
 
 
 
-            predictions = predictions[0].tolist()
+
             # classes = {k: v for k, v in sorted(classes.items(), key=lambda item: item[1])}
             predictions = dict(zip(classes.keys(), predictions))
             predictions = {k: v for k, v in sorted(predictions.items(), key=lambda item: item[1], reverse=True)}
