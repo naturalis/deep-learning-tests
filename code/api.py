@@ -7,8 +7,6 @@
 # # https://blog.keras.io/building-a-simple-keras-deep-learning-rest-api.html?source=post_page
 # # https://towardsdatascience.com/deploying-a-keras-deep-learning-model-as-a-web-application-in-p-fc0f2354a7ff
 
-
-
 import tensorflow as tf
 from flask import Flask, jsonify
 from flask_restful import Resource, Api, reqparse, request
@@ -16,6 +14,7 @@ from flask_jwt import JWT, jwt_required
 from datetime import datetime
 import logging, os, json, sys, uuid
 import numpy as np
+from time import perf_counter
 
 USERS = []
 UPLOAD_FOLDER = '/tmp'
@@ -129,6 +128,8 @@ def identify_image():
             unique_filename = os.path.join(app.config['UPLOAD_FOLDER'], unique_filename)
             file.save(unique_filename)
 
+            prediction_start = perf_counter()
+
             x = tf.keras.preprocessing.image.load_img(
                 unique_filename,
                 target_size=(299,299),
@@ -167,6 +168,7 @@ def identify_image():
                 results.append({ 'class' : key, 'prediction': predictions[key] })
 
             logger.info("prediction: {}".format(results[0]))
+            logger.info("time taken: {}".format(perf_counter()-prediction_start))
 
             return json.dumps({ 'predictions' : results })
 
