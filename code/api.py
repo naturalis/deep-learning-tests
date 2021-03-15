@@ -138,7 +138,7 @@ def identify_image():
             # predictions = model.predict(x)
 
 
-            batch = self.generate_augmented_image_batch(x)
+            batch = generate_augmented_image_batch(x)
 
             predictions = model.predict_on_batch(batch)
 
@@ -174,7 +174,7 @@ def identify_image():
         return { "error" : "method not allowed" }
 
 
-def generate_augmented_image_batch(self,img):
+def generate_augmented_image_batch(img):
     # convert to numpy array
     data = tf.keras.preprocessing.image.img_to_array(img)
     # expand dimension to one sample
