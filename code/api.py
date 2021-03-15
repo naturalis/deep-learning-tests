@@ -31,7 +31,6 @@ model_path = None
 model_classes_path = None
 model = None
 classes = None
-identification_style = "original_only"
 
 def set_model_path(path):
     global model_path
@@ -44,6 +43,7 @@ def set_classes_path(path):
 def set_identification_style(style):
     global identification_style
     identification_style = style
+
 
 def initialize(app):
     initialize_logger()
@@ -130,6 +130,8 @@ def identify_image():
                 interpolation="nearest")
 
             classes = {k: v for k, v in sorted(classes.items(), key=lambda item: item[1])}
+
+            identification_style = "original_only"
 
             logger.info("identification_style: {}".format(identification_style))
 
@@ -274,15 +276,12 @@ if __name__ == '__main__':
 
     model_name = os.environ['API_MODEL_NAME']
     model_path = os.path.join(os.environ['PROJECT_ROOT'],"models",model_name)
-    identification_style = os.getenv('API_ID_STYLE')
 
     m = os.path.join(model_path,"model.hdf5")
     c = os.path.join(model_path,"classes.json")
 
     set_model_path(m)
     set_classes_path(c)
-    if not identification_style is None:
-        set_identification_style(identification_style)
 
     initialize(app)
 
