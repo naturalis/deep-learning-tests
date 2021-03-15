@@ -207,6 +207,7 @@ def generate_augmented_image_batch(img):
         # convert to unsigned integers for viewing
         # image = next_batch[0].astype('uint8')
         image = next_batch[0]
+        image /= 255.0
         batch.append(image)
         # # plot raw pixel data
         # pyplot.imshow(image)
