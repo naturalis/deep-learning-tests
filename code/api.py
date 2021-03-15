@@ -195,8 +195,14 @@ def generate_augmented_image_batch(img):
         rescale=1./255
     )
 
-    it = datagen.flow(samples, batch_size=1)
+    it = datagen.flow(samples, batch_size=8)
+    next_batch = it.next()
+    return np.array(next_batch)
+
+
+
     batch = []
+    it = datagen.flow(samples, batch_size=1)
 
     for i in range(8):
         # generate batch of images
