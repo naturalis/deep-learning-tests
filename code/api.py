@@ -31,6 +31,8 @@ model_path = None
 model_classes_path = None
 model = None
 classes = None
+identification_styles = [ "batch", "original_only" ]
+identification_style = "original_only"
 
 def set_model_path(path):
     global model_path
@@ -39,6 +41,13 @@ def set_model_path(path):
 def set_classes_path(path):
     global model_classes_path
     model_classes_path = path
+
+def set_identification_style(style):
+    global identification_style, identification_styles
+    if style in identification_styles:
+        identification_style = style
+    else:
+        raise ValueError("unknown identification style: {} ({})".format(style,";".join(identification_styles)))
 
 def initialize(app):
     initialize_logger()
@@ -101,13 +110,9 @@ def root():
 # @jwt_required()
 @app.route("/identify",methods=["POST"])
 def identify_image():
-    global model, classes, logger
-
-    logger.info(request.data['fuck'])
+    global model, classes, identification_style, logger
 
     if request.method == 'POST':
-
-        # try:
 
         uploaded_files = request.files.getlist("image")
 
@@ -130,36 +135,40 @@ def identify_image():
 
             classes = {k: v for k, v in sorted(classes.items(), key=lambda item: item[1])}
 
+            logger.info("identification_style: {}".format(identification_style))
 
-            # original image prediction
-            y = tf.keras.preprocessing.image.img_to_array(x)
-            y = np.expand_dims(y, axis=0)
 
-            y = y[..., :3]  # remove alpha channel if present
-            if y.shape[3] == 1:
-                y = np.repeat(y, axis=3, repeats=3)
-            y /= 255.0
-            # y = (y - 0.5) * 2.0 # why this, laurens?
+            if identification_style == "original_only":
+                # original image prediction
+                y = tf.keras.preprocessing.image.img_to_array(x)
+                y = np.expand_dims(y, axis=0)
 
-            predictions = model.predict(y)
+                y = y[..., :3]  # remove alpha channel if present
+                if y.shape[3] == 1:
+                    y = np.repeat(y, axis=3, repeats=3)
+                y /= 255.0
+                # y = (y - 0.5) * 2.0 # why this, laurens?
+
+                predictions = model.predict(y)
 
 
             # # "Delias belisama Cramer, 1779",
 
 
-            # # augmented image batch prediction
-            # batch = generate_augmented_image_batch(x)
-            # batch_predictions = model.predict_on_batch(batch)
+            elif identification_style == "batch":
+                # augmented image batch prediction
+                batch = generate_augmented_image_batch(x)
+                batch_predictions = model.predict_on_batch(batch)
 
-            # logger.info("batch length: {}".format(len(batch)))
-            # logger.info("batch predict: {}".format(batch_predictions))
-            # logger.info("batch predict length: {}".format(len(batch_predictions)))
-            # logger.info("batch wtf: {}".format(set(batch_predictions[0])==set(batch_predictions[1])))
+                logger.info("batch length: {}".format(len(batch)))
+                logger.info("batch predict: {}".format(batch_predictions))
+                logger.info("batch predict length: {}".format(len(batch_predictions)))
+                logger.info("batch wtf: {}".format(set(batch_predictions[0])==set(batch_predictions[1])))
 
 
-            # batch_predictions = np.mean(batch_predictions,axis=0)
-            # batch_predictions = dict(zip(classes.keys(), batch_predictions))
-            # batch_predictions = {k: v for k, v in sorted(batch_predictions.items(), key=lambda item: item[1], reverse=True)}
+                batch_predictions = np.mean(batch_predictions,axis=0)
+                batch_predictions = dict(zip(classes.keys(), batch_predictions))
+                batch_predictions = {k: v for k, v in sorted(batch_predictions.items(), key=lambda item: item[1], reverse=True)}
 
 
 
@@ -267,12 +276,14 @@ if __name__ == '__main__':
 
     model_name = os.environ['API_MODEL_NAME']
     model_path = os.path.join(os.environ['PROJECT_ROOT'],"models",model_name)
+    identification_style = os.environ['API_ID_STYLE']
 
     m = os.path.join(model_path,"model.hdf5")
     c = os.path.join(model_path,"classes.json")
 
     set_model_path(m)
     set_classes_path(c)
+    set_identification_style(identification_style)
 
     initialize(app)
 
