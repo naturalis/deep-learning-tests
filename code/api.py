@@ -31,7 +31,6 @@ model_path = None
 model_classes_path = None
 model = None
 classes = None
-identification_styles = [ "batch", "original_only" ]
 identification_style = "original_only"
 
 def set_model_path(path):
@@ -43,11 +42,8 @@ def set_classes_path(path):
     model_classes_path = path
 
 def set_identification_style(style):
-    global identification_style, identification_styles
-    if style in identification_styles:
-        identification_style = style
-    else:
-        raise ValueError("unknown identification style: {} ({})".format(style,";".join(identification_styles)))
+    global identification_style
+    identification_style = style
 
 def initialize(app):
     initialize_logger()
@@ -170,6 +166,8 @@ def identify_image():
                 batch_predictions = dict(zip(classes.keys(), batch_predictions))
                 batch_predictions = {k: v for k, v in sorted(batch_predictions.items(), key=lambda item: item[1], reverse=True)}
 
+            else:
+                raise ValueError("invalid identification style: {}".format(identification_style))
 
 
 
