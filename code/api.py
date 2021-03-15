@@ -149,7 +149,8 @@ def identify_image():
 
                 predictions = model.predict(y)
                 predictions = predictions[0].tolist()
-                logger.info("{}".format(predictions))
+                # logger.info("{}".format(predictions))
+                logger.info("SINGLE: {}".format(type(predictions)))
 
 
             # # "Delias belisama Cramer, 1779",
@@ -166,7 +167,8 @@ def identify_image():
                 # logger.info("batch 1==2: {}".format(set(batch_predictions[0])==set(batch_predictions[1])))
 
                 predictions = np.mean(batch_predictions,axis=0)
-                logger.info("{}".format(predictions))
+                # logger.info("{}".format(predictions))
+                logger.info("BATCH: {}".format(type(predictions)))
 
 
 
