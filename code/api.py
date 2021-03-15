@@ -154,7 +154,7 @@ def identify_image():
             # # "Delias belisama Cramer, 1779",
 
 
-            elif identification_style == "batch":
+            if identification_style == "batch":
                 # augmented image batch prediction
                 batch = generate_augmented_image_batch(x)
                 batch_predictions = model.predict_on_batch(batch)
@@ -166,9 +166,6 @@ def identify_image():
 
                 predictions = np.mean(batch_predictions,axis=0)
                 logger.info("{}".format(predictions))
-
-            else:
-                raise ValueError("invalid identification style: {}".format(identification_style))
 
 
 
