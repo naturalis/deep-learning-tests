@@ -138,6 +138,7 @@ def identify_image():
             predictions = model.predict(y)
 
 
+            # "Delias belisama Cramer, 1779",
 
 
 
@@ -147,7 +148,7 @@ def identify_image():
 
             batch = generate_augmented_image_batch(x)
 
-            batch_predictions = model.predict_on_batch(batch)
+            batch_predictions = model.predict(batch)
             logger.info("batch length: {}".format(len(batch)))
             logger.info("batch predict 0: {}".format(batch_predictions))
             logger.info("batch predict length: {}".format(len(batch_predictions)))
@@ -202,10 +203,10 @@ def generate_augmented_image_batch(img):
     # generate samples and plot
     for i in range(8):
         # generate batch of images
-        # next_batch = it.next()
+        next_batch = it.next()
         # convert to unsigned integers for viewing
-        # image = batch[0].astype('uint8')
-        batch.append(it.next())
+        image = batch[0].astype('uint8')
+        batch.append(image)
         # # plot raw pixel data
         # pyplot.imshow(image)
     # # show the figure
