@@ -134,7 +134,12 @@ def identify_image():
             x /= 255.0
             # x = (x - 0.5) * 2.0 # why this, laurens?
 
-            predictions = model.predict(x)
+
+            predictions = model.predict_on_batch([x])
+
+
+
+            # predictions = model.predict(x)
 
             predictions = predictions[0].tolist()
             classes = {k: v for k, v in sorted(classes.items(), key=lambda item: item[1])}
