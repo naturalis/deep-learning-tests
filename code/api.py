@@ -125,21 +125,31 @@ def identify_image():
                 unique_filename,
                 target_size=(299,299),
                 interpolation="nearest")
-            x = tf.keras.preprocessing.image.img_to_array(x)
-            x = np.expand_dims(x, axis=0)
 
-            x = x[..., :3]  # remove alpha channel if present
-            if x.shape[3] == 1:
-                x = np.repeat(x, axis=3, repeats=3)
-            x /= 255.0
-            # x = (x - 0.5) * 2.0 # why this, laurens?
+            # x = tf.keras.preprocessing.image.img_to_array(x)
+            # x = np.expand_dims(x, axis=0)
 
-
-            predictions = model.predict_on_batch([x])
-
-            logger.info("wtf")
+            # x = x[..., :3]  # remove alpha channel if present
+            # if x.shape[3] == 1:
+            #     x = np.repeat(x, axis=3, repeats=3)
+            # x /= 255.0
+            # # x = (x - 0.5) * 2.0 # why this, laurens?
 
             # predictions = model.predict(x)
+
+
+            batch = self.generate_augmented_image_batch(x)
+
+            predictions = model.predict_on_batch(batch)
+
+            print(predictions)
+
+
+
+
+
+
+
 
             predictions = predictions[0].tolist()
             classes = {k: v for k, v in sorted(classes.items(), key=lambda item: item[1])}
@@ -162,6 +172,42 @@ def identify_image():
 
     else:
         return { "error" : "method not allowed" }
+
+
+def generate_augmented_image_batch(self,img):
+    # convert to numpy array
+    data = tf.keras.preprocessing.image.img_to_array(img)
+    # expand dimension to one sample
+    samples = expand_dims(data, 0)
+    # create image data augmentation generator
+    datagen = tf.keras.preprocessing.image.ImageDataGenerator(
+        width_shift_range=[-0.1,-0.1],
+        height_shift_range=[-0.1,-0.1],
+        rotation_range=25,
+        zoom_range=0.2
+    )
+    # prepare iterator
+    it = datagen.flow(samples, batch_size=1)
+
+    batch = []
+
+    # generate samples and plot
+    for i in range(8):
+        # define subplot
+        pyplot.subplot(330 + 1 + i)
+        # generate batch of images
+        batch = it.next()
+        # convert to unsigned integers for viewing
+        image = batch[0].astype('uint8')
+
+        batch.append(image)
+
+        # # plot raw pixel data
+        # pyplot.imshow(image)
+    # # show the figure
+    # pyplot.show()
+
+    return batch
 
 
 # def log_usage(language="",key="",room="",hits=""):
