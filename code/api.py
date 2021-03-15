@@ -136,7 +136,7 @@ def identify_image():
             logger.info("identification_style: {}".format(identification_style))
 
 
-            if identification_style == "original_only":
+            if True or identification_style == "original_only":
                 # original image prediction
                 y = tf.keras.preprocessing.image.img_to_array(x)
                 y = np.expand_dims(y, axis=0)
@@ -148,6 +148,7 @@ def identify_image():
                 # y = (y - 0.5) * 2.0 # why this, laurens?
 
                 predictions = model.predict(y)
+                logger.info("{}".format(predictions))
 
 
             # # "Delias belisama Cramer, 1779",
@@ -158,12 +159,13 @@ def identify_image():
                 batch = generate_augmented_image_batch(x)
                 batch_predictions = model.predict_on_batch(batch)
 
-                logger.info("batch length: {}".format(len(batch)))
-                logger.info("batch predict: {}".format(batch_predictions))
-                logger.info("batch predict length: {}".format(len(batch_predictions)))
-                logger.info("batch wtf: {}".format(set(batch_predictions[0])==set(batch_predictions[1])))
+                # logger.info("batch length: {}".format(len(batch)))
+                # logger.info("batch predict: {}".format(batch_predictions))
+                # logger.info("batch predict length: {}".format(len(batch_predictions)))
+                # logger.info("batch 1==2: {}".format(set(batch_predictions[0])==set(batch_predictions[1])))
 
                 predictions = np.mean(batch_predictions,axis=0)
+                logger.info("{}".format(predictions))
 
             else:
                 raise ValueError("invalid identification style: {}".format(identification_style))
