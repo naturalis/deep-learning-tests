@@ -31,7 +31,7 @@ model_path = None
 model_classes_path = None
 model = None
 classes = None
-identification_style = "fuck"
+identification_style = "original_only"
 
 def set_model_path(path):
     global model_path
@@ -130,14 +130,10 @@ def identify_image():
                 target_size=(299,299),
                 interpolation="nearest")
 
-            classes = {k: v for k, v in sorted(classes.items(), key=lambda item: item[1])}
-
-            # identification_style = "batch"
-
             logger.info("identification_style: {}".format(identification_style))
 
 
-            if True or identification_style == "original_only":
+            if identification_style == "original_only":
                 # original image prediction
                 y = tf.keras.preprocessing.image.img_to_array(x)
                 y = np.expand_dims(y, axis=0)
@@ -150,14 +146,8 @@ def identify_image():
 
                 predictions = model.predict(y)
                 predictions = predictions[0].tolist()
-                # logger.info("{}".format(predictions))
-                logger.info("SINGLE: {}".format(type(predictions)))
 
-
-            # # "Delias belisama Cramer, 1779",
-
-
-            if identification_style == "batch":
+            elif identification_style == "batch":
                 # augmented image batch prediction
                 batch = generate_augmented_image_batch(x)
                 batch_predictions = model.predict_on_batch(batch)
@@ -169,13 +159,9 @@ def identify_image():
 
                 predictions = np.mean(batch_predictions,axis=0)
                 predictions = predictions.tolist()
-                # logger.info("{}".format(predictions))
-                logger.info("BATCH: {}".format(type(predictions)))
 
 
-
-
-            # classes = {k: v for k, v in sorted(classes.items(), key=lambda item: item[1])}
+            classes = {k: v for k, v in sorted(classes.items(), key=lambda item: item[1])}
             predictions = dict(zip(classes.keys(), predictions))
             predictions = {k: v for k, v in sorted(predictions.items(), key=lambda item: item[1], reverse=True)}
 
