@@ -44,7 +44,8 @@ def set_classes_path(path):
 
 def set_identification_style(style):
     global identification_style
-    identification_style = style
+    # identification_style = style
+    logger.info("identification_style: {}, {}".format(identification_style,style))
 
 
 def initialize(app):
@@ -266,7 +267,7 @@ if __name__ == '__main__':
     set_classes_path(c)
 
     if not id_style is None:
-        print("style: {}".format(id_style))
+        set_identification_style(id_style)
 
     initialize(app)
 
