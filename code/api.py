@@ -103,6 +103,8 @@ def root():
 def identify_image():
     global model, classes, logger
 
+    print(request.data)
+
     if request.method == 'POST':
 
         # try:
