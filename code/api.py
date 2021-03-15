@@ -193,15 +193,11 @@ def generate_augmented_image_batch(img):
 
     # generate samples and plot
     for i in range(8):
-        # define subplot
-        pyplot.subplot(330 + 1 + i)
         # generate batch of images
-        batch = it.next()
+        # next_batch = it.next()
         # convert to unsigned integers for viewing
-        image = batch[0].astype('uint8')
-
-        batch.append(image)
-
+        # image = batch[0].astype('uint8')
+        batch.append(it.next())
         # # plot raw pixel data
         # pyplot.imshow(image)
     # # show the figure
