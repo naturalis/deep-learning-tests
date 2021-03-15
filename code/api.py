@@ -184,30 +184,27 @@ def identify_image():
 
 
 def generate_augmented_image_batch(img):
-    # convert to numpy array
     data = tf.keras.preprocessing.image.img_to_array(img)
-    # expand dimension to one sample
     samples = np.expand_dims(data, 0)
-    # create image data augmentation generator
+
     datagen = tf.keras.preprocessing.image.ImageDataGenerator(
         width_shift_range=[-0.1,-0.1],
         height_shift_range=[-0.1,-0.1],
         rotation_range=25,
-        zoom_range=0.2
+        zoom_range=0.2,
+        rescale=1./255
     )
-    # prepare iterator
-    it = datagen.flow(samples, batch_size=1)
 
+    it = datagen.flow(samples, batch_size=1)
     batch = []
 
-    # generate samples and plot
     for i in range(8):
         # generate batch of images
         next_batch = it.next()
         # convert to unsigned integers for viewing
         # image = next_batch[0].astype('uint8')
         image = next_batch[0]
-        image /= 255.0
+        # image /= 255.0
         batch.append(image)
         # # plot raw pixel data
         # pyplot.imshow(image)
