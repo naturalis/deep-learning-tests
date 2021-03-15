@@ -44,9 +44,7 @@ def set_classes_path(path):
 
 def set_identification_style(style):
     global identification_style
-    # identification_style = style
-    print("identification_style: {}, {}".format(identification_style,style))
-
+    identification_style = style
 
 def initialize(app):
     initialize_logger()
