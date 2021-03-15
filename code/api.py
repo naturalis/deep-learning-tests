@@ -213,7 +213,7 @@ def generate_augmented_image_batch(img):
     # # show the figure
     # pyplot.show()
 
-    return batch
+    return np.array(batch)
 
 
 # def log_usage(language="",key="",room="",hits=""):
