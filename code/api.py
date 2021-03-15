@@ -32,6 +32,7 @@ model_classes_path = None
 model = None
 classes = None
 identification_style = "original_only"
+batch_size = 16
 
 def set_model_path(path):
     global model_path
@@ -107,7 +108,7 @@ def root():
 # @jwt_required()
 @app.route("/identify",methods=["POST"])
 def identify_image():
-    global model, classes, identification_style, logger
+    global logger, model, classes, identification_style
 
     if request.method == 'POST':
 
@@ -132,9 +133,7 @@ def identify_image():
 
             logger.info("identification_style: {}".format(identification_style))
 
-
             if identification_style == "original_only":
-                # original image prediction
                 y = tf.keras.preprocessing.image.img_to_array(x)
                 y = np.expand_dims(y, axis=0)
 
@@ -148,15 +147,8 @@ def identify_image():
                 predictions = predictions[0].tolist()
 
             elif identification_style == "batch":
-                # augmented image batch prediction
                 batch = generate_augmented_image_batch(x)
                 batch_predictions = model.predict_on_batch(batch)
-
-                # logger.info("batch length: {}".format(len(batch)))
-                # logger.info("batch predict: {}".format(batch_predictions))
-                # logger.info("batch predict length: {}".format(len(batch_predictions)))
-                # logger.info("batch 1==2: {}".format(set(batch_predictions[0])==set(batch_predictions[1])))
-
                 predictions = np.mean(batch_predictions,axis=0)
                 predictions = predictions.tolist()
 
@@ -167,26 +159,28 @@ def identify_image():
 
             os.remove(unique_filename)
 
-            # logger.info(predictions)
             results = []
             for key in predictions:
                 results.append({ 'class' : key, 'prediction': predictions[key] })
 
-            # return json.dumps(predictions)
+            logger.info("prediction: {}".format(results[0]))
+
             return json.dumps({ 'predictions' : results })
 
-        # except Exception as e:
-
-        #     return { "error" : str(e) }
+        else:
+            return { "error" : "unsupported file type" }
 
     else:
         return { "error" : "method not allowed" }
 
 
 def generate_augmented_image_batch(img):
+    global logger, batch_size
+
+    logger.info("batch_size: {}".format(batch_size))
+
     data = tf.keras.preprocessing.image.img_to_array(img)
     samples = np.expand_dims(data, 0)
-
     datagen = tf.keras.preprocessing.image.ImageDataGenerator(
         width_shift_range=[-0.1,-0.1],
         height_shift_range=[-0.1,-0.1],
@@ -197,7 +191,7 @@ def generate_augmented_image_batch(img):
 
     batch = []
     it = datagen.flow(samples, batch_size=1)
-    for i in range(8):
+    for i in range(batch_size):
         next_batch = it.next()
         image = next_batch[0]
         batch.append(image)
@@ -263,12 +257,16 @@ if __name__ == '__main__':
 
     model_name = os.environ['API_MODEL_NAME']
     model_path = os.path.join(os.environ['PROJECT_ROOT'],"models",model_name)
+    id_style = os.environ['API_IDENTIFICATION_STYLE']
 
     m = os.path.join(model_path,"model.hdf5")
     c = os.path.join(model_path,"classes.json")
 
     set_model_path(m)
     set_classes_path(c)
+
+    if not id_style is None:
+        print("style: {}".format(id_style))
 
     initialize(app)
 
