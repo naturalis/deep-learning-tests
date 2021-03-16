@@ -30,7 +30,7 @@ model_path = None
 model_classes_path = None
 model = None
 classes = None
-identification_style = "original_only"
+identification_style = "original"
 identification_batch_size = 16
 
 def set_model_path(path):
@@ -112,6 +112,9 @@ def root():
 def identify_image():
     global logger, model, classes, identification_style
 
+    if identification_style not in [ "original", "batch", "both" ]:
+        identification_style = "original"
+
     if request.method == 'POST':
 
         uploaded_files = request.files.getlist("image")
@@ -124,6 +127,7 @@ def identify_image():
         logger.info("file: {}".format(file))
 
         if file and allowed_file(file.filename):
+
             unique_filename = str(uuid.uuid4())
             unique_filename = os.path.join(app.config['UPLOAD_FOLDER'], unique_filename)
             file.save(unique_filename)
@@ -137,7 +141,7 @@ def identify_image():
 
             logger.info("identification_style: {}".format(identification_style))
 
-            if identification_style == "original_only":
+            if identification_style in [ "original", "both" ]:
                 y = tf.keras.preprocessing.image.img_to_array(x)
                 y = np.expand_dims(y, axis=0)
 
@@ -150,27 +154,42 @@ def identify_image():
                 predictions = model.predict(y)
                 predictions = predictions[0].tolist()
 
-            elif identification_style == "batch":
+                if identification_style == "both" :
+                    predictions_original = predictions
+
+            if identification_style in [ "batch", "both" ]:
                 batch = generate_augmented_image_batch(x)
                 batch_predictions = model.predict_on_batch(batch)
                 predictions = np.mean(batch_predictions,axis=0)
                 predictions = predictions.tolist()
 
+            os.remove(unique_filename)
 
             classes = {k: v for k, v in sorted(classes.items(), key=lambda item: item[1])}
             predictions = dict(zip(classes.keys(), predictions))
             predictions = {k: v for k, v in sorted(predictions.items(), key=lambda item: item[1], reverse=True)}
 
-            os.remove(unique_filename)
-
             results = []
             for key in predictions:
                 results.append({ 'class' : key, 'prediction': predictions[key] })
 
+            if identification_style == "both" :
+                predictions_original = dict(zip(classes.keys(), predictions_original))
+                predictions_original = {k: v for k, v in sorted(predictions_original.items(), key=lambda item: item[1], reverse=True)}
+
+                results_original = []
+                for key in predictions_original:
+                    results_original.append({ 'class' : key, 'prediction': predictions_original[key] })
+
             logger.info("prediction: {}".format(results[0]))
             logger.info("time taken: {}".format(perf_counter()-prediction_start))
 
-            return json.dumps({ 'predictions' : results })
+            if identification_style == "both" :
+                output = { 'predictions' : results, 'predictions_original' : results_original }
+            else:
+                output = { 'predictions' : results }
+
+            return json.dumps(output)
 
         else:
             return { "error" : "unsupported file type" }
@@ -180,12 +199,12 @@ def identify_image():
 
 
 def generate_augmented_image_batch(img):
-    global logger, identification_batch_size
+    global logger, identification_style, identification_batch_size
 
     logger.info("identification_batch_size: {}".format(batch_size))
 
     data = tf.keras.preprocessing.image.img_to_array(img)
-    samples = np.expand_dims(data, 0)
+    original = np.expand_dims(data, 0)
     datagen = tf.keras.preprocessing.image.ImageDataGenerator(
         width_shift_range=[-0.1,-0.1],
         height_shift_range=[-0.1,-0.1],
@@ -195,13 +214,24 @@ def generate_augmented_image_batch(img):
     )
 
     batch = []
-    it = datagen.flow(samples, batch_size=1)
-    for i in range(identification_batch_size):
+    if identification_style == "both":
+        batch.append(original)
+
+    it = datagen.flow(original, batch_size=1)
+
+    for i in range(identification_batch_size-len(batch)):
         next_batch = it.next()
         image = next_batch[0]
         batch.append(image)
 
+    logger.info("len(batch): {}".format(len(batch)))
+
     return np.array(batch)
+
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return jsonify({ "error" : e.description }), 404
 
 
 # def log_usage(language="",key="",room="",hits=""):
@@ -218,10 +248,6 @@ def generate_augmented_image_batch(img):
 #     remote_addr=request.remote_addr
 #     logger.error("{remote_addr} - {endpoint} - {error}".format(remote_addr=remote_addr,endpoint=endpoint,error=error))
 
-
-@app.errorhandler(404)
-def page_not_found(e):
-    return jsonify({ "error" : e.description }), 404
 
 
 # jwt = JWT(app, verify, identity)
@@ -289,6 +315,8 @@ if __name__ == '__main__':
     # API_LOGFILE_PATH=/log/general.log
     # API_DEBUG=1
     # API_FLASK_DEBUG=0 (avoid)
+    # API_IDENTIFICATION_STYLE=batch (batch, original, both)
+    # API_BATCH_ID_SIZE=16
 
 
 
