@@ -30,6 +30,7 @@ model_path = None
 model_classes_path = None
 model = None
 classes = None
+identification_styles = [ "original", "batch", "both", "batch_incl_original" ]
 identification_style = "original"
 identification_batch_size = 16
 
@@ -42,8 +43,11 @@ def set_classes_path(path):
     model_classes_path = path
 
 def set_identification_style(style):
-    global identification_style
-    identification_style = style
+    global identification_style, identification_styles
+    if style in identification_styles:
+        identification_style = style
+    else:
+        raise ValueError("unknown identification style: {} ({})".format(style,";".join(identification_styles)))
 
 def set_identification_batch_size(size):
     global identification_batch_size
@@ -100,6 +104,7 @@ def load_model():
     logger.info("loaded {} classes ({})".format(len(classes),model_classes_path))
 
 def allowed_file(filename):
+    global ALLOWED_EXTENSIONS
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
@@ -111,9 +116,6 @@ def root():
 @app.route("/identify",methods=["POST"])
 def identify_image():
     global logger, model, classes, identification_style
-
-    if identification_style not in [ "original", "batch", "both" ]:
-        identification_style = "original"
 
     if request.method == 'POST':
 
@@ -157,7 +159,7 @@ def identify_image():
                 if identification_style == "both" :
                     predictions_original = predictions
 
-            if identification_style in [ "batch", "both" ]:
+            if identification_style in [ "batch", "both", "batch_incl_original" ]:
                 batch = generate_augmented_image_batch(x)
                 batch_predictions = model.predict_on_batch(batch)
                 predictions = np.mean(batch_predictions,axis=0)
@@ -203,19 +205,15 @@ def generate_augmented_image_batch(original):
 
     logger.info("identification_batch_size: {}".format(batch_size))
 
-    # original = tf.keras.preprocessing.image.img_to_array(original)
-    # original = np.expand_dims(original, 0)
-
     datagen = tf.keras.preprocessing.image.ImageDataGenerator(
         width_shift_range=[-0.1,-0.1],
         height_shift_range=[-0.1,-0.1],
         rotation_range=5,
         zoom_range=0.1
-        # rescale=1./255
     )
 
     batch = []
-    if identification_style == "both":
+    if identification_style == "batch_incl_original":
         batch.append(original[0])
 
     it = datagen.flow(original, batch_size=1)
@@ -224,8 +222,6 @@ def generate_augmented_image_batch(original):
         next_batch = it.next()
         image = next_batch[0]
         batch.append(image)
-
-    logger.info("len(batch): {}".format(len(batch)))
 
     return np.array(batch)
 
@@ -315,10 +311,7 @@ if __name__ == '__main__':
     # API_MODEL_NAME=20200804-142255
     # API_LOGFILE_PATH=/log/general.log
     # API_DEBUG=1
-    # API_FLASK_DEBUG=0 (avoid)
-    # API_IDENTIFICATION_STYLE=batch (batch, original, both)
+    # API_IDENTIFICATION_STYLE=batch (batch, original, both, batch_incl_original)
     # API_BATCH_ID_SIZE=16
-
-
-
+    # API_FLASK_DEBUG=0 (avoid)
 
