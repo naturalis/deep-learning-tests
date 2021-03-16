@@ -216,9 +216,7 @@ def generate_augmented_image_batch(original):
 
     batch = []
     if identification_style == "both":
-        batch.append(original)
-        logger.info(original)
-
+        batch.append(original[0])
 
     it = datagen.flow(original, batch_size=1)
 
@@ -226,8 +224,6 @@ def generate_augmented_image_batch(original):
         next_batch = it.next()
         image = next_batch[0]
         batch.append(image)
-
-    logger.info(image)
 
     logger.info("len(batch): {}".format(len(batch)))
 
