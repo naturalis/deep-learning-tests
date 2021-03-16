@@ -144,7 +144,7 @@ def identify_image():
             x = tf.keras.preprocessing.image.img_to_array(x)
             x = np.expand_dims(x, axis=0)
 
-            x = y[..., :3]  # remove alpha channel if present
+            x = x[..., :3]  # remove alpha channel if present
             if x.shape[3] == 1:
                 x = np.repeat(x, axis=3, repeats=3)
             x /= 255.0
