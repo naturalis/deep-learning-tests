@@ -33,6 +33,7 @@ classes = None
 identification_styles = [ "original", "batch", "both", "batch_incl_original" ]
 identification_style = "original"
 identification_batch_size = 16
+batch_transformations = None
 
 def set_model_path(path):
     global model_path
@@ -52,6 +53,10 @@ def set_identification_style(style):
 def set_identification_batch_size(size):
     global identification_batch_size
     identification_batch_size = size
+
+def set_batch_transformations(transformations):
+    global batch_transformations
+    batch_transformations = transformations
 
 def initialize(app):
     initialize_logger()
@@ -175,7 +180,7 @@ def identify_image():
             for key in predictions:
                 results.append({ 'class' : key, 'prediction': predictions[key] })
 
-            logger.info("prediction: {}".format(results[0]))
+            logger.info("prediction (batch): {}".format(results[0]))
 
             if identification_style == "both" :
                 predictions_original = dict(zip(classes.keys(), predictions_original))
@@ -204,15 +209,18 @@ def identify_image():
 
 
 def generate_augmented_image_batch(original):
-    global logger, identification_style, identification_batch_size
+    global logger, identification_style, identification_batch_size, batch_transformations
 
     logger.info("identification_batch_size: {}".format(batch_size))
+    logger.info("batch_transformations: {}".format(batch_transformations))
+
+    b = batch_transformations
 
     datagen = tf.keras.preprocessing.image.ImageDataGenerator(
-        width_shift_range=[-0.1,-0.1],
-        height_shift_range=[-0.1,-0.1],
-        rotation_range=5,
-        zoom_range=0.1
+        width_shift_range=b["width_shift_range"] if "width_shift_range" in b else [-0.1,-0.1],
+        height_shift_range=b["height_shift_range"] if "height_shift_range" in b else [-0.1,-0.1],
+        rotation_range=b["rotation_range"] if "rotation_range" in b else 5,
+        zoom_range=b["zoom_range"] if "zoom_range" in b else 0.1
     )
 
     batch = []
@@ -290,6 +298,7 @@ if __name__ == '__main__':
     model_path = os.path.join(os.environ['PROJECT_ROOT'],"models",model_name)
     id_style = os.getenv('API_IDENTIFICATION_STYLE')
     batch_size = os.getenv('API_BATCH_ID_SIZE')
+    batch_transformations = os.getenv('API_BATCH_TRANSFORMATIONS')
 
     m = os.path.join(model_path,"model.hdf5")
     c = os.path.join(model_path,"classes.json")
@@ -302,6 +311,9 @@ if __name__ == '__main__':
 
     if not batch_size is None:
         set_identification_batch_size(int(batch_size))
+
+    if not batch_transformations is None:
+        set_batch_transformations(json.loads(batch_transformations))
 
     initialize(app)
 
@@ -317,4 +329,5 @@ if __name__ == '__main__':
     # API_IDENTIFICATION_STYLE=batch (batch, original, both, batch_incl_original)
     # API_BATCH_ID_SIZE=16
     # API_FLASK_DEBUG=0 (avoid)
+
 
