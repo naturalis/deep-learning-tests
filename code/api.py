@@ -141,17 +141,17 @@ def identify_image():
 
             logger.info("identification_style: {}".format(identification_style))
 
+            x = tf.keras.preprocessing.image.img_to_array(x)
+            x = np.expand_dims(x, axis=0)
+
+            x = y[..., :3]  # remove alpha channel if present
+            if x.shape[3] == 1:
+                x = np.repeat(x, axis=3, repeats=3)
+            x /= 255.0
+            # x = (x - 0.5) * 2.0 # why this, laurens?
+
             if identification_style in [ "original", "both" ]:
-                y = tf.keras.preprocessing.image.img_to_array(x)
-                y = np.expand_dims(y, axis=0)
-
-                y = y[..., :3]  # remove alpha channel if present
-                if y.shape[3] == 1:
-                    y = np.repeat(y, axis=3, repeats=3)
-                y /= 255.0
-                # y = (y - 0.5) * 2.0 # why this, laurens?
-
-                predictions = model.predict(y)
+                predictions = model.predict(x)
                 predictions = predictions[0].tolist()
 
                 if identification_style == "both" :
@@ -198,19 +198,20 @@ def identify_image():
         return { "error" : "method not allowed" }
 
 
-def generate_augmented_image_batch(img):
+def generate_augmented_image_batch(original):
     global logger, identification_style, identification_batch_size
 
     logger.info("identification_batch_size: {}".format(batch_size))
 
-    data = tf.keras.preprocessing.image.img_to_array(img)
-    original = np.expand_dims(data, 0)
+    # original = tf.keras.preprocessing.image.img_to_array(original)
+    # original = np.expand_dims(original, 0)
+
     datagen = tf.keras.preprocessing.image.ImageDataGenerator(
         width_shift_range=[-0.1,-0.1],
         height_shift_range=[-0.1,-0.1],
         rotation_range=5,
-        zoom_range=0.1,
-        rescale=1./255
+        zoom_range=0.1
+        # rescale=1./255
     )
 
     batch = []
