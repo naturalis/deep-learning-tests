@@ -175,6 +175,8 @@ def identify_image():
             for key in predictions:
                 results.append({ 'class' : key, 'prediction': predictions[key] })
 
+            logger.info("prediction: {}".format(results[0]))
+
             if identification_style == "both" :
                 predictions_original = dict(zip(classes.keys(), predictions_original))
                 predictions_original = {k: v for k, v in sorted(predictions_original.items(), key=lambda item: item[1], reverse=True)}
@@ -183,7 +185,8 @@ def identify_image():
                 for key in predictions_original:
                     results_original.append({ 'class' : key, 'prediction': predictions_original[key] })
 
-            logger.info("prediction: {}".format(results[0]))
+                logger.info("prediction (original): {}".format(results_original[0]))
+
             logger.info("time taken: {}".format(perf_counter()-prediction_start))
 
             if identification_style == "both" :
