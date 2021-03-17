@@ -157,32 +157,30 @@ def identify_image():
             x /= 255.0
             # x = (x - 0.5) * 2.0 # why this, laurens?
 
-            if identification_style in [ "original", "both" ]:
-                predictions = model.predict(x)
-                predictions = predictions[0].tolist()
+            predictions_batch = None
+            predictions_batch = None
 
-                if identification_style == "both" :
-                    predictions_original = predictions
+            if identification_style in [ "original", "both" ]:
+                predictions_original = model.predict(x)
+                predictions_original = predictions_original[0].tolist()
 
             if identification_style in [ "batch", "both", "batch_incl_original" ]:
                 batch = generate_augmented_image_batch(x)
-                batch_predictions = model.predict_on_batch(batch)
-                predictions = np.mean(batch_predictions,axis=0)
-                predictions = predictions.tolist()
+                predictions_batch = model.predict_on_batch(batch)
+                predictions_batch = np.mean(predictions_batch,axis=0)
+                predictions_batch = predictions_batch.tolist()
+
+                if identification_style  = "batch_incl_original":
+                    predictions_original = predictions_batch[0].tolist()
 
             os.remove(unique_filename)
 
             classes = {k: v for k, v in sorted(classes.items(), key=lambda item: item[1])}
-            predictions = dict(zip(classes.keys(), predictions))
-            predictions = {k: v for k, v in sorted(predictions.items(), key=lambda item: item[1], reverse=True)}
 
-            results = []
-            for key in predictions:
-                results.append({ 'class' : key, 'prediction': predictions[key] })
+            results_original = None
+            results_batch = None
 
-            logger.info("prediction (batch): {}".format(results[0]))
-
-            if identification_style == "both" :
+            if predictions_original:
                 predictions_original = dict(zip(classes.keys(), predictions_original))
                 predictions_original = {k: v for k, v in sorted(predictions_original.items(), key=lambda item: item[1], reverse=True)}
 
@@ -190,14 +188,28 @@ def identify_image():
                 for key in predictions_original:
                     results_original.append({ 'class' : key, 'prediction': predictions_original[key] })
 
+
+            if predictions_batch:
+                predictions_batch = dict(zip(classes.keys(), predictions_batch))
+                predictions_batch = {k: v for k, v in sorted(predictions_batch.items(), key=lambda item: item[1], reverse=True)}
+
+                results_batch = []
+                for key in predictions_batch:
+                    results_batch.append({ 'class' : key, 'prediction': predictions_batch[key] })
+
+            if results_batch:
+                logger.info("prediction (batch): {}".format(results_batch[0]))
+            if results_original:
                 logger.info("prediction (original): {}".format(results_original[0]))
 
             logger.info("time taken: {}".format(perf_counter()-prediction_start))
 
-            if identification_style == "both" :
-                output = { 'predictions' : results, 'predictions_original' : results_original }
+            if results_batch:
+                output['predictions'] = results_batch
+                if results_original:
+                    output['predictions_original'] = results_original
             else:
-                output = { 'predictions' : results }
+                output['predictions'] = results_original
 
             return json.dumps(output)
 

@@ -20,7 +20,7 @@ class ImageIdentify(baseclass.BaseClass):
 
     def set_image_list(self,list_path):
         with open(list_path) as f:
-            self.images = f.read().splitlines() 
+            self.images = f.read().splitlines()
         # print(self.images)
 
     def set_top(self,top):
@@ -39,7 +39,81 @@ class ImageIdentify(baseclass.BaseClass):
 
     def predict_image(self,image):
         x = tf.keras.preprocessing.image.load_img(
-            image, 
+            unique_filename,
+            target_size=(299,299),
+            interpolation="nearest")
+
+        logger.info("identification_style: {}".format(identification_style))
+
+        x = tf.keras.preprocessing.image.img_to_array(x)
+        x = np.expand_dims(x, axis=0)
+
+        x = x[..., :3]  # remove alpha channel if present
+        if x.shape[3] == 1:
+            x = np.repeat(x, axis=3, repeats=3)
+        x /= 255.0
+        # x = (x - 0.5) * 2.0 # why this, laurens?
+
+        if identification_style in [ "original", "both" ]:
+            predictions = model.predict(x)
+            predictions = predictions[0].tolist()
+
+            if identification_style == "both" :
+                predictions_original = predictions
+
+        if identification_style in [ "batch", "both", "batch_incl_original" ]:
+            batch = generate_augmented_image_batch(x)
+            batch_predictions = model.predict_on_batch(batch)
+            predictions = np.mean(batch_predictions,axis=0)
+            predictions = predictions.tolist()
+
+            if identification_style  = "batch_incl_original":
+                predictions_original = predictions[0].tolist()
+
+        classes = {k: v for k, v in sorted(classes.items(), key=lambda item: item[1])}
+        predictions = dict(zip(classes.keys(), predictions))
+        predictions = {k: v for k, v in sorted(predictions.items(), key=lambda item: item[1], reverse=True)}
+
+        if self.top > 0:
+            count = 0
+            topped = {}
+            for k, v in predictions.items():
+                topped[k]=v
+                count += 1
+                if count >= self.top:
+                    break
+
+            predictions = topped
+
+
+        results = []
+        for key in predictions:
+            results.append({ 'class' : key, 'prediction': predictions[key] })
+
+        if identification_style == "both" :
+            predictions_original = dict(zip(classes.keys(), predictions_original))
+            predictions_original = {k: v for k, v in sorted(predictions_original.items(), key=lambda item: item[1], reverse=True)}
+
+            if self.top > 0:
+                count = 0
+                topped = {}
+                for k, v in predictions_original.items():
+                    topped[k]=v
+                    count += 1
+                    if count >= self.top:
+                        break
+
+                predictions_original = topped
+
+            results_original = []
+            for key in predictions_original:
+                results_original.append({ 'class' : key, 'prediction': predictions_original[key] })
+
+
+
+    def predict_image_original(self,image):
+        x = tf.keras.preprocessing.image.load_img(
+            image,
             target_size=(299,299),
             interpolation="nearest")
         x = tf.keras.preprocessing.image.img_to_array(x)
@@ -69,7 +143,7 @@ class ImageIdentify(baseclass.BaseClass):
         else:
             return predictions
 
-        
+
 
 if __name__ == '__main__':
 
@@ -80,12 +154,12 @@ if __name__ == '__main__':
     timer = utils.Timer()
     timer.get_time_passed()
 
-    parser = argparse.ArgumentParser() 
+    parser = argparse.ArgumentParser()
     parser.add_argument("--image", type=str)
     parser.add_argument("--images", type=str)
     parser.add_argument("--list", type=str)
     parser.add_argument("--model", type=str)
-    args = parser.parse_args() 
+    args = parser.parse_args()
 
     if args.model:
         predict.set_model_name(args.model)
