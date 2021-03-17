@@ -205,11 +205,11 @@ def identify_image():
             logger.info("time taken: {}".format(perf_counter()-prediction_start))
 
             if not results_batch is None:
-                output['predictions'] = results_batch
+                output = { 'predictions' : results_batch }
                 if not results_original is None:
                     output['predictions_original'] = results_original
             else:
-                output['predictions'] = results_original
+                output = { 'predictions' : results_original }
 
             return json.dumps(output)
 
