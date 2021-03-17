@@ -9,6 +9,8 @@ class ImageIdentify(baseclass.BaseClass):
     results = []
     top = 0
     identification_style = "original"
+    identification_batch_size = 16
+    batch_transformations = None
 
     def set_image(self,image_path):
         self.images.append(image_path)
@@ -29,6 +31,12 @@ class ImageIdentify(baseclass.BaseClass):
 
     def set_identification_style(self,identification_style):
         self.identification_style = identification_style
+
+    def set_identification_batch_size(self,size):
+        self.identification_batch_size = size
+
+    def set_batch_transformations(self,transformations):
+        self.batch_transformations = transformations
 
     def predict_images(self):
         self.results = []
@@ -137,9 +145,7 @@ class ImageIdentify(baseclass.BaseClass):
 
 
     def generate_augmented_image_batch(self,original):
-        global logger, identification_style, identification_batch_size, batch_transformations
-
-        b = batch_transformations
+        b = self.batch_transformations
 
         datagen = tf.keras.preprocessing.image.ImageDataGenerator(
             width_shift_range=b["width_shift_range"] if "width_shift_range" in b else [-0.1,-0.1],
@@ -149,12 +155,12 @@ class ImageIdentify(baseclass.BaseClass):
         )
 
         batch = []
-        if identification_style == "batch_incl_original":
+        if self.identification_style == "batch_incl_original":
             batch.append(original[0])
 
         it = datagen.flow(original, batch_size=1)
 
-        for i in range(identification_batch_size-len(batch)):
+        for i in range(self.identification_batch_size-len(batch)):
             next_batch = it.next()
             image = next_batch[0]
             batch.append(image)
@@ -219,12 +225,22 @@ if __name__ == '__main__':
     else:
         predict.set_model_name(os.environ['API_MODEL_NAME'])
 
-    predict.set_model_folder()
-    predict.load_model()
-    predict.set_top(args.top)
+    batch_size = os.getenv('API_BATCH_ID_SIZE')
+    batch_transformations = os.getenv('API_BATCH_TRANSFORMATIONS')
 
     if args.identification_style:
         predict.set_identification_style(args.identification_style)
+
+    if not batch_size is None:
+        predict.set_identification_batch_size(int(batch_size))
+
+    if not batch_transformations is None:
+        predict.set_batch_transformations(json.loads(batch_transformations))
+
+
+    predict.set_model_folder()
+    predict.load_model()
+    predict.set_top(args.top)
 
     if args.image:
         # predict.set_image(args.image)
