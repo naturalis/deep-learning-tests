@@ -8,6 +8,7 @@ class ImageIdentify(baseclass.BaseClass):
     images = []
     results = []
     top = 0
+    identification_style = "original"
 
     def set_image(self,image_path):
         self.images.append(image_path)
@@ -26,13 +27,18 @@ class ImageIdentify(baseclass.BaseClass):
     def set_top(self,top):
         self.top = top
 
+    def set_identification_style(self,identification_style):
+        self.identification_style = identification_style
 
     def predict_images(self):
         self.results = []
         for image in self.images:
             if os.path.exists(image):
                 predictions = self.predict_image(image)
-                self.results.append({ "image" : image, "prediction" : predictions })
+                x = { "image" : image, "prediction" : predictions["predictions"] }
+                if predictions['predictions_original']:
+                    x["predictions_original"] = predictions["predictions_original"]
+                self.results.append(x)
             else:
                 print("image doesn't exist: {}".format(image));
         return json.dumps({ "project" : self.project_name, "model" : self.model_name, "predictions" : self.results })
@@ -43,8 +49,6 @@ class ImageIdentify(baseclass.BaseClass):
             target_size=(299,299),
             interpolation="nearest")
 
-        logger.info("identification_style: {}".format(identification_style))
-
         x = tf.keras.preprocessing.image.img_to_array(x)
         x = np.expand_dims(x, axis=0)
 
@@ -54,43 +58,29 @@ class ImageIdentify(baseclass.BaseClass):
         x /= 255.0
         # x = (x - 0.5) * 2.0 # why this, laurens?
 
-        if identification_style in [ "original", "both" ]:
-            predictions = model.predict(x)
-            predictions = predictions[0].tolist()
+        predictions_batch = None
+        predictions_batch = None
 
-            if identification_style == "both" :
-                predictions_original = predictions
+        if self.identification_style in [ "original", "both" ]:
+            predictions_original = self.model.predict(x)
+            predictions_original = predictions_original[0].tolist()
 
-        if identification_style in [ "batch", "both", "batch_incl_original" ]:
-            batch = generate_augmented_image_batch(x)
-            batch_predictions = model.predict_on_batch(batch)
-            predictions = np.mean(batch_predictions,axis=0)
-            predictions = predictions.tolist()
+        if self.identification_style in [ "batch", "both", "batch_incl_original" ]:
+            batch = self.generate_augmented_image_batch(x)
+            predictions_batch = self.model.predict_on_batch(batch)
+            if self.identification_style == "batch_incl_original":
+                predictions_original = predictions_batch[0].tolist()
+            predictions_batch = np.mean(predictions_batch,axis=0)
+            predictions_batch = predictions_batch.tolist()
 
-            if identification_style  = "batch_incl_original":
-                predictions_original = predictions[0].tolist()
+        os.remove(unique_filename)
 
-        classes = {k: v for k, v in sorted(classes.items(), key=lambda item: item[1])}
-        predictions = dict(zip(classes.keys(), predictions))
-        predictions = {k: v for k, v in sorted(predictions.items(), key=lambda item: item[1], reverse=True)}
+        classes = {k: v for k, v in sorted(self.classes.items(), key=lambda item: item[1])}
 
-        if self.top > 0:
-            count = 0
-            topped = {}
-            for k, v in predictions.items():
-                topped[k]=v
-                count += 1
-                if count >= self.top:
-                    break
+        results_original = None
+        results_batch = None
 
-            predictions = topped
-
-
-        results = []
-        for key in predictions:
-            results.append({ 'class' : key, 'prediction': predictions[key] })
-
-        if identification_style == "both" :
+        if not predictions_original is None:
             predictions_original = dict(zip(classes.keys(), predictions_original))
             predictions_original = {k: v for k, v in sorted(predictions_original.items(), key=lambda item: item[1], reverse=True)}
 
@@ -109,6 +99,67 @@ class ImageIdentify(baseclass.BaseClass):
             for key in predictions_original:
                 results_original.append({ 'class' : key, 'prediction': predictions_original[key] })
 
+
+        if not predictions_batch is None:
+            predictions_batch = dict(zip(classes.keys(), predictions_batch))
+            predictions_batch = {k: v for k, v in sorted(predictions_batch.items(), key=lambda item: item[1], reverse=True)}
+
+            if self.top > 0:
+                count = 0
+                topped = {}
+                for k, v in predictions_batch.items():
+                    topped[k]=v
+                    count += 1
+                    if count >= self.top:
+                        break
+
+                predictions_batch = topped
+
+            results_batch = []
+            for key in predictions_batch:
+                results_batch.append({ 'class' : key, 'prediction': predictions_batch[key] })
+
+        if not results_batch is None:
+            logger.info("prediction (batch): {}".format(results_batch[0]))
+        if not results_original is None:
+            logger.info("prediction (original): {}".format(results_original[0]))
+
+        logger.info("time taken: {}".format(perf_counter()-prediction_start))
+
+        if not results_batch is None:
+            output = { 'predictions' : results_batch }
+            if not results_original is None:
+                output['predictions_original'] = results_original
+        else:
+            output = { 'predictions' : results_original }
+
+        return output
+
+
+    def generate_augmented_image_batch(self,original):
+        global logger, identification_style, identification_batch_size, batch_transformations
+
+        b = batch_transformations
+
+        datagen = tf.keras.preprocessing.image.ImageDataGenerator(
+            width_shift_range=b["width_shift_range"] if "width_shift_range" in b else [-0.1,-0.1],
+            height_shift_range=b["height_shift_range"] if "height_shift_range" in b else [-0.1,-0.1],
+            rotation_range=b["rotation_range"] if "rotation_range" in b else 5,
+            zoom_range=b["zoom_range"] if "zoom_range" in b else 0.1
+        )
+
+        batch = []
+        if identification_style == "batch_incl_original":
+            batch.append(original[0])
+
+        it = datagen.flow(original, batch_size=1)
+
+        for i in range(identification_batch_size-len(batch)):
+            next_batch = it.next()
+            image = next_batch[0]
+            batch.append(image)
+
+        return np.array(batch)
 
 
     def predict_image_original(self,image):
@@ -159,6 +210,8 @@ if __name__ == '__main__':
     parser.add_argument("--images", type=str)
     parser.add_argument("--list", type=str)
     parser.add_argument("--model", type=str)
+    parser.add_argument("--identification_style", choices=[ "original", "batch", "both", "batch_incl_original" ], default="batch_incl_original")
+    parser.add_argument("--top", type=int, default=3)
     args = parser.parse_args()
 
     if args.model:
@@ -168,7 +221,10 @@ if __name__ == '__main__':
 
     predict.set_model_folder()
     predict.load_model()
-    predict.set_top(3)
+    predict.set_top(args.top)
+
+    if args.identification_style:
+        predict.set_identification_style(args.identification_style)
 
     if args.image:
         # predict.set_image(args.image)
