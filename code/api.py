@@ -167,11 +167,11 @@ def identify_image():
             if identification_style in [ "batch", "both", "batch_incl_original" ]:
                 batch = generate_augmented_image_batch(x)
                 predictions_batch = model.predict_on_batch(batch)
+                if identification_style == "batch_incl_original":
+                    predictions_original = predictions_batch[0].tolist()
                 predictions_batch = np.mean(predictions_batch,axis=0)
                 predictions_batch = predictions_batch.tolist()
 
-                if identification_style == "batch_incl_original":
-                    predictions_original = predictions_batch[0].tolist()
 
             os.remove(unique_filename)
 
