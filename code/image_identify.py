@@ -81,8 +81,6 @@ class ImageIdentify(baseclass.BaseClass):
             predictions_batch = np.mean(predictions_batch,axis=0)
             predictions_batch = predictions_batch.tolist()
 
-        os.remove(unique_filename)
-
         classes = {k: v for k, v in sorted(self.classes.items(), key=lambda item: item[1])}
 
         results_original = None
