@@ -134,7 +134,6 @@ class ImageIdentify(baseclass.BaseClass):
 
         return output
 
-
     def generate_augmented_image_batch(self,original):
         b = self.batch_transformations
 
@@ -159,40 +158,6 @@ class ImageIdentify(baseclass.BaseClass):
         return np.array(batch)
 
 
-    def predict_image_original(self,image):
-        x = tf.keras.preprocessing.image.load_img(
-            image,
-            target_size=(299,299),
-            interpolation="nearest")
-        x = tf.keras.preprocessing.image.img_to_array(x)
-        x = np.expand_dims(x, axis=0)
-
-        x = x[..., :3]  # remove alpha channel if present
-        if x.shape[3] == 1:
-            x = np.repeat(x, axis=3, repeats=3)
-        x /= 255.0
-        # x = (x - 0.5) * 2.0 # why this, laurens?
-
-        predictions = self.model.predict(x)
-        predictions = predictions[0].tolist()
-        classes = {k: v for k, v in sorted(self.classes.items(), key=lambda item: item[1])}
-        predictions = dict(zip(classes.keys(), predictions))
-        predictions = {k: v for k, v in sorted(predictions.items(), key=lambda item: item[1], reverse=True)}
-
-        if self.top > 0:
-            count = 0
-            topped = {}
-            for k, v in predictions.items():
-                topped[k]=v
-                count += 1
-                if count >= self.top:
-                    break
-            return topped
-        else:
-            return predictions
-
-
-
 if __name__ == '__main__':
 
     predict = ImageIdentify()
@@ -209,6 +174,7 @@ if __name__ == '__main__':
     parser.add_argument("--model", type=str)
     parser.add_argument("--identification_style", choices=[ "original", "batch", "both", "batch_incl_original" ], default="batch_incl_original")
     parser.add_argument("--top", type=int, default=3)
+    parser.add_argument("--outfile", type=str)
     args = parser.parse_args()
 
     if args.model:
@@ -235,20 +201,30 @@ if __name__ == '__main__':
 
     if args.image:
         # predict.set_image(args.image)
-        x = json.dumps(predict.predict_image(args.image))
+        data = json.dumps(predict.predict_image(args.image))
 
     if args.images:
         predict.set_images(args.images)
-        x = predict.predict_images()
+        data = predict.predict_images()
 
     if args.list:
         predict.set_image_list(args.list)
-        x = predict.predict_images()
+        data = predict.predict_images()
 
     print(timer.get_time_passed(format="pretty"))
-    print(x)
+    print(data)
+
+    if args.outfile:
+        outfile = args.outfile
+    else:
+        outfile = "./output.json"
+
+    with open(outfile, 'w') as f:
+        json.dump(data, f)
 
     # export PROJECT_ROOT=/data/ai/corvidae/
     # python image_identify.py /data/ai/corvidae/images/eccbc87e4b/RMNH.AVES.47171_1.jpg v1.0
     # sudo docker-compose run tensorflow /code/image_identify.py /data/corvidae/images/eccbc87e4b/RMNH.AVES.47171_1.jpg v1.0
     # sudo docker-compose run tensorflow /code/image_identify.py --image=/data/corvidae/images/eccbc87e4b/RMNH.AVES.47171_1.jpg v1.0
+
+    # sudo docker-compose run tensorflow /code/image_identify.py --image /data/museum/naturalis/images_smaller/a87ff679a2/ZMA.INS.1329165_1.jpg | jq
