@@ -45,7 +45,7 @@ class ImageIdentify(baseclass.BaseClass):
 
     def predict_image(self,image):
         x = tf.keras.preprocessing.image.load_img(
-            unique_filename,
+            image,
             target_size=(299,299),
             interpolation="nearest")
 
