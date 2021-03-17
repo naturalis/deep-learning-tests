@@ -170,7 +170,7 @@ def identify_image():
                 predictions_batch = np.mean(predictions_batch,axis=0)
                 predictions_batch = predictions_batch.tolist()
 
-                if identification_style  = "batch_incl_original":
+                if identification_style == "batch_incl_original":
                     predictions_original = predictions_batch[0].tolist()
 
             os.remove(unique_filename)
@@ -180,7 +180,7 @@ def identify_image():
             results_original = None
             results_batch = None
 
-            if predictions_original:
+            if not predictions_original is None:
                 predictions_original = dict(zip(classes.keys(), predictions_original))
                 predictions_original = {k: v for k, v in sorted(predictions_original.items(), key=lambda item: item[1], reverse=True)}
 
@@ -189,7 +189,7 @@ def identify_image():
                     results_original.append({ 'class' : key, 'prediction': predictions_original[key] })
 
 
-            if predictions_batch:
+            if not predictions_batch is None:
                 predictions_batch = dict(zip(classes.keys(), predictions_batch))
                 predictions_batch = {k: v for k, v in sorted(predictions_batch.items(), key=lambda item: item[1], reverse=True)}
 
@@ -197,16 +197,16 @@ def identify_image():
                 for key in predictions_batch:
                     results_batch.append({ 'class' : key, 'prediction': predictions_batch[key] })
 
-            if results_batch:
+            if not results_batch is None::
                 logger.info("prediction (batch): {}".format(results_batch[0]))
-            if results_original:
+            if not results_original is None::
                 logger.info("prediction (original): {}".format(results_original[0]))
 
             logger.info("time taken: {}".format(perf_counter()-prediction_start))
 
-            if results_batch:
+            if not results_batch is None::
                 output['predictions'] = results_batch
-                if results_original:
+                if not results_original is None::
                     output['predictions_original'] = results_original
             else:
                 output['predictions'] = results_original
