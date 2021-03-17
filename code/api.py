@@ -197,16 +197,16 @@ def identify_image():
                 for key in predictions_batch:
                     results_batch.append({ 'class' : key, 'prediction': predictions_batch[key] })
 
-            if not results_batch is None::
+            if not results_batch is None:
                 logger.info("prediction (batch): {}".format(results_batch[0]))
-            if not results_original is None::
+            if not results_original is None:
                 logger.info("prediction (original): {}".format(results_original[0]))
 
             logger.info("time taken: {}".format(perf_counter()-prediction_start))
 
-            if not results_batch is None::
+            if not results_batch is None:
                 output['predictions'] = results_batch
-                if not results_original is None::
+                if not results_original is None:
                     output['predictions_original'] = results_original
             else:
                 output['predictions'] = results_original
