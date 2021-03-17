@@ -220,7 +220,7 @@ if __name__ == '__main__':
         outfile = "./output.json"
 
     with open(outfile, 'w') as f:
-        json.dump(data, f)
+        f.write(data)
 
     # export PROJECT_ROOT=/data/ai/corvidae/
     # python image_identify.py /data/ai/corvidae/images/eccbc87e4b/RMNH.AVES.47171_1.jpg v1.0
