@@ -23,8 +23,6 @@ class ModelReport(baseclass.BaseClass):
                 # print(key,val)
                 self.classes.append({"key" : val, "class" : key})
 
-        print(self.classes)
-
         with open(self.class_list_file_model) as csvfile:
             spamreader = csv.reader(csvfile)
             for row in spamreader:
@@ -32,6 +30,7 @@ class ModelReport(baseclass.BaseClass):
                 for d in self.classes:
                     if 0 in row and row[0]==d["class"]:
                         d.update({"classes" : int(row[1])})
+
 
 
     def read_analysis(self):
