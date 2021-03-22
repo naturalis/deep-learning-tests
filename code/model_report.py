@@ -30,7 +30,7 @@ class ModelReport(baseclass.BaseClass):
             for row in spamreader:
                 # print(row[0],row[1])
                 for d in self.classes:
-                    if row[0] and row[0]==d["class"]:
+                    if 0 in row and row[0]==d["class"]:
                         d.update({"classes" : int(row[1])})
 
 
