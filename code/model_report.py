@@ -28,7 +28,7 @@ class ModelReport(baseclass.BaseClass):
 
         for key,val in used_classes.items():
             match = [ x for x in all_classes if 0 in x and x[0] == key ]
-            print(match)
+            print(match,key)
             self.classes.append({"key" : val, "class" : key, "support" : int(match[0][1]) })
 
         for item in all_classes:
