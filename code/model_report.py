@@ -26,6 +26,9 @@ class ModelReport(baseclass.BaseClass):
             reader = csv.reader(csvfile)
             all_classes = list(filter(None, list(reader)))
 
+
+        print(all_classes)
+
         for key,val in used_classes.items():
             match = [ x for x in all_classes if 0 in x and x[0] == key ]
             print(match,key)
