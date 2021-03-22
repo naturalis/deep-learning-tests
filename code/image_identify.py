@@ -232,9 +232,19 @@ if __name__ == '__main__':
 # sudo git pull; python3 ../code/batch_api_call.py --image_list /data/maarten.schermer/data/museum/naturalis/lists/sheet7_downloaded_images.csv --api_url http://0.0.0.0:8090/identify --override_image_root_folder /data/maarten.schermer/data/museum/naturalis/sheet7_images/
 
 
-sudo docker-compose run tensorflow /code/image_identify.py \
-    --image_list /data/museum/naturalis/lists/sheet7_downloaded_images.csv \
-    --outfile /data/sheet7_predictions.json \
-    --identification_style both \
-    --top 5
+# sudo git pull; python3 ../code/batch_api_call.py --image_list /data/maarten.schermer/data/museum/naturalis/lists/sheet8_downloaded_images.csv --api_url http://0.0.0.0:8090/identify --override_image_root_folder /data/maarten.schermer/data/museum/naturalis/sheet8_images/
+
+
+# sudo docker-compose run tensorflow /code/image_identify.py \
+#     --image_list /data/museum/naturalis/lists/sheet7_downloaded_images.csv \
+#     --outfile /data/sheet7_predictions.json \
+#     --identification_style both \
+#     --top 5
+
+
+# sudo docker-compose run tensorflow /code/image_identify.py \
+#     --image_list /data/museum/naturalis/lists/sheet8_downloaded_images.csv \
+#     --outfile /data/sheet8_predictions.json \
+#     --identification_style both \
+#     --top 5
 
