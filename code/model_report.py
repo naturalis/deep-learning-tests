@@ -26,10 +26,10 @@ class ModelReport(baseclass.BaseClass):
         with open(self.class_list_file_model) as csvfile:
             spamreader = csv.reader(csvfile)
             for row in spamreader:
-                # print(row[0],row[1])
-                for d in self.classes:
-                    if row[0]==d["class"]:
-                        d.update({"support" : int(row[1])})
+                print(row[0],row[1])
+                # for d in self.classes:
+                #     if row[0]==d["class"]:
+                #         d.update({"support" : int(row[1])})
 
 
     def read_analysis(self):
