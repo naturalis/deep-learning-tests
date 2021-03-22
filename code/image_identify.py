@@ -170,7 +170,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("--image", type=str)
     parser.add_argument("--images", type=str)
-    parser.add_argument("--list", type=str)
+    parser.add_argument("--image_list", type=str)
     parser.add_argument("--model", type=str)
     parser.add_argument("--identification_style", choices=[ "original", "batch", "both", "batch_incl_original" ], default="batch_incl_original")
     parser.add_argument("--top", type=int, default=3)
@@ -207,8 +207,8 @@ if __name__ == '__main__':
         predict.set_images(args.images)
         data = predict.predict_images()
 
-    if args.list:
-        predict.set_image_list(args.list)
+    if args.image_list:
+        predict.set_image_list(args.image_list)
         data = predict.predict_images()
 
     print(timer.get_time_passed(format="pretty"))
@@ -222,9 +222,19 @@ if __name__ == '__main__':
     with open(outfile, 'w') as f:
         f.write(data)
 
-    # export PROJECT_ROOT=/data/ai/corvidae/
-    # python image_identify.py /data/ai/corvidae/images/eccbc87e4b/RMNH.AVES.47171_1.jpg v1.0
-    # sudo docker-compose run tensorflow /code/image_identify.py /data/corvidae/images/eccbc87e4b/RMNH.AVES.47171_1.jpg v1.0
-    # sudo docker-compose run tensorflow /code/image_identify.py --image=/data/corvidae/images/eccbc87e4b/RMNH.AVES.47171_1.jpg v1.0
+# export PROJECT_ROOT=/data/ai/corvidae/
+# python image_identify.py /data/ai/corvidae/images/eccbc87e4b/RMNH.AVES.47171_1.jpg v1.0
+# sudo docker-compose run tensorflow /code/image_identify.py /data/corvidae/images/eccbc87e4b/RMNH.AVES.47171_1.jpg v1.0
+# sudo docker-compose run tensorflow /code/image_identify.py --image=/data/corvidae/images/eccbc87e4b/RMNH.AVES.47171_1.jpg v1.0
+# sudo docker-compose run tensorflow /code/image_identify.py --image /data/museum/naturalis/images_smaller/a87ff679a2/ZMA.INS.1329165_1.jpg | jq
 
-    # sudo docker-compose run tensorflow /code/image_identify.py --image /data/museum/naturalis/images_smaller/a87ff679a2/ZMA.INS.1329165_1.jpg | jq
+
+# sudo git pull; python3 ../code/batch_api_call.py --image_list /data/maarten.schermer/data/museum/naturalis/lists/sheet7_downloaded_images.csv --api_url http://0.0.0.0:8090/identify --override_image_root_folder /data/maarten.schermer/data/museum/naturalis/sheet7_images/
+
+
+sudo docker-compose run tensorflow /code/image_identify.py \
+    --image_list /data/museum/naturalis/lists/sheet7_downloaded_images.csv \
+    --outfile /data/sheet7_predictions.json \
+    --identification_style both \
+    --top 5
+

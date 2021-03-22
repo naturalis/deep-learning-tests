@@ -13,6 +13,7 @@ class ModelReport(baseclass.BaseClass):
 
     classes=[]
     skipped_classes=[]
+    imperfect_classes = []
 
     def __init__(self):
         super().__init__()
@@ -54,6 +55,10 @@ class ModelReport(baseclass.BaseClass):
                                 "f1-score" : float(val["f1-score"])}
                             )
 
+                            if float(val["f1-score"]) < 1:
+                                self.imperfect_classes.append({ 'key' : d["key"], 'f1-score' : val["f1-score"]})
+
+
             for val in data["top_k_per_class"]:
                 for d in self.classes:
                     if int(val["class"])==d["key"]:
@@ -65,6 +70,15 @@ class ModelReport(baseclass.BaseClass):
 
 
     def print_report(self):
+        self.print_report_classes()
+        print("")
+        self.print_report_skipped_classes():
+
+
+
+
+    def print_report_classes(self):
+
         l=0
         for item in self.classes:
             l = len(item["class"]) if len(item["class"]) > l else l
@@ -73,6 +87,7 @@ class ModelReport(baseclass.BaseClass):
         s2 = "{: >7}"
         s3 = "{: >10}"
         s4 = "{: >10}"
+
         round_at = 5
         round_at_pct = 1
 
@@ -103,20 +118,26 @@ class ModelReport(baseclass.BaseClass):
                 s4.format(round(item["top_5"],round_at)),
             )
 
-        print("")
-        print("skipped classes")
+    def print_report_skipped_classes(self):
+
+        l=0
+        for item in self.skipped_classes:
+            l = len(item["class"]) if len(item["class"]) > l else l
+
+        s1 = "{: <"+str(l)+"}"
+        s2 = "{: >7}"
 
         print(
-            s1.format("class"),
-            s2.format("support")
+            self.s1.format("skipped classes"),
+            self.s2.format("support")
         )
 
         print("-" * (l+65))
 
         for item in self.skipped_classes:
             print(
-                s1.format(item["class"]),
-                s2.format(item["support"])
+                self.s1.format(item["class"]),
+                self.s2.format(item["support"])
             )
 
 

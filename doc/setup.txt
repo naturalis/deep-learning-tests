@@ -152,3 +152,7 @@ sudo docker-compose run tensorflow /code/image_downloader.py \
 
 
 sudo git pull; python3 ../code/batch_api_call.py --image_list /data/maarten.schermer/data/museum/naturalis/lists/sheet7_downloaded_images.csv --api_url http://0.0.0.0:8090/identify --override_image_root_folder /data/maarten.schermer/data/museum/naturalis/sheet7_images/
+
+
+sudo docker-compose run tensorflow /code/image_identify.py --image /data/museum/naturalis/images_smaller/a87ff679a2/ZMA.INS.1329165_1.jpg --outfile /data/bla.json --identification_style both --top 5
+
