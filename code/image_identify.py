@@ -280,10 +280,10 @@ if __name__ == '__main__':
 #     --override_image_root_folder /data/museum/naturalis/sheet8_images/
 
 
-sudo docker-compose run tensorflow /code/image_identify.py \
-    --image_list /data/museum/naturalis/lists/sheet7_downloaded_images.csv \
-    --outfile /data/sheet7_predictions.json \
-    --identification_style both \
-    --top 5 \
-    --override_image_root_folder /data/museum/naturalis/sheet7_images/
+# sudo docker-compose run tensorflow /code/image_identify.py \
+#     --image_list /data/museum/naturalis/lists/sheet7_downloaded_images.csv \
+#     --outfile /data/sheet7_predictions.json \
+#     --identification_style both \
+#     --top 5 \
+#     --override_image_root_folder /data/museum/naturalis/sheet7_images/
 
