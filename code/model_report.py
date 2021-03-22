@@ -26,18 +26,16 @@ class ModelReport(baseclass.BaseClass):
             reader = csv.reader(csvfile)
             all_classes = list(filter(None, list(reader)))
 
-
-        print(all_classes)
-
         for key,val in used_classes.items():
             match = [ x for x in all_classes if x[0] == key ]
-            print(match,key)
             self.classes.append({"key" : val, "class" : key, "support" : int(match[0][1]) })
 
         for item in all_classes:
             match = [ x for x in self.classes if x["class"] == item[0] ]
             if len(match)==0:
                 self.skipped_classes.append({"class" : item[0], "support" : item[1] })
+
+        print(self.skipped_classes)
 
 
     def read_analysis(self):
