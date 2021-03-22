@@ -23,13 +23,13 @@ class ModelReport(baseclass.BaseClass):
                 # print(key,val)
                 self.classes.append({"key" : val, "class" : key})
 
-        with open(self.get_class_list_path()) as csvfile:
-            spamreader = csv.reader(csvfile)
-            for row in spamreader:
-                # print(row[0],row[1])
-                for d in self.classes:
-                    if row[0]==d["class"]:
-                        d.update({"input" : int(row[1])})
+        # with open(self.get_class_list_path()) as csvfile:
+        #     spamreader = csv.reader(csvfile)
+        #     for row in spamreader:
+        #         # print(row[0],row[1])
+        #         for d in self.classes:
+        #             if row[0]==d["class"]:
+        #                 d.update({"input" : int(row[1])})
 
 
     def read_analysis(self):
@@ -56,7 +56,7 @@ class ModelReport(baseclass.BaseClass):
                             "top_3" : (val["top_3"] / d["support"]),
                             "top_5" : (val["top_5"] / d["support"])
                         })
-                
+
 
     def print_report(self):
         l=0
@@ -64,7 +64,7 @@ class ModelReport(baseclass.BaseClass):
             l = len(item["class"]) if len(item["class"]) > l else l
 
         s1 = "{: <"+str(l)+"}"
-        s2 = "{: >7}" 
+        s2 = "{: >7}"
         s3 = "{: >10}"
         s4 = "{: >10}"
         round_at = 5
@@ -112,7 +112,7 @@ class ModelReport(baseclass.BaseClass):
 
 if __name__ == "__main__":
 
-    parser = argparse.ArgumentParser() 
+    parser = argparse.ArgumentParser()
     parser.add_argument("--load_model",type=str)
     args = parser.parse_args()
 
@@ -121,7 +121,7 @@ if __name__ == "__main__":
     report.set_debug(os.environ["DEBUG"]=="1" if "DEBUG" in os.environ else False)
     report.set_project(os.environ)
 
-    if args.load_model: 
+    if args.load_model:
         report.set_model_name(args.load_model)
     else:
         raise ValueError("need a model name (--load_model=<model name>)")
