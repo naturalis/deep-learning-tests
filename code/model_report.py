@@ -23,13 +23,13 @@ class ModelReport(baseclass.BaseClass):
                 # print(key,val)
                 self.classes.append({"key" : val, "class" : key})
 
-        # with open(self.get_class_list_path()) as csvfile:
-        #     spamreader = csv.reader(csvfile)
-        #     for row in spamreader:
-        #         # print(row[0],row[1])
-        #         for d in self.classes:
-        #             if row[0]==d["class"]:
-        #                 d.update({"input" : int(row[1])})
+        with open(self.class_list_file_model) as csvfile:
+            spamreader = csv.reader(csvfile)
+            for row in spamreader:
+                # print(row[0],row[1])
+                for d in self.classes:
+                    if row[0]==d["class"]:
+                        d.update({"support" : int(row[1])})
 
 
     def read_analysis(self):
