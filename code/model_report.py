@@ -35,7 +35,7 @@ class ModelReport(baseclass.BaseClass):
             if len(match)==0:
                 self.skipped_classes.append({"class" : item[0], "support" : item[1] })
 
-        print(self.skipped_classes)
+        # print(self.skipped_classes)
 
 
     def read_analysis(self):
@@ -113,7 +113,7 @@ class ModelReport(baseclass.BaseClass):
 
         print("-" * (l+65))
 
-        for item in self.classes:
+        for item in self.skipped_classes:
             print(
                 s1.format(item["class"]),
                 s2.format(item["support"])
