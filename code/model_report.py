@@ -18,28 +18,22 @@ class ModelReport(baseclass.BaseClass):
         super().__init__()
 
     def read_classes(self):
+
         with open(self.get_classes_path()) as json_file:
-            data = json.load(json_file)
-            for key,val in data.items():
-                # print(key,val)
-                self.classes.append({"key" : val, "class" : key})
+            used_classes = json.load(json_file)
 
         with open(self.class_list_file_model) as csvfile:
-            spamreader = csv.reader(csvfile)
-            for row in spamreader:
-                if not 0 in row:
-                    continue
-                # print(row[0],row[1])
-                t = False
-                for d in self.classes:
-                    if row[0]==d["class"]:
-                        d.update({"support" : int(row[1])})
-                        t = True
+            reader = csv.reader(csvfile)
+            all_classes = list(reader)
 
-                if not t:
-                    self.skipped_classes.append({"class" :row[0], "support" : row[1]})
+        for key,val in used_classes.items():
+            match = [ x for x in all_classes if x[0] == key ]
+            self.classes.append({"key" : val, "class" : key, "support" : int(match[0][1]) })
 
-        print(self.skipped_classes)
+        for item in all_classes:
+            match = [ x for x in self.classes if x["class"] == item[0] ]
+            if len(match)==0:
+                self.skipped_classes.append({"class" : item[0], "support" : item[1] })
 
 
     def read_analysis(self):
@@ -105,6 +99,22 @@ class ModelReport(baseclass.BaseClass):
                 # s4.format(round(item["top_1"],round_at_pct)), # top1 is the same as recall
                 s4.format(round(item["top_3"],round_at)),
                 s4.format(round(item["top_5"],round_at)),
+            )
+
+        print("")
+        print("skipped classes")
+
+        print(
+            s1.format("class"),
+            s2.format("support")
+        )
+
+        print("-" * (l+65))
+
+        for item in self.classes:
+            print(
+                s1.format(item["class"]),
+                s2.format(item["support"])
             )
 
 
