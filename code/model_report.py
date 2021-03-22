@@ -24,7 +24,7 @@ class ModelReport(baseclass.BaseClass):
 
         with open(self.class_list_file_model) as csvfile:
             reader = csv.reader(csvfile)
-            all_classes = list(reader)
+            all_classes = list(filter(None, list(reader)))
 
         for key,val in used_classes.items():
             match = [ x for x in all_classes if 0 in x and x[0] == key ]
