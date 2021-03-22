@@ -5,6 +5,8 @@ from lib import baseclass, utils
 
 class ImageIdentify(baseclass.BaseClass):
 
+    override_image_root_folder = None
+    # prepend_image_root_folder = None
     images = []
     results = []
     top = 0
@@ -38,9 +40,19 @@ class ImageIdentify(baseclass.BaseClass):
     def set_batch_transformations(self,transformations):
         self.batch_transformations = transformations
 
+    def set_override_image_root_folder(self,folder):
+        self.override_image_root_folder = folder
+
+    # def set_prepend_image_root_folder(self,folder):
+    #     self.prepend_image_root_folder = folder
+
     def predict_images(self):
         self.results = []
         for image in self.images:
+
+            if self.override_image_root_folder:
+                image = os.path.join(self.override_image_root_folder, os.path.basename(image))
+
             if os.path.exists(image):
                 predictions = self.predict_image(image)
                 x = { "image" : image, "prediction" : predictions["predictions"] }
@@ -52,6 +64,10 @@ class ImageIdentify(baseclass.BaseClass):
         return json.dumps({ "project" : self.project_name, "model" : self.model_name, "predictions" : self.results })
 
     def predict_image(self,image):
+
+        if self.override_image_root_folder:
+            image = os.path.join(self.override_image_root_folder, os.path.basename(image))
+
         x = tf.keras.preprocessing.image.load_img(
             image,
             target_size=(299,299),
@@ -175,6 +191,10 @@ if __name__ == '__main__':
     parser.add_argument("--identification_style", choices=[ "original", "batch", "both", "batch_incl_original" ], default="batch_incl_original")
     parser.add_argument("--top", type=int, default=3)
     parser.add_argument("--outfile", type=str)
+
+    parser.add_argument("--override_image_root_folder",type=str)
+    parser.add_argument("--prepend_image_root_folder",type=str)
+
     args = parser.parse_args()
 
     if args.model:
@@ -193,6 +213,15 @@ if __name__ == '__main__':
 
     if not batch_transformations is None:
         predict.set_batch_transformations(json.loads(batch_transformations))
+
+
+    # replaces whatever the folder is in the image list (just keeps basename)
+    if args.override_image_root_folder:
+        predict.set_override_image_root_folder(args.override_image_root_folder)
+
+    # # prepends to whatever is in the image list
+    # if args.prepend_image_root_folder:
+    #     predict.set_prepend_image_root_folder(args.prepend_image_root_folder)
 
 
     predict.set_model_folder()
