@@ -59,6 +59,7 @@ class ImageIdentify(baseclass.BaseClass):
                 if predictions['predictions_original']:
                     x["predictions_original"] = predictions["predictions_original"]
                 self.results.append(x)
+                print("{}: {} {}".format(image,predictions["predictions"][0]["class"],predictions["predictions"][0]["prediction"]));
             else:
                 print("image doesn't exist: {}".format(image));
         return json.dumps({ "project" : self.project_name, "model" : self.model_name, "predictions" : self.results })
@@ -275,5 +276,14 @@ if __name__ == '__main__':
 #     --image_list /data/museum/naturalis/lists/sheet8_downloaded_images.csv \
 #     --outfile /data/sheet8_predictions.json \
 #     --identification_style both \
-#     --top 5
+#     --top 5 \
+#     --override_image_root_folder /data/museum/naturalis/sheet8_images/
+
+
+sudo docker-compose run tensorflow /code/image_identify.py \
+    --image_list /data/museum/naturalis/lists/sheet7_downloaded_images.csv \
+    --outfile /data/sheet7_predictions.json \
+    --identification_style both \
+    --top 5 \
+    --override_image_root_folder /data/museum/naturalis/sheet7_images/
 
