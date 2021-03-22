@@ -12,6 +12,7 @@ from lib import baseclass
 class ModelReport(baseclass.BaseClass):
 
     classes=[]
+    skipped_classes=[]
 
     def __init__(self):
         super().__init__()
@@ -27,10 +28,15 @@ class ModelReport(baseclass.BaseClass):
             spamreader = csv.reader(csvfile)
             for row in spamreader:
                 # print(row[0],row[1])
+                t = False
                 for d in self.classes:
                     if 0 in row and row[0]==d["class"]:
-                        d.update({"classes" : int(row[1])})
+                        d.update({"support" : int(row[1])})
+                        t = True
+                if not t:
+                    self.skipped_classes.append({"class" :row[0], "support" : row[1]})
 
+        print(self.skipped_classes)
 
 
     def read_analysis(self):
