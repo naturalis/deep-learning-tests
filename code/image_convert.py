@@ -37,7 +37,8 @@ class ImageConvert(baseclass.BaseClass):
                 method_to_call = getattr(self, converter)
                 result = method_to_call(item["filename"])
             else:
-                self.logger.warning("image not present in image list: {}".format(item["filename"]))
+                pass
+                # self.logger.warning("image not present in image list: {}".format(item["filename"]))
 
         print(self.downloaded_images)
 
