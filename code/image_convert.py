@@ -4,7 +4,7 @@ from lib import baseclass
 
 class ImageConvert(baseclass.BaseClass):
 
-    extensions_to_convert = [ "png" ]
+    extensions_to_convert = [ ".png" ]
 
     def __init__(self):
         super().__init__()
@@ -14,7 +14,6 @@ class ImageConvert(baseclass.BaseClass):
         for f in glob.iglob(self.image_path + '/**/*.*', recursive=True):
             if os.path.isfile(f):
                 filename, file_extension = os.path.splitext(f)
-                print(file_extension)
                 if file_extension.lower() in self.extensions_to_convert:
                     print(filename)
 
