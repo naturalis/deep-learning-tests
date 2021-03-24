@@ -24,15 +24,24 @@ class ImageConvert(baseclass.BaseClass):
                     self.files_to_convert.append({ "filename" : f, "extension" : file_extension })
 
     def run_conversions(self):
+
+        for x in self.downloaded_images:
+            print(os.path.join(self.image_root_path,x[self.image_col]))
+
         for item in self.files_to_convert:
 
+            print(item["filename"])
+
             s = [ x for x in self.downloaded_images if os.path.join(self.image_root_path,x[self.image_col]) == item["filename"] ]
+
+
 
             if len(s)>0:
                 converter = [ x["converter"] for x in self.extensions_to_convert if x["extension"] == item["extension"] ].pop()
                 method_to_call = getattr(self, converter)
                 result = method_to_call(item["filename"])
             else:
+                pass
                 print("wtf {}".format(item))
 
     def convert_png(self,img):
