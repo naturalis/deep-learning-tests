@@ -12,7 +12,7 @@ class ImageConvert(baseclass.BaseClass):
 
     def get_images_to_convert(self):
 
-        extensions = [ x["extension"] in x for self.extensions_to_convert ]
+        extensions = [ x["extension"] for x in self.extensions_to_convert ]
 
         for f in glob.iglob(self.image_path + '/**/*.*', recursive=True):
             if os.path.isfile(f):
