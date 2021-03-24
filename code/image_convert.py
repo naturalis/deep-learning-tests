@@ -47,5 +47,5 @@ if __name__ == "__main__":
     ic.set_debug(os.environ["DEBUG"]=="1" if "DEBUG" in os.environ else False)
     ic.set_project(os.environ)
     # ic.set_model_folder()
-    ic.set_image_list_file(os.getenv('IMAGE_LIST_FILE'))
+    # ic.set_image_list_file(os.getenv('IMAGE_LIST_FILE'))
     ic.get_images_to_convert()
