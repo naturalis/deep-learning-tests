@@ -51,11 +51,11 @@ class ImageConvert(baseclass.BaseClass):
         rgb_im.save(new_img)
 
         for idx, item in enumerate(self.downloaded_images):
-            print(item)
+            print(item[self.image_col] == img,item[self.image_col],img)
             if item[self.image_col] == img:
                 self.downloaded_images[idx][self.image_col] == new_img
 
-        self.logger.info("converted png: {} --> {}".format(img,new_img))
+        # self.logger.info("converted png: {} --> {}".format(img,new_img))
 
     def read_downloaded_images_file(self):
         with open(self.downloaded_images_file) as csv_file:
