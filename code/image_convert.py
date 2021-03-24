@@ -61,4 +61,4 @@ if __name__ == "__main__":
 
     ic.read_downloaded_images_file()
     ic.get_images_to_convert()
-    # ic.run_conversions()
+    ic.run_conversions()
