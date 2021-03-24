@@ -4,18 +4,24 @@ from lib import baseclass
 
 class ImageConvert(baseclass.BaseClass):
 
-    extensions_to_convert = [ ".png" ]
+    extensions_to_convert=[ { "extension" : ".png", "converter" : self.fuck() } ]
+    files_to_convert=[]
 
     def __init__(self):
         super().__init__()
 
     def get_images_to_convert(self):
 
+        extensions = [ x["extension"] in x for self.extensions_to_convert ]
+
         for f in glob.iglob(self.image_path + '/**/*.*', recursive=True):
             if os.path.isfile(f):
                 filename, file_extension = os.path.splitext(f)
-                if file_extension.lower() in self.extensions_to_convert:
-                    print(f)
+                if file_extension.lower() in extensions:
+                    # print(f)
+                    self.files_to_convert.append({ "filename" : filename, "extension" : file_extension })
+
+        print(self.files_to_convert)
 
         # bad_files=[]
         # checked=0
