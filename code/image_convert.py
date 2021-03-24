@@ -37,7 +37,7 @@ class ImageConvert(baseclass.BaseClass):
 
     def convert_png(self,img):
         pass
-        self.logger.info("convert_png: {}".format(img))
+        # self.logger.info("convert_png: {}".format(img))
 
 
     def read_downloaded_images_file(self):
