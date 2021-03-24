@@ -49,9 +49,9 @@ class ImageConvert(baseclass.BaseClass):
         rgb_im = im.convert('RGB')
         rgb_im.save(new_img)
 
-        for item in self.downloaded_images:
+        for idx, item in enumerate(self.downloaded_images):
             if item[self.image_col] == img:
-                item[self.image_col] == new_img
+                self.downloaded_images[idx][self.image_col] == new_img
 
         self.logger.info("converted png: {} --> {}".format(img,new_img))
 
