@@ -35,7 +35,7 @@ class BaseClass():
     downloaded_images_file = None
     timestamp = None
     model_name = None
-    image_path = None
+    image_root_path = None
     models_folder = None
     image_list_class_col = None
     image_list_image_col = None
@@ -141,14 +141,14 @@ class BaseClass():
         self.image_list_file_csv = os.path.join(self.project_root, "lists", "images.csv")
 
         if image_path is not None:
-            self.image_path = image_path
-            self.logger.info("using override image folder: {}".format(self.image_path))
+            self.image_root_path = image_path
+            self.logger.info("using override image folder: {}".format(self.image_root_path))
         else:
-            self.image_path = os.path.join(self.project_root, "images")
+            self.image_root_path = os.path.join(self.project_root, "images")
 
-        if not os.path.exists(self.image_path):
-            os.mkdir(self.image_path)
-            self.logger.info("created image folder: {}".format(self.image_path))
+        if not os.path.exists(self.image_root_path):
+            os.mkdir(self.image_root_path)
+            self.logger.info("created image folder: {}".format(self.image_root_path))
 
         self.models_folder = os.path.join(self.project_root, "models")
 
@@ -295,7 +295,7 @@ class BaseClass():
         # # print(len(df), len(self.traindf), len(self.testdf))
 
         df.columns = [self.COL_CLASS, self.COL_IMAGE]
-        df[self.COL_IMAGE] = self.image_path.rstrip("/") + "/" + df[self.COL_IMAGE].astype(str)
+        df[self.COL_IMAGE] = self.image_root_path.rstrip("/") + "/" + df[self.COL_IMAGE].astype(str)
         self.traindf = df
         self.logger.info("read {} images in {} classes".format(self.traindf[self.COL_IMAGE].nunique(),self.traindf[self.COL_CLASS].nunique()))
 
@@ -308,7 +308,7 @@ class BaseClass():
                 errors.append(row["image"])
 
         if len(errors) > 0:
-            raise ValueError("found non-existing images (example: {}; is image root '{}' correct?)".format(errors[0],self.image_path))
+            raise ValueError("found non-existing images (example: {}; is image root '{}' correct?)".format(errors[0],self.image_root_path))
 
     def image_list_apply_class_list(self):
         before = len(self.traindf)

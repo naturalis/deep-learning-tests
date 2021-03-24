@@ -75,10 +75,10 @@ class ImageDownloader(baseclass.BaseClass):
             # self.previously_downloaded_files = [{"file": file, "path": os.path.join(self.previously_downloaded_files,file)} \
             # for file in os.listdir(self.override_download_folder) if os.path.isfile(os.path.join(self.override_download_folder, file))]
         else:
-            for subdir, dirs, files in os.walk(self.image_path):
+            for subdir, dirs, files in os.walk(self.image_root_path):
                 for file in files:
                     self.previously_downloaded_files.append( \
-                    {"file": file, "path": os.path.join(subdir.replace(self.image_path,""),file).lstrip("/")})
+                    {"file": file, "path": os.path.join(subdir.replace(self.image_root_path,""),file).lstrip("/")})
 
     def download_images(self):
         if self.skip_download_if_exists:
@@ -133,7 +133,7 @@ class ImageDownloader(baseclass.BaseClass):
                         # print(filename)
                         # print(file_to_save)
                     else:
-                        file_to_save = os.path.join(self.image_path, self._current_subdir,filename)
+                        file_to_save = os.path.join(self.image_root_path, self._current_subdir,filename)
                         subdir_to_write = self._current_subdir
 
                     try:
@@ -149,7 +149,7 @@ class ImageDownloader(baseclass.BaseClass):
 
     def _set_download_subdir(self):
         self._current_subdir = md5(str(self._subfolder_index).encode('utf-8')).hexdigest()[:10]
-        subdir_path = os.path.join(self.image_path, self._current_subdir)
+        subdir_path = os.path.join(self.image_root_path, self._current_subdir)
         if not os.path.isdir(subdir_path):
             os.mkdir(subdir_path)
 
@@ -158,8 +158,8 @@ class ImageDownloader(baseclass.BaseClass):
             while True:
                 self._subfolder_index += 1
                 self._current_subdir = md5(str(self._subfolder_index).encode('utf-8')).hexdigest()[:10]
-                if not os.path.isdir(os.path.join(self.image_path, self._current_subdir)):
-                    os.mkdir(os.path.join(self.image_path, self._current_subdir))
+                if not os.path.isdir(os.path.join(self.image_root_path, self._current_subdir)):
+                    os.mkdir(os.path.join(self.image_root_path, self._current_subdir))
                     break
 
 

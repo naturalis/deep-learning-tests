@@ -17,7 +17,7 @@ class ImageConvert(baseclass.BaseClass):
     def get_images_to_convert(self):
         extensions = [ x["extension"] for x in self.extensions_to_convert ]
 
-        for f in glob.iglob(self.image_path + '/**/*.*', recursive=True):
+        for f in glob.iglob(self.image_root_path + '/**/*.*', recursive=True):
             if os.path.isfile(f):
                 filename, file_extension = os.path.splitext(f)
                 if file_extension.lower() in extensions:
@@ -26,7 +26,8 @@ class ImageConvert(baseclass.BaseClass):
     def run_conversions(self):
         for item in self.files_to_convert:
 
-            s = [ x for x in self.downloaded_images if x[self.image_col] == item["filename"] ]
+            s = [ x for x in self.downloaded_images if x[self.image_col] == item["filename"].replace(self.image_root_path,"") ]
+
             if len(s)>0:
                 converter = [ x["converter"] for x in self.extensions_to_convert if x["extension"] == item["extension"] ].pop()
                 method_to_call = getattr(self, converter)
