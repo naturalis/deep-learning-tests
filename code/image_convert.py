@@ -4,7 +4,7 @@ from lib import baseclass
 
 class ImageConvert(baseclass.BaseClass):
 
-    extensions_to_convert=[ { "extension" : ".png", "converter" : "fuck" } ]
+    extensions_to_convert=[ { "extension" : ".png", "converter" : "convert_png" } ]
     files_to_convert=[]
 
     def __init__(self):
@@ -18,38 +18,16 @@ class ImageConvert(baseclass.BaseClass):
             if os.path.isfile(f):
                 filename, file_extension = os.path.splitext(f)
                 if file_extension.lower() in extensions:
-                    # print(f)
                     self.files_to_convert.append({ "filename" : filename, "extension" : file_extension })
 
-        print(self.files_to_convert)
+    def run_conversions(self):
+        for item in self.files_to_convert:
+            converter = [ x["converter"] for x in self.extensions_to_convert if x["extension"] == item["extension"] ]
+            method_to_call = getattr(self, converter)
+            result = method_to_call(item["filename"])
 
-        method_to_call = getattr(self, 'fuck')
-        result = method_to_call(23)
-
-    def fuck(self,a):
-        print("hurray! {}".format(a))
-
-        # bad_files=[]
-        # checked=0
-        # for filename in glob.iglob(rootdir + '/**/*.jpg', recursive=True):
-        #     if os.path.isfile(filename):
-        #         # print(filename)
-        #         try:
-        #             # img = Image.open(filename) # open the image file
-        #             # img.verify() # verify that it is, in fact an image
-        #             im = Image.open(filename)
-        #             im.verify() #I perform also verify, don't know if he sees other types o defects
-        #             # im.close() #reload is necessary in my case
-        #             im = Image.open(filename)
-        #             im.transpose(Image.FLIP_LEFT_RIGHT)
-        #             # im.close()
-        #         except Exception as e:
-        #             bad_files.append({ "filename": filename, "error": str(e)})
-        #         checked += 1
-        #         if checked % 1000 == 0:
-        #             print("{} / {} ".format(len(bad_files),checked))
-
-        # return bad_files
+    def convert_png(self,img):
+        print("convert_png: {}".format(img))
 
 
 
@@ -62,3 +40,4 @@ if __name__ == "__main__":
     # ic.set_model_folder()
     # ic.set_image_list_file(os.getenv('IMAGE_LIST_FILE'))
     ic.get_images_to_convert()
+    ic.run_conversions()
