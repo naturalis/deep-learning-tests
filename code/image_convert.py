@@ -51,6 +51,7 @@ class ImageConvert(baseclass.BaseClass):
         rgb_im.save(new_img)
 
         for idx, item in enumerate(self.downloaded_images):
+            print(item)
             if item[self.image_col] == img:
                 self.downloaded_images[idx][self.image_col] == new_img
 
