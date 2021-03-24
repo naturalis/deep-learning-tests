@@ -1,4 +1,4 @@
-import os, csv
+import os, csv, argparse
 import  glob
 from lib import baseclass, utils
 
@@ -24,29 +24,13 @@ class ImageConvert(baseclass.BaseClass):
                     self.files_to_convert.append({ "filename" : f, "extension" : file_extension })
 
     def run_conversions(self):
-
-        print(os.path.join(self.image_root_path,self.downloaded_images[0][self.image_col]))
-        print(self.files_to_convert[0]["filename"])
-
-        return
-
-        for x in self.downloaded_images:
-            print(os.path.join(self.image_root_path,x[self.image_col]))
-
         for item in self.files_to_convert:
-
-            print(item["filename"])
-
             s = [ x for x in self.downloaded_images if os.path.join(self.image_root_path,x[self.image_col]) == item["filename"] ]
-
-
-
             if len(s)>0:
                 converter = [ x["converter"] for x in self.extensions_to_convert if x["extension"] == item["extension"] ].pop()
                 method_to_call = getattr(self, converter)
                 result = method_to_call(item["filename"])
             else:
-                pass
                 print("wtf {}".format(item))
 
     def convert_png(self,img):
@@ -58,7 +42,6 @@ class ImageConvert(baseclass.BaseClass):
             reader = csv.reader(csv_file, delimiter=utils._determine_csv_separator(self.downloaded_images_file,"utf-8-sig"))
             self.downloaded_images = list(reader)
 
-
         print(self.downloaded_images)
 
 
@@ -66,9 +49,15 @@ if __name__ == "__main__":
 
     ic = ImageConvert()
 
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--alt_image_list",type=str,help="specify alternative downloaded image list")
+
+    if args.alt_image_list:
+        ic.set_alt_downloaded_images_file(args.alt_image_list)
+
     ic.set_debug(os.environ["DEBUG"]=="1" if "DEBUG" in os.environ else False)
     ic.set_project(os.environ)
     ic.set_image_col(int(os.environ["IMAGE_LIST_FILE_COLUMN"]) if "IMAGE_LIST_FILE_COLUMN" in os.environ else 2)
     ic.read_downloaded_images_file()
     ic.get_images_to_convert()
-    ic.run_conversions()
+    # ic.run_conversions()
