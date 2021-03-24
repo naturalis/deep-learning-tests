@@ -53,12 +53,13 @@ if __name__ == "__main__":
     parser.add_argument("--alt_image_list",type=str,help="specify alternative downloaded image list")
     args = parser.parse_args()
 
-    if args.alt_image_list:
-        ic.set_alt_downloaded_images_file(args.alt_image_list)
-
     ic.set_debug(os.environ["DEBUG"]=="1" if "DEBUG" in os.environ else False)
     ic.set_project(os.environ)
     ic.set_image_col(int(os.environ["IMAGE_LIST_FILE_COLUMN"]) if "IMAGE_LIST_FILE_COLUMN" in os.environ else 2)
+
+    if args.alt_image_list:
+        ic.set_alt_downloaded_images_file(args.alt_image_list)
+
     ic.read_downloaded_images_file()
     ic.get_images_to_convert()
     # ic.run_conversions()
