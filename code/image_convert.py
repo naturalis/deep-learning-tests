@@ -24,10 +24,10 @@ class ImageConvert(baseclass.BaseClass):
         print(self.files_to_convert)
 
         method_to_call = getattr(self, 'fuck')
-        result = method_to_call()
+        result = method_to_call(23)
 
-    def fuck(self):
-        print("hurray!")
+    def fuck(self,a):
+        print("hurray! {}".format(a))
 
         # bad_files=[]
         # checked=0
