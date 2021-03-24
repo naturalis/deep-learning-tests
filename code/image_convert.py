@@ -44,6 +44,8 @@ class ImageConvert(baseclass.BaseClass):
             self.downloaded_images = list(reader)
 
 
+        print(self.downloaded_images)
+
 
 if __name__ == "__main__":
 
