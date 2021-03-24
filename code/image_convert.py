@@ -22,7 +22,6 @@ class ImageConvert(baseclass.BaseClass):
                 filename, file_extension = os.path.splitext(f)
                 if file_extension.lower() in extensions:
                     self.files_to_convert.append({ "filename" : f, "extension" : file_extension })
-                    break
 
         self.logger.info("found {} images to convert".format(len(self.files_to_convert)))
 
