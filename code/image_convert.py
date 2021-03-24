@@ -14,7 +14,7 @@ class ImageConvert(baseclass.BaseClass):
         for f in glob.iglob(self.image_path + '/**/*.*', recursive=True):
             if os.path.isfile(f):
                 filename, file_extension = os.path.splitext(f)
-                if lower(file_extension) in self.extensions_to_convert:
+                if file_extension.lower() in self.extensions_to_convert:
                     print(filename)
 
         # bad_files=[]
