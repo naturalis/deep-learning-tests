@@ -167,9 +167,9 @@ class BaseClass():
         elif os.path.exists(filename):
             self.class_list_file = filename
         else:
-            raise ValueError("alternative class list file {} does not exist".format(filename))
+            raise ValueError("alternative class list file does not exist: {}".format(filename))
 
-        self.logger.info("using alternative class list file {}".format(self.class_list_file))
+        self.logger.info("using alternative class list file: {}".format(self.class_list_file))
 
     def set_alt_downloaded_images_file(self,filename):
         alt_downloaded_images_file = os.path.join(self.project_root, "lists", filename)
@@ -178,9 +178,9 @@ class BaseClass():
         elif os.path.exists(filename):
             self.downloaded_images_file = filename
         else:
-            raise ValueError("alternative downloaded images file {} does not exist".format(filename))
+            raise ValueError("alternative downloaded images file does not exist: {}".format(filename))
 
-        self.logger.info("using alternative downloaded images file {}".format(self.downloaded_images_file))
+        self.logger.info("using alternative downloaded images file: {}".format(self.downloaded_images_file))
 
     def set_model_folder(self):
         self.model_folder = os.path.join(self.project_root, "models", self.model_name)

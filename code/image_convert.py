@@ -45,7 +45,7 @@ class ImageConvert(baseclass.BaseClass):
             reader = csv.reader(csv_file, delimiter=utils._determine_csv_separator(self.downloaded_images_file,"utf-8-sig"))
             self.downloaded_images = list(reader)
 
-        self.logger.warning("read image list {}".format(self.downloaded_images_file))
+        self.logger.info("read image list {}".format(self.downloaded_images_file))
 
 if __name__ == "__main__":
 
