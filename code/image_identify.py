@@ -59,7 +59,7 @@ class ImageIdentify(baseclass.BaseClass):
                 if predictions['predictions_original']:
                     x["predictions_original"] = predictions["predictions_original"]
                 self.results.append(x)
-                print("{}: {} {}".format(image,predictions["predictions"][0]["class"],predictions["predictions"][0]["prediction"]));
+                print("{}: {} ({})".format(image,predictions["predictions"][0]["class"],predictions["predictions"][0]["prediction"]));
             else:
                 print("image doesn't exist: {}".format(image));
         return json.dumps({ "project" : self.project_name, "model" : self.model_name, "predictions" : self.results })
@@ -120,7 +120,7 @@ class ImageIdentify(baseclass.BaseClass):
 
             results_original = []
             for key in predictions_original:
-                results_original.append({ 'class' : key, 'prediction': predictions_original[key] })
+                results_original.append({ 'class' : key, 'predictions': predictions_original[key] })
 
 
         if not predictions_batch is None:
@@ -140,7 +140,7 @@ class ImageIdentify(baseclass.BaseClass):
 
             results_batch = []
             for key in predictions_batch:
-                results_batch.append({ 'class' : key, 'prediction': predictions_batch[key] })
+                results_batch.append({ 'class' : key, 'predictions': predictions_batch[key] })
 
         if not results_batch is None:
             output = { 'predictions' : results_batch }
