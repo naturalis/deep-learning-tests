@@ -4,14 +4,17 @@ from lib import baseclass, utils
 
 class ImageConvert(baseclass.BaseClass):
 
+    downloaded_images=[]
     extensions_to_convert=[ { "extension" : ".png", "converter" : "convert_png" } ]
     files_to_convert=[]
 
     def __init__(self):
         super().__init__()
 
-    def get_images_to_convert(self):
+    def set_image_col(self,image_col):
+        self.image_col = image_col
 
+    def get_images_to_convert(self):
         extensions = [ x["extension"] for x in self.extensions_to_convert ]
 
         for f in glob.iglob(self.image_path + '/**/*.*', recursive=True):
@@ -22,9 +25,14 @@ class ImageConvert(baseclass.BaseClass):
 
     def run_conversions(self):
         for item in self.files_to_convert:
-            converter = [ x["converter"] for x in self.extensions_to_convert if x["extension"] == item["extension"] ].pop()
-            method_to_call = getattr(self, converter)
-            result = method_to_call(item["filename"])
+
+            s = [ x for x in self.downloaded_images if x[self.image_col] == item["filename"] ]
+            if len(s)>0:
+                converter = [ x["converter"] for x in self.extensions_to_convert if x["extension"] == item["extension"] ].pop()
+                method_to_call = getattr(self, converter)
+                result = method_to_call(item["filename"])
+            else:
+                print("wtf {}".format(item))
 
     def convert_png(self,img):
         print("convert_png: {}".format(img))
@@ -33,9 +41,8 @@ class ImageConvert(baseclass.BaseClass):
     def read_downloaded_images_file(self,image_col):
 
         with open(self.downloaded_images_file) as csv_file:
-            csv_reader = csv.reader(csv_file, delimiter=utils._determine_csv_separator(self.downloaded_images_file,"utf-8-sig"))
-            for row in csv_reader:
-                print(row[image_col])
+            reader = csv.reader(csv_file, delimiter=utils._determine_csv_separator(self.downloaded_images_file,"utf-8-sig"))
+            self.downloaded_images = list(reader)
 
 
 
@@ -45,8 +52,7 @@ if __name__ == "__main__":
 
     ic.set_debug(os.environ["DEBUG"]=="1" if "DEBUG" in os.environ else False)
     ic.set_project(os.environ)
-    # ic.set_model_folder()
-    # ic.set_image_list_file(os.getenv('IMAGE_LIST_FILE'))
+    ic.set_image_col(int(os.environ["IMAGE_LIST_FILE_COLUMN"]) if "IMAGE_LIST_FILE_COLUMN" in os.environ else 2)
+    ic.read_downloaded_images_file()
     ic.get_images_to_convert()
     ic.run_conversions()
-    ic.read_downloaded_images_file(image_col=int(os.environ["IMAGE_LIST_FILE_COLUMN"]) if "IMAGE_LIST_FILE_COLUMN" in os.environ else 2)
