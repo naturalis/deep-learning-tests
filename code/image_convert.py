@@ -22,7 +22,7 @@ class ImageConvert(baseclass.BaseClass):
 
     def run_conversions(self):
         for item in self.files_to_convert:
-            converter = [ x["converter"] for x in self.extensions_to_convert if x["extension"] == item["extension"] ].unshift()
+            converter = [ x["converter"] for x in self.extensions_to_convert if x["extension"] == item["extension"] ].pop()
             print(converter)
             print(type(converter))
             method_to_call = getattr(self, converter)
