@@ -51,6 +51,7 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
     parser.add_argument("--alt_image_list",type=str,help="specify alternative downloaded image list")
+    args = parser.parse_args()
 
     if args.alt_image_list:
         ic.set_alt_downloaded_images_file(args.alt_image_list)
