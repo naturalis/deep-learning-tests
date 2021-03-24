@@ -33,9 +33,10 @@ class ImageConvert(baseclass.BaseClass):
                 method_to_call = getattr(self, converter)
                 result = method_to_call(item["filename"])
             else:
-                self.logger.warning("image not present in {}: {}".format(len(self.downloaded_images_file,item["filename"])))
+                self.logger.warning("image not present in {}: {}".format(self.downloaded_images_file,item["filename"]))
 
     def convert_png(self,img):
+        pass
         self.logger.info("convert_png: {}".format(img))
 
 
