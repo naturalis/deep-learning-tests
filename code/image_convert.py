@@ -1,6 +1,6 @@
 import os, csv
 import  glob
-from lib import baseclass
+from lib import baseclass, utils
 
 class ImageConvert(baseclass.BaseClass):
 
@@ -32,7 +32,7 @@ class ImageConvert(baseclass.BaseClass):
 
     def read_downloaded_images_file(self):
         with open(self.downloaded_images_file) as csv_file:
-            csv_reader = csv.reader(csv_file, delimiter=_determine_csv_separator(self.downloaded_images_file,"utf-8-sig"))
+            csv_reader = csv.reader(csv_file, delimiter=utils._determine_csv_separator(self.downloaded_images_file,"utf-8-sig"))
             for row in csv_reader:
                 print(row)
 

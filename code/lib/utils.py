@@ -60,7 +60,7 @@ def verify_images(rootdir):
                 im = Image.open(filename)
                 im.verify() #I perform also verify, don't know if he sees other types o defects
                 # im.close() #reload is necessary in my case
-                im = Image.open(filename) 
+                im = Image.open(filename)
                 im.transpose(Image.FLIP_LEFT_RIGHT)
                 # im.close()
             except Exception as e:
@@ -70,3 +70,12 @@ def verify_images(rootdir):
                 print("{} / {} ".format(len(bad_files),checked))
 
     return bad_files
+
+def _determine_csv_separator(filepath,encoding):
+    f = open(filepath, "r", encoding=encoding)
+    line = f.readline()
+    if line.count('\t') > 0:
+        sep = '\t'
+    else:
+        sep = ','
+    return sep

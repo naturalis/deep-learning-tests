@@ -6,21 +6,21 @@ import pandas as pd
 import numpy as np
 from shutil import copyfile
 from datetime import datetime
-from lib import logclass
+from lib import logclass, utils
 
-def _determine_csv_separator(filepath,encoding):
-    f = open(filepath, "r", encoding=encoding)
-    line = f.readline()
-    if line.count('\t') > 0:
-        sep = '\t'
-    else:
-        sep = ','
-    return sep
+# def _determine_csv_separator(filepath,encoding):
+#     f = open(filepath, "r", encoding=encoding)
+#     line = f.readline()
+#     if line.count('\t') > 0:
+#         sep = '\t'
+#     else:
+#         sep = ','
+#     return sep
 
 def _csv_to_dataframe(filepath, usecols, encoding="utf-8-sig"):
     return pd.read_csv(filepath,
         encoding=encoding,
-        sep=_determine_csv_separator(filepath=filepath,encoding=encoding),
+        sep=utils._determine_csv_separator(filepath=filepath,encoding=encoding),
         dtype="str", usecols=usecols, header=None)
 
 class BaseClass():
@@ -263,7 +263,7 @@ class BaseClass():
             image_counter={}
 
             with open(self.downloaded_images_file_model) as csv_file:
-                csv_reader = csv.reader(csv_file, delimiter=_determine_csv_separator(self.downloaded_images_file_model,"utf-8-sig"))
+                csv_reader = csv.reader(csv_file, delimiter=utils._determine_csv_separator(self.downloaded_images_file_model,"utf-8-sig"))
                 for row in csv_reader:
 
                     this_class = row[self.image_list_class_col]
