@@ -49,4 +49,4 @@ if __name__ == "__main__":
     # ic.set_image_list_file(os.getenv('IMAGE_LIST_FILE'))
     ic.get_images_to_convert()
     ic.run_conversions()
-    ic.read_downloaded_images_file(image_col=int(os_environ.get("IMAGE_LIST_FILE_COLUMN")) if "IMAGE_LIST_FILE_COLUMN" in os_environ else 2)
+    ic.read_downloaded_images_file(image_col=int(os.environ["IMAGE_LIST_FILE_COLUMN"]) if "IMAGE_LIST_FILE_COLUMN" in os.environ else 2)
