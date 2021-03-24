@@ -108,11 +108,9 @@ IMAGE_URL_TO_NAME={"expression": "/file/id/|/format/[a-z]*", "replace": "", "pos
 sudo docker-compose run tensorflow /code/project_prepare.py
 sudo docker-compose run tensorflow /code/dwca_reader.py
 sudo docker-compose run tensorflow /code/image_downloader.py
-
 sudo docker-compose run tensorflow /code/image_convert.py
 
 sudo docker-compose run tensorflow /code/check_images.py --path
-
 
 sudo docker-compose run tensorflow /code/model_trainer.py
 sudo docker-compose run tensorflow /code/model_analysis.py --load_model xyz
