@@ -33,7 +33,7 @@ class ImageConvert(baseclass.BaseClass):
                 method_to_call = getattr(self, converter)
                 result = method_to_call(item["filename"])
             else:
-                self.logger.warning("image not present in {}: {}".format(self.downloaded_images_file,item["filename"]))
+                self.logger.warning("image not present in image list: {}".format(item["filename"]))
 
     def convert_png(self,img):
         pass
@@ -44,6 +44,8 @@ class ImageConvert(baseclass.BaseClass):
         with open(self.downloaded_images_file) as csv_file:
             reader = csv.reader(csv_file, delimiter=utils._determine_csv_separator(self.downloaded_images_file,"utf-8-sig"))
             self.downloaded_images = list(reader)
+
+        self.logger.warning("read image list {}".format(self.downloaded_images_file))
 
 if __name__ == "__main__":
 
