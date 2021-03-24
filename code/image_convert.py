@@ -38,8 +38,7 @@ class ImageConvert(baseclass.BaseClass):
         print("convert_png: {}".format(img))
 
 
-    def read_downloaded_images_file(self,image_col):
-
+    def read_downloaded_images_file(self):
         with open(self.downloaded_images_file) as csv_file:
             reader = csv.reader(csv_file, delimiter=utils._determine_csv_separator(self.downloaded_images_file,"utf-8-sig"))
             self.downloaded_images = list(reader)
