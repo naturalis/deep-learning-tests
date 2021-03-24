@@ -23,6 +23,8 @@ class ImageConvert(baseclass.BaseClass):
                 if file_extension.lower() in extensions:
                     self.files_to_convert.append({ "filename" : f, "extension" : file_extension })
 
+        self.logger.info("found {} images to convert".format(len(self.files_to_convert)))
+
     def run_conversions(self):
         for item in self.files_to_convert:
             s = [ x for x in self.downloaded_images if os.path.join(self.image_root_path,x[self.image_col]) == item["filename"] ]
@@ -31,19 +33,16 @@ class ImageConvert(baseclass.BaseClass):
                 method_to_call = getattr(self, converter)
                 result = method_to_call(item["filename"])
             else:
-                print("wtf {}".format(item))
+                self.logger.warning("image not present in {}: {}".format(len(self.downloaded_images_file,item["filename"])))
 
     def convert_png(self,img):
-        print("convert_png: {}".format(img))
+        self.logger.info("convert_png: {}".format(img))
 
 
     def read_downloaded_images_file(self):
         with open(self.downloaded_images_file) as csv_file:
             reader = csv.reader(csv_file, delimiter=utils._determine_csv_separator(self.downloaded_images_file,"utf-8-sig"))
             self.downloaded_images = list(reader)
-
-        print(self.downloaded_images)
-
 
 if __name__ == "__main__":
 
