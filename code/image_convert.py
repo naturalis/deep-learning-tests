@@ -37,12 +37,13 @@ class ImageConvert(baseclass.BaseClass):
                 self.logger.warning("image not present in image list: {}".format(item["filename"]))
 
     def convert_png(self,img):
-        self.logger.info("convert_png: {}".format(img))
+        new_img = img + '.jpg'
 
-        # im = Image.open("Ba_b_do8mag_c6_big.png")
-        # rgb_im = im.convert('RGB')
-        # rgb_im.save('colors.jpg')
+        im = Image.open(img)
+        rgb_im = im.convert('RGB')
+        rgb_im.save(new_img)
 
+        self.logger.info("converted png: {} --> {}".format(img,new_img))
 
     def read_downloaded_images_file(self):
         with open(self.downloaded_images_file) as csv_file:
