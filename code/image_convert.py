@@ -25,6 +25,11 @@ class ImageConvert(baseclass.BaseClass):
 
     def run_conversions(self):
 
+        print(os.path.join(self.image_root_path,self.downloaded_images[0][self.image_col]))
+        print(self.files_to_convert[0]["filename"])
+
+        return
+
         for x in self.downloaded_images:
             print(os.path.join(self.image_root_path,x[self.image_col]))
 
