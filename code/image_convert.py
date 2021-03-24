@@ -18,13 +18,11 @@ class ImageConvert(baseclass.BaseClass):
             if os.path.isfile(f):
                 filename, file_extension = os.path.splitext(f)
                 if file_extension.lower() in extensions:
-                    self.files_to_convert.append({ "filename" : filename, "extension" : file_extension })
+                    self.files_to_convert.append({ "filename" : f, "extension" : file_extension })
 
     def run_conversions(self):
         for item in self.files_to_convert:
             converter = [ x["converter"] for x in self.extensions_to_convert if x["extension"] == item["extension"] ].pop()
-            print(converter)
-            print(type(converter))
             method_to_call = getattr(self, converter)
             result = method_to_call(item["filename"])
 
