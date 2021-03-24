@@ -26,7 +26,7 @@ class ImageConvert(baseclass.BaseClass):
     def run_conversions(self):
         for item in self.files_to_convert:
 
-            s = [ x for x in self.downloaded_images if x[self.image_col] == item["filename"].replace(self.image_root_path,"") ]
+            s = [ x for x in self.downloaded_images if os.path.join(self.image_root_path,x[self.image_col]) == item["filename"] ]
 
             if len(s)>0:
                 converter = [ x["converter"] for x in self.extensions_to_convert if x["extension"] == item["extension"] ].pop()
