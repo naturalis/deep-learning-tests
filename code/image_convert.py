@@ -4,7 +4,7 @@ from lib import baseclass
 
 class ImageConvert(baseclass.BaseClass):
 
-    extensions_to_convert=[ { "extension" : ".png", "converter" : self.fuck() } ]
+    extensions_to_convert=[ { "extension" : ".png", "converter" : "fuck" } ]
     files_to_convert=[]
 
     def __init__(self):
@@ -22,6 +22,12 @@ class ImageConvert(baseclass.BaseClass):
                     self.files_to_convert.append({ "filename" : filename, "extension" : file_extension })
 
         print(self.files_to_convert)
+
+        method_to_call = getattr(self, 'fuck')
+        result = method_to_call()
+
+    def fuck(self):
+        print("hurray!")
 
         # bad_files=[]
         # checked=0
