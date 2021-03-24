@@ -15,7 +15,7 @@ class ImageConvert(baseclass.BaseClass):
             if os.path.isfile(f):
                 filename, file_extension = os.path.splitext(f)
                 if file_extension.lower() in self.extensions_to_convert:
-                    print(filename)
+                    print(f)
 
         # bad_files=[]
         # checked=0
