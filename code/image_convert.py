@@ -1,5 +1,5 @@
-import os, csv, argparse
-import  glob
+import os, csv, argparse, glob
+from PIL import Image
 from lib import baseclass, utils
 
 class ImageConvert(baseclass.BaseClass):
@@ -22,6 +22,7 @@ class ImageConvert(baseclass.BaseClass):
                 filename, file_extension = os.path.splitext(f)
                 if file_extension.lower() in extensions:
                     self.files_to_convert.append({ "filename" : f, "extension" : file_extension })
+                    break
 
         self.logger.info("found {} images to convert".format(len(self.files_to_convert)))
 
@@ -36,8 +37,11 @@ class ImageConvert(baseclass.BaseClass):
                 self.logger.warning("image not present in image list: {}".format(item["filename"]))
 
     def convert_png(self,img):
-        pass
-        # self.logger.info("convert_png: {}".format(img))
+        self.logger.info("convert_png: {}".format(img))
+
+        # im = Image.open("Ba_b_do8mag_c6_big.png")
+        # rgb_im = im.convert('RGB')
+        # rgb_im.save('colors.jpg')
 
 
     def read_downloaded_images_file(self):
@@ -46,6 +50,7 @@ class ImageConvert(baseclass.BaseClass):
             self.downloaded_images = list(reader)
 
         self.logger.info("read image list {}".format(self.downloaded_images_file))
+
 
 if __name__ == "__main__":
 
