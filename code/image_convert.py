@@ -49,3 +49,4 @@ if __name__ == "__main__":
     ic.get_images_to_convert()
     ic.run_conversions()
     ic.read_downloaded_images_file()
+    ic.read_image_list_file()
