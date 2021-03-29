@@ -97,7 +97,7 @@ class DataSet(baseclass.BaseClass):
 
         self.data_set["downloaded_images_file"] = self.model_trainer.downloaded_images_file
         self.data_set["class_list_file"] = self.model_trainer.class_list_file
-        self.data_set["image_path"] = self.model_trainer.image_path
+        self.data_set["image_root_path"] = self.model_trainer.image_root_path
 
         self.data_set["training_settings"] = {
             "validation_split" : self.model_trainer.get_preset("validation_split"),
