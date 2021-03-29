@@ -9,6 +9,7 @@ class ImageConvert(baseclass.BaseClass):
     downloaded_images=[]
     extensions_to_convert=[ { "extension" : ".png", "converter" : "convert_png" } ]
     files_to_convert=[]
+    udpdated = 0
 
     def __init__(self):
         super().__init__()
@@ -49,22 +50,24 @@ class ImageConvert(baseclass.BaseClass):
         for idx, item in enumerate(self.downloaded_images):
             if item[self.image_col] == img:
                 self.downloaded_images[idx][self.image_col] = new_img
+                self.udpdated += 1
 
         self.logger.info("converted png: {} --> {}".format(img,new_img))
 
     def save_updated_image_list(self):
-        filename, file_extension = os.path.splitext(os.path.basename(self.downloaded_images_file))
-        backup = os.path.join(os.path.dirname(self.downloaded_images_file), "".join([filename,
-                            "--pre-image-convert-", self.get_formatted_timestamp(), file_extension]))
+        if self.udpdated > 0:
+            filename, file_extension = os.path.splitext(os.path.basename(self.downloaded_images_file))
+            backup = os.path.join(os.path.dirname(self.downloaded_images_file), "".join([filename,
+                                "--pre-image-convert-", self.get_formatted_timestamp(), file_extension]))
 
-        copyfile(self.downloaded_images_file,backup)
-        self.logger.info("backed up original image list: {}".format(backup))
+            copyfile(self.downloaded_images_file,backup)
+            self.logger.info("backed up original image list: {}".format(backup))
 
-        with open(self.downloaded_images_file, "w") as f:
-            writer = csv.writer(f)
-            writer.writerows(self.downloaded_images)
+            with open(self.downloaded_images_file, "w") as f:
+                writer = csv.writer(f)
+                writer.writerows(self.downloaded_images)
 
-        self.logger.info("wrote updated image list")
+            self.logger.info("wrote updated image list")
 
 
 if __name__ == "__main__":
