@@ -16,9 +16,20 @@ class ImageConvert(baseclass.BaseClass):
     def set_image_col(self,image_col):
         self.image_col = image_col
 
+    def read_downloaded_images_file(self):
+        with open(self.downloaded_images_file) as csv_file:
+            reader = csv.reader(csv_file, delimiter=utils._determine_csv_separator(self.downloaded_images_file,"utf-8-sig"))
+            self.downloaded_images = list(reader)
+
+        self.logger.info("read image list {}".format(self.downloaded_images_file))
+
     def get_images_to_convert(self):
         extensions = [ x["extension"] for x in self.extensions_to_convert ]
 
+        for item in self.downloaded_images:
+            print(item)
+
+        return
         for f in glob.iglob(self.image_root_path + '/**/*.*', recursive=True):
             if os.path.isfile(f):
                 filename, file_extension = os.path.splitext(f)
@@ -39,9 +50,6 @@ class ImageConvert(baseclass.BaseClass):
                 pass
                 # self.logger.warning("image not present in image list: {}".format(item["filename"]))
 
-        print(self.downloaded_images)
-
-
     def convert_png(self,img):
         new_img = img + '.jpg'
 
@@ -55,12 +63,6 @@ class ImageConvert(baseclass.BaseClass):
 
         self.logger.info("converted png: {} --> {}".format(img,new_img))
 
-    def read_downloaded_images_file(self):
-        with open(self.downloaded_images_file) as csv_file:
-            reader = csv.reader(csv_file, delimiter=utils._determine_csv_separator(self.downloaded_images_file,"utf-8-sig"))
-            self.downloaded_images = list(reader)
-
-        self.logger.info("read image list {}".format(self.downloaded_images_file))
 
     def save_updated_image_list(self):
         filename, file_extension = os.path.splitext(os.path.basename(self.downloaded_images_file))
@@ -93,6 +95,6 @@ if __name__ == "__main__":
         ic.set_alt_downloaded_images_file(args.alt_image_list)
 
     ic.read_downloaded_images_file()
-    ic.get_images_to_convert()
-    ic.run_conversions()
-    ic.save_updated_image_list()
+    # ic.get_images_to_convert()
+    # ic.run_conversions()
+    # ic.save_updated_image_list()

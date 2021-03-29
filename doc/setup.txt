@@ -105,39 +105,43 @@ IMAGE_URL_TO_NAME={"expression": "/file/id/|/format/[a-z]*", "replace": "", "pos
 
 
 
+# prepares folder etc
 sudo docker-compose run tensorflow /code/project_prepare.py
+
+# if you have a DwCA (generates image list)
 sudo docker-compose run tensorflow /code/dwca_reader.py
+
+# if you have an image list (downloads images, generates downloadad_image + classes lists)
+# checks for exsisting images, so can be used to just generate the lists
 sudo docker-compose run tensorflow /code/image_downloader.py
-sudo docker-compose run tensorflow /code/image_convert.py
 
-sudo docker-compose run tensorflow /code/check_images.py --path
+# alt options:
+sudo docker-compose run tensorflow /code/image_downloader.py \
+    --override_image_list       /data/museum/naturalis/lists/sheet7_images.csv \
+    --override_download_folder  /data/museum/naturalis/sheet7_images/ \
+    --override_output_file      /data/museum/naturalis/lists/sheet7_downloaded_images.csv
 
+# if you have a folder structure withclass names as subdirs (generates downloadad_images + classes lists)
+python generate_lists.py --image_root /path/to/image/root/
+
+# converts PNG's to JPG's (if any) (rewrites downloadad_images list)
+sudo docker-compose run tensorflow /code/image_convert.py --alt_image_list /path/to/downloaded_images.csv
+
+# checks for corrupt images in --image_root (optional, defaults to path in dataset(?) )
+sudo docker-compose run tensorflow /code/check_images.py --image_root /path/to/image/root/
+
+# train, analyse, compare, report
 sudo docker-compose run tensorflow /code/model_trainer.py
 sudo docker-compose run tensorflow /code/model_analysis.py --load_model xyz
+sudo docker-compose run tensorflow /code/model_compare.py [--cleanup --delete]
 sudo docker-compose run tensorflow /code/model_report.py --load_model xyz
 
-sudo docker-compose run tensorflow /code/model_compare.py [--cleanup --delete]
-
-
-
+# train with alternate input
 sudo docker-compose run tensorflow /code/model_trainer.py --alt_class_list classes-refcoll.csv --alt_image_list downloaded_images-refcoll.csv
 
 
-sudo docker-compose run tensorflow /code/image_downloader.py \
-    --override_image_list       /data/museum/naturalis/lists/sheet7_images.csv \
-    --override_download_folder  /data/museum/naturalis/sheet7_images/ \
-    --override_output_file      /data/museum/naturalis/lists/sheet7_downloaded_images.csv
 
-
-
-sudo docker-compose run tensorflow /code/image_downloader.py \
-    --override_image_list       /data/museum/naturalis/lists/sheet7_images.csv \
-    --override_download_folder  /data/museum/naturalis/sheet7_images/ \
-    --override_output_file      /data/museum/naturalis/lists/sheet7_downloaded_images.csv
-
-
-
-
+# API
 
 # curl -XPOST  -F "image=@ZMA.INS.1279115_1.jpg" http://0.0.0.0:8090/identify
 
@@ -148,13 +152,25 @@ sudo docker-compose run tensorflow /code/image_downloader.py \
 # API_FLASK_DEBUG=0 (avoid)
 
 
+python3 ../code/batch_api_call.py \
+  --image_list /data/maarten.schermer/data/museum/naturalis/lists/sheet7_downloaded_images.csv \
+  --api_url http://0.0.0.0:8090/identify \
+  --override_image_root_folder /data/maarten.schermer/data/museum/naturalis/sheet7_images/
 
+sudo docker-compose run tensorflow /code/image_identify.py \
+  --image /data/museum/naturalis/images_smaller/a87ff679a2/ZMA.INS.1329165_1.jpg \
+  --outfile /data/bla.json \
+  --identification_style both --top 5
 
+sudo docker-compose run tensorflow /code/image_identify.py \
+  --image /data/museum/naturalis/images_smaller/a87ff679a2/ZMA.INS.1329165_1.jpg \
+  --outfile /data/bla.json \
+  --identification_style both \
+  --top 5
 
-
-
-sudo git pull; python3 ../code/batch_api_call.py --image_list /data/maarten.schermer/data/museum/naturalis/lists/sheet7_downloaded_images.csv --api_url http://0.0.0.0:8090/identify --override_image_root_folder /data/maarten.schermer/data/museum/naturalis/sheet7_images/
-
-
-sudo docker-compose run tensorflow /code/image_identify.py --image /data/museum/naturalis/images_smaller/a87ff679a2/ZMA.INS.1329165_1.jpg --outfile /data/bla.json --identification_style both --top 5
-
+sudo docker-compose run tensorflow /code/image_identify.py \
+  --image_list /data/museum/naturalis/lists/sheet7_downloaded_images.csv \
+  --outfile /data/sheet7_predictions.json \
+  --identification_style both \
+  --top 5 \
+  --override_image_root_folder /data/museum/naturalis/sheet8_images/
