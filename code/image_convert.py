@@ -27,8 +27,6 @@ class ImageConvert(baseclass.BaseClass):
 
     def run_conversions(self):
 
-        print(self.downloaded_images)
-
         for item in self.files_to_convert:
             s = [ x for x in self.downloaded_images if os.path.join(self.image_root_path,x[self.image_col]) == item["filename"] ]
             if len(s)>0:
@@ -39,7 +37,7 @@ class ImageConvert(baseclass.BaseClass):
                 pass
                 # self.logger.warning("image not present in image list: {}".format(item["filename"]))
 
-        # print(self.downloaded_images)
+        print(self.downloaded_images)
 
 
     def convert_png(self,img):
@@ -50,10 +48,6 @@ class ImageConvert(baseclass.BaseClass):
         rgb_im.save(new_img)
 
         for idx, item in enumerate(self.downloaded_images):
-
-            if os.path.join(self.image_root_path,item[self.image_col])==img:
-                print(os.path.join(self.image_root_path,item[self.image_col])==img,os.path.join(self.image_root_path,item[self.image_col]),img)
-
             if os.path.join(self.image_root_path,item[self.image_col]) == img:
                 self.downloaded_images[idx][self.image_col] == new_img
 
