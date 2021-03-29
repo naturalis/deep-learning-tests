@@ -13,6 +13,7 @@ class ImageConvert(baseclass.BaseClass):
 
     def __init__(self):
         super().__init__()
+        self.logger.info("available conversions: {} -> jpg".format(";".join([ x["extension"] for x in self.extensions_to_convert ])))
 
     def set_image_col(self,image_col):
         self.image_col = image_col
