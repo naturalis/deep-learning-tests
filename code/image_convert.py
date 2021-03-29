@@ -35,30 +35,22 @@ class ImageConvert(baseclass.BaseClass):
         self.logger.info("found {} images to convert".format(len(self.files_to_convert)))
 
     def run_conversions(self):
-
         for item in self.files_to_convert:
-            s = [ x for x in self.downloaded_images if os.path.join(self.image_root_path,x[self.image_col]) == item["filename"] ]
-            if len(s)>0:
-                converter = [ x["converter"] for x in self.extensions_to_convert if x["extension"] == item["extension"] ].pop()
-                method_to_call = getattr(self, converter)
-                result = method_to_call(item["filename"])
-            else:
-                pass
-                # self.logger.warning("image not present in image list: {}".format(item["filename"]))
+            converter = [ x["converter"] for x in self.extensions_to_convert if x["extension"] == item["extension"] ].pop()
+            method_to_call = getattr(self, converter)
+            result = method_to_call(item["filename"])
 
     def convert_png(self,img):
         new_img = img + '.jpg'
-
-        im = Image.open(img)
+        im = Image.open(os.path.join(self.image_root_path,img))
         rgb_im = im.convert('RGB')
-        rgb_im.save(new_img)
+        rgb_im.save(os.path.join(self.image_root_path,new_img))
 
         for idx, item in enumerate(self.downloaded_images):
-            if os.path.join(self.image_root_path,item[self.image_col]) == img:
-                self.downloaded_images[idx][self.image_col] = new_img.replace(self.image_root_path,"")
+            if item[self.image_col] == img:
+                self.downloaded_images[idx][self.image_col] = new_img
 
         self.logger.info("converted png: {} --> {}".format(img,new_img))
-
 
     def save_updated_image_list(self):
         filename, file_extension = os.path.splitext(os.path.basename(self.downloaded_images_file))
