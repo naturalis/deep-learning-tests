@@ -95,6 +95,6 @@ if __name__ == "__main__":
         ic.set_alt_downloaded_images_file(args.alt_image_list)
 
     ic.read_downloaded_images_file()
-    # ic.get_images_to_convert()
+    ic.get_images_to_convert()
     # ic.run_conversions()
     # ic.save_updated_image_list()
