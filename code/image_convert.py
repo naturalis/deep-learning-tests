@@ -48,6 +48,11 @@ class ImageConvert(baseclass.BaseClass):
         rgb_im.save(new_img)
 
         for idx, item in enumerate(self.downloaded_images):
+
+            print(os.path.join(self.image_root_path,item[self.image_col]))
+            print(img)
+            print()
+
             if os.path.join(self.image_root_path,item[self.image_col]) == img:
                 self.downloaded_images[idx][self.image_col] == new_img
 
