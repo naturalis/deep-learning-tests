@@ -63,9 +63,10 @@ class ImageConvert(baseclass.BaseClass):
         self.logger.info("read image list {}".format(self.downloaded_images_file))
 
     def save_updated_image_list(self):
+        timestamp = self.get_formatted_timestamp()
         filename, file_extension = os.path.splitext(os.path.basename(self.downloaded_images_file))
         backup = os.path.join(os.path.dirname(self.downloaded_images_file), "".join[filename,
-                    "--pre-image-convert-", self.get_formatted_timestamp(), file_extension])
+                    "--pre-image-convert-", timestamp, file_extension])
 
         copyfile(self.downloaded_images_file,backup)
         self.logger.info("backed up original image list: {}".format(backup))
