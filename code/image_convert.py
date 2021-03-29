@@ -27,14 +27,10 @@ class ImageConvert(baseclass.BaseClass):
         extensions = [ x["extension"] for x in self.extensions_to_convert ]
 
         for item in self.downloaded_images:
-            print(item)
-
-        return
-        for f in glob.iglob(self.image_root_path + '/**/*.*', recursive=True):
-            if os.path.isfile(f):
-                filename, file_extension = os.path.splitext(f)
-                if file_extension.lower() in extensions:
-                    self.files_to_convert.append({ "filename" : f, "extension" : file_extension })
+            f = item[self.image_col]
+            filename, file_extension = os.path.splitext(f)
+            if file_extension.lower() in extensions:
+                self.files_to_convert.append({ "filename" : f, "extension" : file_extension })
 
         self.logger.info("found {} images to convert".format(len(self.files_to_convert)))
 
