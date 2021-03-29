@@ -51,7 +51,7 @@ class ImageConvert(baseclass.BaseClass):
 
         for idx, item in enumerate(self.downloaded_images):
             if os.path.join(self.image_root_path,item[self.image_col]) == img:
-                self.downloaded_images[idx][self.image_col] = new_img
+                self.downloaded_images[idx][self.image_col] = new_img.replace(self.image_root_path,"")
 
         self.logger.info("converted png: {} --> {}".format(img,new_img))
 
