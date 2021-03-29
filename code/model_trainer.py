@@ -30,7 +30,7 @@ class ModelTrainer(baseclass.BaseClass):
     def __init__(self):
         super().__init__()
 
-    def __del__(self): 
+    def __del__(self):
         # script interrupted during training
         print("execution interrupted (print version)")
         # self.logger.info("execution interrupted")
@@ -93,7 +93,7 @@ class ModelTrainer(baseclass.BaseClass):
 
             phase.append(self.customcallback)
 
-            phase.append(tf.keras.callbacks.ModelCheckpoint(self.get_model_path(), 
+            phase.append(tf.keras.callbacks.ModelCheckpoint(self.get_model_path(),
                 monitor=self.get_preset("checkpoint_monitor"), save_best_only=True, save_freq="epoch", verbose=1))
 
             if self.get_preset("use_tensorboard"):
@@ -105,10 +105,10 @@ class ModelTrainer(baseclass.BaseClass):
                 patience = self.get_preset("early_stopping_patience")[key]
                 if not monitor == "none":
                     phase.append(tf.keras.callbacks.EarlyStopping(
-                        monitor=monitor, 
+                        monitor=monitor,
                         patience=patience,
-                        mode="auto", 
-                        restore_best_weights=True, 
+                        mode="auto",
+                        restore_best_weights=True,
                         verbose=1))
 
             if key < len(self.get_preset("reduce_lr_params")):
@@ -128,7 +128,7 @@ class ModelTrainer(baseclass.BaseClass):
         #     phase = []
         #     phase.append(tf.keras.callbacks.EarlyStopping(
         #         monitor=trainer.get_preset("early_stopping_monitor"), patience=5, mode="auto", restore_best_weights=True, verbose=1))
-        #     phase.append(tf.keras.callbacks.ModelCheckpoint(trainer.get_model_path(), 
+        #     phase.append(tf.keras.callbacks.ModelCheckpoint(trainer.get_model_path(),
         #         monitor=trainer.get_preset("checkpoint_monitor"), save_best_only=True, save_freq="epoch", verbose=1))
         #     phase.append(tf.keras.callbacks.ReduceLROnPlateau(
         #         monitor=item["monitor"],factor=item["factor"],patience=item["patience"],min_lr=item["min_lr"],verbose=item["verbose"]))
@@ -144,7 +144,7 @@ class ModelTrainer(baseclass.BaseClass):
         target_ratio = self.get_preset("upsampling_ratio")
         before = len(self.traindf)
         self.logger.info("upsampling, target ratio: {}".format(target_ratio))
-        while(self.get_imbalance_ratio() < target_ratio):   
+        while(self.get_imbalance_ratio() < target_ratio):
             counts = self.traindf[self.COL_CLASS].value_counts()
             minority_label = counts.idxmin()
             dataset_minority = self.traindf[self.traindf[self.COL_CLASS]==minority_label]
@@ -181,7 +181,7 @@ class ModelTrainer(baseclass.BaseClass):
             a = self.model_settings["image_augmentation"]
         else:
             a = []
-        
+
         # print(self.traindf)
         if "upsampling_ratio" in self.model_settings and not self.model_settings["upsampling_ratio"] == -1:
             self.upsample()
@@ -265,7 +265,7 @@ class ModelTrainer(baseclass.BaseClass):
         self.logger.info("model has {} layers".format(len(self.model.layers)))
 
     def _assemble_transfer_model(self):
-        
+
         self.base_model = None
 
         if self.get_preset("use_imagenet_weights"):
@@ -389,7 +389,7 @@ class ModelTrainer(baseclass.BaseClass):
 
         self.am_training = True
 
-        for epoch in self.epochs: 
+        for epoch in self.epochs:
 
             self.logger.info("=== training phase {}/{} ===".format((self.training_phase+1),len(self.epochs)))
 
@@ -400,7 +400,7 @@ class ModelTrainer(baseclass.BaseClass):
                 optimizer=self.current_optimizer,
                 loss=self.model_settings["loss"],
                 metrics=self.model_settings["metrics"] if "metrics" in self.model_settings else [ "acc","loss","val_acc","val_loss" ]
-            )           
+            )
 
             if self.debug:
                 self.model.summary()
@@ -497,13 +497,13 @@ class ModelTrainer(baseclass.BaseClass):
 
 if __name__ == "__main__":
 
-    parser = argparse.ArgumentParser() 
+    parser = argparse.ArgumentParser()
     parser.add_argument("--dataset_note",type=str)
     parser.add_argument("--load_model",type=str)
     parser.add_argument("--alt_class_list",type=str,help="specify alternative class list")
     parser.add_argument("--alt_image_list",type=str,help="specify alternative downloaded image list")
     parser.add_argument("--skip_training",action="store_true")
-    args = parser.parse_args() 
+    args = parser.parse_args()
 
     trainer = ModelTrainer()
     timer = utils.Timer()
@@ -513,16 +513,16 @@ if __name__ == "__main__":
     trainer.set_timer(timer)
 
     dataset.set_environ(os.environ)
-    trainer.set_debug(os.environ["DEBUG"]=="1" if "DEBUG" in os.environ else False)    
+    trainer.set_debug(os.environ["DEBUG"]=="1" if "DEBUG" in os.environ else False)
     trainer.set_project(os.environ)
     trainer.set_presets(os_environ=os.environ)
     trainer.set_class_image_minimum(trainer.get_preset("class_image_minimum"))
     trainer.set_class_image_maximum(trainer.get_preset("class_image_maximum"))
 
-    if args.load_model: 
+    if args.load_model:
         trainer.set_model_name(args.load_model)
     else:
-        trainer.set_model_name(trainer.make_model_name())
+        trainer.set_model_name(trainer.get_formatted_timestamp())
 
     trainer.set_skip_training(args.skip_training)
 
@@ -534,8 +534,8 @@ if __name__ == "__main__":
         "loss": tf.keras.losses.CategoricalCrossentropy(),
         "optimizer": trainer.configure_optimizers(),
         "batch_size": trainer.get_preset("batch_size"),
-        "epochs": trainer.get_preset("epochs"), 
-        "freeze_layers": trainer.get_preset("freeze_layers"), 
+        "epochs": trainer.get_preset("epochs"),
+        "freeze_layers": trainer.get_preset("freeze_layers"),
         "callbacks" : trainer.configure_callbacks(),
         "metrics" : trainer.get_preset("metrics"),
         "image_augmentation" : trainer.get_preset("image_augmentation"),
@@ -544,10 +544,10 @@ if __name__ == "__main__":
         "downsampling_ratio" : trainer.get_preset("downsampling_ratio")
     })
 
-    if args.dataset_note: 
+    if args.dataset_note:
         dataset.set_note(args.dataset_note)
 
-    if args.alt_class_list: 
+    if args.alt_class_list:
         trainer.set_alternative_class_list_file(args.alt_class_list)
 
     if args.alt_image_list:
@@ -556,7 +556,7 @@ if __name__ == "__main__":
     class_col=trainer.get_preset("image_list_class_column")
     image_col=trainer.get_preset("image_list_file_column")
 
-    if args.load_model: 
+    if args.load_model:
 
         del trainer.model_settings["freeze_layers"]
 

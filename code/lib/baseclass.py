@@ -96,7 +96,7 @@ class BaseClass():
     def set_debug(self,state):
         self.debug = state
 
-    def make_model_name(self):
+    def get_formatted_timestamp(self):
         return "{0}{1:02d}{2:02d}-{3:02d}{4:02d}{5:02d}".format(
             self.timestamp.year,
             self.timestamp.month,

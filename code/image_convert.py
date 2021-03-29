@@ -1,4 +1,6 @@
 import os, csv, argparse, glob
+from shutil import copyfile
+from datetime import datetime
 from PIL import Image
 from lib import baseclass, utils
 
@@ -48,7 +50,6 @@ class ImageConvert(baseclass.BaseClass):
         rgb_im.save(new_img)
 
         for idx, item in enumerate(self.downloaded_images):
-
             if os.path.join(self.image_root_path,item[self.image_col]) == img:
                 self.downloaded_images[idx][self.image_col] = new_img
 
@@ -60,6 +61,20 @@ class ImageConvert(baseclass.BaseClass):
             self.downloaded_images = list(reader)
 
         self.logger.info("read image list {}".format(self.downloaded_images_file))
+
+    def save_updated_image_list(self):
+        filename, file_extension = os.path.splitext(os.path.basename(self.downloaded_images_file))
+        backup = os.path.join(os.path.dirname(self.downloaded_images_file), filename,
+            "--pre-image-convert-", self.get_formatted_timestamp(), file_extension)
+
+        copyfile(self.downloaded_images_file,backup)
+        self.logger.info("backed up original image list: {}".format(backup))
+
+        with open(self.downloaded_images_file, "w") as f:
+            writer = csv.writer(f)
+            writer.writerows(self.downloaded_images)
+
+        self.logger.info("wrote updated image list")
 
 
 if __name__ == "__main__":
@@ -80,3 +95,4 @@ if __name__ == "__main__":
     ic.read_downloaded_images_file()
     ic.get_images_to_convert()
     ic.run_conversions()
+    ic.save_updated_image_list()
