@@ -50,9 +50,10 @@ class Timer:
 class ImageVerifier:
 
     root_dir = None
-    bad_files=[]
+    bad_files = []
+    image_list = []
     current_image_file = None
-    image_list = None
+    image_list_file = None
     filepath_col = None
     override_image_root_folder = None
     prepend_image_root_folder = None
@@ -64,8 +65,8 @@ class ImageVerifier:
     def set_current_image_file(self,current_image_file):
         self.current_image_file = current_image_file
 
-    def set_image_list(self,image_list):
-        self.image_list = image_list
+    def set_image_list_file(self,image_list):
+        self.image_list_file = image_list_file
 
     def set_image_list_filepath_column(self,filepath_col):
         self.filepath_col = filepath_col
@@ -120,7 +121,7 @@ class ImageVerifier:
             print("{} / {} ".format(len(self.bad_files),self.progress))
 
     def read_image_list_file(self):
-        with open(self.image_list) as csv_file:
+        with open(self.image_list_file) as csv_file:
             # reader = csv.reader(csv_file, delimiter=utils._determine_csv_separator(self.downloaded_images_file,"utf-8-sig"))
             reader = csv.reader(csv_file, delimiter=_determine_csv_separator(self.image_list,"utf-8-sig"))
             for row in reader:
