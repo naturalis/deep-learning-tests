@@ -134,7 +134,7 @@ class ImageVerifier:
                 if row[0] and file:
                     self.image_list.append(file)
 
-        print("read image list {}, found {} images".format(self.image_list_file,len(self.image_list)))
+        print("read image list {}, found {} entries".format(self.image_list_file,len(self.image_list)))
 
 
 
