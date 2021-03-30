@@ -30,4 +30,4 @@ if __name__ == "__main__":
     bad_files = img.get_bad_files()
 
     for file in bad_files:
-        dataset.logger.info("found corrupt file: {} ({})".format(file["filename"],file["error"]))
+        dataset.logger.info("{}: {}".format(file["filename"],file["error"]))
