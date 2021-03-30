@@ -47,29 +47,99 @@ class Timer:
         return self.formats[format] % (day, hour, minutes, seconds)
 
 
-def verify_images(rootdir):
-    # bad_files = verify_images("/data")
-    bad_files=[]
-    checked=0
-    for filename in glob.iglob(rootdir + '/**/*.jpg', recursive=True):
-        if os.path.isfile(filename):
-            # print(filename)
-            try:
-                # img = Image.open(filename) # open the image file
-                # img.verify() # verify that it is, in fact an image
-                im = Image.open(filename)
-                im.verify() #I perform also verify, don't know if he sees other types o defects
-                # im.close() #reload is necessary in my case
-                im = Image.open(filename)
-                im.transpose(Image.FLIP_LEFT_RIGHT)
-                # im.close()
-            except Exception as e:
-                bad_files.append({ "filename": filename, "error": str(e)})
-            checked += 1
-            if checked % 1000 == 0:
-                print("{} / {} ".format(len(bad_files),checked))
+class ImageVerifier:
 
-    return bad_files
+    root_dir = None
+    bad_files=[]
+    current_image_file = None
+    image_list = None
+    filepath_col = None
+    override_image_root_folder = None
+    prepend_image_root_folder = None
+    progress = 0
+
+    def set_root_dir(self,root_dir):
+        self.root_dir = root_dir
+
+    def set_current_image_file(self,current_image_file):
+        self.current_image_file = current_image_file
+
+    def set_image_list(self,image_list):
+        self.image_list = image_list
+
+    def set_image_list_filepath_column(self,filepath_col):
+        self.filepath_col = filepath_col
+
+    def set_override_image_root_folder(self,folder):
+        self.override_image_root_folder = folder
+
+    def set_prepend_image_root_folder(self,folder):
+        self.prepend_image_root_folder = folder
+
+    def get_bad_files(self):
+        return self.bad_files
+
+    def verify_image(self):
+        # img = Image.open(filename) # open the image file
+        # img.verify() # verify that it is, in fact an image
+        im = Image.open(self.current_image_file)
+        im.verify() #I perform also verify, don't know if he sees other types o defects
+        # im.close() #reload is necessary in my case
+        im = Image.open(self.current_image_file)
+        im.transpose(Image.FLIP_LEFT_RIGHT)
+        # im.close()
+
+    def verify_images_from_folder(self):
+        self.progress = 0
+        for filename in glob.iglob(self.root_dir + '/**/*.jpg', recursive=True):
+            if os.path.isfile(filename):
+                # print(filename)
+                try:
+                    self.set_current_image_file(filename)
+                    self.verify_image()
+                except Exception as e:
+                    self.bad_files.append({ "filename": filename, "error": str(e)})
+                self.progress += 1
+                self._print_progress()
+
+    def verify_images_from_image_list(self):
+        self.progress = 0
+        self.image_list = []
+        self.read_image_list_file()
+        for filename in self.image_list:
+            try:
+                self.set_current_image_file(filename)
+                self.verify_image()
+            except Exception as e:
+                self.bad_files.append({ "filename": filename, "error": str(e)})
+            self.progress += 1
+            self._print_progress()
+
+    def _print_progress(self):
+        if self.progress % 1000 == 0:
+            print("{} / {} ".format(len(self.bad_files),self.progress))
+
+    def read_image_list_file(self):
+        with open(self.image_list) as csv_file:
+            # reader = csv.reader(csv_file, delimiter=utils._determine_csv_separator(self.downloaded_images_file,"utf-8-sig"))
+            reader = csv.reader(csv_file, delimiter=_determine_csv_separator(self.image_list,"utf-8-sig"))
+            for row in reader:
+                if not row or self.filepath_col not in row:
+                    continue
+                file = row[self.filepath_col]
+
+                if self.override_image_root_folder:
+                    file = os.path.join(self.override_image_root_folder, os.path.basename(file))
+
+                if self.prepend_image_root_folder:
+                    file = os.path.join(self.prepend_image_root_folder, file)
+
+                if row[0] and file:
+                    self.image_list.append(file)
+
+        print("read image list {}, found {} images".format(self.image_list,len(self.image_list)))
+
+
 
 def _determine_csv_separator(filepath,encoding):
     f = open(filepath, "r", encoding=encoding)

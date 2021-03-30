@@ -65,7 +65,7 @@ class ModelAnalysis(baseclass.BaseClass):
 
             self.top_k.append({"top" : n, "pct" : round((true_count / all_count) * 100,4) })
 
-              
+
         #  top k count per class
         for class_key in np.unique(self.test_generator.classes):
             self.class_tops.append({"class" : int(class_key), "top_1" : 0, "top_3" : 0, "top_5" : 0 })
@@ -155,8 +155,8 @@ class ModelAnalysis(baseclass.BaseClass):
 
 if __name__ == "__main__":
 
-    parser = argparse.ArgumentParser() 
-    parser.add_argument("--load_model",type=str)
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--load_model",type=str,required=True)
     args = parser.parse_args()
 
     analysis = ModelAnalysis()
@@ -165,7 +165,7 @@ if __name__ == "__main__":
     analysis.set_project(os.environ)
     analysis.set_presets(os_environ=os.environ)
 
-    if args.load_model: 
+    if args.load_model:
         analysis.set_model_name(args.load_model)
     else:
         raise ValueError("need a model name (--load_model=<model name>)")
