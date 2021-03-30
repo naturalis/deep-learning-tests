@@ -130,6 +130,11 @@ sudo docker-compose run tensorflow /code/image_convert.py --alt_image_list /path
 # checks for corrupt images in --image_root (optional, defaults to path in dataset(?) )
 sudo docker-compose run tensorflow /code/check_images.py --image_root /path/to/image/root/
 
+sudo docker-compose run tensorflow /code/check_image_list.py \
+  --image_list /data/museum/museon/lists/downloaded_images.csv \
+  --filepath_col 1 \
+  --prepend_image_root_folder /data/museum/museon/referentie_afbeeldingen/
+
 # train, analyse, compare, report
 sudo docker-compose run tensorflow /code/model_trainer.py
 sudo docker-compose run tensorflow /code/model_analysis.py --load_model xyz
