@@ -126,6 +126,8 @@ class ImageVerifier:
                 if not row or self.filepath_col not in row:
                     continue
                 file = row[self.filepath_col]
+                print(row)
+                print(file)
 
                 if self.override_image_root_folder:
                     file = os.path.join(self.override_image_root_folder, os.path.basename(file))
@@ -136,7 +138,7 @@ class ImageVerifier:
                 if row[0] and file:
                     self.image_list.append(file)
 
-        print("read image list {}, found {} images".format(self.image_list,len(self.image_list)))
+        print("read image list {}, found {} images".format(self.image_list_file,len(self.image_list)))
 
 
 
