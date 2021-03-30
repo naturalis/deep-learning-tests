@@ -123,9 +123,6 @@ class ImageVerifier:
             # reader = csv.reader(csv_file, delimiter=utils._determine_csv_separator(self.downloaded_images_file,"utf-8-sig"))
             reader = csv.reader(csv_file, delimiter=_determine_csv_separator(self.image_list_file,"utf-8-sig"))
             for row in reader:
-                if not self.filepath_col in row:
-                    continue
-
                 file = row[self.filepath_col]
 
                 if self.override_image_root_folder:
