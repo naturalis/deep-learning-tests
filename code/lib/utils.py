@@ -65,7 +65,7 @@ class ImageVerifier:
     def set_current_image_file(self,current_image_file):
         self.current_image_file = current_image_file
 
-    def set_image_list_file(self,image_list):
+    def set_image_list_file(self,image_list_file):
         self.image_list_file = image_list_file
 
     def set_image_list_filepath_column(self,filepath_col):
