@@ -13,7 +13,7 @@ if __name__ == "__main__":
     dataset.set_project(os.environ)
     dataset.logger.info("checking for corrupt files")
 
-    img = ImageVerifier()
+    img = utils.ImageVerifier()
 
     if args.image_root:
         dataset.logger.info("checking for corrupt files in {}".format(args.image_root))

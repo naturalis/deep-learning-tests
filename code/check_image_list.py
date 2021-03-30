@@ -17,7 +17,7 @@ if __name__ == "__main__":
     dataset.set_project(os.environ)
     dataset.logger.info("checking image list")
 
-    img = ImageVerifier()
+    img = utils.ImageVerifier()
     img.set_image_list(args.image_list)
     img.set_image_list_filepath_column(args.filepath_col)
     # replaces whatever the folder is in the image list (just keeps basename)
