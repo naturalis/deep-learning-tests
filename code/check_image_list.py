@@ -6,7 +6,6 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--image_list",type=str,help="specify downloaded image list",required=True)
     parser.add_argument("--filepath_col",type=int,help="specify image list filepath column",required=True)
-    parser.add_argument("--filepath_col",type=int,help="specify image list filepath column",required=True)
     parser.add_argument("--override_image_root_folder",type=str)
     parser.add_argument("--prepend_image_root_folder",type=str)
     args = parser.parse_args()
@@ -15,7 +14,6 @@ if __name__ == "__main__":
     dataset.set_environ(os.environ)
     dataset.set_debug(os.environ["DEBUG"]=="1" if "DEBUG" in os.environ else False)
     dataset.set_project(os.environ)
-    dataset.logger.info("checking image list")
 
     img = utils.ImageVerifier()
     img.set_image_list(args.image_list)

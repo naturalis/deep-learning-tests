@@ -11,7 +11,6 @@ if __name__ == "__main__":
     dataset.set_environ(os.environ)
     dataset.set_debug(os.environ["DEBUG"]=="1" if "DEBUG" in os.environ else False)
     dataset.set_project(os.environ)
-    dataset.logger.info("checking for corrupt files")
 
     img = utils.ImageVerifier()
 
