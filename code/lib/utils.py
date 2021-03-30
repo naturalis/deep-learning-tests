@@ -1,7 +1,5 @@
-import time
-import os
+import os, time, csv, glob
 from PIL import Image
-import  glob
 
 class Timer:
 
