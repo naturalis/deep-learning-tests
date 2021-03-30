@@ -125,9 +125,9 @@ class ImageVerifier:
             for row in reader:
                 # if not row or self.filepath_col not in row:
                 #     continue
-                file = row[self.filepath_col]
                 print(row)
-                print(file)
+                print(self.filepath_col)
+                file = row[self.filepath_col]
 
                 if self.override_image_root_folder:
                     file = os.path.join(self.override_image_root_folder, os.path.basename(file))
