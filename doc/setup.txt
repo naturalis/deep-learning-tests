@@ -135,10 +135,12 @@ sudo docker-compose run tensorflow /code/check_image_list.py \
   --filepath_col 1 \
   --prepend_image_root_folder /data/museum/museon/referentie_afbeeldingen/
 
-# train, analyse, compare, report
+# train, analyse, compare
 sudo docker-compose run tensorflow /code/model_trainer.py
 sudo docker-compose run tensorflow /code/model_analysis.py --load_model xyz
 sudo docker-compose run tensorflow /code/model_compare.py [--cleanup --delete]
+
+# report
 sudo docker-compose run tensorflow /code/model_report.py --load_model xyz
 
 # train with alternate input

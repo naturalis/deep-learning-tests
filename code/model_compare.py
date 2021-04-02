@@ -69,6 +69,10 @@ class ModelCompare(baseclass.BaseClass):
 
         print("deleting models:")
         for item in self.delete:
+
+            if len(item.strip())==0:
+                continue
+
             if not os.path.exists(os.path.join(self.models_folder, item)):
                 print("model doesn't exist: {}".format(item))
                 continue
