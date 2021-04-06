@@ -125,7 +125,7 @@ class ModelReport(baseclass.BaseClass):
         print("")
 
     def print_report_summary(self):
-        s1 = "{: <21}"
+        s1 = "{: <16}"
         s2 = "{: >7}"
 
         print("summary")
@@ -136,7 +136,6 @@ class ModelReport(baseclass.BaseClass):
         print(s1.format("skipped classes:"),s2.format(len(self.skipped_classes)))
         print(s1.format("min. images:"),s2.format(self.this_model["class_image_minimum"]))
         print(s1.format("max. images:"),s2.format(self.this_model["class_image_maximum"]))
-        print(s1.format("support:"),s2.format(self.this_model["weighted_support"]))
         print(s1.format("support:"),s2.format(self.this_model["macro_support"]))
 
     def print_report_classes(self):
