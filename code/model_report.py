@@ -72,7 +72,7 @@ class ModelReport(baseclass.BaseClass):
     def print_report(self):
         self.print_report_classes()
         print("")
-        self.print_report_skipped_classes():
+        self.print_report_skipped_classes()
 
 
 
