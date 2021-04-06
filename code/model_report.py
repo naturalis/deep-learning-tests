@@ -73,6 +73,10 @@ class ModelReport(baseclass.BaseClass):
     def read_analysis(self):
         with open(self.get_analysis_path()) as json_file:
             data = json.load(json_file)
+
+            self.this_model["weighted_support"] = data["classification_report"]["weighted avg"]["support"]
+            self.this_model["macro_support"] = data["classification_report"]["macro avg"]["support"]
+
             for key,val in data["classification_report"].items():
                 if (key.isnumeric()):
                     # print(key,val['precision'],val['recall'],val['f1-score'],val['support'])
@@ -126,15 +130,14 @@ class ModelReport(baseclass.BaseClass):
 
         print("summary")
         print("-" * (self.max_class_name_length+65))
-
         print(s1.format("model ID:"),s2.format(self.this_model["name"]))
         print(s1.format("date:"),s2.format(self.this_model["date"]))
         print(s1.format("classes:"),s2.format(len(self.classes)))
         print(s1.format("skipped classes:"),s2.format(len(self.skipped_classes)))
         print(s1.format("min. images:"),s2.format(self.this_model["class_image_minimum"]))
         print(s1.format("max. images:"),s2.format(self.this_model["class_image_maximum"]))
-
-
+        print(s1.format("support:"),s2.format(self.this_model["weighted_support"]))
+        print(s1.format("support:"),s2.format(self.this_model["macro_support"]))
 
     def print_report_classes(self):
         s1 = "{: <"+str(self.max_class_name_length)+"}"
