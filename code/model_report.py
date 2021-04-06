@@ -14,9 +14,40 @@ class ModelReport(baseclass.BaseClass):
     classes=[]
     skipped_classes=[]
     imperfect_classes = []
+    max_class_name_length = 0
+    max_skipped_class_name_length = 0
+    this_model = None
 
     def __init__(self):
         super().__init__()
+
+    def read_dataset(self):
+        with open(self.get_dataset_path()) as json_file:
+            tmp = json.load(json_file)
+            self.this_model["name"] = tmp["model_name"]
+            self.this_model["date"] = tmp["created"]
+            self.this_model["state"] = "?" if not "state" in tmp else tmp["state"]
+            self.this_model["base_model"] = tmp["base_model"]
+            self.this_model["training_time"] = tmp["training_time"] if "training_time" in tmp else "n/a"
+            self.this_model["epochs_trained"] = tmp["epochs_trained"] if "epochs_trained" in tmp else "n/a"
+
+            if "model_retrain_note" in tmp:
+                self.this_model["note"] = "{} / {}".format(tmp["model_note"],tmp["model_retrain_note"])
+            else:
+                self.this_model["note"] = tmp["model_note"]
+
+            self.this_model["class_count"] = int(tmp["class_count"])
+            self.this_model["class_count_before_maximum"] = tmp["class_count_before_maximum"]
+            self.this_model["class_image_minimum"] = tmp["class_image_minimum"]
+            self.this_model["class_image_maximum"] = tmp["class_image_maximum"]
+            self.this_model["use_class_weights"] = tmp["use_class_weights"]
+
+            self.this_model["epochs"] = "; ".join(map(str,tmp["training_phases"]["epochs"]))
+            self.this_model["layers"] = "; ".join(map(str,tmp["training_phases"]["freeze_layers"]))
+            self.this_model["image_augmentation"] = tmp["training_settings"]["image_augmentation"].lower()!="none"
+            self.this_model["downloaded_images_file"] = tmp["downloaded_images_file"] if "downloaded_images_file" in tmp else None
+            self.this_model["class_list_file"] = tmp["class_list_file"] if "class_list_file" in tmp else None
+
 
     def read_classes(self):
 
@@ -69,21 +100,43 @@ class ModelReport(baseclass.BaseClass):
                         })
 
 
+    def set_settings(self):
+        self.max_class_name_length=0
+        for item in self.classes:
+            self.max_class_name_length = \
+                len(item["class"]) if len(item["class"]) > self.max_class_name_length else self.max_class_name_length
+
+        for item in self.skipped_classes:
+            self.max_skipped_class_name_length = \
+                len(item["class"]) if len(item["class"]) > self.max_skipped_class_name_length else self.max_skipped_class_name_length
+
     def print_report(self):
+        self.set_settings(self)
+
+        self.print_report_summary()
+        print("")
         self.print_report_classes()
         print("")
         self.print_report_skipped_classes()
 
+    def print_report_summary(self):
+
+        s1 = "{: <13}"
+        s2 = "{: >7}"
+
+        print(s1.format("model ID:"),s2.format(self.this_model["name"]))
+        print(s1.format("date:"),s2.format(self.this_model["date"]))
+        print(s1.format("classes:"),s2.format(len(self.classes)))
+        print(s1.format("classes:"),s2.format(self.this_model["class_count"]))
+        print(s1.format("skipped:"),s2.format(len(self.skipped_classes)))
+        print(s1.format("skipped:"),s2.format(self.this_model["class_count_before_maximum"] - self.this_model["class_count"]))
+        print(s1.format("min. images:"),s2.format(self.this_model["class_image_maximum"]))
+        print(s1.format("max. images:"),s2.format(self.this_model["class_image_maximum"]))
 
 
 
     def print_report_classes(self):
-
-        l=0
-        for item in self.classes:
-            l = len(item["class"]) if len(item["class"]) > l else l
-
-        s1 = "{: <"+str(l)+"}"
+        s1 = "{: <"+str(self.max_class_name_length)+"}"
         s2 = "{: >7}"
         s3 = "{: >10}"
         s4 = "{: >10}"
@@ -102,7 +155,7 @@ class ModelReport(baseclass.BaseClass):
             s4.format("top 5"),
         )
 
-        print("-" * (l+65))
+        print("-" * (self.max_class_name_length+65))
 
         for item in self.classes:
             # print(item["class"],item["f1-score"],item["support"])
@@ -119,12 +172,7 @@ class ModelReport(baseclass.BaseClass):
             )
 
     def print_report_skipped_classes(self):
-
-        l=0
-        for item in self.skipped_classes:
-            l = len(item["class"]) if len(item["class"]) > l else l
-
-        s1 = "{: <"+str(l)+"}"
+        s1 = "{: <"+str(self.max_skipped_class_name_length)+"}"
         s2 = "{: >7}"
 
         print(
@@ -132,7 +180,7 @@ class ModelReport(baseclass.BaseClass):
             s2.format("support")
         )
 
-        print("-" * (l+65))
+        print("-" * (self.max_skipped_class_name_length+65))
 
         for item in self.skipped_classes:
             print(
@@ -170,6 +218,7 @@ if __name__ == "__main__":
         raise ValueError("need a model name (--load_model=<model name>)")
 
     report.set_model_folder()
+    report.read_dataset()
     report.read_classes()
     report.read_analysis()
     report.print_report()
