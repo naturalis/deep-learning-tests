@@ -128,16 +128,16 @@ class ModelReport(baseclass.BaseClass):
         s2 = "{: >7}"
 
         print(
-            self.s1.format("skipped classes"),
-            self.s2.format("support")
+            s1.format("skipped classes"),
+            s2.format("support")
         )
 
         print("-" * (l+65))
 
         for item in self.skipped_classes:
             print(
-                self.s1.format(item["class"]),
-                self.s2.format(item["support"])
+                s1.format(item["class"]),
+                s2.format(item["support"])
             )
 
 
