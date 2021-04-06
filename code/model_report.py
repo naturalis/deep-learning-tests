@@ -16,7 +16,7 @@ class ModelReport(baseclass.BaseClass):
     imperfect_classes = []
     max_class_name_length = 0
     max_skipped_class_name_length = 0
-    this_model = None
+    this_model = {}
 
     def __init__(self):
         super().__init__()
