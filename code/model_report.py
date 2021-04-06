@@ -121,17 +121,17 @@ class ModelReport(baseclass.BaseClass):
         print("")
 
     def print_report_summary(self):
-
-        s1 = "{: <13}"
+        s1 = "{: <21}"
         s2 = "{: >7}"
+
+        print("summary")
+        print("-" * (self.max_class_name_length+65))
 
         print(s1.format("model ID:"),s2.format(self.this_model["name"]))
         print(s1.format("date:"),s2.format(self.this_model["date"]))
         print(s1.format("classes:"),s2.format(len(self.classes)))
-        print(s1.format("classes:"),s2.format(self.this_model["class_count"]))
-        print(s1.format("skipped:"),s2.format(len(self.skipped_classes)))
-        print(s1.format("skipped:"),s2.format(self.this_model["class_count_before_maximum"] - self.this_model["class_count"]))
-        print(s1.format("min. images:"),s2.format(self.this_model["class_image_maximum"]))
+        print(s1.format("skipped classes:"),s2.format(len(self.skipped_classes)))
+        print(s1.format("min. images:"),s2.format(self.this_model["class_image_minimum"]))
         print(s1.format("max. images:"),s2.format(self.this_model["class_image_maximum"]))
 
 
