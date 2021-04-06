@@ -111,13 +111,14 @@ class ModelReport(baseclass.BaseClass):
                 len(item["class"]) if len(item["class"]) > self.max_skipped_class_name_length else self.max_skipped_class_name_length
 
     def print_report(self):
-        self.set_settings(self)
+        self.set_settings()
 
         self.print_report_summary()
         print("")
         self.print_report_classes()
         print("")
         self.print_report_skipped_classes()
+        print("")
 
     def print_report_summary(self):
 
