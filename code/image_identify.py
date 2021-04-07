@@ -135,8 +135,6 @@ class ImageIdentify(baseclass.BaseClass):
         else:
             output = { "predictions" : results_original }
 
-        print(output)
-
         return output
 
     def generate_augmented_image_batch(self,original):
