@@ -110,7 +110,7 @@ class ImageIdentify(baseclass.BaseClass):
             predictions_original = {k: v for k, v in sorted(predictions_original.items(), key=lambda item: item[1], reverse=True)}
 
             print(predictions_original)
-            print(type{predictions_original})
+            print(type(predictions_original))
             exit(0)
 
             if self.top > 0:
