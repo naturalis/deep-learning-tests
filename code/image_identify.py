@@ -108,6 +108,9 @@ class ImageIdentify(baseclass.BaseClass):
 
         if not predictions_original is None:
             predictions_original = dict(zip(classes.keys(), predictions_original))
+
+            print(predictions_original)
+
             predictions_original = {k: v for k, v in sorted(predictions_original.items(), key=lambda item: item[1], reverse=True)}
 
             print(predictions_original)
