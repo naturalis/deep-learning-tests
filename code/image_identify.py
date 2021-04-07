@@ -109,12 +109,6 @@ class ImageIdentify(baseclass.BaseClass):
 
             predictions_original = {k: v for k, v in sorted(predictions_original.items(), key=lambda item: item[1], reverse=True)}
 
-            print(predictions_original)
-            print(type(predictions_original))
-
-            print(fuck)
-            exit(0)
-
             if self.top > 0:
                 predictions_original = dict(itertools.islice(predictions_original.items(), self.top))
 
@@ -129,19 +123,11 @@ class ImageIdentify(baseclass.BaseClass):
             predictions_batch = {k: v for k, v in sorted(predictions_batch.items(), key=lambda item: item[1], reverse=True)}
 
             if self.top > 0:
-                count = 0
-                topped = {}
-                for k, v in predictions_batch.items():
-                    topped[k]=v
-                    count += 1
-                    if count >= self.top:
-                        break
-
-                predictions_batch = topped
+                predictions_batch = dict(itertools.islice(predictions_batch.items(), self.top))
 
             results_batch = []
             for key in predictions_batch:
-                results_batch.append({ 'class' : key, 'predictions': predictions_batch[key] })
+                results_batch.append({ "class" : key, "prediction": predictions_batch[key] })
 
         if not results_batch is None:
             output = { 'predictions' : results_batch }
