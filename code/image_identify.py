@@ -16,17 +16,17 @@ class ImageIdentify(baseclass.BaseClass):
 
     def set_image(self,image_path):
         self.images.append(image_path)
-        # print(self.images)
+        self.logger.info("got {} images".format(len(self.images)));
 
     def set_images(self,image_paths):
         for item in image_paths.split(","):
             self.images.append(item)
-        # print(self.images)
+        self.logger.info("got {} images".format(len(self.images)));
 
     def set_image_list(self,list_path):
         with open(list_path) as f:
             self.images = f.read().splitlines()
-        # print(self.images)
+        self.logger.info("got {} images".format(len(self.images)));
 
     def set_top(self,top):
         self.top = top
@@ -59,6 +59,7 @@ class ImageIdentify(baseclass.BaseClass):
                 if predictions['predictions_original']:
                     x["predictions_original"] = predictions["predictions_original"]
                 self.results.append(x)
+
                 self.logger.info("{}: {} ({})".format(image,predictions["predictions"][0]["class"],predictions["predictions"][0]["prediction"]));
             else:
                 self.logger.warning("image doesn't exist: {}".format(image));
