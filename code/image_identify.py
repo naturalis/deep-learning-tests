@@ -1,4 +1,4 @@
-import os, sys, json, argparse
+import os, sys, json, argparse, itertools
 import tensorflow as tf
 import numpy as np
 from lib import baseclass, utils
@@ -111,6 +111,8 @@ class ImageIdentify(baseclass.BaseClass):
 
             print(predictions_original)
             print(type(predictions_original))
+            fuck = dict(itertools.islice(predictions_original.items(), 5))
+            print(fuck)
             exit(0)
 
             if self.top > 0:
