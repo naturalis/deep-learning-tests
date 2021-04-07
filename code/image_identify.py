@@ -59,10 +59,10 @@ class ImageIdentify(baseclass.BaseClass):
                 if predictions['predictions_original']:
                     x["predictions_original"] = predictions["predictions_original"]
                 self.results.append(x)
-
-                print("{}: {} ({})".format(image,predictions["predictions"][0]["class"],predictions["predictions"][0]["prediction"]));
+                self.logger.info("{}: {} ({})".format(image,predictions["predictions"][0]["class"],predictions["predictions"][0]["prediction"]));
             else:
-                print("image doesn't exist: {}".format(image));
+                self.logger.warning("image doesn't exist: {}".format(image));
+
         return json.dumps({ "project" : self.project_name, "model" : self.model_name, "predictions" : self.results })
 
     def predict_image(self,image):
@@ -116,8 +116,6 @@ class ImageIdentify(baseclass.BaseClass):
             for key in predictions_original:
                 results_original.append({ "class" : key, "prediction": predictions_original[key] })
 
-            print(results_original)
-
         if not predictions_batch is None:
             predictions_batch = dict(zip(classes.keys(), predictions_batch))
             predictions_batch = {k: v for k, v in sorted(predictions_batch.items(), key=lambda item: item[1], reverse=True)}
@@ -130,11 +128,11 @@ class ImageIdentify(baseclass.BaseClass):
                 results_batch.append({ "class" : key, "prediction": predictions_batch[key] })
 
         if not results_batch is None:
-            output = { 'predictions' : results_batch }
+            output = { "predictions" : results_batch }
             if not results_original is None:
-                output['predictions_original'] = results_original
+                output[ "predictions_original" ] = results_original
         else:
-            output = { 'predictions' : results_original }
+            output = { "predictions" : results_original }
 
         print(output)
 
