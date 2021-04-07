@@ -89,13 +89,9 @@ class ImageIdentify(baseclass.BaseClass):
 
         if self.identification_style in [ "original", "both" ]:
             predictions_original = self.model.predict(x)
-
-            print(predictions_original)
-
-
             predictions_original = predictions_original[0].tolist()
 
-
+            print(predictions_original)
 
         if self.identification_style in [ "batch", "both", "batch_incl_original" ]:
             batch = self.generate_augmented_image_batch(x)
@@ -113,6 +109,8 @@ class ImageIdentify(baseclass.BaseClass):
         if not predictions_original is None:
             predictions_original = dict(zip(classes.keys(), predictions_original))
             predictions_original = {k: v for k, v in sorted(predictions_original.items(), key=lambda item: item[1], reverse=True)}
+
+            print(predictions_original)
 
             if self.top > 0:
                 count = 0
