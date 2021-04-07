@@ -111,25 +111,18 @@ class ImageIdentify(baseclass.BaseClass):
 
             print(predictions_original)
             print(type(predictions_original))
-            fuck = dict(itertools.islice(predictions_original.items(), 5))
+
             print(fuck)
             exit(0)
 
             if self.top > 0:
-                count = 0
-                topped = {}
-                for k, v in predictions_original.items():
-                    topped[k]=v
-                    count += 1
-                    if count >= self.top:
-                        break
-
-                predictions_original = topped
+                predictions_original = dict(itertools.islice(predictions_original.items(), self.top))
 
             results_original = []
             for key in predictions_original:
-                results_original.append({ 'class' : key, 'predictions': predictions_original[key] })
+                results_original.append({ "class" : key, "prediction": predictions_original[key] })
 
+            print(results_original)
 
         if not predictions_batch is None:
             predictions_batch = dict(zip(classes.keys(), predictions_batch))
