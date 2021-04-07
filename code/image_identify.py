@@ -91,6 +91,8 @@ class ImageIdentify(baseclass.BaseClass):
             predictions_original = self.model.predict(x)
             predictions_original = predictions_original[0].tolist()
 
+            print(predictions_original)
+
         if self.identification_style in [ "batch", "both", "batch_incl_original" ]:
             batch = self.generate_augmented_image_batch(x)
             predictions_batch = self.model.predict_on_batch(batch)
