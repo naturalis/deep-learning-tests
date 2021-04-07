@@ -59,6 +59,9 @@ class ImageIdentify(baseclass.BaseClass):
                 if predictions['predictions_original']:
                     x["predictions_original"] = predictions["predictions_original"]
                 self.results.append(x)
+
+                print(predictions["predictions"])
+
                 print("{}: {} ({})".format(image,predictions["predictions"][0]["class"],predictions["predictions"][0]["prediction"]));
             else:
                 print("image doesn't exist: {}".format(image));
