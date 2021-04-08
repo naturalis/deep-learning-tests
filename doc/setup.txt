@@ -158,6 +158,11 @@ sudo docker-compose run tensorflow /code/model_trainer.py --alt_class_list class
 # API_DEBUG=1
 # API_FLASK_DEBUG=0 (avoid)
 
+# run API
+sudo docker-compose up -d
+# sudo git reset --hard; sudo git pull; ./build-api.sh; sudo docker-compose stop api; sudo docker-compose up -d
+
+
 
 python3 ../code/batch_api_call.py \
   --image_list /data/maarten.schermer/data/museum/naturalis/lists/sheet7_downloaded_images.csv \
@@ -181,3 +186,8 @@ sudo docker-compose run tensorflow /code/image_identify.py \
   --identification_style both \
   --top 5 \
   --override_image_root_folder /data/museum/naturalis/sheet8_images/
+
+
+
+
+

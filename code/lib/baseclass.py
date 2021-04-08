@@ -305,6 +305,7 @@ class BaseClass():
             if index >= images_to_check:
                 break
             if not os.path.exists(row["image"]):
+                self.logger.info("image doesn't exist: {}".format(row["image"]))
                 errors.append(row["image"])
 
         if len(errors) > 0:
