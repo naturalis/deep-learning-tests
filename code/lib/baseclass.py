@@ -269,8 +269,8 @@ class BaseClass():
                     this_class = row[self.image_list_class_col].strip()
                     this_images = row[self.image_list_image_col].strip()
 
-                    print(self.image_list_class_col, this_class, type(this_class))
-                    print(self.image_list_image_col, this_images, type(this_images))
+                    self.logger.info("{} {} {}".format(self.image_list_class_col, this_class, type(this_class)))
+                    self.logger.info("{} {} {}".format(self.image_list_image_col, this_images, type(this_images)))
 
                     if this_class in image_counter and image_counter[this_class] >= self.class_image_maximum:
                         skipped_images += 1
