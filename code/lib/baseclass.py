@@ -266,17 +266,13 @@ class BaseClass():
                 csv_reader = csv.reader(csv_file, delimiter=utils._determine_csv_separator(self.downloaded_images_file_model,"utf-8-sig"))
                 for row in csv_reader:
 
-                    this_class = row[self.image_list_class_col].strip()
-                    this_images = row[self.image_list_image_col].strip()
-
-                    self.logger.info("{} {} {}".format(self.image_list_class_col, this_class, type(this_class)))
-                    self.logger.info("{} {} {}".format(self.image_list_image_col, this_images, type(this_images)))
+                    this_class = row[self.image_list_class_col]
 
                     if this_class in image_counter and image_counter[this_class] >= self.class_image_maximum:
                         skipped_images += 1
                         continue
 
-                    this_list.append([this_class,this_images])
+                    this_list.append([row[self.image_list_class_col].strip(),row[self.image_list_image_col].strip()])
 
                     if this_class in image_counter:
                         image_counter[this_class] += 1
@@ -284,6 +280,8 @@ class BaseClass():
                         image_counter[this_class] = 1
 
             df = pd.DataFrame(this_list)
+
+            print(df)
 
             self.logger.info("skipped {} images due to image maximum".format(skipped_images))
 
