@@ -281,7 +281,7 @@ class BaseClass():
 
             df = pd.DataFrame(this_list)
 
-            print(df)
+            self.logger.info(df)
 
             self.logger.info("skipped {} images due to image maximum".format(skipped_images))
 
