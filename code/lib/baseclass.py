@@ -253,6 +253,17 @@ class BaseClass():
 
         self.logger.info("reading images from: {}".format(self.downloaded_images_file_model))
 
+
+        separator = utils._determine_csv_separator(self.downloaded_images_file_model,"utf-8-sig")
+
+        with open(self.downloaded_images_file_model) as csv_file:
+            csv_reader = csv.reader(csv_file, delimiter=separator)
+            for row in csv_reader:
+                print(row,len(row),self.image_list_class_col,self.image_list_image_col)
+                break
+
+
+
         skipped_images = 0
 
         if self.class_image_maximum > 0:
@@ -263,7 +274,7 @@ class BaseClass():
             image_counter={}
 
             with open(self.downloaded_images_file_model) as csv_file:
-                csv_reader = csv.reader(csv_file, delimiter=utils._determine_csv_separator(self.downloaded_images_file_model,"utf-8-sig"))
+                csv_reader = csv.reader(csv_file, delimiter=separator)
                 for row in csv_reader:
 
                     this_class = row[self.image_list_class_col]
@@ -297,10 +308,6 @@ class BaseClass():
         df.columns = [self.COL_CLASS, self.COL_IMAGE]
         df[self.COL_IMAGE] = self.image_root_path.rstrip("/") + "/" + df[self.COL_IMAGE].astype(str)
         self.traindf = df
-
-        print(df)
-
-
         self.logger.info("read {} images in {} classes".format(self.traindf[self.COL_IMAGE].nunique(),self.traindf[self.COL_CLASS].nunique()))
 
     def test_image_existence(self,images_to_check=10):
