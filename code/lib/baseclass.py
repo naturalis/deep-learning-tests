@@ -253,16 +253,14 @@ class BaseClass():
 
         self.logger.info("reading images from: {}".format(self.downloaded_images_file_model))
 
-
         separator = utils._determine_csv_separator(self.downloaded_images_file_model,"utf-8-sig")
 
         with open(self.downloaded_images_file_model) as csv_file:
             csv_reader = csv.reader(csv_file, delimiter=separator)
             for row in csv_reader:
-                print(row,len(row),self.image_list_class_col,self.image_list_image_col)
-                break
-
-
+                if len(row) < max(self.image_list_class_col,self.image_list_image_col)+1:
+                    raise ValueError("too few columns ({}) (image_list_class_col: {}; image_list_image_col: {}); check IMAGE_LIST_CLASS_COLUMN & IMAGE_LIST_FILE_COLUMN".
+                        format(len(row),self.image_list_class_col,self.image_list_image_col))
 
         skipped_images = 0
 
