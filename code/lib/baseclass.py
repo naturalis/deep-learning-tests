@@ -281,8 +281,6 @@ class BaseClass():
 
             df = pd.DataFrame(this_list)
 
-            self.logger.info(df)
-
             self.logger.info("skipped {} images due to image maximum".format(skipped_images))
 
         else:
@@ -299,6 +297,10 @@ class BaseClass():
         df.columns = [self.COL_CLASS, self.COL_IMAGE]
         df[self.COL_IMAGE] = self.image_root_path.rstrip("/") + "/" + df[self.COL_IMAGE].astype(str)
         self.traindf = df
+
+        print(df)
+
+
         self.logger.info("read {} images in {} classes".format(self.traindf[self.COL_IMAGE].nunique(),self.traindf[self.COL_CLASS].nunique()))
 
     def test_image_existence(self,images_to_check=10):
