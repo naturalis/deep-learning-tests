@@ -359,8 +359,7 @@ class ModelTrainer(baseclass.BaseClass):
         else:
             self.current_callbacks = self.model_settings["callbacks"]
 
-    def train_model(self):
-
+    def set_class_weights(self):
         if "use_class_weights" in self.model_settings and not self.model_settings["use_class_weights"] is False:
             total = np.sum([int(b[1]) for b in self.class_list ])
             self.class_weight = {}
@@ -368,17 +367,21 @@ class ModelTrainer(baseclass.BaseClass):
                 self.class_weight[k]=(1 / int(item[1]))*(total)/2.0
 
             self.logger.info("using class weights")
-            self.logger.info(self.class_weight)
-            self.logger.info(self.class_list)
-            print(self.train_generator.class_indices)
 
+            f = open(self.class_weights_file_model, "w")
+            f.write(json.dumps(self.class_weight))
+            f.close()
+
+            self.logger.info("wrote {}".format(self.class_weights_file_model))
         else:
             self.class_weight = None
-
             self.logger.info("using no class weights")
 
+    def train_model(self):
 
         self.logger.info("start training \"{}\" ({})".format(self.project_name,self.project_root))
+
+        self.set_class_weights()
 
         self.training_phase = 0
 

@@ -41,23 +41,23 @@ services:
       - /data/maarten.schermer/deep-learning-tests/code:/code
       - /data/maarten.schermer/api-log/:/log
 
-  # webserver:
-  #   image: mds-webserver:latest
-  #   ports:
-  #     - "8091:80"
-  #   env_file:
-  #     - .env
-  #   logging: *default-logging
-  #   volumes:
-  #     - /data/maarten.schermer/data:/data
-  #     - ../webserver:/var/www/html
+  webserver:
+    image: mds-webserver:latest
+    ports:
+      - "8091:80"
+    env_file:
+      - .env
+    logging: *default-logging
+    volumes:
+      - /data/maarten.schermer/data:/data
+      - ../webserver:/var/www/html
 
-  # tensorboard:
-  #   image: mds-tensorboard:latest
-  #   ports:
-  #     - "6006:6006"
-  #   env_file:
-  #     - .env
-  #   logging: *default-logging
-  #   volumes:
-  #     - /data/maarten.schermer${PROJECT_ROOT}log:/log
+  tensorboard:
+    image: mds-tensorboard:latest
+    ports:
+      - "6006:6006"
+    env_file:
+      - .env
+    logging: *default-logging
+    volumes:
+      - /data/maarten.schermer${PROJECT_ROOT}log:/log

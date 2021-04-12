@@ -41,6 +41,11 @@ class BaseClass():
     image_list_image_col = None
     class_list_file = None
     # class_list_file_class_col = None
+
+    class_list_file_model = None
+    downloaded_images_file_model = None
+    class_weights_file_model = None
+
     class_image_minimum = 2
     class_image_maximum = 0
     model_path = None
@@ -56,7 +61,6 @@ class BaseClass():
     presets = {}
 
     default_reduce_lr_params = { 'reduce_lr_params' : [ { "monitor" : "val_loss", "factor" : 0.1, "patience" : 4, "min_lr" : 1e-8, "verbose" : 1 } ] }
-
 
     def __init__(self):
         pr = os.environ.get("PROJECT_ROOT")
@@ -190,6 +194,7 @@ class BaseClass():
 
         self.class_list_file_model = os.path.join(self.model_folder, "classes.csv")
         self.downloaded_images_file_model = os.path.join(self.model_folder, "downloaded_images.csv")
+        self.class_weights_file_model = os.path.join(self.model_folder, "class_weights.json")
 
     def set_model_settings(self, model_settings):
         self.model_settings = model_settings

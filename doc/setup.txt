@@ -191,3 +191,5 @@ sudo docker-compose run tensorflow /code/image_identify.py \
 
 
 
+
+run-tensorboard.sh
