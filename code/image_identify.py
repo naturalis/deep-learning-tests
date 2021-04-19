@@ -32,7 +32,7 @@ class ImageIdentify(baseclass.BaseClass):
         with open(list_path) as csv_file:
             csv_reader = csv.reader(csv_file, delimiter=delimiter)
             for row in csv_reader:
-                self.images.push(row[column])
+                self.images.append(row[column])
         self.logger.info("got {} images".format(len(self.images)));
 
     def set_top(self,top):
