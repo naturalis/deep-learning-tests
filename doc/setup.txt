@@ -111,8 +111,8 @@ sudo docker-compose run tensorflow /code/project_prepare.py
 # if you have a DwCA (generates image list)
 sudo docker-compose run tensorflow /code/dwca_reader.py
 
-# if you have an image list (downloads images, generates downloadad_image + classes lists)
-# checks for exsisting images, so can be used to just generate the lists
+# if you have an image list, downloads images, generates 'downloadad_image' + 'classes' lists
+# checks for exsisting images, so can be used for additional images or to just generate the lists
 sudo docker-compose run tensorflow /code/image_downloader.py
 
 # alt options:

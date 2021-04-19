@@ -32,6 +32,8 @@ class DataSet(baseclass.BaseClass):
 
     def set_environ(self,os_environ):
         for item in [
+            'PROJECT_NAME','PROJECT_ROOT','IMAGES_ROOT','IMAGE_URL_TO_NAME', \
+            'IMAGE_LIST_CLASS_COLUMN','IMAGE_LIST_FILE_COLUMN', \
             'BASE_MODEL','IMAGE_AUGMENTATION','REDUCE_LR_PARAMS','VALIDATION_SPLIT', \
             'LEARNING_RATE','BATCH_SIZE','EPOCHS','FREEZE_LAYERS','METRICS', \
             'CHECKPOINT_MONITOR', 'EARLY_STOPPING_MONITOR', 'EARLY_STOPPING_PATIENCE', \

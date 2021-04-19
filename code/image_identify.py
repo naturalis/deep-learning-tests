@@ -1,4 +1,4 @@
-import os, sys, json, argparse, itertools
+import os, sys, json, argparse, itertools, csv
 import tensorflow as tf
 import numpy as np
 from lib import baseclass, utils
@@ -26,6 +26,13 @@ class ImageIdentify(baseclass.BaseClass):
     def set_image_list(self,list_path):
         with open(list_path) as f:
             self.images = f.read().splitlines()
+        self.logger.info("got {} images".format(len(self.images)));
+
+    def set_image_csv_list(self,list_path,column,delimiter):
+        with open(list_path) as csv_file:
+            csv_reader = csv.reader(csv_file, delimiter=delimiter)
+            for row in csv_reader:
+                self.images.push(row[column])
         self.logger.info("got {} images".format(len(self.images)));
 
     def set_top(self,top):
@@ -174,6 +181,10 @@ if __name__ == '__main__':
     parser.add_argument("--image", type=str)
     parser.add_argument("--images", type=str)
     parser.add_argument("--image_list", type=str)
+    parser.add_argument("--image_csv_list", type=str)
+    parser.add_argument("--csv_delimiter", type=str, default=",")
+    parser.add_argument("--csv_column", type=int)
+
     parser.add_argument("--model", type=str)
     parser.add_argument("--identification_style", choices=[ "original", "batch", "both", "batch_incl_original" ], default="batch_incl_original")
     parser.add_argument("--top", type=int, default=3)
@@ -218,13 +229,19 @@ if __name__ == '__main__':
     if args.image:
         # predict.set_image(args.image)
         data = json.dumps(predict.predict_image(args.image))
-
+    else:
     if args.images:
         predict.set_images(args.images)
         data = predict.predict_images()
-
+    else:
     if args.image_list:
         predict.set_image_list(args.image_list)
+        data = predict.predict_images()
+    else:
+    if args.image_csv_list:
+        if not args.csv_column:
+            raise ValueError("need columnof images in CSV-file (--csv_column)")
+        predict.set_image_csv_list(args.image_list,args.csv_column,args.csv_delimiter)
         data = predict.predict_images()
 
     print(timer.get_time_passed(format="pretty"))
