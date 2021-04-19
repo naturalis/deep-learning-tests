@@ -238,7 +238,7 @@ if __name__ == '__main__':
     elif args.image_csv_list:
         if not args.csv_column:
             raise ValueError("need column of images in CSV-file (--csv_column)")
-        predict.set_image_csv_list(args.image_list,args.csv_column,args.csv_delimiter)
+        predict.set_image_csv_list(args.image_csv_list,args.csv_column,args.csv_delimiter)
         data = predict.predict_images()
 
     print(timer.get_time_passed(format="pretty"))
