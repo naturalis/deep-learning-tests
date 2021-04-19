@@ -6,7 +6,7 @@ from lib import baseclass, utils
 class ImageIdentify(baseclass.BaseClass):
 
     override_image_root_folder = None
-    # prepend_image_root_folder = None
+    prepend_image_root_folder = None
     images = []
     results = []
     top = 0
@@ -50,8 +50,8 @@ class ImageIdentify(baseclass.BaseClass):
     def set_override_image_root_folder(self,folder):
         self.override_image_root_folder = folder
 
-    # def set_prepend_image_root_folder(self,folder):
-    #     self.prepend_image_root_folder = folder
+    def set_prepend_image_root_folder(self,folder):
+        self.prepend_image_root_folder = folder
 
     def predict_images(self):
         self.results = []
@@ -59,6 +59,9 @@ class ImageIdentify(baseclass.BaseClass):
 
             if self.override_image_root_folder:
                 image = os.path.join(self.override_image_root_folder, os.path.basename(image))
+
+            if self.prepend_image_root_folder:
+                image = os.path.join(self.prepend_image_root_folder, image)
 
             if os.path.exists(image):
                 predictions = self.predict_image(image)
@@ -217,9 +220,9 @@ if __name__ == '__main__':
     if args.override_image_root_folder:
         predict.set_override_image_root_folder(args.override_image_root_folder)
 
-    # # prepends to whatever is in the image list
-    # if args.prepend_image_root_folder:
-    #     predict.set_prepend_image_root_folder(args.prepend_image_root_folder)
+    # prepends to whatever is in the image list
+    if args.prepend_image_root_folder:
+        predict.set_prepend_image_root_folder(args.prepend_image_root_folder)
 
 
     predict.set_model_folder()
