@@ -229,18 +229,15 @@ if __name__ == '__main__':
     if args.image:
         # predict.set_image(args.image)
         data = json.dumps(predict.predict_image(args.image))
-    else:
-    if args.images:
+    elif args.images:
         predict.set_images(args.images)
         data = predict.predict_images()
-    else:
-    if args.image_list:
+    elif args.image_list:
         predict.set_image_list(args.image_list)
         data = predict.predict_images()
-    else:
-    if args.image_csv_list:
+    elif args.image_csv_list:
         if not args.csv_column:
-            raise ValueError("need columnof images in CSV-file (--csv_column)")
+            raise ValueError("need column of images in CSV-file (--csv_column)")
         predict.set_image_csv_list(args.image_list,args.csv_column,args.csv_delimiter)
         data = predict.predict_images()
 
