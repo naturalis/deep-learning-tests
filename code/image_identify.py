@@ -10,9 +10,12 @@ class ImageIdentify(baseclass.BaseClass):
     images = []
     results = []
     top = 0
+    max_identifications = None
+    identifications_done = 0
     identification_style = "original"
     identification_batch_size = 16
     batch_transformations = None
+    output_file = None
 
     def set_image(self,image_path):
         self.images.append(image_path)
@@ -53,6 +56,16 @@ class ImageIdentify(baseclass.BaseClass):
     def set_prepend_image_root_folder(self,folder):
         self.prepend_image_root_folder = folder
 
+    def set_output_file(self,output_file):
+        self.output_file = output_file
+
+    def set_max_identifications(self,max_identifications):
+        self.max_identifications = max_identifications
+
+    def save_results(self,result):
+        with open(self.output_file, "a") as myfile:
+            myfile.write(json.dumps(result)+"\n")
+
     def predict_images(self):
         self.results = []
         for image in self.images:
@@ -61,23 +74,31 @@ class ImageIdentify(baseclass.BaseClass):
                 image = os.path.join(self.override_image_root_folder, os.path.basename(image))
 
             if self.prepend_image_root_folder:
-                image = os.path.join(self.prepend_image_root_folder, image)
+                image = os.path.join(self.prepend_image_root_folder, images)
 
             if os.path.exists(image):
                 predictions = self.predict_image(image)
                 x = { "image" : image, "prediction" : predictions["predictions"] }
                 if predictions['predictions_original']:
                     x["predictions_original"] = predictions["predictions_original"]
-                self.results.append(x)
+
+                self.save_results(x)
+                # self.results.append(x)
 
                 self.logger.info("{}: {} ({})".format(image,predictions["predictions"][0]["class"],predictions["predictions"][0]["prediction"]));
+
+                self.identifications_done += 1
+
+                if self.max_identifications and self.identifications_done >= self.max_identifications:
+                    self.logger.warning("hit max identifications: {}".format(self.identifications_done));
+                    break
+
             else:
                 self.logger.warning("image doesn't exist: {}".format(image));
 
-        return json.dumps({ "project" : self.project_name, "model" : self.model_name, "predictions" : self.results })
+        # return json.dumps({ "project" : self.project_name, "model" : self.model_name, "predictions" : self.results })
 
     def predict_image(self,image):
-
         if self.override_image_root_folder:
             image = os.path.join(self.override_image_root_folder, os.path.basename(image))
 
@@ -187,11 +208,12 @@ if __name__ == '__main__':
     parser.add_argument("--image_csv_list", type=str)
     parser.add_argument("--csv_delimiter", type=str, default=",")
     parser.add_argument("--csv_column", type=int)
+    parser.add_argument("--max_identifications", type=int)
 
     parser.add_argument("--model", type=str)
     parser.add_argument("--identification_style", choices=[ "original", "batch", "both", "batch_incl_original" ], default="batch_incl_original")
     parser.add_argument("--top", type=int, default=3)
-    parser.add_argument("--outfile", type=str)
+    parser.add_argument("--output_file", type=str, default="./output.json")
 
     parser.add_argument("--override_image_root_folder",type=str)
     parser.add_argument("--prepend_image_root_folder",type=str)
@@ -224,33 +246,27 @@ if __name__ == '__main__':
     if args.prepend_image_root_folder:
         predict.set_prepend_image_root_folder(args.prepend_image_root_folder)
 
-
+    predict.set_output_file(args.output_file)
     predict.set_model_folder()
     predict.load_model()
     predict.set_top(args.top)
 
+    if args.max_identifications:
+        predict.set_max_identifications(args.max_identifications)
+
     if args.image:
         # predict.set_image(args.image)
-        data = json.dumps(predict.predict_image(args.image))
+        json.dumps(predict.predict_image(args.image))
     elif args.images:
         predict.set_images(args.images)
-        data = predict.predict_images()
+        predict.predict_images()
     elif args.image_list:
         predict.set_image_list(args.image_list)
-        data = predict.predict_images()
+        predict.predict_images()
     elif args.image_csv_list:
         if not args.csv_column:
             raise ValueError("need column of images in CSV-file (--csv_column)")
         predict.set_image_csv_list(args.image_csv_list,args.csv_column,args.csv_delimiter)
-        data = predict.predict_images()
+        predict.predict_images()
 
     print(timer.get_time_passed(format="pretty"))
-    print(data)
-
-    if args.outfile:
-        outfile = args.outfile
-    else:
-        outfile = "./output.json"
-
-    with open(outfile, 'w') as f:
-        f.write(data)
