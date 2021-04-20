@@ -74,7 +74,7 @@ class ImageIdentify(baseclass.BaseClass):
                 image = os.path.join(self.override_image_root_folder, os.path.basename(image))
 
             if self.prepend_image_root_folder:
-                image = os.path.join(self.prepend_image_root_folder, images)
+                image = os.path.join(self.prepend_image_root_folder, image)
 
             if os.path.exists(image):
                 predictions = self.predict_image(image)
